@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>地图</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/basicSkills.css' />
+    <link rel='stylesheet' href='/stylesheets/portInfo.css' />
+    <!--<link rel='stylesheet' href='/stylesheets/maodi.css' />-->
+    <link rel='stylesheet' href='/stylesheets/route.css' />
+    <link rel='stylesheet' href='/stylesheets/newberth.css' />
+
+    <link rel="stylesheet" href="http://openlayers.org/en/v3.17.1/css/ol.css" type="text/css">
+    <link rel="stylesheet" href="https://openlayers.org/en/v4.1.1/css/ol.css" type="text/css">
+    <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+    <script src="https://openlayers.org/en/v4.1.1/build/ol.js"></script>
+    <script src="http://openlayers.org/en/v3.17.1/build/ol.js" type="text/javascript"></script>
+
+    <script type="text/javascript" src="/javascripts/blmMap.js"></script>
+    <script type="text/javascript" src="/javascripts/blmDraw.js"></script>
+    <script type="text/javascript" src="/javascripts/blmMarker.js"></script>
+    <script type="text/javascript" src="/javascripts/blmLayer.js"></script>
+    <script type="text/javascript" src="/javascripts/blmOperate.js"></script>
+    <script type="text/javascript" src="/javascripts/blmBind.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery.js"></script>
+
+</head>
+<body>
+<div id="map" class="map" tabindex="0"></div>
+<!--<map id="map" class="map"></map>-->
+<div id="optain_topLeft_text"></div>
+<div id="mouse_rightBottom_text"></div>
+<div id="right_tool">
+    <div id="right_tool_btn"></div>
+    <div id="right_tool_content">
+        <ul class="basic_tool">
+            <li class="switch_map"><b></b>
+                <div class="right_basic_map">
+                    <div class="basic_map_list">
+                        <div class="map_mouse_select" id="ditu">地图</div>
+                        <div id="weitu">卫图</div>
+                        <div id="haitu">海图</div>
+                    </div>
+                </div>
+            </li>
+            <li class="obtain_coordinate"><b></b>
+                <div class="obtain_content">
+                    <input type="text" readonly>
+                    <span><input type="button" value="复制" id="copy_obtain_coordinate"></span>
+                </div>
+            </li>
+            <li class="screen_scale"><b></b></li>
+            <li class="draw_polygon"><b></b>
+                <div class="polygon_content">
+                    <ul>
+                        <li class="Circle"><b></b></li>
+                        <li class="Polygon"><b></b></li>
+                        <li class="Box"><b></b></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div id="route_Show">
+    <div class="route_Ship_btn"></div>
+</div>
+<div id="route_list">
+    <div class="route_title">
+        <span>船舶列表</span>
+        <div class="route_title_offbtn"></div>
+        <div class="route_bottom_img"><img src="/images/line_1.png"></div>
+    </div>
+    <div class="ship_list">
+        <input type="text">
+        <ul class="ship_list_title">
+            <li>
+                <span>船名</span>
+                <span>MMSI</span>
+            </li>
+        </ul>
+        <ul class="ship_list_content">
+        </ul>
+    </div>
+    <div class="oneShip_listShow_btn"></div>
+    <div class="oneShip_route_listDiv">
+        <ul class="oneShip_routeList_title">
+            <li>
+                <span>序号</span>
+                <span>出发时间</span>
+                <span>到达时间</span>
+                <span>出发港口</span>
+                <span>到达港口</span>
+            </li>
+        </ul>
+        <ul class="oneShip_routeList">
+        </ul>
+    </div>
+</div>
+
+<div id="portBasicInfo">
+    <div class="portInfo_title">
+        <span></span>
+        <div class="portInfo_title_offbtn"></div>
+        <div class="portInfo_bottom_img"><img src="/images/line_1.png"></div>
+    </div>
+    <div class="portInfo_content">
+        <div class="portInfo_list">
+            <div class="port_country">
+                <span></span>
+                <i class="port_logo"></i>
+            </div>
+            <div class="port_position">
+                <span></span>
+                <span style="margin-left:50px;"></span>
+            </div>
+            <div class="port_authority">
+                <span style="position:relative;top:-10px;">港务局：</span>
+                <span></span>
+            </div>
+            <div class="port_chart_number">
+                <span style="position:relative;top:-10px;">海图号：</span>
+                <span></span>
+            </div>
+        </div>
+        <div class="portInfo_bottom_img"></div>
+    </div>
+    <div class="portInfo_btn">
+        <div class="portInfo_berth_btn"><i></i></div>
+        <div class="anchorageInfo_anchorage_btn"><i></i></div>
+    </div>
+</div>
+<div id="berthInfoManage">
+    <div class="portInfo_title">
+        <span>泊位信息管理</span>
+        <div class="portInfo_title_offbtn"></div>
+        <div class="portInfo_bottom_img"><img src="/images/line_1.png"></div>
+    </div>
+    <div class="portInfo_content">
+        <div class="berthInfo_topLeft">
+            <ul class="berthInfo_pierList_title">
+                <li>
+                    <span>序号</span>
+                    <span>码头</span>
+                    <span>经纬度</span>
+                    <!-- <span>操作</span> -->
+                </li>
+            </ul>
+
+            <ul class="berthInfo_pierList"></ul>
+        </div>
+        <!-- <i class="add_pier_logo_btn"></i> -->
+        <div class="berthInfo_topRight">
+            <div class="berthInfo_content">
+                <div>
+                    <span>港口：</span>
+                    <span>Dmpier</span>
+                </div>
+                <div>
+                    <span>码头：</span>
+                    <span>Parker Point</span>
+                </div>
+                <div>
+                    <span>经纬度：</span>
+                    <span>LAT 20°39'S,LONG 116°43'E</span>
+                </div>
+                <div>
+                    <span>货物：</span>
+                    <span>lron Ore</span>
+                </div>
+                <div>
+                    <span>泊位数量：</span>
+                    <span>3</span>
+                </div>
+                <div class="pier_operating">
+                    <span class="pier_analysis_btn"></span>
+                    <span class="pier_remarks_btn"></span>
+                    <span class="pier_modify_btn"></span>
+                </div>
+            </div>
+        </div>
+        <div class="berthInfo_list">
+            <ul class="berthInfo_title">
+                <li>
+                    <span>序号</span>
+                    <span>全长</span>
+                    <span>吃水</span>
+                    <span>空高</span>
+                    <span>型宽</span>
+                    <span>长度</span>
+                    <span>水深</span>
+                    <span>装载机数量</span>
+                    <span>装载率</span>
+                    <span>移动</span>
+                    <span>外延</span>
+                    <span>操作</span>
+                </li>
+                <!-- <i class="add_berth_logo_btn"></i> -->
+            </ul>
+            <ul class="berthInfo_ListContent"></ul>
+        </div>
+    </div>
+</div>
+<div id="pier_modify">
+    <div class="portInfo_title">
+        <span>码头信息修改</span>
+        <div class="portInfo_title_offbtn"></div>
+        <div class="portInfo_bottom_img"><img src="/images/line_1.png"></div>
+    </div>
+    <div class="pier_Info_content">
+        <div><span>码头名：</span><input type="text" value="码头名"></div>
+        <div><span>所属港口：</span><input type="text" value="所属港口"></div>
+        <div><span>所属公司：</span><input type="text" value="所属公司"></div>
+        <div><span>泊位数量：</span><input type="text" value="泊位数量"></div>
+        <div><span>经度：</span><input type="text" value="经度"></div>
+        <div><span>纬度：</span><input type="text" value="纬度"></div>
+        <div><span>盐浓度：</span><input type="text" value="盐浓度"></div>
+        <div><span>位置：</span><input type="text" value="位置"></div>
+        <div><span>潮汐：</span><input type="text" value="潮汐"></div>
+        <div class="pierInfo_select pierInfo_type_div"><span>码头类型：</span><span class="pier_Info_Type"></span>
+            <ul class="pierInfo_select_list pier_Info_Type_list">
+                <li>装载1</li>
+                <li>卸载1</li>
+                <li>不明1</li>
+            </ul>
+        </div>
+        <div class="pierInfo_select pierInfo_goods_div"><span>货物：</span><span class="pier_Info_goods"></span>
+            <ul class="pierInfo_select_list pier_Info_goods_list">
+                <li>a</li>
+                <li>b</li>
+                <li>c</li>
+                <li>d</li>
+            </ul>
+        </div>
+        <div class="pierInfo_select pierInfo_InoutType_div"><span>进出口类型：</span><span class="pier_Info_InoutType"></span>
+            <ul class="pierInfo_select_list pier_Info_InoutType_list">
+                <li>装载</li>
+                <li>卸载</li>
+                <li>不明</li>
+            </ul>
+        </div>
+        <div class="pier_info_submit_btn">提交</div>
+        <div class="pier_info_cancel_btn">取消</div>
+    </div>
+</div>
+
+
+<div id="pier_remarks">
+    <div class="portInfo_title">
+        <span>码头概述</span>
+        <div class="portInfo_title_offbtn"></div>
+        <div class="portInfo_bottom_img"><img src="/images/line_1.png"></div>
+    </div>
+    <div class="pier_Info_contents">
+        <textarea name="pierRemark" id="pierRemark"></textarea>
+        <div class="pier_remark_submit_btn">确定</div>
+    </div>
+</div>
+<div id="stillArea_show">
+    <div class="portInfo_title">
+        <span>详细信息</span>
+        <div class="portInfo_title_offbtn"></div>
+        <div class="portInfo_bottom_img"><img src="/images/line_1.png"></div>
+    </div>
+    <div class="stillArea_contents"></div>
+    <!--<div class="stillArea_locationChange_btn">位置改变</div>-->
+    <div class="stillArea_btn_list">
+        <div class="stillArea_btn stillArea_statistics">统计分析</div>
+        <div class="stillArea_btn stillArea_addBerth">设为泊位</div>
+        <div class="stillArea_btn stillArea_addAnch">设为锚地</div>
+    </div>
+
+</div>
+
+<!--<div id="anchorageInfoManage">-->
+    <!--<div class="anchorageInfo_title">-->
+        <!--<span>锚地信息管理界面</span>-->
+        <!--<div class="anchorageInfo_title_offbtn"></div>-->
+        <!--<div class="anchorageInfo_bottom_img"></div>-->
+    <!--</div>-->
+    <!--<div class="anchorageInfo_content">-->
+        <!--<div class="anchorageInfo_topLeft">-->
+            <!--<ul class="anchorageInfo_pierList_title">-->
+                <!--<li>-->
+                    <!--<span>序号</span>-->
+                    <!--<span>名称</span>-->
+                    <!--&lt;!&ndash; <span>操作</span> &ndash;&gt;-->
+                    <!--&lt;!&ndash; <span></span> &ndash;&gt;-->
+                <!--</li>-->
+            <!--</ul>-->
+            <!--<ul class="anchorageInfo_pierList"></ul>-->
+        <!--</div>-->
+        <!--<div class="anchorageInfo_topRight">-->
+            <!--<div class="anchorageInfo_content01">-->
+                <!--<div>-->
+                    <!--<span>名称：</span>-->
+                    <!--<span>锚地1</span>-->
+                <!--</div>-->
+                <!--<div>-->
+                    <!--<span>用途：</span>-->
+                    <!--<span>大型海峡型船停泊</span>-->
+                <!--</div>-->
+                <!--<div class="anchorage_operating">-->
+                    <!--<span class="anchorage_analysis_btn"></span>-->
+                    <!--<span class="anchorage_remarks_btn"></span>-->
+                    <!--<span class="anchorage_modify_btn"></span>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="anchorageInfo_list">-->
+            <!--<ul class="anchorageInfo_title">-->
+                <!--<li>-->
+                    <!--<span>序号</span>-->
+                    <!--<span>经度</span>-->
+                    <!--<span>纬度</span>-->
+                    <!--<span>操作</span>-->
+                <!--</li>-->
+            <!--</ul>-->
+            <!--<ul class="anchorageInfo_ListContent">-->
+                <!--<li >-->
+                    <!--<span>1</span>-->
+                    <!--<span>LAT 20"39'S</span>-->
+                    <!--<span>LAT 20"39'S</span>-->
+                    <!--<span><i class="delete">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i></span>-->
+                <!--</li>-->
+            <!--</ul>-->
+            <!--&lt;!&ndash; <div class="anchorageInfo_add_btn"></div> &ndash;&gt;-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+<!--<div id="anchorage_modify">-->
+    <!--<div class="anchorageInfo_title">-->
+        <!--<span>锚地信息修改</span>-->
+        <!--<div class="anchorageInfo_title_offbtn"></div>-->
+        <!--<div class="anchorageInfo_bottom_img"></div>-->
+    <!--</div>-->
+    <!--<div class="anchorage_Info_content">-->
+        <!--<div><span>锚地名：</span><input type="text"></div>-->
+        <!--<div><span>所属港口：</span><input type="text"></div>-->
+        <!--<div><span>用途：</span><input type="text"></div>-->
+    <!--</div>-->
+    <!--<div class='anchorage_Info_submit'>提交</div>-->
+    <!--<div class="anchorage_Info_cancel">取消</div>-->
+<!--</div>-->
+<!--<div id="anchorage_add">-->
+    <!--<div class="anchorage_add_tittle"><span>&nbsp;&nbsp;添加锚地信息</span><a href="#">&nbsp;&nbsp;&nbsp;&nbsp;</a></div>-->
+    <!--<div class="anchorage_add_content">-->
+    <!--&nbsp;&nbsp;&nbsp;锚地名：<input type="text" class="anchorage_add_ipt1"/><br />-->
+    <!--所属港口：<input type="text" class="anchorage_add_ipt2"/><br />-->
+    <!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用途：<input type="text" class="anchorage_add_ipt3"/><br />-->
+    <!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;描述：<textarea name="" id=" "></textarea>-->
+        <!--<div class="anchorage_add_btn1">提交</div> -->
+        <!--<div class="anchorage_add_btn2">重置</div>-->
+    <!--</div>-->
+<!--</div>-->
+<!--<div id="anchorage_remarks">-->
+    <!--<div class="anchorageInfo_title">-->
+        <!--<span>锚地概述</span>-->
+        <!--<div class="anchorageInfo_title_offbtn"></div>-->
+        <!--<div class="anchorageInfo_bottom_img"></div>-->
+    <!--</div>-->
+    <!--<div class="anchorage_Info_contents">-->
+        <!--<textarea name="anchorageRemark" id="anchorageRemark">锚地备注信息</textarea>-->
+        <!--<div class="anchorage_remark_submit_btn">确定</div>-->
+    <!--</div>-->
+<!--</div>-->
+
+<!--<div class="box1">-->
+    <!--<div class="boxTittle">-->
+        <!--<span>统计表</span>-->
+        <!--<a href="#"></a>-->
+    <!--</div>-->
+    <!--<div class="boxTittle_img"></div>-->
+    <!--<button id="btn1">近一年</button>-->
+    <!--<button id="btn2">近三年</button>-->
+    <!--<button id="btn3">全部</button>-->
+    <!--&lt;!&ndash;<button id="btnmaodi"><img src="/icon/anchorage.png" alt="" width="32" height="15" margin-righi='5' /></button><button id='btnbowei'><img src="/icon/berth.png" alt="" width="32" height="15" margin-righi='5' /></button>&ndash;&gt;-->
+    <!--<select name="" id="select1" selected=""><option value="">Jule</option></select><select name="" id="select2" value=""><option value="">Dry Bulk</option></select>-->
+    <!--<div class="box2" style="width:260px;height:240px">-->
+       <!--<table id='myTable5'>-->
+            <!--<caption>船舶类型</caption>-->
+            <!--<tbody>-->
+                <!--<tr>-->
+                    <!--<th>45</th>-->
+                    <!--<td>17</td>-->
+                    <!--<td>13</td>-->
+                    <!--<td>12</td>-->
+                    <!--<td>2</td>-->
+                    <!--<td>1</td>-->
+                <!--</tr>-->
+            <!--</tbody>-->
+             <!--<thead>-->
+                <!--<tr>-->
+                    <!--<th></th>-->
+                    <!--<th>兼用船</th>-->
+                    <!--<th>暂无</th>-->
+                    <!--<th>油船</th> -->
+                    <!--<th>化学货船</th>-->
+                    <!--<th>散货船</th>                   -->
+                <!--</tr>-->
+            <!--</thead>-->
+        <!--</table>  -->
+    <!--</div>-->
+    <!--<div class="box3">-->
+        <!--<table id='SNStat' width='426' height='238' border='0' cellspacing='0' cellpadding='0' align='center'>-->
+  <!--<tr>-->
+    <!--<td>&nbsp;</td>-->
+    <!--<td style="font-size:15px;">最大值</td>-->
+    <!--<td style="font-size:15px;">最小值</td>-->
+    <!--<td style="font-size:15px;">平均值</td>-->
+    <!--<td style="font-size:15px;">标准差</td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+    <!--<td style="background:#fce498;font-weight:bold;font-size:15px;">全长(m)</td>-->
+    <!--<td></td>-->
+    <!--<td></td>-->
+    <!--<td></td>-->
+    <!--<td></td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+    <!--<td style="background:#fce498;font-weight:bold;font-size:15px;">型宽(m)</td>-->
+    <!--<td></td>-->
+    <!--<td></td>-->
+    <!--<td></td>-->
+    <!--<td></td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+    <!--<td style="background:#fce498;font-weight:bold;font-size:15px;">吃水(m)</td>-->
+    <!--<td></td>-->
+    <!--<td></td>-->
+    <!--<td></td>-->
+    <!--<td></td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+    <!--<td style="background:#fce498;font-weight:bold;font-size:15px;">空高(m)</td>-->
+    <!--<td></td>-->
+    <!--<td></td>-->
+    <!--<td></td>-->
+    <!--<td></td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+    <!--<td style="background:#fce498;font-weight:bold;font-size:15px;">时长(h)</td>-->
+    <!--<td></td>-->
+    <!--<td></td>-->
+    <!--<td></td>-->
+    <!--<td></td>-->
+  <!--</tr>-->
+  <!--<tr>-->
+    <!--<td style="background:#fce498;font-weight:bold;font-size:15px;">DWT(T)</td>-->
+    <!--<td></td>-->
+    <!--<td></td>-->
+    <!--<td></td>-->
+    <!--<td></td>-->
+  <!--</tr>-->
+<!--</table>-->
+    <!--</div>-->
+    <!--<div class="box4">-->
+        <!--<table id='SNInfo' border='0' cellspacing='0' cellpadding='0' align='center'>-->
+        <!--</table>-->
+    <!--</div>-->
+    <!--</div>-->
+
+
+<div id="berth_select">
+    <div class="portInfo_title">
+        <span>泊位详情</span>
+        <div class="portInfo_title_offbtn"></div>
+        <div class="portInfo_bottom_img"><img src="/images/line_1.png"></div>
+    </div>
+    <div class="addBerth_pier_select">
+        <div class="berth_detail_left berth_detail">
+            <div class="port_select addBerth_select">
+                <span>所属港口：</span>
+                <span></span>
+                <ul class="addBerth_port_list">
+                </ul>
+            </div>
+            <div class="berth_select addBerth_select">
+                <span>所属码头：</span>
+                <span>暂无码头</span>
+                <ul class="addBerth_pier_list">
+                </ul>
+                <div class="inquire_Details inquire_pier_details"></div>
+                <div class="inquire_Details add_pier_btn"></div>
+            </div>
+            <div class="berth_detail_input"><span>装载率：</span><input type="text" value=""></div>
+            <div class="berth_detail_input"><span>装载机数量：</span><input type="text" value=""></div>
+            <div class="berth_detail_input"><span>移动(Travel)：</span><input type="text" value=""></div>
+            <div class="berth_detail_input"><span>外延(Outreach)：</span><input type="text" value=""></div>
+        </div>
+        <div class="berth_detail_right berth_detail">
+            <div class="berthAdd_inputNum"><span>全长(LOA)：</span><input type="text" value=""><span> M</span></div>
+            <div class="berthAdd_inputNum"><span>吃水(Draft)：</span><input type="text" value=""><span> M</span></div>
+            <div class="berthAdd_inputNum"><span>水深(Depth)：</span><input type="text" value=""><span> M</span></div>
+            <div class="berthAdd_inputNum"><span>长度(Length)：</span><input type="text" value=""><span> M</span></div>
+            <div class="berthAdd_inputNum"><span>空高(AirDraft)：</span><input type="text" value=""><span> M</span></div>
+            <div class="berthAdd_inputNum"><span>型宽(Moulded_Beam)：</span><input type="text" value=""><span> M</span></div>
+        </div>
+        <!--<div class="berthInfo_PopupBox_btn">保存</div>-->
+        <button class="berthInfo_PopupBox_btn" style="background:#ccc;" disabled="disabled" >保存</button>
+        <div class="popupBox_DividingLine"><img src="/images/line_1.png"></div>
+    </div>
+    <div class="onePier_berthList">
+        <ul class="onePier_berthTitle">
+            <li>
+                <span>序号</span>
+                <span>全长</span>
+                <span>吃水</span>
+                <span>空高</span>
+                <span>型宽</span>
+                <span>长度</span>
+                <span>水深</span>
+                <span>装载机数量</span>
+                <span>装载率</span>
+                <span>移动</span>
+                <span>外延</span>
+            </li>
+        </ul>
+        <ul class="onePier_berthContent">
+        </ul>
+    </div>
+</div>
+
+<div id="pier_add">
+    <div class="portInfo_title">
+        <span>码头信息</span>
+        <div class="portInfo_title_offbtn"></div>
+        <div class="portInfo_bottom_img"><img src="/images/line_1.png"></div>
+    </div>
+    <div class="pier_Info_content">
+        <div><span>码头名：</span><input type="text" value="未命名"></div>
+        <div><span>所属港口：</span><input type="text" value="" disabled></div>
+        <div class="pier_company"><span>所属公司：</span><input type="text" value="">
+            <!--<ul class="pier_Company_list">-->
+                <!--<li>1</li>-->
+                <!--<li>2</li>-->
+                <!--<li>3</li>-->
+            <!--</ul>-->
+        </div>
+        <div><span>泊位数量：</span><input type="text" value=""></div>
+        <div><span>经度：</span><input class="LatLong_input" type="text" value="" readonly="readonly" style="background:#fff;">
+            <div class="pier_LatLong_enter">
+                <input type="text" value="00" maxlength="2"> °
+                <input type="text" value="00" maxlength="2"> .
+                <input type="text" value="0000" maxlength="4"> '
+                <div class="EastLong_or_WestLong EastLong"></div>
+            </div>
+        </div>
+        <div><span>纬度：</span><input class="LatLong_input" type="text" value="" readonly="readonly" style="background:#fff;">
+            <div class="pier_LatLong_enter">
+                <input type="text" value="00" maxlength="2"> °
+                <input type="text" value="00" maxlength="2"> .
+                <input type="text" value="0000" maxlength="4"> '
+                <div class="SouthLat_or_NorthLat SouthLat"></div>
+            </div>
+        </div>
+        <div><span>盐浓度：</span><input type="text" value=""></div>
+        <div><span>位置：</span><input type="text" value=""></div>
+        <div><span>潮汐：</span><input type="text" value=""></div>
+        <div><span>码头类型：</span><input type="text" value=""></div>
+        <div><span>货物：</span><input type="text" value=""></div>
+        <div><span>进出口类型：</span><input type="text" value=""></div>
+        <!--<div class="pierInfo_select pierInfo_type_div"><span>码头类型：</span><span class="pier_Info_Type"></span>-->
+            <!--<ul class="pierInfo_select_list pier_Info_Type_list">-->
+                <!--<li>装载1</li>-->
+                <!--<li>卸载1</li>-->
+                <!--<li>不明1</li>-->
+            <!--</ul>-->
+        <!--</div>-->
+        <!--<div class="pierInfo_select pierInfo_goods_div"><span>货物：</span><span class="pier_Info_goods"></span>-->
+            <!--<ul class="pierInfo_select_list pier_Info_goods_list">-->
+                <!--<li>a</li>-->
+                <!--<li>b</li>-->
+                <!--<li>c</li>-->
+                <!--<li>d</li>-->
+            <!--</ul>-->
+        <!--</div>-->
+        <!--<div class="pierInfo_select pierInfo_InoutType_div"><span>进出口类型：</span><span class="pier_Info_InoutType"></span>-->
+            <!--<ul class="pierInfo_select_list pier_Info_InoutType_list">-->
+                <!--<li>装载</li>-->
+                <!--<li>卸载</li>-->
+                <!--<li>不明</li>-->
+            <!--</ul>-->
+        <!--</div>-->
+        <div><span>描述：</span><textarea name="" id="" ></textarea></div>
+        <div class="pier_info_add_submit_btn">提交</div>
+        <div class="pier_info_reset_btn">重置</div>
+    </div>
+</div>
+
+<div id="berth_add">
+    <div class="portInfo_title">
+        <span>添加泊位信息</span>
+        <div class="portInfo_title_offbtn"></div>
+        <div class="portInfo_bottom_img"><img src="/images/line_1.png"></div>
+    </div>
+    <div class="berth_add_content">
+        <div><span>所属港口：</span><input type="text" value="" disabled></div>
+        <div><span>所属码头：</span><input type="text" value="" disabled></div>
+        <div class="berthAdd_inputNum"><span>全长(LOA)：</span><input type="text" value=""></div>
+        <div class="berthAdd_inputNum"><span>吃水(Draft)：</span><input type="text" value=""></div>
+        <div class="berthAdd_inputNum"><span>空高(AirDraft)：</span><input type="text" value=""></div>
+        <div class="berthAdd_inputNum"><span>型宽(Moulded_Beam)：</span><input type="text" value=""></div>
+        <div class="berthAdd_inputNum"><span>长度(Length)：</span><input type="text" value=""></div>
+        <div class="berthAdd_inputNum"><span>水深(Depth)：</span><input type="text" value=""></div>
+        <div><span>装载机数量：</span><input type="text" value=""></div>
+        <div><span>装载率：</span><input type="text" value=""></div>
+        <div><span>移动(Travel)：</span><input type="text" value=""></div>
+        <div><span>外延(Outreach)：</span><input type="text" value=""></div>
+        <div class="berth_add_submit">保存</div>
+        <div class="berth_add_reset">重置</div>
+    </div>
+</div>
+<div class="alert"></div>
+<div class="confirm"></div>
+
+<!--&lt;!&ndash;锚地详情页面&ndash;&gt;-->
+<div id="anch_select">
+    <div class="portInfo_title">
+        <span>锚地详情</span>
+        <div class="portInfo_title_offbtn"></div>
+        <div class="portInfo_bottom_img"><img src="/images/line_1.png"></div>
+    </div>
+    <div class="anchInfo_select_content">
+        <div class="addAnch_port_select">
+            <span>所属港口：</span>
+            <span>London</span>
+            <ul class="addAnch_port_list">
+                <li>London</li>
+                <li>Singapore</li>
+                <li>Abidjan</li>
+                <li>Algiers</li>
+                <li>Marseilles</li>
+            </ul>
+            <!--<div class="inquire_Details inquire_port_details">查</div>-->
+        </div>
+        <div class="anch_detail_input"><span>锚地名：</span> <input type="text"></div>
+        <div class="anch_detail_input"><span>用途：</span> <textarea name="" id="AnchUse"></textarea></div>
+        <div class="anch_detail_input"><span>说明：</span> <textarea name="" id="AnchDes"></textarea></div>
+    </div>
+    <!--<div class="addAnch_confirm addAnch_btn">保存</div>-->
+    <button class="addAnch_confirm addAnch_btn" style="background:#ccc;" disabled="disabled" >保存</button>
+    <div class="addAnch_reset addAnch_btn">重置</div>
+    <div class="popupBox_DividingLine"><img src="/images/line_1.png"></div>
+    <div class="onePort_AnchList">
+        <ul class="onePort_AnchTitle">
+            <li>
+                <span>序号</span>
+                <span>锚地名</span>
+                <span>用途</span>
+                <span>描述</span>
+            </li>
+        </ul>
+        <ul class="onePort_AnchContent">
+        </ul>
+    </div>
+</div>
+
+
+<!--泊位管理-->
+<div id="newBerth">
+    <div class="newBerthAnch_title">
+        <span>泊位管理</span>
+        <div class="dividing_line line_1"></div>
+    </div>
+    <div class="pierInfo_list" terminalKey="">
+        <div class="pier_info port_select span_select">
+            <span>港口：</span><span id="port_name" port_id=""></span>
+            <ul id="berth_port_list">
+            </ul>
+        </div>
+        <div class="pier_info">
+            <span>码头名称：</span><input type="text" id="pier_name" placeholder="请输入码头名称">
+        </div>
+        <div class="pier_info company_select input_select">
+            <span>公司：</span><input type="search" id="company_name" placeholder="请输入公司名">
+            <ul id ="company_name_list">
+            </ul>
+        </div>
+        <div class="pier_info pier_BerthNum">
+            <span>泊位：</span><input type="text" placeholder="0" id="berth_num"><span>个</span>
+        </div>
+        <div class="pier_info pier_impExpType span_select">
+            <span>进出口：</span><span id="import_export_type">进口</span>
+            <ul>
+                <li>进口</li>
+                <li>出口</li>
+            </ul>
+        </div>
+        <div class="pier_info pier_CargoType span_select">
+            <span>货物：</span><span id="cargo_type_key">Lron Ore</span>
+            <ul>
+                <li>Lron Ore</li>
+            </ul>
+        </div>
+        <div class="pier_info pier_LongLat">
+            <span>经纬度：</span><input type="text" id="LON_LAT" numeric = "0,0" disabled value="00°00.0000N, 00°00.0000S">
+        </div>
+        <div class="pier_info pier_Location">
+            <span>位置：</span><input type="text" id="location">
+        </div>
+        <div class="pier_info pier_Des">
+            <span>说明：</span><input type="text" id ="des">
+        </div>
+    </div>
+    <div class="dividing_line line_1"></div>
+    <ul class="berth_list">
+    </ul>
+    <div class="dividing_line line_1"></div>
+    <div class="pier_btn">
+        <button id = "berth_statistic" class="berthAnch_btn">统计</button>
+        <button id ="berth_save" class="berthAnch_btn" style = "background:#ccc" disabled="disabled">保存</button>
+        <button id = "berth_cancel" class="berthAnch_btn">取消</button>
+    </div>
+</div>
+
+<div id="newAnch">
+    <div class="newBerthAnch_title">
+        <span>锚地管理</span>
+        <div class="dividing_line line_1"></div>
+    </div>
+    <div class="anchInfo_list">
+        <div class="pier_info anchName_select input_select">
+            <span>锚地名：</span><input type="text" id="anch_name" placeholder="请输入锚地名称" value="">
+            <ul id="anch_name_list">
+            </ul>
+        </div>
+        <div class="pier_info anch_purpose">
+            <span>用途：</span><input type="text" id="anch_purpose" placeholder="请输入锚地用途" value="">
+        </div>
+        <div class="pier_info anch_Des">
+            <span>说明：</span><input type="text" id="anch_Des" placeholder="请输入锚地说明" value="">
+        </div>
+    </div>
+    <div class="dividing_line line_1"></div>
+    <ul class="anch_AllLongLat">
+        <li>
+            <span>已选经纬度</span>
+            <ul class="oneAnch_longLat selected_LonLat">
+            </ul>
+        </li>
+    </ul>
+    <div class="dividing_line line_1"></div>
+    <div class="anchInfo_intentPort">
+        <div class="pier_info anch_IntentPort">
+            <span>目的港：</span>
+            <span>
+                <ul class="IntentPort_list">
+                    <li class = "add_port"><span> + 增加目的港口</span></li>
+                </ul>
+            </span>
+            <!--<div class="add_oneIntentPort_btn"></div>-->
+            <div class="AllIntentPort_List">
+                <input class="IntentPort_input" type="text" placeholder="请选择港口或输入港口">
+                <ul id="port_list_to_choose">
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="dividing_line line_1"></div>
+    <div class="anch_btn">
+        <div id="anch_save" class="berthAnch_btn"  style = "background:#ccc" disabled="disabled">保存</div>
+        <div id="anch_cancel" class="berthAnch_btn">取消</div>
+    </div>
+</div>
+
+<!--泊位信息统计-->
+<div id="newBerthStatistics">
+    <div class="newBerthAnch_title">
+        <span>泊位信息统计</span>
+        <div class="close_btn"></div>
+        <div class="dividing_line line_1"></div>
+    </div>
+    <div class="pier_info span_select berthStat_shipType">
+        <span>船舶类型：</span><span>Ore Carrier</span>
+        <ul>
+            <li>Ore Carrier</li>
+        </ul>
+    </div>
+    <table id="BerthStatistics" width="90%" cellspacing="0" cellpadding="5">
+        <thead>
+            <tr>
+                <th>MOUTH</th>
+                <th>LOA(m)</th>
+                <th>BEAM(m)</th>
+                <th>DRAFT(m)</th>
+                <th>DWT(t)</th>
+                <th>DTPH(t/h)</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+</body>
+
+<!--<script type="text/javascript" src="/javascripts/require.js"></script>-->
+<script type="text/javascript" src="/javascripts/testCommon.js"></script>
+<script type="text/javascript" src="/javascripts/parkArea.js"></script>
+<script type="text/javascript" src="/javascripts/portShow.js"></script>
+<script type="text/javascript" src="/javascripts/pointShow.js"></script>
+<script type="text/javascript" src="/javascripts/contourShow.js"></script>
+<script type="text/javascript" src="/javascripts/anchShow.js"></script>
+<script type="text/javascript" src="/javascripts/statistic.js"></script>
+<script type="text/javascript" src="/javascripts/route.js"></script>
+<script type="text/javascript" src="/javascripts/confirm.js"></script>
+<!--<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1RjvgLx-N8yWBBa639e1jHw1wCh6KJUU&callback=initMap" type="text/javascript"></script>-->
+<script>
+    var unknown_style = new ol.style.Style({
+        image: new ol.style.Icon({
+            scale: 0.1,
+            src: 'icon/unknow.png'
+        })
+    });
+
+    var position_style =  new ol.style.Style({
+        image: new ol.style.Icon({
+            scale: 1,
+            src: 'icon/position.png'
+        })
+    });
+
+    // 泊位图标
+    var berth_style = new ol.style.Style({
+        image: new ol.style.Icon({
+            scale: 0.5,
+            src: 'icon/berth.png'
+        })
+    });
+
+    // 锚地图标
+    var anchorage_style = new ol.style.Style({
+        image: new ol.style.Icon({
+            scale: 0.5,
+            src: 'icon/anchorage.png'
+        })
+    });
+
+    // 扇形图图标
+    var pie_style = new ol.style.Style({
+        image: new ol.style.Icon({
+            scale: 0.8,
+            src: 'icon/pie.png'
+        })
+    });
+
+    // 设置图标style
+    var park_style = {
+        // 锚地图标
+        0: anchorage_style,
+        // 泊位图标
+        1: berth_style,
+        // 定位图标
+        2: unknown_style,
+    };
+
+    // 起始点
+    var start_style = new ol.style.Style({
+            image: new ol.style.Icon({
+//            scale: 0.2,
+                src: 'icon/start.png'
+            })
+    });
+
+    // 结束点
+    var end_style = new ol.style.Style({
+        image: new ol.style.Icon({
+//            scale: 0.25,
+            src: 'icon/stop.png'
+        })
+    });
+
+
+    // 静止点的显示
+    var point_style = new ol.style.Style({
+        image: new ol.style.Circle({
+            radius: 2,
+            stroke: new ol.style.Stroke({
+                color: 'black'
+            }),
+            fill: new ol.style.Fill({
+                color: 'blue'
+            })
+        })
+    });
+
+    // 箭头的显示
+    function arrow_style(rotation) {
+        return new ol.style.Style({
+            image: new ol.style.Icon({
+                anchor: [0.75, 0.5],
+                src: 'icon/arrow.png',
+//                scale: 0.4,
+                rotateWithView: true,
+                rotation: -rotation
+            })
+        });
+    }
+//    var point_style = new ol.style.Style({
+//        image: new ol.style.Icon({
+//            scale: 0.05,
+//            src: 'icon/signal.png'
+//        })
+//    });
+
+    var contour_style =  new ol.style.Style({
+        stroke: new ol.style.Stroke({
+            color: 'red',
+            lineDash: [1, 2, 3, 4, 5, 6],
+            width: 3
+        }),
+        fill: new ol.style.Fill({
+            color: 'rgba(0, 0, 255, 0.1)'
+        })
+    });
+
+    var anch_style =  new ol.style.Style({
+        stroke: new ol.style.Stroke({
+            color: 'blue',
+            lineDash: [1, 2, 3, 4, 5, 6],
+            width: 3
+        }),
+        fill: new ol.style.Fill({
+            color: 'rgba(0, 0, 255, 0.1)'
+        }),
+        text: new ol.style.Text({
+            // font: '10px sans-serif' 默认这个字体，可以修改成其他的，格式和css的字体设置一样
+            text: '锚地区域',
+            fill: new ol.style.Fill({
+                color: 'red'
+            })
+        })
+    });
+
+
+//    var source = new ol.source.Vector();
+//    var vector = new ol.layer.Vector({
+//        source: source,
+//        style: new ol.style.Style({
+//            stroke: new ol.style.Stroke({
+//                color: '#AE7528',       //测距完成后线颜色
+//                width: 2                //测距完成后线宽度
+//            })
+//        })
+//    });
+
+    // 标尺层
+    var range_source = new ol.source.Vector({wrapX:true});
+    var range_vector = new ol.layer.Vector({
+        id : "draw layer",
+        source : range_source,
+        style: new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: '#AE7528',       //测距完成后线颜色
+                width: 2                //测距完成后线宽度
+            })
+        })
+    });
+
+    // 地图基本作画功能
+    var draw = new ol.interaction.Draw({});
+    var source = new ol.source.Vector({wrapX:true});
+    var vector = new ol.layer.Vector({
+        id : "draw layer",
+        source:source,
+        style: new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: '#AE7528',       //测距完成后线颜色
+                width: 2                //测距完成后线宽度
+            })
+        })
+    });
+
+    // 初始缩放等级
+    var initLevel = 4;
+
+    // 基本地图
+    var basic = blmol.layer.createGoogleTile('basic');
+//    var basic = blmol.layer.createBasicTile('basic');
+    // 卫星地图
+//    var bing = blmol.layer.createBingTile('bing');
+    var satellite = blmol.layer.createGGSatelliteTile("satellite");
+
+// 电子海图
+    var haitu = blmol.layer.createESeaTile('haitu');
+
+    // 停泊区域图标层
+    var icon = blmol.layer.createVectorLayer('icon', 0, 20);
+    // 停泊区域点层
+    var  point = blmol.layer.createVectorLayer('point', 0, 20);
+    // 航线层
+    var  route = blmol.layer.createVectorLayer('route', 0, 20);
+    // 定位图标显示层
+    var position = blmol.layer.createVectorLayer('position', 0, 20);
+    // 锚地区域图层
+    var current_anch = blmol.layer.createVectorLayer('current_anch', 0, 20);
+    // 锚地区域图层
+    var anch = blmol.layer.createVectorLayer('anch', 0, 20);
+
+    // 起始点的图标
+//    var start_end = blmol.layer.createVectorLayer('start_end', 0, 20);
+
+    //港口图标显示层
+    var portLayer = blmol.layer.createVectorLayer('portLogo',0, 20);
+
+    // 创造地图
+    var map = blmol.map.createMap('map', [-45.496166, -23.907], initLevel, [basic, satellite, haitu], true, false, false);
+
+    // 显示的图层
+    blmol.map.addLayer(map, icon);
+    blmol.map.addLayer(map, point);
+    blmol.map.addLayer(map, route);
+    blmol.map.addLayer(map, portLayer);
+    blmol.map.addLayer(map, range_vector);
+    blmol.map.addLayer(map, vector);
+    blmol.map.addLayer(map, position);
+    blmol.map.addLayer(map, anch);
+    blmol.map.addLayer(map, current_anch);
+
+//    blmol.map.addLayer(map, start_end);
+
+    // 初始区域
+//    var initArea  = blmol.operation.getCurrentExtent(map);
+
+    // 得到港口的所有点
+    getAllPoints();
+
+    // 获取所有锚地区域
+    getAllAnch();
+
+    reqPortBasicInfo();
+
+    //获取初始地图
+    setMapShow();
+
+
+
+    // 利用Drag方法，使得地图上的标签可以拖动
+//    var dragDrop = new app.Drag();
+//    map.addInteraction(dragDrop);
+
+    // 添加选择功能
+//    var select = new ol.interaction.Select();
+//    map.addInteraction(select);
+//
+//    //添加修改功能
+//    var selected = select.getFeatures();
+//    var modify = new ol.interaction.Modify(
+////        features: selected
+//    );
+//    map.addInteraction(modify);
+
+    $('map').css('height',document.body.clientHeight + 'px');
+    //实时监测浏览器窗口高度
+    window.onresize = function(){
+        $(".map").css("height",$(window).height()+"px");
+        $("body").css("height",$(window).height()+"px");
+    };
+    $(".map").css("height",$(window).height()+"px");
+    $("body").css("height",$(window).height()+"px");
+
+    // 针对事件进行操作
+    var currentMouseCoordinate;
+
+    // 添加鼠标移动监听事件
+    blmol.bind.addOnMouseMoveListener(map,function(map,coordinate,feature,evt){
+        currentMouseCoordinate = coordinate;
+        $('#optain_topLeft_text').text(coordinate[0].toFixed(6)+','+coordinate[1].toFixed(6));
+    });
+
+    // 监听界面变化
+    blmol.bind.addOnMapMoveEndListener(map, function (map, extent, event) {
+        var zoom = blmol.operation.getZoom(map);
+        console.log(zoom);
+        iconLayer(zoom, extent);
+//        if(zoom > 10){
+//
+//        }
+//        else{
+//            anch.getSource().clear();
+//        }
+    });
+
+
+//    $('.stillArea_statistics_btn').click(function () {
+//        // SNShow([clusterId]);
+//        $('.box1').css({'display':'block','zIndex':100});
+//    });
+
+//    var info = function (map, listener) {
+//        var click = function (evt) {
+//            var features = [];
+//            map.forEachFeatureAtPixel(evt.pixel, function (feature) {
+//                features.push(feature);
+//            });
+//            listener(map, ol.proj.toLonLat(evt.coordinate), features, evt);
+//        };
+//        return map.on('singleclick', click);
+//    };
+//
+//    info(map, function(map, point, features){
+//        if (features.length > 0 ){
+//            alert(point + " / " + features[0].get('cluster_id'))
+//        }else{
+//            alert(point)
+//        }
+//    })
+
+
+
+</script>
+<script type="text/javascript" src="/javascripts/basicSkills.js"></script>
+<script type="text/javascript" src="/javascripts/portInfo.js"></script>
+<!--<script type="text/javascript" src="/javascripts/maodi.js"></script>-->
+<script type="text/javascript" src="/javascripts/manage.js"></script>
+<script type="text/javascript" src="/javascripts/jsapi.js"></script>
+<script type="text/javascript" src="/javascripts/corechart.js"></script>      
+<script type="text/javascript" src="/javascripts/jquery.gvChart-1.0.1.min.js"></script>
+<script type="text/javascript" src="/javascripts/jquery.ba-resize.min.js"></script>
+<script type="text/javascript" src="/javascripts/berthInfo.js"></script>
+<script type="text/javascript" src="/javascripts/util.js"></script>
+<script type="text/javascript" src="/javascripts/berth.js"></script>
+<script type="text/javascript" src="/javascripts/anch.js"></script>
+<!--<script type="text/javascript" src="/javascripts/interaction.js"></script>-->
+<script type="text/javascript">
+    gvChartInit();
+$(function(){
+    $('#myTable5').gvChart({
+        chartType: 'PieChart',
+        gvSettings: {
+            vAxis: {title: 'No of players'},
+            hAxis: {title: 'Month'},
+            width: 260,
+            height: 240
+        }
+    });
+});
+</script>
+</html>

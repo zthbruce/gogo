@@ -1,0 +1,11 @@
+target
+bin
+*.db
+out
+.idea
+.DS_Store
+test
+META-INF
+~*
+web/node_modules/*
+
