@@ -500,7 +500,7 @@ $('#berth_save').click(function () {
 
 // 统计按钮
 $('#berth_statistic').click(function(){
-    $('#newBerth').fadeOut("normal");
+    // $('#newBerth').fadeOut("normal");
     var berthZIndex = $('#newBerth').css('zIndex');
     berthZIndex++;
     console.log(berthZIndex);
@@ -579,7 +579,7 @@ function changeBerthSaveButton(saveStatus) {
 //弹出框关闭事件
 $('.newBerthAnch_title>.close_btn').click(function(){
     $(this).parent().parent().css('display','none');
-    $('#newBerth').fadeIn(600);
+    // $('#newBerth').fadeIn(600);
 });
 //船舶类型选择
 $('.berthStat_shipType>ul>li').click(function(){

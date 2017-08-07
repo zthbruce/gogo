@@ -74,6 +74,7 @@ function anchLayer(anchInfoList){
             }),
             text : new ol.style.Text({
                 // font: '10px sans-serif' 默认这个字体，可以修改成其他的，格式和css的字体设置一样
+                font: "15px",
                 text: name !== "" ? name : "未命名锚地",
                 fill: new ol.style.Fill({
                     color: 'black'
