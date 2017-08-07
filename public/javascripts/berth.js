@@ -17,15 +17,18 @@ function addPierSelectCompanyName(companyStr){
             if(data[0] === "200"){
                 var jsonData = data[1];
                 for(var i=0;i<jsonData.length;i++){
-                    var companyName = jsonData[i].ENName;
+                    var companyName = jsonData[i].Name;
+                    var companyNumber =  jsonData[i].CompanyNumber;
                     // 显示公司列表
-                    $("#company_name_list").append('<li>' + companyName + '</li>');
+                    $("#company_name_list").append('<li "companyNumber" = ' + companyNumber + '>' + companyName + '</li>');
                 }
                 $("#company_name_list").slideDown(200);
                 // 点击选择按钮
                 $('#company_name_list>li').on('click', function () {
                     console.log($(this).text());
-                    $('#company_name').val($(this).text())
+                    // $('#company_name').val($(this).text());
+                    $('#company_name').attr("companyNumber", $(this).attr("companyNumber"));
+                    $('#company_name').val($(this).text());
                     $(this).slideUp(400)
                 });
             }
@@ -79,7 +82,9 @@ function getPierInfo(clusterId, lon, lat){
                 $("#port_name").attr("port_id", pierInfo.PortID);
                 $("#port_name").text(pierInfo.PortName);
                 $("#pier_name").val(pierInfo.Name); // 码头名字
-                $("#company_name").val(pierInfo.BelongtoCompany); // 公司名字
+                // $("#company_name").val(pierInfo.BelongtoCompany); // 公司名字
+                $("#company_name").attr("companyNumber", pierInfo.BelongtoCompany);
+                $("#company_name").val(pierInfo.CompanyName); // 公司名字
                 $("#berth_num").val(pierInfo.BerthQuantity); // 泊位数量
                 $("#tide").val(pierInfo.Tide); // 潮汐
                 $("#import_export_type").text(pierInfo.ImportExportType);
@@ -98,6 +103,7 @@ function getPierInfo(clusterId, lon, lat){
                 $("#port_name").attr("port_id", default_port.PortID);
                 $("#port_name").text(default_port.ENName);
                 $("#pier_name").val("");
+                $("#company_name").attr("companyNumber", "");
                 $("#company_name").val("");
                 $("#berth_num").val(""); // 泊位数量
                 $("#location").val("");//位置
@@ -408,6 +414,13 @@ $('#berth_save').click(function () {
         // 生成一个码头ID
         terminalKey = generateNewPierKey();
     }
+
+    // 如果公司的number为0
+    var companyNumber = $("#company_name").attr('companyNumber');
+    // 当还不是公司的时候，生成一个公司key值
+    if(companyNumber === ""){
+        companyNumber = 'C' + generateNewPierKey();
+    }
     var portID = $("#port_name").attr("port_id");
     // 码头发生改变时保存码头信息
     console.log("保存码头信息");
@@ -422,7 +435,8 @@ $('#berth_save').click(function () {
         TerminalKey: terminalKey,
         Name: $("#pier_name").val(),
         PortID: portID,
-        BelongtoCompany: $("#company_name").val(),
+        // BelongtoCompany: $("#company_name").val(),
+        BelongtoCompany: companyNumber,
         BerthQuantity: $("#berth_num").val(),
         ImportExportType: $("#import_export_type").text(),
         CargoTypeKey: $("#cargo_type_key").text(),
@@ -438,6 +452,18 @@ $('#berth_save').click(function () {
         url: '/berth/saveTerminal',
         type: 'get',
         data: reqPram,
+        success: function (data) {
+            console.log(data[1])
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
+    // 保存公司信息
+    $.ajax({
+        url: '/berth//savePierCompany',
+        type: 'get',
+        data: {CompanyNumber: companyNumber, Name:$("#company_name").val()},
         success: function (data) {
             console.log(data[1])
         },
@@ -504,7 +530,7 @@ $('.pierInfo_list>.pier_info').bind('input propertychange',function() {
 // });
 
 $('.company_select>input').keyup(function(){
-    console.log("输入信息");
+    console.log("输入公司信息");
     var nowVal = $(this).val();
     // 清空列表
     $("#company_name_list").empty();

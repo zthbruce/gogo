@@ -166,6 +166,7 @@ function changeBerthSaveButton(saveStatus) {
  * 地图图标单击事件入口
  */
 var anchStatus = false;
+var old_feature;
 mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feature, evt) {
     console.log(anchStatus);
     if (feature.length !== 0) {
@@ -190,8 +191,8 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                     var anchKey = feature[0].get('anchKey') === undefined ? "" : feature[0].get('anchKey');
                     console.log(anchKey);
                     changeAnchSaveButton(false);
-                    feature[0].setId("current");
-                    // feature[0]['anchKey']  = '';
+                    old_feature =  feature[0];
+                    feature[0].setId("current"); // 将当前的设为current
                     getAnchInfo(anchKey, lon, lat);
                 }
                 // 泊位管理弹出框
@@ -203,23 +204,65 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                     getPierInfo(clusterId, lon, lat);
                 }
             }
-            // 如果
+            // 如果已经进入锚地状态
             else{
-                var clusterId = feature[0].get('cluster_id');
-                var anchKey = feature[0].get('anchKey') === undefined ? "" : feature[0].get('anchKey');
-                console.log(anchKey);
-                // 如果点击旧锚地图标, 将其加入选择列表
-                if( type === 0){
-                    var number = parseInt($(".selected_LonLat>li:last-child>span:first-child").text()) + 1;
+                var id = feature[0].get("id");
+                // 当属于本锚地时，点击之后取消选定
+                if(id === "choosed"){
+                    // 获取行号
+                    var number = feature[0].get("number");
+                    console.log("行号" + number + "将被取消");
+                    var ele = $(".selected_LonLat>li:eq(" + (number - 1) + ")");
+                    var lon = parseFloat(ele.attr("lon"));
+                    var lat = parseFloat(ele.attr("lat"));
+                    var clusterId = ele.attr("clusterId"); // 不重新赋予新的
+                    // var number = parseInt($(".unselected_LonLat>li:last-child>span:first-child").text()) + 1;
                     number = isNaN(number) ? 1: number;
-                    var normalLonLatStr = transLonLatToNormal(lon, lat);
-                    var chooseStr = '<li clusterId=' + clusterId + ' lon=' + lon  + ' lat=' + lat +'><span>' + number + '</span><span class = "anch_belong"></span><span>' + normalLonLatStr + '</span></li>';
-                    $(".selected_LonLat").append(chooseStr);
-                    changeAnchSaveButton(true);
-                    // 更新轮廓点
+                    // var normalLonLatStr = $(this).next().text();
+                    // var chooseStr = '<li clusterId=' + ele.attr("clusterId") + ' lon=' + ele.attr("lon")  + ' lat=' + ele.attr("lat") +'><span>' + number + '</span><span class = "anch_notBelong"></span><span>' + normalLonLatStr + '</span></li>';
+                    // $(".unselected_LonLat").append(chooseStr);
+                    // 移除本行
+                    var nextDomList = ele.nextAll();
+                    for(var i = 0; i < nextDomList.length; i++){
+                        var num = parseInt(nextDomList.eq(i).children("span:first-child").text()) -1;
+                        nextDomList.eq(i).children("span:first-child").text(num);
+                    }
+                    ele.remove();
                     updateLocationList();
-                    // 根据当前所选点，画出轮廓线
+                    // 根据当前点画出轮廓线
                     writeContourLine(locationList);
+                    // 将删除的点重新拿出来, 显示在地图上, 以备选择, 目前没有保留clusterID这个字段
+                    var feature = new ol.Feature({
+                        'lon' : lon,
+                        'lat': lat,
+                        'name': "park_icon",
+                        'type': 0,
+                        'cluster_id' : clusterId,
+                        geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
+                    });
+                    feature.setStyle(park_style[0]); // 还原成锚地图标
+                    icon.getSource().addFeature(feature);
+                    changeAnchSaveButton(true);
+                }
+                else {
+                    console.log("加入");
+                    var clusterId = feature[0].get('cluster_id');
+                    var anchKey = feature[0].get('anchKey') === undefined ? "" : feature[0].get('anchKey');
+                    console.log(anchKey);
+                    // 如果点击旧锚地图标, 将其加入选择列表
+                    if (type === 0) {
+                        var number = parseInt($(".selected_LonLat>li:last-child>span:first-child").text()) + 1;
+                        number = isNaN(number) ? 1 : number;
+                        var normalLonLatStr = transLonLatToNormal(lon, lat);
+                        var chooseStr = '<li clusterId=' + clusterId + ' lon=' + lon + ' lat=' + lat + '><span>' + number + '</span><span class = "anch_belong"></span><span>' + normalLonLatStr + '</span></li>';
+                        $(".selected_LonLat").append(chooseStr);
+                        changeAnchSaveButton(true);
+                        // 更新轮廓点
+                        updateLocationList();
+                        // 根据当前所选点，画出轮廓线
+                        writeContourLine(locationList);
+                        changeAnchSaveButton(true);
+                    }
                 }
             }
         }

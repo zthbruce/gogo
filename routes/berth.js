@@ -16,7 +16,7 @@ var router = express.Router();
  */
 router.get('/addPierSelectCompanyName', function(req, res, next){
     var companyStr = req.query.companyStr;
-    var sqls = util.format("SELECT ENName,CNName,CompanyNumber FROM T1101_Company WHERE CNName LIKE '%" + companyStr  + "%' OR ENName LIKE '%" + companyStr + "%' LIMIT 50" );
+    var sqls = util.format("SELECT CompanyNumber, Name FROM T2107_Company WHERE Name LIKE '%" + companyStr  + "%'  LIMIT 50" );
     mysql.query(sqls, function (err, results) {
         if(err){
             console.log(utils.eid1);
@@ -91,7 +91,7 @@ router.get('/getBerthListFromPier', function(req, res, next){
  */
 router.get('/getTerminal', function(req, res, next){
     var staticAreaKey = req.query.staticAreaKey;
-    var sqls = util.format('SELECT  t1.*, t2.ENName AS PortName FROM T2102_Terminal t1 LEFT JOIN T2101_Port t2 ON t1.PortID = t2.PortID WHERE TerminalKey = (SELECT TerminalKey FROM T2103_TerminalDetails ' +
+    var sqls = util.format('SELECT  t1.*, t2.ENName AS PortName, t3.Name AS CompanyName FROM T2102_Terminal t1 LEFT JOIN T2101_Port t2 ON t1.PortID = t2.PortID LEFT JOIN T2107_Company t3 ON t1.BelongtoCompany = t3.CompanyNumber WHERE TerminalKey = (SELECT TerminalKey FROM T2103_TerminalDetails ' +
         ' WHERE StationaryAreaKey = "%s")', staticAreaKey);
     mysql.query(sqls, function (err, results) {
         if(err){
@@ -261,25 +261,21 @@ router.get('/reqShipStaticData', function(req, res, next){
     });
 });
 
-// router.get('/saveCompany', function(req, res, next) {
-//     var StationaryAreaKeyList = req.query.StationaryAreaKeyList;
-//     var sqls = 'DELETE FROM T2103_TerminalDetails WHERE StationaryAreaKey in (';
-//     for(var i = 0; i< StationaryAreaKeyList.length; i++){
-//         if( i > 0){
-//             sqls += ","
-//         }
-//         sqls += StationaryAreaKeyList[i]
-//     }
-//     mysql.query(sqls, function (err, results) {
-//         if (err) {
-//             console.log(utils.eid1);
-//             res.jsonp(['404', utils.eid1]);
-//         } else {
-//             console.log("成功连接数据库");
-//             res.jsonp(['200', "删除码头信息成功"]);
-//         }
-//     });
-// });
+/**
+ * 保存码头公司信息
+ */
+router.get('/savePierCompany', function(req, res, next) {
+    var sqls = util.format('REPLACE INTO `T2107_Company` (CompanyNumber, NAME) VALUE ("%s", "%s")',req.query.CompanyNumber, req.query.Name);
+    mysql.query(sqls, function (err, results) {
+        if (err) {
+            console.log(utils.eid1);
+            res.jsonp(['404', utils.eid1]);
+        } else {
+            console.log("成功连接数据库");
+            res.jsonp(['200', "保存公司信息成功"]);
+        }
+    });
+});
 
 // 作为中间路由传递
 module.exports = router;

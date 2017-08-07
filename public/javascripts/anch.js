@@ -141,31 +141,6 @@ function getAnchInfo(anchKey, lon, lat) {
     // 将锚地的key值赋上
     $(".anchInfo_list").attr("anchKey", anchKey);
     $(".IntentPort_list>li:not(.add_port)").remove(); // 目的港口列表初始化
-    // 当anchKey不存在的时候， 即为聚类的锚地
-    // if(anchKey === ""){
-    //     $(".anchInfo_list>.pier_info>input").val(""); //初始化输入
-    //     // 未选择列表中
-    //     var closeAnchList = getCloseAnchList(lon, lat, allPoints, 20);
-    //     // 将当前点排除掉
-    //     $(".selected_LonLat").empty();
-    //     $(".unselected_LonLat").empty();
-    //     console.log("锚地长度:" + closeAnchList.length);
-    //     for(var i = 0; i< closeAnchList.length; i++){
-    //         var ele = closeAnchList[i];
-    //         if(i === 0){
-    //             // 在选择列表中只有本锚地信息lon, lat
-    //             var normalLonLat = transLonLatToNormal(lon, lat);
-    //             // var chooseLonLatStr = '<li clusterId=' + ele.clusterId + ' lon=' + lon + ' lat=' + lat + '><span>1</span><span class = "anch_belong"></span><span>' +  normalLonLat[0] + ", " + normalLonLat[1] + '</span></li>';
-    //             var chooseLonLatStr = '<li clusterId=' + ele.clusterId + ' lon=' + lon + ' lat=' + lat + '><span>1</span><span class = "always_belong"></span><span>' +  normalLonLat[0] + ", " + normalLonLat[1] + '</span></li>';
-    //             $(".selected_LonLat").append(chooseLonLatStr);
-    //         }else {
-    //             normalLonLat = transLonLatToNormal(ele.lon, ele.lat);
-    //             var unchoosedLonLatStr = '<li clusterId=' + ele.clusterId + ' lon=' + ele.lon + ' lat=' + ele.lat +'><span>' + i + '</span><span class = "anch_notBelong"></span><span>' + normalLonLat[0] + ", " + normalLonLat[1] + '</span></li>';
-    //             $(".unselected_LonLat").append(unchoosedLonLatStr);
-    //         }
-    //     }
-    // }
-    // else {
         $.ajax({
             url: '/anch/getAnchInfo',
             type: 'get',
@@ -203,7 +178,7 @@ function getAnchInfo(anchKey, lon, lat) {
                         var normalLonLat = transLonLatToNormal(lonLatInfo[0], lonLatInfo[1]);
                         var chooseLonLatStr = '<li clusterId="" lon=' + lonLatInfo[0] + ' lat=' + lonLatInfo[1] + '><span>' + (j + 1) + '</span><span class = "always_belong"></span><span>' + normalLonLat[0] + ", " + normalLonLat[1] + '</span></li>';
                         $(".selected_LonLat").append(chooseLonLatStr);
-                        locationList.push([lonLatInfo[0], lonLatInfo[1]]);
+                        locationList.push([parseFloat(lonLatInfo[0]), parseFloat(lonLatInfo[1])]);
                     }
                     locationList.push(locationList[0]); // 将第一个点做为结尾
                     // locationList.push([lonLatInfo[0], lonLatInfo[1]]);
@@ -223,13 +198,14 @@ function getAnchInfo(anchKey, lon, lat) {
                 }
                 else{
                     // 中心点为本点
-                    center = [lon, lat];
-                    locationList = [[lon, lat]];
+                    console.log(centerLon + "," + centerLat);
+                    center = [centerLon, centerLat];
+                    locationList = [[centerLon, centerLat]];
                     // chooseLonLatList = [[lon, lat]];
                     // 锚地信息初始化
                     $(".anchInfo_list>.pier_info>input").val(""); //初始化输入
                     // 未选择列表中
-                    var closeAnchList = getCloseAnchList(lon, lat, allPoints, 20);
+                    var closeAnchList = getCloseAnchList(centerLon, centerLat, allPoints, 20);
                     // 将当前点排除掉
                     $(".selected_LonLat").empty();
                     $(".unselected_LonLat").empty();
@@ -238,9 +214,9 @@ function getAnchInfo(anchKey, lon, lat) {
                         var ele = closeAnchList[i];
                         if(i === 0){
                             // 在选择列表中只有本锚地信息lon, lat
-                            var normalLonLat = transLonLatToNormal(lon, lat);
+                            var normalLonLat = transLonLatToNormal(centerLon, centerLat);
                             // var chooseLonLatStr = '<li clusterId=' + ele.clusterId + ' lon=' + lon + ' lat=' + lat + '><span>1</span><span class = "anch_belong"></span><span>' +  normalLonLat[0] + ", " + normalLonLat[1] + '</span></li>';
-                            var chooseLonLatStr = '<li clusterId=' + ele.clusterId + ' lon=' + lon + ' lat=' + lat + '><span>1</span><span class = "always_belong"></span><span>' +  normalLonLat[0] + ", " + normalLonLat[1] + '</span></li>';
+                            var chooseLonLatStr = '<li clusterId=' + ele.clusterId + ' lon=' + centerLon + ' lat=' + centerLat + '><span>1</span><span class = "always_belong"></span><span>' +  normalLonLat[0] + ", " + normalLonLat[1] + '</span></li>';
                             $(".selected_LonLat").append(chooseLonLatStr);
                         }else {
                             normalLonLat = transLonLatToNormal(ele.lon, ele.lat);
@@ -258,6 +234,29 @@ function getAnchInfo(anchKey, lon, lat) {
                 for(var i = 0; i < closePortList.length; i++){
                     var port = closePortList[i];
                     $("#port_list_to_choose").append('<li portID="'+ port.PortID+'">'+port.ENName+'</li>');
+                }
+
+                // 将曲线的点(勾)画出来
+                console.log("画出点");
+                current_anch.getSource().clear(); // 清空图层
+                for(var i = 0; i < locationList.length - 1; i++) {
+                    var ele = locationList[i];
+                    var lon = ele[0];
+                    var lat = ele[1];
+                    console.log(lon + "," + lat);
+                    var anch_choosed = new ol.Feature({
+                        'number': i + 1,
+                        'id' : 'choosed',
+                        'lon' : lon,
+                        'lat': lat,
+                        'type': 0,
+                        'anchKey': anchKey,
+                        // 'cluster_id' : key,
+                        geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
+                    });
+                    anch_choosed.setStyle(choosedAnch);
+                    current_anch.getSource().addFeature(anch_choosed);
+                    // features.push(park_feature);
                 }
             },
             error: function (err) {
@@ -342,6 +341,7 @@ function updateLocationList(){
     // position.getSource().addFeatures(positionFeatureList);
 
     center = [lonSum / num, latSum / num];
+    console.log("中心点为: " + center);
     // 顺时针排序
     locationList.sort(clockCompare);
     var firstPoint = locationList[0];
@@ -349,52 +349,15 @@ function updateLocationList(){
 }
 
 // 画出锚地的轮廓线
+// 再画上边界点
 function writeContourLine(lonLatList) {
-    // var lonLatList = [];
-    // var num = 0;
-    // var lonSum  = 0;
-    //  var latSum  = 0;
-    // $(".selected_LonLat >li").each(function () {
-    //     num++;
-    //     var lon = parseFloat($(this).attr("lon"));
-    //     var lat = parseFloat($(this).attr("lat"));
-    //     lonSum += lon;
-    //     latSum += lat;
-    //     lonLatList.push([lon, lat])
-    // });
-    // // // 将几个点的定位显示
-    // // var positionFeatureList = [];
-    // // for( var i = 0; i < lonLatList.length; i++){
-    // //     var lon_lat = lonLatList[i];
-    // //     var position_feature = new ol.Feature({
-    // //         geometry: new ol.geom.Point(ol.proj.fromLonLat([lon_lat[0], lon_lat[1]]))
-    // //     });
-    // //     position_feature.setStyle(position_style);
-    // //     positionFeatureList.push(position_feature)
-    // // }
-    // // position.getSource().clear();
-    // // position.getSource().addFeatures(positionFeatureList);
-    //
-    // center = [lonSum / num, latSum / num];
-    // // 顺时针排序
-    // lonLatList.sort(clockCompare);
-    // var firstPoint = lonLatList[0];
-    // lonLatList.push(firstPoint);
     var lonLatInfo = [];
     for(var i = 0; i < lonLatList.length; i++){
         var ele = lonLatList[i];
         lonLatInfo.push(ol.proj.fromLonLat([ele[0], ele[1]]));
     }
-
-    // var feature = new ol.Feature({
-    //     // id: "current",
-    //     // anchKey:"current",
-    //     geometry: new ol.geom.Polygon([lonLatInfo])
-    // });
-
     // 清空之后再刷新区域
     if(anch.getSource().getFeatureById("current") !== null){
-        console.log("here");
         anch.getSource().removeFeature(anch.getSource().getFeatureById("current"));
     }
     // 添加新的feature
@@ -407,9 +370,29 @@ function writeContourLine(lonLatList) {
     });
     feature.setId('current');
     feature.setStyle();
-    anch.getSource().clear();
+    // anch.getSource().clear(); 无需清空，只要将上述
     anch.getSource().addFeature(feature);
     // map.getView().setCenter(center)
+
+    // 将边界点也显示出来
+    current_anch.getSource().clear(); // 清空图层
+    for(var i = 0; i < locationList.length - 1; i++) {
+        var ele = locationList[i];
+        var lon = ele[0];
+        var lat = ele[1];
+        var anch_choosed = new ol.Feature({
+            'id' : 'choosed',
+            'lon' : lon,
+            'lat': lat,
+            'type': 0,
+            'anchKey': "",
+            'number' : i + 1,
+            // 'cluster_id' : key,
+            geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
+        });
+        anch_choosed.setStyle(choosedAnch);
+        current_anch.getSource().addFeature(anch_choosed);
+    }
 }
 
 
@@ -431,7 +414,7 @@ $('.anchName_select>input').keyup(function(){
 
 
 
-// 点击对号 未选择列表 <- 选择列表 住以及那个序号
+// 点击对号 未选择列表 <- 选择列表
 $(".selected_LonLat").delegate(".anch_belong","click",function(){
 // $(".selected_LonLat").delegate("li>span:nth-child(2)","click",function(){
     var ele = $(this).parent();
@@ -603,6 +586,7 @@ $('#anch_save').click(function(){
         location +=  lon + "#" + lat;
     }
     console.log(location);
+    console.log()
     var anchInfo = {AnchorageKey: anchKey, Name: anchName, Purpose: purpose,
         Des: des, CenterLon: center[0].toFixed(4), CenterLat: center[1].toFixed(4),
         Location: location, DestinationPort: portListStr}; // 向后台请求保存
@@ -657,7 +641,9 @@ $('#anch_save').click(function(){
     anch.getSource().getFeatureById("current").set("anchKey", anchKey);
     position.getSource().clear();
     anchStatus = !anchStatus;
-    map.getView().setCenter(ol.proj.fromLonLat(center));
+    current_anch.getSource().clear();
+    // map.getView().setCenter(ol.proj.fromLonLat(center));
+    // map.getView().setCenter(ol.proj.fromLonLat(center));
 });
 
 // 取消按钮点击之后
@@ -667,9 +653,13 @@ $('#anch_cancel').click(function(){
     position.getSource().clear();
     // 如果有画图未保存的图层, 清空当前的画图区域
     if(anch.getSource().getFeatureById("current") !== null && anch.getSource().getFeatureById("current").get("anchKey") === ""){
+        // 删去正在画的那一层, 还原成
         anch.getSource().removeFeature(anch.getSource().getFeatureById("current"));
+        anch.getSource().addFeature(old_feature);
     }
     anchStatus = !anchStatus;
+    // 将选择勾去掉
+    current_anch.getSource().clear();
 });
 
 
