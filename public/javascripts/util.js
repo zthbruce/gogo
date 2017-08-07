@@ -245,20 +245,22 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                     changeAnchSaveButton(true);
                 }
                 else {
-                    console.log("加入");
                     var clusterId = feature[0].get('cluster_id');
                     var anchKey = feature[0].get('anchKey') === undefined ? "" : feature[0].get('anchKey');
                     console.log(anchKey);
                     // 如果点击旧锚地图标, 将其加入选择列表
                     if (type === 0) {
+                        console.log("加入");
                         var number = parseInt($(".selected_LonLat>li:last-child>span:first-child").text()) + 1;
                         number = isNaN(number) ? 1 : number;
                         var normalLonLatStr = transLonLatToNormal(lon, lat);
-                        var chooseStr = '<li clusterId=' + clusterId + ' lon=' + lon + ' lat=' + lat + '><span>' + number + '</span><span class = "anch_belong"></span><span>' + normalLonLatStr + '</span></li>';
+                        console.log(clusterId);
+                        var chooseStr = '<li clusterId= "' + clusterId +  '" lon=' + lon + ' lat=' + lat + '><span>' + number + '</span><span class = "anch_belong"></span><span>' + normalLonLatStr + '</span></li>';
+                        console.log(chooseStr);
                         $(".selected_LonLat").append(chooseStr);
-                        changeAnchSaveButton(true);
                         // 更新轮廓点
                         updateLocationList();
+                        // console.log(locationList);
                         // 根据当前所选点，画出轮廓线
                         writeContourLine(locationList);
                         changeAnchSaveButton(true);
