@@ -940,6 +940,14 @@
         })
     });
 
+    var exist_anch_style = new ol.style.Style({
+        image: new ol.style.Icon({
+            scale: 0.8,
+            src: 'images/anchor.png'
+        })
+    });
+
+
 
 //    var source = new ol.source.Vector();
 //    var vector = new ol.layer.Vector({
@@ -1077,16 +1085,15 @@
     });
 
     // 监听界面变化
+    var oldLevel = initLevel;
     blmol.bind.addOnMapMoveEndListener(map, function (map, extent, event) {
         var zoom = blmol.operation.getZoom(map);
         console.log(zoom);
         iconLayer(zoom, extent);
-//        if(zoom > 10){
-//
-//        }
-//        else{
-//            anch.getSource().clear();
-//        }
+        if((zoom >= 10 && oldLevel < 10) || (zoom < 10  && oldLevel >= 10)){
+            anchLayer(zoom) // 变化锚地显示
+        }
+        oldLevel = zoom;
     });
 
 
