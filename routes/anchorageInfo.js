@@ -6,7 +6,7 @@
 
 var nowdate = new Date();
 var nowday = nowdate.toLocaleDateString();
-console.log(nowday)
+console.log(nowday);
 
 function generateNewPierKey(){
     //新建码头key值

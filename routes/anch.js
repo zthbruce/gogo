@@ -33,7 +33,7 @@ router.get('/getAnchInfo', function(req, res, next){
 
 
 /**
- *
+ * 根据名字进行搜索
  */
 router.get('/anchNameSearch', function(req, res, next){
     var anchNameStr = req.query.anchNameStr;
@@ -115,6 +115,9 @@ router.get('/saveAnchInfo', function(req, res, next){
     });
 });
 
+/**
+ * 获取锚地显示信息
+ */
 router.get('/getAnchShowInfo', function(req, res, next){
     var sqls = util.format("SELECT AnchorageKey, Name, CenterLon, CenterLat, Location FROM T2104_Anchorage");
     mysql.query(sqls, function (err, results) {
@@ -131,9 +134,6 @@ router.get('/getAnchShowInfo', function(req, res, next){
         }
     });
 });
-
-
-
 
 
 module.exports = router;
