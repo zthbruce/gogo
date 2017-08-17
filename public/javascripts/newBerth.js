@@ -18,7 +18,6 @@ $('.newBerthAnch_title').mousedown(function(event){
     if(changeDivId=='newBerthStatistics'){newBerthStatDown = true;}
     DivLeft = event.clientX - $(this).offset().left;
     DivTop = event.clientY - $(this).offset().top;
-    $(this).css('cursor','all-scroll');
 });
 var portDivZIndex = 0;
 $('#newBerth,#newAnch,#newBerthStatistics').click(function(){
@@ -31,7 +30,6 @@ $('.newBerthAnch_title').mouseup(function(){
     if(changeDivId=='newBerth'){newBerthDown = false;}
     if(changeDivId=='newAnch'){newAnchDown = false;}
     if(changeDivId=='newBerthStatistics'){newBerthStatDown = false;}
-    $(this).css('cursor','auto');
 });
 
 $(window).mousemove(function(event){

@@ -1,5 +1,6 @@
-#route_Show{width:40px;height:40px;background:#fff;position:fixed;bottom:50px;left:50px;}
-#route_Show>.route_Ship_btn{width:32px;height:32px;margin:4px;cursor:pointer;background:url('/icon/route.png') no-repeat 4px 4px;}
+#route_Show{width:120px;height:40px;background:#fff;position:fixed;bottom:50px;left:50px;}
+#route_Show>div{display:inline-block;width:32px;height:32px;margin:4px;cursor:pointer;float:left;}
+#route_Show>.route_Ship_btn{background:url('/icon/route.png') no-repeat 4px 4px;}
 #route_Show>.route_Ship_btn:hover{background-position:-24px 4px;}
 #route_Show>.route_Ship_btn:active{background-position:-52px 4px;}
 #route_list{background:#fff;position:fixed;border-top-left-radius:10px;border-top-right-radius:10px;box-shadow:0px 5px 10px 5px #999;}
@@ -29,7 +30,7 @@
 .ship_list_content li:hover{color:#fff;background:#2EB1EA;}
 .ship_list_content .active{color:#fff;background:#2EB1EA;}
 
-.oneShip_listShow_btn {width:20px;height:30px;background:url('/images/expand_right.png') no-repeat;position:absolute;left:290px;top:200px;cursor:pointer;}
+.oneShip_listShow_btn {width:20px;height:30px;background:url('/images/expand.png') no-repeat;position:absolute;left:290px;top:200px;cursor:pointer;}
 /*.oneShip_listShow_btn_right{width:20px;height:30px;background:url('/images/expand_right.png') no-repeat;position:absolute;left:290px;top:200px;cursor:pointer;}*/
 /*.oneShip_listShow_btn_left{width:20px;height:30px;background:url('/images/expand_left.png') no-repeat;position:absolute;left:290px;top:200px;cursor:pointer;}*/
 /*.oneShip_listShow_btn{width:8px;height:30px;background:#00f;position:absolute;left:290px;top:200px;cursor:pointer;}*/
@@ -50,6 +51,10 @@
 .oneShip_routeList li{color:#060205;background:#ffffff;cursor:pointer;}
 .oneShip_routeList li:hover{color:#fff;background:#2EB1EA;}
 .oneShip_routeList .active{color:#fff;background:#2EB1EA;}
+
+
+
+
 
 
 

@@ -195,7 +195,6 @@ function getDetailRoute(MMSI, startTime, stopTime) {
             console.log(e);
         }
     })
-
 }
 
 /**

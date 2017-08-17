@@ -1,0 +1,36 @@
+/*航线管理*/
+
+/*航线左下列表操作*/
+#route_Show>.route_Info_btn{background:url('/icon/route.png') no-repeat 4px 4px;}
+#route_Show>.route_Info_btn:hover{background-position:-24px 4px;}
+#route_Show>.route_Info_btn:active{background-position:-52px 4px;}
+.route_List_ul{background:rgba(0,0,0,0.8);position:absolute;border-radius:2px;}
+.route_List_ul>li{height:30px;cursor:pointer;line-height:30px;color:#fff;font-size:14px;padding-left:10px;}
+.route_List_ul>li:hover{background:#217BA2;}
+.routeType_list{width:80px;bottom:40px;left:80px;display:block;}
+.routeType_list>li>i{display:inline-block;width:0px;height:0px;border:4px solid transparent;border-left-color:#eee;float:right;margin-top:12px;}
+.oneRoute_List{width:130px;bottom:40px;left:160px;display:block;}
+.oneRoute_List>li{font-size:12px;}
+
+/*航线信息管理弹出框*/
+#routeInfo{width:500px;height:415px;position:fixed;z-index:100;top:70px;left:300px;border-radius: 10px;background: rgba(6, 2, 5, 0.8);display:block;}
+.routeStartEnd{width:96%;height:70px;margin:5px auto;}
+.routeInfo_Install{width:96%;height:70px;margin:5px auto;background:#fff;}
+.routeDes{width:96%;height:160px;margin:5px auto;}
+.routeInstall_Btn{width:96%;height:30px;margin:5px auto;}
+/*起终点选择*/
+.routeStartEnd>div{font-size:14px;color:#fff;width:90%;margin:0px auto 5px;height:20px;}
+.routePort_Select>div{display:inline-block;width:49%;height:20px;line-height:20px;}
+.routePort_Select i{display:inline-block;width:8px;height:14px;margin-left:5px;background:#ccc;position:relative;top:2px;}
+.routeStartPier_Select{}
+.routeEndPier_Select{margin-bottom:0px;}
+.routePoint_infoShow{display:inline-block;margin-left:10px;height:20px;line-height:20px;}
+.routeStartEndPier .routePoint_infoShow{width:340px;}
+
+
+/*中英文说明*/
+.routeDes>div{display:inline-block;width:49%;height:160px;font-size:14px;color:#fff;text-align:center;}
+.routeDes>div>textarea{display:inline-block;width:96%;height:140px;font-size:13px;margin-left:5px;resize:none;overflow-y:scroll;}
+
+
+

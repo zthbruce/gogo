@@ -23,6 +23,8 @@ var berth = require('./routes/berth'); // 泊位的接口
 
 var anch = require('./routes/anch'); // 锚地的接口
 
+var fleet = require('./routes/fleet'); // 锚地的接口
+
 var app = express();
 
 //设置跨域访问
@@ -64,12 +66,13 @@ app.use('/contourShow', contour);
 
 app.use('/statistic', statistic);
 
-app.use('/route', route);
+app.use('/route', route); // 航次
 
 app.use('/berth', berth); //泊位
 
 app.use('/anch', anch); //锚地
 
+app.use("/fleet", fleet); //船队
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

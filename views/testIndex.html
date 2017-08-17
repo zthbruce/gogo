@@ -8,6 +8,8 @@
     <!--<link rel='stylesheet' href='/stylesheets/maodi.css' />-->
     <link rel='stylesheet' href='/stylesheets/route.css' />
     <link rel='stylesheet' href='/stylesheets/newberth.css' />
+    <link rel='stylesheet' href='/stylesheets/fleet.css' />
+    <link rel='stylesheet' href='/stylesheets/routeInfo.css' />
 
     <link rel="stylesheet" href="http://openlayers.org/en/v3.17.1/css/ol.css" type="text/css">
     <link rel="stylesheet" href="https://openlayers.org/en/v4.1.1/css/ol.css" type="text/css">
@@ -23,9 +25,10 @@
     <script type="text/javascript" src="/javascripts/blmOperate.js"></script>
     <script type="text/javascript" src="/javascripts/blmBind.js"></script>
     <script type="text/javascript" src="/javascripts/jquery.js"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/daterangepicker.css">
 
 </head>
-<body>
+<body style="overflow:hidden;">
 <div id="map" class="map" tabindex="0"></div>
 <!--<map id="map" class="map"></map>-->
 <div id="optain_topLeft_text"></div>
@@ -64,8 +67,71 @@
 </div>
 
 <div id="route_Show">
+    <div class="route_Fleet_btn"></div>
     <div class="route_Ship_btn"></div>
+    <div class="route_Info_btn"></div>
+
+    <!--船队分类-->
+    <ul class="ShipType_list Fleet_List_ul">
+        <li id="0">Bulk Cargo<i></i></li>
+        <li id="1">Crude<i></i></li>
+        <li id="2">Container<i></i></li>
+    </ul>
+    <ul class="BulkCargo FleetName_List Fleet_List_ul">
+        <!--<li>VLOC(<i>120</i>)</li>-->
+        <!--<li>Cape(<i>300</i>)</li>-->
+        <!--<li>Mini Cape(<i>500</i>)</li>-->
+        <!--<li>Panamax(<i>1500</i>)</li>-->
+        <!--<li>Supramax(<i>1800</i>)</li>-->
+        <!--<li>Handymax(<i>2000</i>)</li>-->
+        <!--<li>Handysize</li>-->
+    </ul>
+    <ul class="Crude FleetName_List Fleet_List_ul">
+        <!--<li>VLCC(<i>680</i>)</li>-->
+        <!--<li>Aframax(<i>800</i>)</li>-->
+        <!--<li>MR Tanker(<i>100</i>)</li>-->
+        <!--<li>成品油(<i>1900</i>)</li>-->
+        <!--<li>Q-Max(<i>30</i>)</li>-->
+        <!--<li>LPG(<i>60</i>)</li>-->
+    </ul>
+    <ul class="Container FleetName_List Fleet_List_ul"></ul>
+
+    <!--航线分类-->
+    <ul class="routeType_list route_List_ul">
+        <li>BCI<i></i></li>
+        <li>BDTI<i></i></li>
+        <li>BCTI<i></i></li>
+        <li>BITR<i></i></li>
+        <li>BLPGR<i></i></li>
+        <li>BPI<i></i></li>
+        <li>BSI<i></i></li>
+        <li>BHSI<i></i></li>
+    </ul>
+    <!--9,18,5,7,1,4,12,6-->
+    <ul class="oneRoute_List route_List_ul">
+        <li>Route C2</li>
+        <li>Route C3</li>
+        <li>Route C4</li>
+        <li>Route C5</li>
+        <li>Route C7</li>
+        <li>Route C8 03</li>
+        <li>Route C9 03</li>
+        <li>Route C10 03</li>
+        <li>Route C11 03</li>
+        <li>Route C2</li>
+        <li>Route C3</li>
+        <li>Route C4</li>
+        <li>Route C5</li>
+        <li>Route C7</li>
+        <li>Route C8 03</li>
+        <li>Route C9 03</li>
+        <li>BCTI Route 14</li>
+        <li>BITR-Asia Route 12</li>
+    </ul>
+
 </div>
+
+
 <div id="route_list">
     <div class="route_title">
         <span>船舶列表</span>
@@ -98,6 +164,297 @@
         </ul>
     </div>
 </div>
+
+<!--
+    船队管理
+-->
+<!--船队信息管理-->
+<div id="fleet">
+    <div class="fleet_title">
+        <span>VLOC</span>
+        <div class="title_offbtn"></div>
+    </div>
+    <div class="dividing_line"></div>
+    <div class="fleetInfo_timeSelect">
+        <div class="today_btn">今日</div>
+        <div class="time_Line">
+            <div class="timeLine_LeftBtn"></div>
+            <div class="timeLine_List">
+                <div class="timeLine_Axle"></div>
+                <ul class="TimePointList">
+                    <li><span>2017-06-12</span><i></i></li>
+                    <li><span>2017-05-12</span><i></i></li>
+                    <li><span>2017-04-12</span><i></i></li>
+                    <li><span>2017-03-12</span><i></i></li>
+                    <li><span>2017-02-12</span><i></i></li>
+                    <li><span>2017-02-02</span><i></i></li>
+                    <li><span>2016-12-12</span><i></i></li>
+                    <li><span>2016-11-12</span><i></i></li>
+                    <li><span>2016-09-12</span><i></i></li>
+                    <li><span>2016-08-12</span><i></i></li>
+                    <li><span>2016-07-12</span><i></i></li>
+                </ul>
+            </div>
+            <div class="timeLine_RightBtn"></div>
+        </div>
+    </div>
+    <div class="dividing_line"></div>
+    <div class="fleetInfo_content">
+        <ul class="fleetList_title">
+            <li>
+                <span>船舶类型</span><span>IMO</span><span>MMSI</span><span>船名</span><span>DWT(t)</span><span>船龄</span><span>状态</span>
+            </li>
+        </ul>
+        <ul class="fleetList_List">
+            <li>
+                <span>Ore</span>
+                <span>9012252</span>
+                <span></span>
+                <span>SINOCARRIER</span>
+                <span>266307</span>
+                <span>20</span>
+                <span>正服役</span>
+                <span><i>i</i></span>
+            </li>
+            <li>
+                <span>Ore</span>
+                <span>9012252</span>
+                <span>441916000</span>
+                <span>SINOCARRIER</span>
+                <span>266307</span>
+                <span>20</span>
+                <span>正服役</span>
+                <span><i>i</i></span>
+            </li>
+            <li>
+                <span>Ore</span>
+                <span>9012252</span>
+                <span>441916000</span>
+                <span>SINOCARRIER</span>
+                <span>266307</span>
+                <span>20</span>
+                <span>正服役</span>
+                <span><i>i</i></span>
+            </li>
+        </ul>
+    </div>
+    <div class="dividing_line"></div>
+    <div class="fleetInfo_total">
+        <div class="fleetInfo_Num">
+            <span>船舶数量：</span>
+            <span>0</span>
+            <span class="fleet_TotalBtn fleet_AddBtn fleet_AddNumBtn"></span>
+            <span class="fleet_TotalBtn fleet_LessBtn fleet_LessNumBtn"></span>
+        </div>
+        <div class="fleetInfo_DWT">
+            <span>总DWT：</span>
+            <span>0</span>
+            <span class="fleet_TotalBtn fleet_AddBtn fleet_AddDWTBtn"></span>
+            <span class="fleet_TotalBtn fleet_LessBtn fleet_LessDWTBtn"></span>
+        </div>
+    </div>
+</div>
+<!--船舶详情-->
+<div id="shipDetails">
+    <div class="fleet_title">
+        <span class="shipName">SINOCARRIER</span>
+        <div class="title_offbtn"></div>
+    </div>
+    <div class="dividing_line"></div>
+    <div class="shipInfo_show">
+        <div class="shipInfo_img">
+            <div class="shipInfo_imgShow">
+                <ul>
+                    <li>1</li>
+                    <li>2</li>
+                    <li>3</li>
+                </ul>
+            </div>
+            <div class="shipInfo_imgBtn">
+                <span class="imgBtn_left"></span>
+                <span class="imgBtn_right"></span>
+            </div>
+        </div>
+        <ul class="shipInfo_List">
+            <li>IMO: 9012252</li>
+            <li>船级社: KR</li>
+            <li>MMSI: 441916000</li>
+            <li>船籍港: Panama</li>
+            <li>DWT: 266307 mt</li>
+            <li>船旗: <img src=""> KOR</li>
+            <li>吃水: 10.419 m</li>
+            <li>状态: 正服役</li>
+            <li>长*宽*高: 172*26*14 m</li>
+            <li>类型: 货船</li>
+            <li>建造年代: 1992-08-27</li>
+        </ul>
+    </div>
+    <div class="dividing_line"></div>
+    <div class="shipInfo_company">
+        <ul>
+            <li>船东: </li>
+            <li>建造商: </li>
+            <li>ISM管理: </li>
+            <li>管理公司: </li>
+        </ul>
+    </div>
+    <div class="dividing_line"></div>
+    <div class="shipInfo_fleet">
+        <ul>
+            <li><span>船队: </span><span class="shipInfo_FleetName"></span>
+                <ul class="shipInfo_FleetList">
+                    <li FleetNumber="F1">Capesize</li>
+                    <li FleetNumber="F2">VLOC</li>
+                    <li FleetNumber="F3">Panamax</li>
+                    <li FleetNumber="F4">Mini Cape</li>
+                    <li FleetNumber="F5">Supramax</li>
+                    <li FleetNumber="F6">Handysize</li>
+                    <li FleetNumber="F7">Handymax</li>
+                    <li FleetNumber="F8">VLCC</li>
+                    <li FleetNumber="F9">Aframax</li>
+                    <li FleetNumber="F10">MR Tanker</li>
+                    <li FleetNumber="F11">成品油</li>
+                    <li FleetNumber="F12">BLPGR</li>
+                    <li FleetNumber="F13">Q-Max</li>
+                </ul>
+            </li>
+            <li class="shipInfo_Time"><span>进入时间: </span><input id="shipInfo_EnterTime" size="12"/></li>
+            <li class="shipInfo_Time"><span>离开时间: </span><input id="shipInfo_LeaveTime" size="12"/></li>
+        </ul>
+        <div class="shipInfo_updateBtn">保存</div>
+    </div>
+    <div class="dividing_line"></div>
+    <div class="shipInfo_btn">
+        <div class="ship_track"></div>
+    </div>
+</div>
+<!--船舶范围搜索-->
+<div id="ShipSearch_DWTRange">
+    <div class="Search_Info">
+        类型: <span type="0" class="Search_typeText" >散货</span>
+        <ul class="Search_typeSelect">
+            <li type="0">散货</li>
+            <li type="1">原油</li>
+            <li type="2">集装箱</li>
+        </ul>
+        &nbsp;&nbsp;DWT范围: <input type="text" placeholder="20000" class="min_dwt"> t ～ <input type="text" placeholder="400000" class="max_dwt"> t
+        <div class="DWTSearch_btn"></div>
+        <div class="ShipSearch_ShowBtn"></div>
+    </div>
+</div>
+<!--船舶搜索结果-->
+<div id="searchShipList">
+    <div class="fleet_title">
+        <span>船舶列表</span>
+        <div class="title_offbtn"></div>
+    </div>
+    <div class="dividing_line"></div>
+    <div class="fleetInfo_content">
+        <ul class="fleetList_title">
+            <li>
+                <span>船舶类型</span><span>IMO</span><span>MMSI</span><span>船名</span><span>DWT(t)</span><span>船龄</span><span>状态</span>
+            </li>
+        </ul>
+        <ul class="fleetList_List">
+            <li>
+                <span>Ore</span>
+                <span>9012252</span>
+                <span></span>
+                <span>SINOCARRIER</span>
+                <span>266307</span>
+                <span>20</span>
+                <span>正服役</span>
+                <span><i>i</i></span>
+            </li>
+            <li>
+                <span>Ore</span>
+                <span>9012252</span>
+                <span>441916000</span>
+                <span>SINOCARRIER</span>
+                <span>266307</span>
+                <span>20</span>
+                <span>正服役</span>
+                <span><i>i</i></span>
+            </li>
+            <li>
+                <span>Ore</span>
+                <span>9012252</span>
+                <span>441916000</span>
+                <span>SINOCARRIER</span>
+                <span>266307</span>
+                <span>20</span>
+                <span>正服役</span>
+                <span><i>i</i></span>
+            </li>
+        </ul>
+    </div>
+    <div class="dividing_line"></div>
+    <div class="fleetInfo_total">
+        <div class="fleetInfo_Num">
+            <span>船舶数量：</span>
+            <span>0</span>
+        </div>
+        <div class="searchInfo_operating">
+            <i class="operating_radioBtn"></i>
+            <span>显示已在船队船舶</span>
+        </div>
+    </div>
+</div>
+
+
+<!--
+    航线管理
+-->
+<div id="routeInfo">
+    <div class="fleet_title">
+        <span>Route C2</span>
+        <div class="title_offbtn"></div>
+    </div>
+    <div class="dividing_line"></div>
+    <!--起终港口设置-->
+    <div class="routeStartEnd">
+        <div class="routePort_Select">
+            <div class="routePort_Start">
+                出发港:<span class="routePoint_infoShow">Tubarao</span>
+                <i></i>
+            </div>
+            <div class="routePort_End">
+                目的港:<span class="routePoint_infoShow">Rotterdam</span>
+                <i></i>
+            </div>
+            <div class="routePort_End"></div>
+        </div>
+        <div class="routeStartPier_Select routeStartEndPier">
+            出发码头:<span class="routePoint_infoShow">Rotterdam</span>
+        </div>
+        <div class="routeEndPier_Select routeStartEndPier">
+            到达码头:<span class="routePoint_infoShow">Rotterdam</span>
+        </div>
+    </div>
+    <div class="dividing_line"></div>
+    <!--航线信息设置-->
+    <div class="routeInfo_Install">
+        <div class=""></div>
+    </div>
+    <div class="dividing_line"></div>
+    <!--航线中英文说明设置-->
+    <div class="routeDes">
+        <div class="routeDes_Chinese">
+            中文说明:
+            <textarea></textarea>
+        </div>
+        <div class="routeDes_English">
+            英文说明:
+            <textarea></textarea>
+        </div>
+    </div>
+    <div class="dividing_line"></div>
+    <!--航线按钮操作-->
+    <div class="routeInstall_Btn">
+
+    </div>
+</div>
+
 
 <div id="portBasicInfo">
     <div class="portInfo_title">
@@ -272,195 +629,6 @@
     </div>
 
 </div>
-
-<!--<div id="anchorageInfoManage">-->
-    <!--<div class="anchorageInfo_title">-->
-        <!--<span>锚地信息管理界面</span>-->
-        <!--<div class="anchorageInfo_title_offbtn"></div>-->
-        <!--<div class="anchorageInfo_bottom_img"></div>-->
-    <!--</div>-->
-    <!--<div class="anchorageInfo_content">-->
-        <!--<div class="anchorageInfo_topLeft">-->
-            <!--<ul class="anchorageInfo_pierList_title">-->
-                <!--<li>-->
-                    <!--<span>序号</span>-->
-                    <!--<span>名称</span>-->
-                    <!--&lt;!&ndash; <span>操作</span> &ndash;&gt;-->
-                    <!--&lt;!&ndash; <span></span> &ndash;&gt;-->
-                <!--</li>-->
-            <!--</ul>-->
-            <!--<ul class="anchorageInfo_pierList"></ul>-->
-        <!--</div>-->
-        <!--<div class="anchorageInfo_topRight">-->
-            <!--<div class="anchorageInfo_content01">-->
-                <!--<div>-->
-                    <!--<span>名称：</span>-->
-                    <!--<span>锚地1</span>-->
-                <!--</div>-->
-                <!--<div>-->
-                    <!--<span>用途：</span>-->
-                    <!--<span>大型海峡型船停泊</span>-->
-                <!--</div>-->
-                <!--<div class="anchorage_operating">-->
-                    <!--<span class="anchorage_analysis_btn"></span>-->
-                    <!--<span class="anchorage_remarks_btn"></span>-->
-                    <!--<span class="anchorage_modify_btn"></span>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="anchorageInfo_list">-->
-            <!--<ul class="anchorageInfo_title">-->
-                <!--<li>-->
-                    <!--<span>序号</span>-->
-                    <!--<span>经度</span>-->
-                    <!--<span>纬度</span>-->
-                    <!--<span>操作</span>-->
-                <!--</li>-->
-            <!--</ul>-->
-            <!--<ul class="anchorageInfo_ListContent">-->
-                <!--<li >-->
-                    <!--<span>1</span>-->
-                    <!--<span>LAT 20"39'S</span>-->
-                    <!--<span>LAT 20"39'S</span>-->
-                    <!--<span><i class="delete">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i></span>-->
-                <!--</li>-->
-            <!--</ul>-->
-            <!--&lt;!&ndash; <div class="anchorageInfo_add_btn"></div> &ndash;&gt;-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</div>-->
-<!--<div id="anchorage_modify">-->
-    <!--<div class="anchorageInfo_title">-->
-        <!--<span>锚地信息修改</span>-->
-        <!--<div class="anchorageInfo_title_offbtn"></div>-->
-        <!--<div class="anchorageInfo_bottom_img"></div>-->
-    <!--</div>-->
-    <!--<div class="anchorage_Info_content">-->
-        <!--<div><span>锚地名：</span><input type="text"></div>-->
-        <!--<div><span>所属港口：</span><input type="text"></div>-->
-        <!--<div><span>用途：</span><input type="text"></div>-->
-    <!--</div>-->
-    <!--<div class='anchorage_Info_submit'>提交</div>-->
-    <!--<div class="anchorage_Info_cancel">取消</div>-->
-<!--</div>-->
-<!--<div id="anchorage_add">-->
-    <!--<div class="anchorage_add_tittle"><span>&nbsp;&nbsp;添加锚地信息</span><a href="#">&nbsp;&nbsp;&nbsp;&nbsp;</a></div>-->
-    <!--<div class="anchorage_add_content">-->
-    <!--&nbsp;&nbsp;&nbsp;锚地名：<input type="text" class="anchorage_add_ipt1"/><br />-->
-    <!--所属港口：<input type="text" class="anchorage_add_ipt2"/><br />-->
-    <!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用途：<input type="text" class="anchorage_add_ipt3"/><br />-->
-    <!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;描述：<textarea name="" id=" "></textarea>-->
-        <!--<div class="anchorage_add_btn1">提交</div> -->
-        <!--<div class="anchorage_add_btn2">重置</div>-->
-    <!--</div>-->
-<!--</div>-->
-<!--<div id="anchorage_remarks">-->
-    <!--<div class="anchorageInfo_title">-->
-        <!--<span>锚地概述</span>-->
-        <!--<div class="anchorageInfo_title_offbtn"></div>-->
-        <!--<div class="anchorageInfo_bottom_img"></div>-->
-    <!--</div>-->
-    <!--<div class="anchorage_Info_contents">-->
-        <!--<textarea name="anchorageRemark" id="anchorageRemark">锚地备注信息</textarea>-->
-        <!--<div class="anchorage_remark_submit_btn">确定</div>-->
-    <!--</div>-->
-<!--</div>-->
-
-<!--<div class="box1">-->
-    <!--<div class="boxTittle">-->
-        <!--<span>统计表</span>-->
-        <!--<a href="#"></a>-->
-    <!--</div>-->
-    <!--<div class="boxTittle_img"></div>-->
-    <!--<button id="btn1">近一年</button>-->
-    <!--<button id="btn2">近三年</button>-->
-    <!--<button id="btn3">全部</button>-->
-    <!--&lt;!&ndash;<button id="btnmaodi"><img src="/icon/anchorage.png" alt="" width="32" height="15" margin-righi='5' /></button><button id='btnbowei'><img src="/icon/berth.png" alt="" width="32" height="15" margin-righi='5' /></button>&ndash;&gt;-->
-    <!--<select name="" id="select1" selected=""><option value="">Jule</option></select><select name="" id="select2" value=""><option value="">Dry Bulk</option></select>-->
-    <!--<div class="box2" style="width:260px;height:240px">-->
-       <!--<table id='myTable5'>-->
-            <!--<caption>船舶类型</caption>-->
-            <!--<tbody>-->
-                <!--<tr>-->
-                    <!--<th>45</th>-->
-                    <!--<td>17</td>-->
-                    <!--<td>13</td>-->
-                    <!--<td>12</td>-->
-                    <!--<td>2</td>-->
-                    <!--<td>1</td>-->
-                <!--</tr>-->
-            <!--</tbody>-->
-             <!--<thead>-->
-                <!--<tr>-->
-                    <!--<th></th>-->
-                    <!--<th>兼用船</th>-->
-                    <!--<th>暂无</th>-->
-                    <!--<th>油船</th> -->
-                    <!--<th>化学货船</th>-->
-                    <!--<th>散货船</th>                   -->
-                <!--</tr>-->
-            <!--</thead>-->
-        <!--</table>  -->
-    <!--</div>-->
-    <!--<div class="box3">-->
-        <!--<table id='SNStat' width='426' height='238' border='0' cellspacing='0' cellpadding='0' align='center'>-->
-  <!--<tr>-->
-    <!--<td>&nbsp;</td>-->
-    <!--<td style="font-size:15px;">最大值</td>-->
-    <!--<td style="font-size:15px;">最小值</td>-->
-    <!--<td style="font-size:15px;">平均值</td>-->
-    <!--<td style="font-size:15px;">标准差</td>-->
-  <!--</tr>-->
-  <!--<tr>-->
-    <!--<td style="background:#fce498;font-weight:bold;font-size:15px;">全长(m)</td>-->
-    <!--<td></td>-->
-    <!--<td></td>-->
-    <!--<td></td>-->
-    <!--<td></td>-->
-  <!--</tr>-->
-  <!--<tr>-->
-    <!--<td style="background:#fce498;font-weight:bold;font-size:15px;">型宽(m)</td>-->
-    <!--<td></td>-->
-    <!--<td></td>-->
-    <!--<td></td>-->
-    <!--<td></td>-->
-  <!--</tr>-->
-  <!--<tr>-->
-    <!--<td style="background:#fce498;font-weight:bold;font-size:15px;">吃水(m)</td>-->
-    <!--<td></td>-->
-    <!--<td></td>-->
-    <!--<td></td>-->
-    <!--<td></td>-->
-  <!--</tr>-->
-  <!--<tr>-->
-    <!--<td style="background:#fce498;font-weight:bold;font-size:15px;">空高(m)</td>-->
-    <!--<td></td>-->
-    <!--<td></td>-->
-    <!--<td></td>-->
-    <!--<td></td>-->
-  <!--</tr>-->
-  <!--<tr>-->
-    <!--<td style="background:#fce498;font-weight:bold;font-size:15px;">时长(h)</td>-->
-    <!--<td></td>-->
-    <!--<td></td>-->
-    <!--<td></td>-->
-    <!--<td></td>-->
-  <!--</tr>-->
-  <!--<tr>-->
-    <!--<td style="background:#fce498;font-weight:bold;font-size:15px;">DWT(T)</td>-->
-    <!--<td></td>-->
-    <!--<td></td>-->
-    <!--<td></td>-->
-    <!--<td></td>-->
-  <!--</tr>-->
-<!--</table>-->
-    <!--</div>-->
-    <!--<div class="box4">-->
-        <!--<table id='SNInfo' border='0' cellspacing='0' cellpadding='0' align='center'>-->
-        <!--</table>-->
-    <!--</div>-->
-    <!--</div>-->
-
 
 <div id="berth_select">
     <div class="portInfo_title">
@@ -793,6 +961,12 @@
         </tbody>
     </table>
 </div>
+
+<!--&lt;!&ndash;加载显示&ndash;&gt;-->
+<!--<div class="loader"></div>-->
+
+
+
 </body>
 
 <!--<script type="text/javascript" src="/javascripts/require.js"></script>-->
@@ -805,6 +979,9 @@
 <script type="text/javascript" src="/javascripts/statistic.js"></script>
 <script type="text/javascript" src="/javascripts/route.js"></script>
 <script type="text/javascript" src="/javascripts/confirm.js"></script>
+<script src="/javascripts/datePicker/moment.min.js"></script>
+<script src="/javascripts/datePicker/jquery.daterangepicker.js"></script>
+<script type="text/javascript" src="/javascripts/fleet.js"></script>
 <!--<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1RjvgLx-N8yWBBa639e1jHw1wCh6KJUU&callback=initMap" type="text/javascript"></script>-->
 <script>
     var unknown_style = new ol.style.Style({
@@ -1137,6 +1314,8 @@
 <script type="text/javascript" src="/javascripts/berth.js"></script>
 <script type="text/javascript" src="/javascripts/anch.js"></script>
 <!--<script type="text/javascript" src="/javascripts/interaction.js"></script>-->
+
+
 <script type="text/javascript">
     gvChartInit();
 $(function(){

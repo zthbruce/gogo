@@ -81,3 +81,9 @@ a {
   border-radius: 20px;
   font-size: 25px;
 }
+
+
+.loader {
+  border-top: 16px solid blue;
+  border-bottom: 16px solid blue;
+}

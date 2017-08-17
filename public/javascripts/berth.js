@@ -357,6 +357,7 @@ $(window).mousemove(function(event){
         $('#newBerthStatistics').offset({top:newTop,left:newLeft});
     }
 });
+
 // 输入下拉框
 $('.span_select>span:nth-child(2)').click(function(){
     $(this).next('ul').slideDown(200);
@@ -374,8 +375,6 @@ $('.span_select>ul>li,.input_select>ul>li').click(function(){
     $(this).parent().slideUp(200);
     changeBerthSaveButton(true);
 });
-
-
 
 
 // 泊位管理界面关闭
@@ -492,12 +491,6 @@ $('#berth_save').click(function () {
     // }
 });
 
-// 统计按钮事件
-// $('#berth_statistic').click(function () {
-//     $('#newBerthStatistics').fadeIn("normal");
-//     $('#newBerth').fadeOut("normal");
-// })
-
 // 统计按钮
 $('#berth_statistic').click(function(){
     // $('#newBerth').fadeOut("normal");
@@ -521,13 +514,6 @@ $('.pierInfo_list>.pier_info').bind('input propertychange',function() {
     changeBerthSaveButton(true);
 });
 
-// 监听泊位列表输入信息的改变
-// $('.berth_list').bind('input propertychange',function() {
-//     //进行相关操作
-//     // berthStatus = true;
-//     // 将状态保存为可保存状态
-//     changeBerthSaveButton(true);
-// });
 
 $('.company_select>input').keyup(function(){
     console.log("输入公司信息");
