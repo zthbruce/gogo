@@ -212,6 +212,9 @@ $('.FleetName_List').delegate('li', 'click', function () {
     getTimePointList(fleetNumber);
     // 获取船队列表
     getShipList2Fleet(fleetNumber, "");
+    fleetDivZIndex++;
+    console.log(fleetDivZIndex);
+    $('#fleet').css('zIndex',fleetDivZIndex);
     fleet_div.fadeIn(600);
 });
 
@@ -294,7 +297,11 @@ $('.fleetList_List').delegate('.shipDetailInfo', 'click', function () {
             console.log(err);
         }
     });
+    fleetDivZIndex++;
+    console.log(fleetDivZIndex);
+    $('#shipDetails').css('zIndex',fleetDivZIndex);
     $('#shipDetails').fadeIn(600);
+    event.stopPropagation();
 });
 
 // 点击船队获取下拉船队列表选项
@@ -303,6 +310,7 @@ $(".shipInfo_FleetName").click(function () {
     $(this).next("ul").slideDown(200)
 });
 
+// 离开船队下拉框
 $(".shipInfo_FleetList").mouseleave(function () {
     $(this).slideUp(200)
 });
@@ -455,6 +463,7 @@ $('.fleet_title').mousedown(function(event){
 });
 var fleetDivZIndex = 0;
 $('#fleet,#shipDetails,#searchShipList,#routeInfo').click(function(){
+    console.log("here");
     fleetDivZIndex++;
     $(this).css('zIndex',fleetDivZIndex);
 });
