@@ -212,9 +212,9 @@ $('.FleetName_List').delegate('li', 'click', function () {
     getTimePointList(fleetNumber);
     // 获取船队列表
     getShipList2Fleet(fleetNumber, "");
-    fleetDivZIndex++;
-    console.log(fleetDivZIndex);
-    $('#fleet').css('zIndex',fleetDivZIndex);
+    // fleetDivZIndex++;
+    // console.log(fleetDivZIndex);
+    // $('#fleet').css('zIndex',fleetDivZIndex);
     fleet_div.fadeIn(600);
 });
 
@@ -418,10 +418,12 @@ $(".operating_radioBtn").click(function () {
     console.log("here");
     var shipNum = $(' #searchShipList .fleetInfo_Num>span:nth-child(2)');
     if(belongStatus){
+        $(".operating_radioBtn").css("background", '');
         $(".belong2Fleet").hide();
         shipNum.text(shipNum.attr("notBelong"));
     }
     else{
+        $(".operating_radioBtn").css("background", '#ccc');
         $(".belong2Fleet").show();
         shipNum.text(shipNum.attr("total"));
     }
@@ -429,14 +431,22 @@ $(".operating_radioBtn").click(function () {
 });
 
 /**
- *
+ * 点击轨迹按钮显示一个月或者选择相应的日期
  */
-
 $('.ship_track').click(function () {
-    var MMSI = $('.shipInfo_List>li:nth-child(3)').text();
-    console.log(MMSI);
-    // var startTime =
-
+    var MMSI = $('.shipInfo_List>li:nth-child(3)').text().slice(6,15);
+    if(MMSI !==""){
+        // if(startTime !== ""){
+        // var startTime = *.val() // 根据选择的日期进行显示
+        // var date = new Date(startTime);
+        //}
+        var today = new Date();
+        var endTime = Date.parse(today) / 1000;
+        var oneMonth = 25920000;
+        var startTime = endTime - oneMonth;
+        // 获取相应的轨迹
+        getDetailRoute(MMSI, startTime, endTime);
+    }
 });
 
 
@@ -549,27 +559,38 @@ var fleetInfoTimeLeft = 0;
 //     if(timeLeft<=timeAxleWidth-timePointWidth+90){timeLeft=timeAxleWidth-timePointWidth;}
 //     $('.TimePointList').css('left',timeLeft);
 // });
+
 // 点击右边
 $('.fleetInfo_timeSelect .timeLine_RightBtn').click(function(){
     console.log("here");
     var timePoint_ul = $('.TimePointList');
     var timeLeft = parseInt(timePoint_ul.css('left'));
     var width = parseInt(timePoint_ul.css("width"));
-    console.log(width);
-    console.log(timeLeft);
-    timeLeft = timeLeft - 600;
-    if(timeLeft + width >= 0) {
-        timePoint_ul.css('left',timeLeft);
+    // timeLeft = timeLeft - 600;
+    if(timeLeft - 600 + width  >= 0) {
+        timePoint_ul.animate(
+            {
+                left : "-=600",
+            },
+            300, // 时长
+            function() { console.log('done!'); // 回调函数
+            });
     }
 });
 
 $('.fleetInfo_timeSelect .timeLine_LeftBtn').click(function(){
     console.log("here");
-    var timeLeft = parseInt($('.TimePointList').css('left'));
+    var timePoint_ul = $('.TimePointList');
+    var timeLeft = parseInt(timePoint_ul.css('left'));
     console.log(timeLeft);
     if(timeLeft < 0){
-        timeLeft = timeLeft + 600;
-        $('.TimePointList').css('left',timeLeft);
+        timePoint_ul.animate(
+            {
+                left : "+=600",
+            },
+            300, // 时长
+            function() { console.log('done!'); // 回调函数
+            });
     }
 });
 

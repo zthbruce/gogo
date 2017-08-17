@@ -76,7 +76,7 @@ router.get("/getFleetDetailInfo", function (req, res, next) {
     else{
          sql = util.format('SELECT t1.ShipNumber, LEVEL2EN, LEVEL3EN, IMO, MMSI, ENMV, DWT, ShipStatus, BuiltDate, JoinTime, LeaveTime FROM T4101_Fleet t1 LEFT JOIN ' +
             'T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber LEFT JOIN T0105_Tonage t3 ON t1.ShipNumber = t3.ShipNumber LEFT JOIN T9904_ShipType t4 on t2.ShipType = t4.ShipTypeKey' +
-            ' WHERE FleetNumber = "%s" AND (LeaveTime IS NULL OR LeaveTime >= "%s") AND (JoinTime IS NULL OR JoinTime <= "%s") AND ShipStatus IN ("1", "2", "3", "4") ORDER BY DWT DESC', fleetNumber, timePoint, timePoint);
+            ' WHERE FleetNumber = "%s" AND (((JoinTime IS NULL OR JoinTime <= "%s") AND ShipStatus IN ("1", "2", "3")) OR (ShipStatus = "4" AND LeaveTime >= "%s")) ORDER BY DWT DESC', fleetNumber, timePoint, timePoint);
     }
     mysql.query(sql, function (err, results) {
         if(err){

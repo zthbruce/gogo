@@ -137,8 +137,9 @@
 #searchShipList{width:650px;height:360px;top:70px;left:300px;display:none;}
 #searchShipList .fleetInfo_Num{width:140px;}
 .searchInfo_operating{cursor:pointer;}
-.operating_radioBtn{display:inline-block;width:10px;height:10px;background:#fff;margin-right:2px;}
+.operating_radioBtn{display:inline-block;width:10px;height:10px;margin-right:2px;border:2px solid #fff}
 .operating_radioBtn:hover{background:#ccc;}
+/*.searchInfo_operating>{display:inline-block;width:10px;height:10px;background:url("/images/check.png");margin-right:2px;}*/
 
 
 
