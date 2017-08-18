@@ -76,7 +76,7 @@ router.get("/getFleetDetailInfo", function (req, res, next) {
     else{
          sql = util.format('SELECT t1.ShipNumber, LEVEL2EN, LEVEL3EN, IMO, MMSI, ENMV, DWT, ShipStatus, BuiltDate, JoinTime, LeaveTime FROM T4101_Fleet t1 LEFT JOIN ' +
             'T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber LEFT JOIN T0105_Tonage t3 ON t1.ShipNumber = t3.ShipNumber LEFT JOIN T9904_ShipType t4 on t2.ShipType = t4.ShipTypeKey' +
-            ' WHERE FleetNumber = "%s" AND (((JoinTime IS NULL OR JoinTime <= "%s") AND ShipStatus IN ("1", "2", "3")) OR (ShipStatus = "4" AND LeaveTime >= "%s")) ORDER BY DWT DESC', fleetNumber, timePoint, timePoint);
+            ' WHERE FleetNumber = "%s" AND (((JoinTime IS NULL OR JoinTime <= "%s") AND ShipStatus IN ("1", "2", "3")) OR (ShipStatus = "4" AND LeaveTime = "%s")) ORDER BY DWT DESC', fleetNumber, timePoint, timePoint);
     }
     mysql.query(sql, function (err, results) {
         if(err){
@@ -230,6 +230,7 @@ router.get("/getSearchShipList", function (req, res, next) {
             'imn.`T4101_Fleet`  t3 ON t1.ShipNumber = t3.ShipNumber LEFT JOIN T0105_Tonage t4 ON t1.ShipNumber = t4.ShipNumber ' +
             'WHERE  ShipStatus IN ("1", "2", "3") AND DWT >= %s AND DWT <= %s AND Level3EN IN ("Crude oil", "LNG", "LPG", "Product carrier") ORDER BY DWT DESC', min_DWT, max_DWT);
     }
+    // 集装箱
     else{
         sql = util.format('SELECT t1.ShipNumber, LEVEL2EN, LEVEL3EN, IMO, MMSI, ENMV, DWT, ShipStatus, BuiltDate, ' +
             'FleetNumber FROM imn.`T0101_Ship` t1 LEFT JOIN T9904_ShipType t2 ON t1.ShipType = t2.ShipTypeKey LEFT JOIN ' +

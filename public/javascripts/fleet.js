@@ -180,14 +180,16 @@ var ShipStatusInfo = {'0': "在建", '1': "正服役", '2': "维护中", '3': "�
 /*** 船队列表弹出框操作 */
 $('.route_Fleet_btn').click(function(){
     $('.ShipType_list').fadeToggle(300);
+    $('.FleetName_List').fadeOut(300);
     $('#fleet').fadeOut(600);
 });
 
 /** 鼠标移动到船队上显示船队的信息*/
 $('.ShipType_list>li').mouseenter(function(){
     var fleetName = $(this).text().replace(" ","");
-    //console.log(fleetName);
     var fleetType = $(this).attr("id");
+    $('.ShipType_list>li').removeClass("choose");
+    $(this).addClass("choose");
     var fleet_ul =  $('.'+fleetName);
     //列表第一次需要初始化
     fleet_ul.empty();
@@ -208,22 +210,23 @@ $('.ShipType_list>li').mouseenter(function(){
 
 // 点击船队列表中的船队获取所属船舶列表
 $('.FleetName_List').delegate('li', 'click', function () {
+    $('.FleetName_List>li').removeClass("choose"); // 清空所有选项
     var fleet_li = $(this);
     var fleetNumber = fleet_li.attr("fleetNumber"); //船队ID
     var fleetName = fleet_li.attr("fleetName"); // 船队名字
     var fleet_div = $('#fleet');
-    var fleet_title =fleet_div.find('.fleet_title>span');
-    fleet_title.text(fleetName); // 填充船队名字
+    var fleet_title = fleet_div.find('.fleet_title>span');
+    var fleetType = $('.ShipType_list>.choose').text();
+    fleet_title.text(fleetType + "-" + fleetName); // 填充船队名字
     fleet_title.attr("fleetNumber", fleetNumber); // 赋上船队Number
+    // 选中的那行高亮显示
+    $(this).addClass("choose");
     console.log(fleetNumber);
     // 获得时间轴
     getTimePointList(fleetNumber);
     fleet_div.fadeIn(600);
     // 获取船队列表
     getShipList2Fleet(fleetNumber, "");
-    // fleetDivZIndex++;
-    // console.log(fleetDivZIndex);
-    // $('#fleet').css('zIndex',fleetDivZIndex);
 
 });
 
@@ -253,6 +256,9 @@ $(".TimePointList").delegate('li>i', 'click', function(){
 $('.fleetList_List').delegate('.shipDetailInfo', 'click', function () {
     var ship_li = $(this);
     var current_li = ship_li.parent().parent();
+    // 高亮显示本行
+    $('.fleetList_List>li').removeAttr("id");
+    current_li.attr("id", "choose");
     var shipType = current_li.children('span:nth-child(1)').text();
     var IMO = current_li.children('span:nth-child(2)').text();
     var MMSI = current_li.children('span:nth-child(3)').text();
