@@ -30,10 +30,17 @@ function getBasicFleetInfo(){
  */
 function getShipList2Fleet(fleetNumber, timePoint){
     console.log(timePoint);
+    var fleet_div = $('#fleet');
+    var shipList = fleet_div.find('.fleetList_List');
+    shipList.empty();
     $.ajax({
         url: '/fleet/getFleetDetailInfo',
         type: 'get',
         data: {FleetNumber: fleetNumber, TimePoint: timePoint},
+        beforeSend:function () {
+            console.log("loading");
+            shipList.css("background", 'url("/images/ajax-loader.gif") no-repeat center');
+        },
         success: function (data){
             // 获取成功
             // console.log("获取数据成功");
@@ -46,9 +53,6 @@ function getShipList2Fleet(fleetNumber, timePoint){
                 var num_add = 0;
                 var num_less = 0;
                 // fleetBasicInfo = data[1];
-                var fleet_div = $('#fleet');
-                var shipList = fleet_div.find('.fleetList_List');
-                shipList.empty();
                 for(var i = 0; i < fleetDetailInfo.length; i++){
                     var detailInfo = fleetDetailInfo[i];
                     var MMSI = detailInfo.MMSI === null?"":detailInfo.MMSI;
@@ -57,7 +61,7 @@ function getShipList2Fleet(fleetNumber, timePoint){
                     var today = new Date();
                     var this_year = today.getFullYear();
                     var shipAge = this_year - parseInt(detailInfo.BuiltDate.slice(0, 4));
-                    console.log(detailInfo.ShipStatus);
+                    // console.log(detailInfo.ShipStatus);
                     var shipStatus = ShipStatusInfo[detailInfo.ShipStatus];
                     var leaveOrJoin = '';
                     var joinTime = detailInfo.JoinTime;
@@ -86,7 +90,7 @@ function getShipList2Fleet(fleetNumber, timePoint){
                     DWT_Sum += DWT;
                 }
                 // 总吨位
-                fleet_div.find('.fleetInfo_DWT>span:nth-child(2)').text(DWT_Sum);
+                fleet_div.find('.fleetInfo_DWT>span:nth-child(2)').text(DWT_Sum - DWT_less);
                 // 吨位增减
                 $(".fleet_AddDWTBtn").text("+" + DWT_add);
                 $(".fleet_LessDWTBtn").text("-" + DWT_less);
@@ -97,7 +101,7 @@ function getShipList2Fleet(fleetNumber, timePoint){
                 //     $(".fleet_LessDWTBtn").text("-" + DWT_less);
                 // }
                 // 总船舶数目
-                fleet_div.find('.fleetInfo_Num>span:nth-child(2)').text(fleetDetailInfo.length);
+                fleet_div.find('.fleetInfo_Num>span:nth-child(2)').text(fleetDetailInfo.length - num_less);
                 $(".fleet_AddNumBtn").text("+" + num_add);
                 $('.fleet_LessNumBtn').text("-" + num_less);
                 // if(num_add > 0){
@@ -113,6 +117,10 @@ function getShipList2Fleet(fleetNumber, timePoint){
         },
         error: function (err) {
             console.log(err);
+        },
+        complete:function(){
+            console.log("加载结束");
+            shipList.css("background", ""); // 清除背景
         }
     });
 }
@@ -210,12 +218,13 @@ $('.FleetName_List').delegate('li', 'click', function () {
     console.log(fleetNumber);
     // 获得时间轴
     getTimePointList(fleetNumber);
+    fleet_div.fadeIn(600);
     // 获取船队列表
     getShipList2Fleet(fleetNumber, "");
     // fleetDivZIndex++;
     // console.log(fleetDivZIndex);
     // $('#fleet').css('zIndex',fleetDivZIndex);
-    fleet_div.fadeIn(600);
+
 });
 
 // 点击船舶列表中的今日按钮
@@ -357,17 +366,24 @@ $(".DWTSearch_btn").click(function () {
    var min_DWT = min_dwt_input.val() === ""? min_dwt_input.attr("placeholder"):min_dwt_input.val();
    var max_DWT = max_dwt_input.val() === ""? max_dwt_input.attr("placeholder"):max_dwt_input.val();
    console.log(type+", " + min_DWT+"," + max_DWT);
+   var searchShipList = $("#searchShipList");
+    var shipList = searchShipList.find(".fleetList_List");
+    shipList.empty();
+    // 显示列表
+    searchShipList.fadeIn(600);
     $.ajax({
         url: '/fleet/getSearchShipList',
         type: 'get',
         data: {Type: type, Min_DWT: min_DWT, Max_DWT: max_DWT},
+        beforeSend:function () {
+            console.log("loading");
+            shipList.css("background", 'url("/images/ajax-loader.gif") no-repeat center');
+        },
         success: function (data) {
             // 获取成功
             // console.log("获取数据成功");
             if (data[0] === "200") {
                 var shipListInfo = data[1];
-                var shipList = $("#searchShipList").find(".fleetList_List");
-                shipList.empty();
                 var count = 0;
                 for(var i = 0; i < shipListInfo.length; i++){
                     var detailInfo = shipListInfo[i];
@@ -404,10 +420,12 @@ $(".DWTSearch_btn").click(function () {
         },
         error: function (err) {
             console.log(err);
+        },
+        complete:function(){
+            console.log("加载结束");
+            shipList.css("background", ""); // 清除背景
         }
     });
-    // 显示列表
-    $('#searchShipList').fadeIn(600);
 });
 
 /**

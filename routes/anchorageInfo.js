@@ -13,13 +13,13 @@ var date = new Date();
 // var
 // console.log(year)
 
-var endTime = Date.parse(date) / 1000
+var endTime = Date.parse(date) / 1000;
 var oneMonth = 25920000;
 var startTime = endTime - oneMonth;
-console.log(startTime)
+console.log(startTime);
 //
 //
 // function getLastMonth
 
-console.log(30*24*36000)
+console.log(30*24*36000);
 

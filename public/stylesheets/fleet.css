@@ -15,7 +15,7 @@
 
 /*船舶列表弹出框*/
 #fleet,#shipDetails,#ShipSearch_DWTRange,#searchShipList{position:fixed;z-index:100;display:none; border-radius: 10px;background: rgba(6, 2, 5, 0.8)}
-#fleet{width:650px;height:400px;top:70px;left:300px;display:none;}
+#fleet{width:650px;height:400px;top:70px;left:300px;display:block;}
 .fleet_title{width:100%;height:30px;position:relative;}
 .fleet_title>span{display:block;width:100%;text-align:center;height:28px;line-height:28px;margin:0 auto;color:#fff;}
 .title_offbtn{display:inline-block;width:12px;height:12px;position:absolute;top:9px;right:10px;background:url("/images/close_nor.png") no-repeat;cursor:pointer;}
@@ -141,7 +141,8 @@
 .operating_radioBtn:hover{background:#ccc;}
 /*.searchInfo_operating>{display:inline-block;width:10px;height:10px;background:url("/images/check.png");margin-right:2px;}*/
 
-
+/*加载圈*/
+/*.loading{width:24px;height:24px; margin-left:50%;margin-top:50%;}*/
 
 
 
