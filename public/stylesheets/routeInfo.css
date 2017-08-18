@@ -13,7 +13,7 @@
 .oneRoute_List>li{font-size:12px;}
 
 /*航线信息管理弹出框*/
-#routeInfo{width:500px;height:415px;position:fixed;z-index:100;top:70px;left:300px;border-radius: 10px;background: rgba(6, 2, 5, 0.8);display:block;}
+#routeInfo{width:500px;height:415px;position:fixed;z-index:100;top:70px;left:300px;border-radius: 10px;background: rgba(6, 2, 5, 0.8);display:none;}
 .routeStartEnd{width:96%;height:70px;margin:5px auto;}
 .routeDes{width:96%;height:160px;margin:5px auto;}
 .routeInstall_Btn{width:96%;height:30px;margin:5px auto;}

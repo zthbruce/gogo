@@ -360,6 +360,7 @@ $(".shipInfo_updateBtn").click(function () {
 
 // 点击搜索按钮进行搜索
 $(".DWTSearch_btn").click(function () {
+    $(".check").removeAttr("checked");
    var type =  $(".Search_typeText").attr("type");
    var min_dwt_input = $(".min_dwt");
    var max_dwt_input = $(".max_dwt");
@@ -432,17 +433,19 @@ $(".DWTSearch_btn").click(function () {
  * 选择是否显示在船队列表
  */
 var belongStatus = false;
-$(".operating_radioBtn").click(function () {
+$(".check").click(function () {
     console.log("here");
     var shipNum = $(' #searchShipList .fleetInfo_Num>span:nth-child(2)');
     if(belongStatus){
-        $(".operating_radioBtn").css("background", '');
+        // $(".operating_radioBtn").css("background", '');
+        // $(".check").attr("checked", "");
         $(".belong2Fleet").hide();
         shipNum.text(shipNum.attr("notBelong"));
     }
     else{
-        $(".operating_radioBtn").css("background", '#ccc');
+        // $(".operating_radioBtn").css("background", '#ccc');
         $(".belong2Fleet").show();
+        $(".check").attr("checked", "checked");
         shipNum.text(shipNum.attr("total"));
     }
     belongStatus = !belongStatus;
