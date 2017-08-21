@@ -112,6 +112,7 @@
 .shipInfo_fleet>ul>li>span:first-child{margin-right:5px;position:relative;top:-5px;}
 .shipInfo_fleet>ul>li>span:nth-child(2){display:inline-block;width:75px;height:16px;line-height:16px;border:1px solid #ccc;border-radius:5px;cursor:pointer;padding-left:5px;}
 .shipInfo_fleet>ul>li>input{display:inline-block;width:85px;height:18px;line-height:18px;background:transparent;color:#fff;border:1px solid #ccc;border-radius:5px;cursor:pointer;padding-left:5px;overflow:hidden;}
+#shipInfo_EnterTime,#shipInfo_LeaveTime{display:inline-block;width:85px;height:18px;line-height:18px;background:transparent;color:#fff;border:1px solid #ccc;border-radius:5px;cursor:pointer;padding-left:5px;overflow:hidden;}
 .shipInfo_FleetList{width:80px;position:absolute;background:rgba(6, 2, 5, 0.8);z-index:100;left:40px;border:1px solid #323232;border-radius:5px;display:none;}
 .shipInfo_FleetList>li{height:16px;line-height:16px;padding-left:5px;font-size:12px;color:white;cursor:pointer;}
 .shipInfo_FleetList>li:hover{background:#217BA2;}

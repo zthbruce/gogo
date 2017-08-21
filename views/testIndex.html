@@ -6,10 +6,10 @@
     <link rel='stylesheet' href='/stylesheets/basicSkills.css' />
     <link rel='stylesheet' href='/stylesheets/portInfo.css' />
     <!--<link rel='stylesheet' href='/stylesheets/maodi.css' />-->
-    <link rel='stylesheet' href='/stylesheets/route.css' />
+    <link rel='stylesheet' href='/stylesheets/voyage.css' />
     <link rel='stylesheet' href='/stylesheets/newberth.css' />
     <link rel='stylesheet' href='/stylesheets/fleet.css' />
-    <link rel='stylesheet' href='/stylesheets/routeInfo.css' />
+    <link rel='stylesheet' href='/stylesheets/standardRoute.css' />
 
     <link rel="stylesheet" href="http://openlayers.org/en/v3.17.1/css/ol.css" type="text/css">
     <link rel="stylesheet" href="https://openlayers.org/en/v4.1.1/css/ol.css" type="text/css">
@@ -25,7 +25,9 @@
     <script type="text/javascript" src="/javascripts/blmOperate.js"></script>
     <script type="text/javascript" src="/javascripts/blmBind.js"></script>
     <script type="text/javascript" src="/javascripts/jquery.js"></script>
-    <link rel="stylesheet" type="text/css" href="/stylesheets/daterangepicker.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/datePicker/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/datePicker/zzsc.css">
+    <link rel="stylesheet" href="/stylesheets/datePicker/dcalendar.picker.css"/>
 
 </head>
 <body style="overflow:hidden;">
@@ -107,7 +109,6 @@
         <li>BSI<i></i></li>
         <li>BHSI<i></i></li>
     </ul>
-    <!--9,18,5,7,1,4,12,6-->
     <ul class="oneRoute_List route_List_ul">
         <li>Route C2</li>
         <li>Route C3</li>
@@ -354,13 +355,44 @@
                 标准目的港:<span class="routePoint_infoShow">Rotterdam</span>
                 <i></i>
             </div>
-            <div class="routePort_End"></div>
         </div>
-        <div class="routeStartPier_Select routeStartEndPier">
-            出发港:<span class="routePoint_infoShow">Rotterdam、Rotterdam</span>
+        <div class="routeStartEndPort routeStartPort_Select">
+            <span>出发港：</span>
+            <span>
+                <ul class="StartEndPort_List">
+                    <li><span>sadasdqw</span><i></i></li>
+                    <li><span>sadasdqw</span><i></i></li>
+                    <li class = "add_Port add_StartPort"><span> + 增加出发港口</span></li>
+                </ul>
+            </span>
+            <div class="AllStartEndPort_List">
+                <input class="StartEndPort_input" type="text" placeholder="请选择港口或输入港口">
+                <ul>
+                    <li>asdasd</li>
+                    <li>basdasd</li>
+                    <li>casdasd</li>
+                    <li>ddasdasd</li>
+                </ul>
+            </div>
         </div>
-        <div class="routeEndPier_Select routeStartEndPier">
-            到达港:<span class="routePoint_infoShow">Rotterdam</span>
+        <div class="routeStartEndPort routeEndPort_Select">
+            <span>目的港：</span>
+            <span>
+                <ul class="StartEndPort_List">
+                    <li><span>sadasdqw</span><i></i></li>
+                    <li><span>sadasdqw</span><i></i></li>
+                    <li class = "add_Port add_EndPort"><span> + 增加目的港口</span></li>
+                </ul>
+            </span>
+            <div class="AllStartEndPort_List">
+                <input class="StartEndPort_input" type="text" placeholder="请选择港口或输入港口">
+                <ul>
+                    <li>asdasd</li>
+                    <li>basdasd</li>
+                    <li>casdasd</li>
+                    <li>ddasdasd</li>
+                </ul>
+            </div>
         </div>
     </div>
     <div class="dividing_line"></div>
@@ -919,12 +951,11 @@
 <script type="text/javascript" src="/javascripts/contourShow.js"></script>
 <script type="text/javascript" src="/javascripts/anchShow.js"></script>
 <script type="text/javascript" src="/javascripts/statistic.js"></script>
-<script type="text/javascript" src="/javascripts/route.js"></script>
+<script type="text/javascript" src="/javascripts/voyage.js"></script>
 <script type="text/javascript" src="/javascripts/confirm.js"></script>
-<script src="/javascripts/datePicker/moment.min.js"></script>
-<script src="/javascripts/datePicker/jquery.daterangepicker.js"></script>
 <script type="text/javascript" src="/javascripts/fleet.js"></script>
 <!--<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1RjvgLx-N8yWBBa639e1jHw1wCh6KJUU&callback=initMap" type="text/javascript"></script>-->
+
 <script>
     var unknown_style = new ol.style.Style({
         image: new ol.style.Icon({
@@ -1254,10 +1285,15 @@
 <script type="text/javascript" src="/javascripts/berthInfo.js"></script>
 <script type="text/javascript" src="/javascripts/util.js"></script>
 <script type="text/javascript" src="/javascripts/berth.js"></script>
-<script type="text/javascript" src="/javascripts/anch.js"></script>
+<script type="text/javascript" src="/javascripts/anch.js">
+</script><script type="text/javascript" src="/javascripts/route.js"></script>
 <!--<script type="text/javascript" src="/javascripts/interaction.js"></script>-->
 
-
+<script type="text/javascript" src="/javascripts/datePicker/dcalendar.picker.js"></script>
+<script type="text/javascript">
+    $('#shipInfo_EnterTime').dcalendarpicker();
+    $('#shipInfo_LeaveTime').dcalendarpicker();
+</script>
 <script type="text/javascript">
     gvChartInit();
 $(function(){

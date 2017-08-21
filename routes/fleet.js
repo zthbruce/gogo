@@ -36,7 +36,7 @@ router.get("/getFleetBasicInfo", function (req, res, next) {
               for(var i = 0; i < results.length; i++){
                   var ele = results[i];
                   var fleetType = ele.Type;
-                  var content = { FleetNumber:ele.FleetNumber, ENName: ele.ENName, CNName: ele.CNName, Number: ele.Number};
+                  var content = {FleetNumber:ele.FleetNumber, ENName: ele.ENName, CNName: ele.CNName, Number: ele.Number};
                   if(fleetType === "0"){
                       fleet_0.push(content)
                   }

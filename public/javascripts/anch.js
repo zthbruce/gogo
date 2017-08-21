@@ -369,10 +369,8 @@ function writeContourLine(lonLatList) {
         geometry: new ol.geom.Polygon([lonLatInfo])
     });
     feature.setId('current');
-    feature.setStyle();
-    // anch.getSource().clear(); 无需清空，只要将上述
+    // feature.setStyle();
     anch.getSource().addFeature(feature);
-    // map.getView().setCenter(center)
 
     // 将边界点也显示出来
     current_anch.getSource().clear(); // 清空图层
@@ -387,9 +385,9 @@ function writeContourLine(lonLatList) {
             'type': 0,
             'anchKey': "",
             'number' : i + 1,
-            // 'cluster_id' : key,
             geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
         });
+        // 表示已经选择，实际上那个
         anch_choosed.setStyle(choosedAnch);
         current_anch.getSource().addFeature(anch_choosed);
     }
@@ -586,7 +584,6 @@ $('#anch_save').click(function(){
         location +=  lon + "#" + lat;
     }
     console.log(location);
-    console.log()
     var anchInfo = {AnchorageKey: anchKey, Name: anchName, Purpose: purpose,
         Des: des, CenterLon: center[0].toFixed(4), CenterLat: center[1].toFixed(4),
         Location: location, DestinationPort: portListStr}; // 向后台请求保存
@@ -640,7 +637,7 @@ $('#anch_save').click(function(){
     anch.getSource().getFeatureById("current").setStyle(anch_style);
     anch.getSource().getFeatureById("current").set("anchKey", anchKey);
     position.getSource().clear();
-    anchStatus = !anchStatus;
+    anchStatus = false; // 将锚地状态还原
     current_anch.getSource().clear();
     // map.getView().setCenter(ol.proj.fromLonLat(center));
     // map.getView().setCenter(ol.proj.fromLonLat(center));
@@ -657,7 +654,7 @@ $('#anch_cancel').click(function(){
         anch.getSource().removeFeature(anch.getSource().getFeatureById("current"));
         anch.getSource().addFeature(old_feature);
     }
-    anchStatus = !anchStatus;
+    anchStatus = false;
     // 将选择勾去掉
     current_anch.getSource().clear();
 });

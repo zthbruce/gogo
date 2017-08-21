@@ -13,17 +13,34 @@
 .oneRoute_List>li{font-size:12px;}
 
 /*航线信息管理弹出框*/
-#routeInfo{width:500px;height:415px;position:fixed;z-index:100;top:70px;left:300px;border-radius: 10px;background: rgba(6, 2, 5, 0.8);display:none;}
-.routeStartEnd{width:96%;height:70px;margin:5px auto;}
+#routeInfo{width:500px;height:455px;position:fixed;z-index:100;top:70px;left:300px;border-radius: 10px;background: rgba(6, 2, 5, 0.8);display:none;}
+.routeStartEnd{width:96%;height:110px;margin:5px auto;}
 .routeDes{width:96%;height:160px;margin:5px auto;}
 .routeInstall_Btn{width:96%;height:30px;margin:5px auto;}
+
 /*起终点选择*/
 .routeStartEnd>div{font-size:14px;color:#fff;width:90%;margin:0px auto 5px;height:20px;}
 .routePort_Select>div{display:inline-block;width:49%;height:20px;line-height:20px;}
-.routePort_Select i{display:inline-block;width:12px;height:12px;margin-left:5px;background:url('/icon/position_logo.png') no-repeat;position:relative;top:2px;}
-.routeEndPier_Select{margin-bottom:0px;}
+.routePort_Select i{display:inline-block;width:12px;height:12px;margin-left:5px;background:url('/icon/position_logo.png') no-repeat;position:relative;top:2px;cursor:pointer;}
 .routePoint_infoShow{display:inline-block;margin-left:10px;height:20px;line-height:20px;}
-.routeStartEndPier .routePoint_infoShow{width:340px;}
+
+/*出发港、目的港列表选择*/
+.routeStartEnd>.routeStartEndPort{height:40px;position:relative;}
+.routeStartEndPort>span{display:inline-block;height:40px;line-height:24px;overflow:hidden;}
+.routeStartEndPort>span:nth-child(2){width:370px;height:40px;cursor:auto;white-space:nowrap;overflow-x:scroll;}
+.StartEndPort_List{width:5000px;}
+.StartEndPort_List>li{float:left;display:inline-block;height:18px;margin-top:2px;margin-left:5px;padding:0px 5px;border:1px solid #989898;border-radius:5px;background: rgba(255,255,255,0.2)}
+.StartEndPort_List>li>span{display:inline-block;height:18px;line-height:18px;font-size:12px;margin-right:6px;position:relative;top:-3px;}
+.StartEndPort_List>li>i{display:inline-block;width:11px;height:11px;position:relative;top:-1px;background:url("/images/cancel.png") no-repeat;cursor:pointer;}
+.StartEndPort_List>li>i:hover{background:url("/images/cancel-hover.png") no-repeat;}
+.StartEndPort_List>.add_Port{background: rgba(255,255,255,0.2);cursor: pointer;}
+.add_Port:hover{background: rgba(157, 157, 157, 0.70);}
+.AllStartEndPort_List{width:372px;position:absolute;z-index:1000;max-height:140px;padding-top:30px;left:60px;top:40px;display:none;background:rgba(6, 2, 5, 0.8);;border-radius:5px;}
+.AllStartEndPort_List>ul{width:372px;max-height:120px;margin-top:5px;display:block;overflow:hidden;overflow-y:scroll;}
+.AllStartEndPort_List>ul>li{color: #c0c6c8;width:100%;height:20px;font-size:12px;padding-left:5px;font-weight: 500;cursor:pointer;}
+.AllStartEndPort_List>ul>li:hover{background:#217BA2;}
+.AllStartEndPort_List>.StartEndPort_input{display:inline-block;width:333px;height:20px;line-height:20px;border-radius:3px;position:absolute;top:5px;left:10px;padding-left:5px;font-size:12px;border:1px solid #989898;font-weight:500;}
+
 
 /*标准信息管理*/
 .routeInfo_Install{width:96%;height:70px;margin:5px auto;}

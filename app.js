@@ -17,7 +17,7 @@ var contour = require('./routes/contour');
 
 var statistic = require('./routes/statistic');
 
-var route = require('./routes/route');  // 航线
+var route = require('./routes/voyage');  // 航线
 
 var berth = require('./routes/berth'); // 泊位的接口
 

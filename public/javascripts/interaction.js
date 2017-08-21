@@ -218,8 +218,7 @@ app.Drag.prototype.handleUpEvent = function(evt) {
 var saveStatus = false;
 
 /**
- * 地图图标单击事件入口
- * @type {ol.EventsKey}
+ * 地图最外层图标单击事件入口
  */
 mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feature, evt) {
     if (feature.length != 0) {
@@ -247,7 +246,6 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
             $('#stillArea_show').attr('type', clusterType);
             // 请求基本信息
             if (clusterType !== 2) {
-                console.log("here");
                 reqStillAreaInfo(clusterId, clusterType);
             } else {
                 $('.stillArea_contents').html('<div class="stillArea_promptInfo">暂无信息</div>');
@@ -440,8 +438,6 @@ function addAnch(cluster_id, lon, lat, portList,type){
 /**
  * 监听泊位输入框的变化
  */
-// var content_is_changed;
-
 // 此处针对泊位输入框进行监听，切换港口和码头在港口，码头点击事件
 $('.berthAdd_inputNum, .berth_detail_input').bind('input propertychange',function() {
     //进行相关操作

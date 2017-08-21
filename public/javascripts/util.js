@@ -163,49 +163,24 @@ function changeBerthSaveButton(saveStatus) {
 
 /*********************************分割线*******************************************************************************/
 /**
- * 地图图标单击事件入口
+ * 地图图标单击事件入口(真实入口)
  */
 var anchStatus = false;
+var fleetStatus = false;
 var old_feature;
 mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feature, evt) {
-    console.log(anchStatus);
     if (feature.length !== 0) {
         if (feature[0].get('port_id') !== undefined) {
+            // 点击港口图标
             console.log(feature[0].get('port_id'));
             var portId = feature[0].get('port_id');
             reqOnePortBasicInfo(portId);
         } else if (feature[0].get('cluster_id') !== undefined || feature[0].get('anchKey') !== undefined) {
-            // console.log(feature[0].get('cluster_id'));
-            // console.log(feature[0].get('type'));
             var type = feature[0].get('type');
             var lon = feature[0].get('lon');
             var lat = feature[0].get('lat');
-            // 如果不是anchStatus状态
-            if (!anchStatus) {
-                changeBerthSaveButton(false); // 初始化泊位保存状态
-                // 初始化锚地保存状态
-                // 锚地管理弹出框, 不管是原生锚地区域还是锚地聚类, type都设为0, 表示锚地
-                if (type === 0) {
-                    $("#newAnch").fadeIn("normal");
-                    anchStatus = !anchStatus;
-                    var anchKey = feature[0].get('anchKey') === undefined ? "" : feature[0].get('anchKey');
-                    console.log(anchKey);
-                    changeAnchSaveButton(false);
-                    old_feature =  feature[0];
-                    feature[0].setId("current"); // 将当前的设为current
-                    getAnchInfo(anchKey, lon, lat);
-                }
-                // 泊位管理弹出框
-                if (type === 1) {
-                    var clusterId = feature[0].get('cluster_id');
-                    // 弹出泊位的弹出框
-                    $('#newBerth').fadeIn("normal");
-                    // 请求码头整体信息
-                    getPierInfo(clusterId, lon, lat);
-                }
-            }
-            // 如果已经进入锚地状态
-            else{
+            // 如果已经进入锚地状态，状态会变成可选择的情况
+            if(anchStatus){
                 var id = feature[0].get("id");
                 // 当属于本锚地时，点击之后取消选定
                 if(id === "choosed"){
@@ -245,6 +220,7 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                     changeAnchSaveButton(true);
                 }
                 else {
+                    // 如果不属于本锚地, 点击之后标为选定
                     var clusterId = feature[0].get('cluster_id');
                     var anchKey = feature[0].get('anchKey') === undefined ? "" : feature[0].get('anchKey');
                     console.log(anchKey);
@@ -265,6 +241,34 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                         writeContourLine(locationList);
                         changeAnchSaveButton(true);
                     }
+                }
+            }
+            else if(fleetStatus){
+
+            }
+            // 原始状态
+            else{
+                changeBerthSaveButton(false); // 初始化泊位保存状态
+                // 初始化锚地保存状态
+                // 锚地管理弹出框, 不管是原生锚地区域还是锚地聚类区域, type都设为0, 表示锚地
+                if (type === 0) {
+                    // 锚地弹出框
+                    $("#newAnch").fadeIn("normal");
+                    anchStatus = true; // 表示进入锚地状态
+                    var anchKey = feature[0].get('anchKey') === undefined ? "" : feature[0].get('anchKey');
+                    console.log(anchKey);
+                    changeAnchSaveButton(false);
+                    old_feature =  feature[0];
+                    feature[0].setId("current"); // 将当前的设为current
+                    getAnchInfo(anchKey, lon, lat);
+                }
+                // 泊位管理弹出框
+                if (type === 1) {
+                    var clusterId = feature[0].get('cluster_id');
+                    // 弹出泊位的弹出框
+                    $('#newBerth').fadeIn("normal");
+                    // 请求码头整体信息
+                    getPierInfo(clusterId, lon, lat);
                 }
             }
         }
