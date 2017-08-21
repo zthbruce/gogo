@@ -1,8 +1,6 @@
-target
-bin
 *.db
 out
-.idea/*
+.idea/
 .DS_Store
 test
 META-INF/
