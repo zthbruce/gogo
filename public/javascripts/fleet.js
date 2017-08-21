@@ -217,13 +217,16 @@ $('.FleetName_List').delegate('li', 'click', function () {
     var fleet_div = $('#fleet');
     var fleet_title = fleet_div.find('.fleet_title>span');
     var fleetType = $('.ShipType_list>.choose').text();
-    fleet_title.text(fleetType + "-" + fleetName); // 填充船队名字
+    fleet_title.text(fleetName); // 填充船队名字
     fleet_title.attr("fleetNumber", fleetNumber); // 赋上船队Number
     // 选中的那行高亮显示
     $(this).addClass("choose");
     console.log(fleetNumber);
     // 获得时间轴
     getTimePointList(fleetNumber);
+    fleetDivZIndex++;
+    console.log(fleetDivZIndex);
+    fleet_div.css('zIndex',fleetDivZIndex);
     fleet_div.fadeIn(600);
     // 获取船队列表
     getShipList2Fleet(fleetNumber, "");
@@ -541,7 +544,11 @@ $(window).mousemove(function(event){
 
 //弹出框关闭事件
 $('.fleet_title>.title_offbtn').click(function(){
+    console.log("here");
+    $('.Fleet_List_ul>li').removeClass("choose"); // 清空所选
+    // $('.FleetName_List>li').removeClass("choose"); // 清空所选
     $(this).parent().parent().fadeOut(300);
+
 });
 
 
@@ -726,6 +733,9 @@ $('.fleetList_List').scroll(function(){
         //在此处执行更多
     }
 });
+
+
+
 
 
 
