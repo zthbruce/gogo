@@ -5,7 +5,9 @@ out
 .idea/*
 .DS_Store
 test
-META-INF
-~*
+META-INF/
 web/node_modules/*
+*.zip
+*.log
+*.iml
 
