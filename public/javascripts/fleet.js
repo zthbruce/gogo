@@ -473,7 +473,8 @@ $('.ship_track').click(function () {
         //}
         var today = new Date();
         var endTime = Date.parse(today) / 1000;
-        var oneMonth = 25920000;
+        // var oneMonth = 25920000; // 30 * 24 * 3600
+        var oneMonth = 15 * 24 * 3600;
         var startTime = endTime - oneMonth;
         // 获取相应的轨迹
         getDetailRoute(MMSI, startTime, endTime);
