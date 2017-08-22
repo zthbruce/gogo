@@ -100,7 +100,7 @@ router.get('/', function(req, res, next) {
     console.log("显示点");
     // console.log(cluster_id);
     // var sql = util.format('SELECT Longitudedd as lon, Latitudedd as lat FROM T3105_StationaryAreaPointSet WHERE StationaryAreaKey = "%s"', cluster_id);
-    var sql = util.format('SELECT Longitudedd as lon, Latitudedd as lat FROM T3105_StationaryAreaPointSet WHERE StationaryAreaKey IN %s', cluster_id_set);
+    var sql = util.format('SELECT Longitude as lon, Latitude as lat FROM T3105_StationaryAreaPointSet WHERE StationaryAreaKey IN %s', cluster_id_set);
     mysql.query(sql, function (err, results) {
         if (err) {
             console.log(utils.eid1);

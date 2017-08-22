@@ -182,6 +182,11 @@ $('.route_Fleet_btn').click(function(){
     $('.ShipType_list').fadeToggle(300);
     $('.FleetName_List').fadeOut(300);
     $('#fleet').fadeOut(600);
+    $('#searchShipList').fadeOut(600);
+    $('#shipDetails').fadeOut(600);
+    //隐藏航线列表和弹出框
+    $('.route_List_ul').fadeOut(300);
+    $('#routeInfo').fadeOut(600);
 });
 
 /** 鼠标移动到船队上显示船队的信息*/
@@ -370,7 +375,7 @@ $(".shipInfo_updateBtn").click(function () {
 
 // 点击搜索按钮进行搜索
 $(".DWTSearch_btn").click(function () {
-    $(".check").removeAttr("checked");
+    $(".check").attr("checked", false); // 初始默认为不选择
    var type =  $(".Search_typeText").attr("type");
    var min_dwt_input = $(".min_dwt");
    var max_dwt_input = $(".max_dwt");
@@ -440,25 +445,26 @@ $(".DWTSearch_btn").click(function () {
 });
 
 /**
- * 选择是否显示在船队列表
+ * 点击选择是否显示在船队列表
  */
-var belongStatus = false;
+// var belongStatus = false;
 $(".check").click(function () {
     console.log("here");
     var shipNum = $(' #searchShipList .fleetInfo_Num>span:nth-child(2)');
-    if(belongStatus){
+    var status = $(".check").attr("checked");
+    if(status){
         // $(".operating_radioBtn").css("background", '');
-        // $(".check").attr("checked", "");
+        $(".check").attr("checked", false);
         $(".belong2Fleet").hide();
         shipNum.text(shipNum.attr("notBelong"));
     }
     else{
         // $(".operating_radioBtn").css("background", '#ccc');
         $(".belong2Fleet").show();
-        $(".check").attr("checked", "checked");
+        $(".check").attr("checked", true);
         shipNum.text(shipNum.attr("total"));
     }
-    belongStatus = !belongStatus;
+    // belongStatus = !belongStatus;
 });
 
 /**
@@ -560,6 +566,7 @@ $('.ShipSearch_ShowBtn').click(function(){
     if(!SearchShow){$('#ShipSearch_DWTRange').animate({'left':'0px'},300);}
     else{$('#ShipSearch_DWTRange').animate({'left':'-364px'},300);}
     SearchShow = !SearchShow;
+    $(".min_dwt").val("");
 });
 
 
