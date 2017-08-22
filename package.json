@@ -16,7 +16,6 @@
     "mysql": "^2.10.2",
     "sequelize": "^3.26.0",
     "serve-favicon": "~2.3.0",
-    "request": "^2.79.0",
-    "pm2":"~2.6.1"
+    "request": "^2.79.0"
   }
 }
