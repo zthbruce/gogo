@@ -279,6 +279,30 @@ router.get("/saveShip2Fleet", function (req, res, next) {
     // })
 });
 
+/**
+ * 获取对应IMO的图片URL
+ */
+router.get("/getShipImage", function (req, res, next) {
+    var IMO = req.query.IMO;
+    var sql = util.format('SELECT URL FROM T0129_Pics WHERE IMO = "%s"', IMO);
+    mysql.query(sql, function (err, results) {
+        if(err){
+            console.log(utils.eid1);
+            res.jsonp(['404', utils.eid1])
+        }
+        else{
+            if(results.length > 0){
+                console.log("成功连接数据库");
+                res.jsonp(['200', results])
+            }
+            else{
+                console.log("无返回数据");
+                res.jsonp(['304', "return nothing"])
+            }
+        }
+    })
+});
+
 module.exports = router;
 
 

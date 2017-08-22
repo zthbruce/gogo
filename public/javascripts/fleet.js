@@ -140,7 +140,7 @@ function getTimePointList(fleetNumber){
             if(data[0] === "200"){
                 var info = data[1];
                 // 设置时间点的宽度
-                timePoint_ul.css("width", info.length * 80 + "px");
+                timePoint_ul.css("width", info.length * 80);
                 for(var i = 0; i< info.length; i++){
                     var ele = info[i];
                     timePoint_ul.append('<li><span>' + ele.JoinTime + '</span><i></i></li>');
@@ -153,6 +153,24 @@ function getTimePointList(fleetNumber){
             console.log(err)
         }
     })
+}
+
+/**
+ * 图片自动播放
+ */
+function imageAutoShow() {
+    autoShow = setInterval(function () {
+        if(curIndex < imageNum){
+            curIndex++;
+            $(".shipInfo_imgShow>ul").animate({"left":"-80"}, 300);
+        }
+        else{
+            // 初始化
+            curIndex = 0;
+            $(".shipInfo_imgShow>ul").css("left", 0);
+        }
+    },3000)
+
 }
 
 
@@ -260,9 +278,13 @@ $(".TimePointList").delegate('li>i', 'click', function(){
     var fleetNumber = $('.fleet_title>span').attr("fleetNumber"); //船队ID
     getShipList2Fleet(fleetNumber, timePoint);
 });
-
+var autoShow;
+var curIndex;
+var imageNum;
 // 点击i图标获取船舶的详细信息
 $('.fleetList_List').delegate('.shipDetailInfo', 'click', function () {
+    curIndex = 0;
+    var imageHost = "http://192.168.0.66/";
     var ship_li = $(this);
     var current_li = ship_li.parent().parent();
     // 高亮显示本行
@@ -275,8 +297,48 @@ $('.fleetList_List').delegate('.shipDetailInfo', 'click', function () {
     var DWT = current_li.children('span:nth-child(5)').text();
     var shipStatus = current_li.children('span:nth-child(7)').text();
     var shipNumber = ship_li.attr("shipNumber");
-    $(".shipName").text(shipName);
-    $(".shipName").attr("shipNumber", shipNumber);
+    // 标题栏
+    var shipTitle = $(".shipName");
+    shipTitle.text(shipName);
+    shipTitle.attr("shipNumber", shipNumber);
+    // 图片显示部分
+    var shipImageList = $(".shipInfo_imgShow>ul");
+    shipImageList.empty();
+    // $(".shipInfo_imgShow").css("background", "url('http://192.168.0.66/group1/M00/00/01/wKgAQll6m1OAfTMpAAIj217DXV4158.s.jpg') center no-repeat");
+    $.ajax({
+        url:'/fleet/getShipImage',
+        type:'get',
+        data:{IMO:IMO},
+        beforeSend:function () {
+            console.log("loading image");
+            $(".shipInfo_imgShow").css("background", 'url("/images/ajax-loader.gif") no-repeat center');
+        },
+        success:function (data) {
+            if(data[0] === "200"){
+                var imageURLList = data[1];
+                imageNum = imageURLList.length;
+                for(var i = 0; i < imageURLList.length;i++){
+                    var bigImageURL = imageHost + imageURLList[i].URL;
+                    console.log(bigImageURL);
+                    var image_li = '<li url='+ bigImageURL + '></li>';
+                    shipImageList.append(image_li);
+                    var smallImageURL = bigImageURL.slice(0, -4) + ".s.jpg";
+                    $(shipImageList.find('>li:eq('+ i + ')')).css("background","url(" + smallImageURL+ ") center no-repeat");
+                }
+                $(".shipInfo_imgShow>ul").css("width", imageNum * li_width);
+            }
+        },
+        error:function(err){
+            console.log(err);
+        },
+        complete:function(){
+            console.log("图片加载结束");
+            $(".shipInfo_imgShow").css("background", ""); // 清除背景
+            imageAutoShow();
+        }
+    });
+
+    // 具体内容部分
     $.ajax({
         url: '/fleet/getShipDetailInfo',
         type: 'get',
@@ -296,17 +358,18 @@ $('.fleetList_List').delegate('.shipDetailInfo', 'click', function () {
                 var builder = shipInfo.Builder === null ? "" : shipInfo.Builder;
                 var name = shipInfo.ENName === ""?shipInfo.CNName: shipInfo.ENName;
                 // 船的详细信息
-                $('.shipInfo_List>li:nth-child(1)').text('IMO: ' + IMO);
-                $('.shipInfo_List>li:nth-child(2)').text('船级社: ' + class_notation);
-                $('.shipInfo_List>li:nth-child(3)').text('MMSI: ' + MMSI);
-                $('.shipInfo_List>li:nth-child(4)').text('类型: ' + shipType);
-                $('.shipInfo_List>li:nth-child(5)').text('建造年代: ' + builtDate);
-                $('.shipInfo_List>li:nth-child(6)').text('船旗: ' + flag);
-                $('.shipInfo_List>li:nth-child(7)').text('DWT: ' + DWT + " t");
-                $('.shipInfo_List>li:nth-child(8)').text('吃水: ' + draft + ' m');
-                $('.shipInfo_List>li:nth-child(9)').text('船籍港: ' + PortName);
+                $('.shipInfo_List>li:nth-child(1)').text('船名: ' + shipName );
+                $('.shipInfo_List>li:nth-child(2)').text('IMO: ' + IMO);
+                $('.shipInfo_List>li:nth-child(3)').text('船级社: ' + class_notation);
+                $('.shipInfo_List>li:nth-child(4)').text('MMSI: ' + MMSI);
+                $('.shipInfo_List>li:nth-child(5)').text('类型: ' + shipType);
+                $('.shipInfo_List>li:nth-child(6)').text('建造年代: ' + builtDate);
+                $('.shipInfo_List>li:nth-child(7)').text('船旗: ' + flag);
+                $('.shipInfo_List>li:nth-child(8)').text('DWT: ' + DWT + " t");
+                $('.shipInfo_List>li:nth-child(9)').text('吃水: ' + draft + ' m');
                 $('.shipInfo_List>li:nth-child(10)').text('状态: ' + shipStatus);
-                $('.shipInfo_List>li:nth-child(11)').text('长*宽*高: ' + LOA + '*' + beam + '*' + height + ' m');
+                $('.shipInfo_List>li:nth-child(11)').text('船籍港: ' + PortName);
+                $('.shipInfo_List>li:nth-child(12)').text('长*宽*高: ' + LOA + '*' + beam + '*' + height + ' m');
                 // 船的管理公司
                 $(".shipInfo_company>ul>li:nth-child(2)").text('建造商: ' + builder);
                 // 所属船队
@@ -326,6 +389,38 @@ $('.fleetList_List').delegate('.shipDetailInfo', 'click', function () {
     $('#shipDetails').css('zIndex',fleetDivZIndex);
     $('#shipDetails').fadeIn(600);
     event.stopPropagation();
+});
+
+// 每一张图片的宽度
+var li_width = 80;
+// 点击图片向左按钮
+$('.imgBtn_left').click(function () {
+    var image_ul = $(".shipInfo_imgShow>ul");
+    var width = image_ul.css("width");
+    var left = image_ul.css("left");
+    if(left + width - li_width > 0){
+        image_ul.animate({"left":"-80"}, 300)
+    }
+});
+
+// 每一张图片向右按钮
+$('.imgBtn_right').click(function () {
+    var image_ul = $(".shipInfo_imgShow>ul");
+    var width = image_ul.css("width");
+    var left = image_ul.css("left");
+    if(left < 0){
+        image_ul.animate({"left":"+80"}, 300)
+    }
+});
+
+// 悬浮在图片上
+$("#shipInfo_imgShow").hover(function(){
+    //滑入清除定时器
+    clearInterval(autoShow);
+    // 可以显示大图
+},function() {
+    //滑出则重置定时器
+    imageAutoShow()
 });
 
 // 点击船队获取下拉船队列表选项
@@ -583,7 +678,7 @@ function updateTimeLineWidth(){
 }
 
 //时间轴滚动距离
-var fleetInfoTimeLeft = 0;
+// var fleetInfoTimeLeft = 0;
 // $('.fleetInfo_timeSelect .timeLine_RightBtn').mousedown(function(){
 //     console.log("here");
 //     var timeLeft = parseInt($('.TimePointList').css('left'));
@@ -603,37 +698,26 @@ var fleetInfoTimeLeft = 0;
 //     $('.TimePointList').css('left',timeLeft);
 // });
 
-// 点击右边
+// 历史事件点击右边
 $('.fleetInfo_timeSelect .timeLine_RightBtn').click(function(){
     console.log("here");
     var timePoint_ul = $('.TimePointList');
     var timeLeft = parseInt(timePoint_ul.css('left'));
     var width = parseInt(timePoint_ul.css("width"));
     // timeLeft = timeLeft - 600;
-    if(timeLeft - 600 + width  >= 0) {
-        timePoint_ul.animate(
-            {
-                left : "-=600"
-            },
-            300, // 时长
-            function() { console.log('done!'); // 回调函数
-            });
+    if(timeLeft - 600 + width  > 0) {
+        timePoint_ul.animate({left : "-=600"}, 300);
     }
 });
 
+// 历史事件点击左边
 $('.fleetInfo_timeSelect .timeLine_LeftBtn').click(function(){
     console.log("here");
     var timePoint_ul = $('.TimePointList');
     var timeLeft = parseInt(timePoint_ul.css('left'));
     console.log(timeLeft);
     if(timeLeft < 0){
-        timePoint_ul.animate(
-            {
-                left : "+=600",
-            },
-            300, // 时长
-            function() { console.log('done!'); // 回调函数
-            });
+        timePoint_ul.animate({left : "+=600"}, 300);
     }
 });
 

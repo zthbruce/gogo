@@ -82,7 +82,7 @@
 
 
 /*船舶详情页面*/
-#shipDetails{width:385px;height:365px;top:10px;left:400px;display:none;}
+#shipDetails{width:385px;height:365px;top:10px;left:400px;display:block;}
 .shipName{font-size:14px;color:#fff;padding-top:3px;}
 .shipInfo_show{width:96%;height:130px;margin:5px auto;}
 .shipInfo_show>.shipInfo_List{width:250px;height:100px;float:right;}
@@ -96,13 +96,16 @@
 .shipInfo_List>li>img{width:16px;height:11px;background:#ccc;position:relative;top:2px;}
 /*轮播图*/
 .shipInfo_show>.shipInfo_img{float:left;width:80px;height:80px;position:relative;top:25px;left:20px;}
-.shipInfo_imgShow{width:80px;height:60px;background:#ccc;overflow:hidden;}
+.shipInfo_imgShow{width:80px;height:60px;overflow:hidden;}
+/*.shipInfo_imgShow{width:80px;height:60px;background:url('http://192.168.0.66/group1/M00/00/01/wKgAQll6m1OAfTMpAAIj217DXV4158.s.jpg') center no-repeat;overflow:hidden;}*/
 .shipInfo_imgShow>ul{width:800px;position:relative;}
 .shipInfo_imgShow>ul>li{display:inline-block;width:80px;height:60px;float:left;}
 .shipInfo_imgBtn{height:14px;width:90%;margin:3px auto;clear:both;}
-.shipInfo_imgBtn>span{width:8px;height:14px;float:left;cursor:pointer;}
-.shipInfo_imgBtn>.imgBtn_left{background:#0f0;}
-.shipInfo_imgBtn>.imgBtn_right{background:#00f;float:right;}
+.shipInfo_imgBtn>span{width:16px;height:16px;float:left;cursor:pointer;}
+.shipInfo_imgBtn>.imgBtn_left{background:url("/images/left.png");}
+.shipInfo_imgBtn>.imgBtn_left:hover{background:url("/images/left-hover.png");}
+.shipInfo_imgBtn>.imgBtn_right{background:url("/images/right.png");float:right;}
+.shipInfo_imgBtn>.imgBtn_right:hover{background:url("/images/right-hover.png");float:right;}
 .shipInfo_company{width:96%;height:80px;margin:5px auto;}
 .shipInfo_company>ul>li{height:20px;line-height:20px;margin-left:20px;font-size:12px;color:#fff;}
 
@@ -126,8 +129,11 @@
 .shipInfo_updateBtn:hover{background:#2EB1EA;}
 .shipInfo_updateBtn:active{background:#4cb4e0;}
 .shipInfo_btn{width:96%;height:30px;margin:5px auto;}
-.shipInfo_btn>div{width:90px;height:30px;cursor:pointer;border-radius:5px;}
-.shipInfo_btn>.ship_track{margin-left:130px;background:#f00;}
+.shipInfo_btn>div{width:90px;height:32px;cursor:pointer;border-radius:5px;}
+/*.shipInfo_btn>.ship_track{margin-left:130px;background:rgba(255, 255, 255, 0.40);}*/
+.shipInfo_btn>.ship_track{margin-left:130px;background:url("/images/route.png") center no-repeat;}
+.shipInfo_btn>.ship_track:hover{border:1px solid #999;}
+/*.ship_track>span{width:32px;height:32px; margin-left: 29px;background:url("/images/route.png") center no-repeat;}*/
 
 
 /*船舶范围搜索条*/
