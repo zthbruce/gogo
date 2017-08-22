@@ -82,14 +82,11 @@ function getDataDuring(table, keyStart, keyEnd, limit, cb){
 //     })
 // });
 
-
+/**
+ * 从mysql中请求点的信息
+ *
+ */
 router.get('/', function(req, res, next) {
-    /* req.query对象，请求实际上是个js对象{"info"
-     通常称为GET请求参数。
-     包含以键值对存放的查询字符串参数
-     req.query不需要任何中间件即可使用
-     */
-    // var cluster_id = req.query.cluster_id;
     var cluster_id_list = req.query.cluster_id_list; //请求数据 cluster_id
     var cluster_id_set = '(';
     var len = cluster_id_list.length;
@@ -100,7 +97,6 @@ router.get('/', function(req, res, next) {
         cluster_id_set += util.format("'%s'", cluster_id_list[i]);
     }
     cluster_id_set += ')';
-    // console.log('目前只有一个停泊区域');
     console.log("显示点");
     // console.log(cluster_id);
     // var sql = util.format('SELECT Longitudedd as lon, Latitudedd as lat FROM T3105_StationaryAreaPointSet WHERE StationaryAreaKey = "%s"', cluster_id);

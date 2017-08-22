@@ -208,6 +208,7 @@ router.get('/getDetailRouteInfo', function(req, res, next) {
         if (result[0] === "200") {
             var lon_lat_info = result[1];
             var sendData = util.format('{"MMSI": "%s", "lat_lon_info":[', MMSI);
+            var count = 0;
             for (var i = 0; i < lon_lat_info.length; i++) {
                 // if (lon_lat_info[i] !== undefined && lon_lat_info[i] !== 'undefined') {
                 if (i > 0) {
@@ -217,12 +218,19 @@ router.get('/getDetailRouteInfo', function(req, res, next) {
                     var info = lon_lat_info[i].info.split("#");
                     // 获取经纬度信息
                     sendData += util.format('[%s, %s]', info[8], info[9]);
+                    count++;
                 }
             }
             sendData += ']}';
-            res.jsonp(['200', sendData]);
+            if(count>0){
+                res.jsonp(['200', sendData]);
+            }
+            else{
+                res.jsonp(['304', "return nothing"]);
+            }
+
         } else {
-            res.jsonp(['304', "nothing return"]);
+            res.jsonp(['404', result]);
         }
     });
 });

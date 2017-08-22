@@ -27,9 +27,11 @@ router.post('/getInfo', function(req, res, next){
                 if (i > 0) {
                     sendData += ",";
                 }
-                sendData += util.format('"%s":{"lon":%s, "lat":%s, "type":%s, "LOA_MAX":%s, "BEAM_MAX":%s, "DRAFT_MAX":%s, "DWT_MAX": %s}',
-                    results[i].cluster_id, results[i].lon, results[i].lat, results[i].type, results[i].LOA_MAX,
-                    results[i].BEAM_MAX, results[i].DRAFT_MAX, results[i].DWT_MAX);
+                // sendData += util.format('"%s":{"lon":%s, "lat":%s, "type":%s, "LOA_MAX":%s, "BEAM_MAX":%s, "DRAFT_MAX":%s, "DWT_MAX": %s}',
+                //     results[i].cluster_id, results[i].lon, results[i].lat, results[i].type, results[i].LOA_MAX,
+                //     results[i].BEAM_MAX, results[i].DRAFT_MAX, results[i].DWT_MAX);
+                sendData += util.format('"%s":{"lon":%s, "lat":%s, "type":%s}',
+                    results[i].cluster_id, results[i].lon, results[i].lat, results[i].type);
             }
             sendData += "}";
             // var sendData = JSON.stringify(results);

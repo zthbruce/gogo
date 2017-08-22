@@ -606,7 +606,7 @@ $('.fleetInfo_timeSelect .timeLine_RightBtn').click(function(){
     if(timeLeft - 600 + width  >= 0) {
         timePoint_ul.animate(
             {
-                left : "-=600",
+                left : "-=600"
             },
             300, // 时长
             function() { console.log('done!'); // 回调函数
