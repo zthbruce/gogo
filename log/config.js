@@ -4,11 +4,6 @@ var config = {
 			{
 				"type":"console"
 			},
-			//{
-			//	"type":"file",
-			//	"filename":"./logs/rizhi.log",
-			//	"category":"blmlog"
-			//}
 			{
 				"category":"blmlog",
 				"type":"dateFile",
