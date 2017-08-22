@@ -22,7 +22,7 @@ function getShipList() {
     $.ajax({
         // async: false,
         // url: OL_Action_Root + "/icon/getInfo",
-        url: "/route/getShipInfo",
+        url: "/voyage/getShipInfo",
         dataType: 'json',
         cache: false,
         timeout: 50000,
@@ -76,7 +76,7 @@ function getShipList() {
 function getBasicRouteList(MMSI) {
     $.ajax({
         data: {MMSI: MMSI},
-        url: "/route/getBasicRouteInfo",
+        url: "/voyage/getBasicRouteInfo",
         dataType: 'json',
         cache: false,
         timeout: 5000,
@@ -137,7 +137,7 @@ function getBasicRouteList(MMSI) {
 function getDetailRoute(MMSI, startTime, stopTime) {
     $.ajax({
         data: {MMSI: MMSI, startTime: startTime, stopTime: stopTime},
-        url: "/route/getDetailRouteInfo",
+        url: "/voyage/getDetailRouteInfo",
         dataType: 'json',
         cache: false,
         timeout: 5000,

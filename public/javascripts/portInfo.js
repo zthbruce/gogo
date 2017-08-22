@@ -15,6 +15,7 @@ blmol.bind.addOnZoomChangeListener(map, function (map, zoom , extent, event) {
     GradeShowPort(AllPortBasicList,zoom);
 });
 
+
 /**
  * 设置港口分级别显示
  */

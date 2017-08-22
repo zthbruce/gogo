@@ -238,7 +238,7 @@ function getAnchInfo(anchKey, lon, lat) {
 
                 // 将曲线的点(勾)画出来
                 console.log("画出点");
-                current_anch.getSource().clear(); // 清空图层
+                current.getSource().clear(); // 清空图层
                 for(var i = 0; i < locationList.length - 1; i++) {
                     var ele = locationList[i];
                     var lon = ele[0];
@@ -254,8 +254,8 @@ function getAnchInfo(anchKey, lon, lat) {
                         // 'cluster_id' : key,
                         geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
                     });
-                    anch_choosed.setStyle(choosedAnch);
-                    current_anch.getSource().addFeature(anch_choosed);
+                    anch_choosed.setStyle(choosed);
+                    current.getSource().addFeature(anch_choosed);
                     // features.push(park_feature);
                 }
             },
@@ -373,7 +373,7 @@ function writeContourLine(lonLatList) {
     anch.getSource().addFeature(feature);
 
     // 将边界点也显示出来
-    current_anch.getSource().clear(); // 清空图层
+    current.getSource().clear(); // 清空图层
     for(var i = 0; i < locationList.length - 1; i++) {
         var ele = locationList[i];
         var lon = ele[0];
@@ -388,8 +388,8 @@ function writeContourLine(lonLatList) {
             geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
         });
         // 表示已经选择，实际上那个
-        anch_choosed.setStyle(choosedAnch);
-        current_anch.getSource().addFeature(anch_choosed);
+        anch_choosed.setStyle(choosed);
+        current.getSource().addFeature(anch_choosed);
     }
 }
 
@@ -411,53 +411,6 @@ $('.anchName_select>input').keyup(function(){
 });
 
 
-
-// 点击对号 未选择列表 <- 选择列表
-$(".selected_LonLat").delegate(".anch_belong","click",function(){
-// $(".selected_LonLat").delegate("li>span:nth-child(2)","click",function(){
-    var ele = $(this).parent();
-    var number = parseInt($(".unselected_LonLat>li:last-child>span:first-child").text()) + 1;
-    number = isNaN(number) ? 1: number;
-    var normalLonLatStr = $(this).next().text();
-    var chooseStr = '<li clusterId=' + ele.attr("clusterId") + ' lon=' + ele.attr("lon")  + ' lat=' + ele.attr("lat") +'><span>' + number + '</span><span class = "anch_notBelong"></span><span>' + normalLonLatStr + '</span></li>';
-    $(".unselected_LonLat").append(chooseStr);
-    // 移除本行
-    var nextDomList = ele.nextAll();
-    for(var i = 0; i < nextDomList.length; i++){
-        var num = parseInt(nextDomList.eq(i).children("span:first-child").text()) -1;
-        nextDomList.eq(i).children("span:first-child").text(num);
-    }
-    ele.remove();
-    updateLocationList();
-    // 根据当前点画出轮廓线
-    writeContourLine(locationList);
-    // ele.nextAll("li>span:first-Child").text("3");
-});
-
-// 点击问号 未选择列表 -> 选择列表
-$(".unselected_LonLat").delegate(".anch_notBelong", "click",function(){
-// $(".unselected_LonLat").delegate("li>span:nth-child(2)", "click",function(){
-    var ele = $(this).parent();
-    var number = parseInt($(".selected_LonLat>li:last-child>span:first-child").text()) + 1;
-    number = isNaN(number) ? 1: number;
-    var normalLonLatStr = $(this).next().text();
-    var lon = ele.attr("lon");
-    var lat =  ele.attr("lat");
-    var chooseStr = '<li clusterId=' + ele.attr("clusterId") + ' lon=' + lon  + ' lat=' + lat +'><span>' + number + '</span><span class = "anch_belong"></span><span>' + normalLonLatStr + '</span></li>';
-    $(".selected_LonLat").append(chooseStr);
-    var nextDomList = ele.nextAll();
-    for(var i = 0; i < nextDomList.length; i++){
-        var num = parseInt(nextDomList.eq(i).children("span:first-child").text()) -1;
-        nextDomList.eq(i).children("span:first-child").text(num);
-    }
-    ele.remove();
-    changeAnchSaveButton(true);
-    // position.getSource().clear(); // 清空一下图层
-    // 更新轮廓点
-    updateLocationList();
-    // 根据当前所选点，画出轮廓线
-    writeContourLine(locationList);
-});
 
 
 // 点击对应的锚地列表行， 在地图上突出显示
@@ -638,7 +591,7 @@ $('#anch_save').click(function(){
     anch.getSource().getFeatureById("current").set("anchKey", anchKey);
     position.getSource().clear();
     anchStatus = false; // 将锚地状态还原
-    current_anch.getSource().clear();
+    current.getSource().clear();
     // map.getView().setCenter(ol.proj.fromLonLat(center));
     // map.getView().setCenter(ol.proj.fromLonLat(center));
 });
@@ -656,7 +609,7 @@ $('#anch_cancel').click(function(){
     }
     anchStatus = false;
     // 将选择勾去掉
-    current_anch.getSource().clear();
+    current.getSource().clear();
 });
 
 

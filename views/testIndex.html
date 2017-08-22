@@ -25,9 +25,13 @@
     <script type="text/javascript" src="/javascripts/blmOperate.js"></script>
     <script type="text/javascript" src="/javascripts/blmBind.js"></script>
     <script type="text/javascript" src="/javascripts/jquery.js"></script>
-    <link rel="stylesheet" type="text/css" href="/stylesheets/datePicker/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="/stylesheets/datePicker/zzsc.css">
-    <link rel="stylesheet" href="/stylesheets/datePicker/dcalendar.picker.css"/>
+
+    <!--1-->
+    <!--<link rel="stylesheet" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">-->
+    <!--<link href="/stylesheets/datePicker/foundation.min.css" rel="stylesheet" type="text/css">-->
+    <!--<link href="/stylesheets/datePicker/foundation-datepicker.min.css" rel="stylesheet" type="text/css">-->
+    <!--2-->
+    <link rel="stylesheet" href="/stylesheets/datePicker/ion.calendar.css">
 
 </head>
 <body style="overflow:hidden;">
@@ -79,35 +83,35 @@
         <li id="1">Crude<i></i></li>
         <li id="2">Container<i></i></li>
     </ul>
-    <ul class="BulkCargo FleetName_List Fleet_List_ul">
-        <!--<li>VLOC(<i>120</i>)</li>-->
-        <!--<li>Cape(<i>300</i>)</li>-->
-        <!--<li>Mini Cape(<i>500</i>)</li>-->
-        <!--<li>Panamax(<i>1500</i>)</li>-->
-        <!--<li>Supramax(<i>1800</i>)</li>-->
-        <!--<li>Handymax(<i>2000</i>)</li>-->
-        <!--<li>Handysize</li>-->
-    </ul>
-    <ul class="Crude FleetName_List Fleet_List_ul">
-        <!--<li>VLCC(<i>680</i>)</li>-->
-        <!--<li>Aframax(<i>800</i>)</li>-->
-        <!--<li>MR Tanker(<i>100</i>)</li>-->
-        <!--<li>成品油(<i>1900</i>)</li>-->
-        <!--<li>Q-Max(<i>30</i>)</li>-->
-        <!--<li>LPG(<i>60</i>)</li>-->
-    </ul>
-    <ul class="Container FleetName_List Fleet_List_ul"></ul>
+    <!--<ul class="BulkCargo FleetName_List Fleet_List_ul">-->
+        <!--&lt;!&ndash;<li>VLOC(<i>120</i>)</li>&ndash;&gt;-->
+        <!--&lt;!&ndash;<li>Cape(<i>300</i>)</li>&ndash;&gt;-->
+        <!--&lt;!&ndash;<li>Mini Cape(<i>500</i>)</li>&ndash;&gt;-->
+        <!--&lt;!&ndash;<li>Panamax(<i>1500</i>)</li>&ndash;&gt;-->
+        <!--&lt;!&ndash;<li>Supramax(<i>1800</i>)</li>&ndash;&gt;-->
+        <!--&lt;!&ndash;<li>Handymax(<i>2000</i>)</li>&ndash;&gt;-->
+        <!--&lt;!&ndash;<li>Handysize</li>&ndash;&gt;-->
+    <!--</ul>-->
+    <!--<ul class="Crude FleetName_List Fleet_List_ul">-->
+        <!--&lt;!&ndash;<li>VLCC(<i>680</i>)</li>&ndash;&gt;-->
+        <!--&lt;!&ndash;<li>Aframax(<i>800</i>)</li>&ndash;&gt;-->
+        <!--&lt;!&ndash;<li>MR Tanker(<i>100</i>)</li>&ndash;&gt;-->
+        <!--&lt;!&ndash;<li>成品油(<i>1900</i>)</li>&ndash;&gt;-->
+        <!--&lt;!&ndash;<li>Q-Max(<i>30</i>)</li>&ndash;&gt;-->
+        <!--&lt;!&ndash;<li>LPG(<i>60</i>)</li>&ndash;&gt;-->
+    <!--</ul>-->
+    <ul class="FleetName_List Fleet_List_ul"></ul>
 
     <!--航线分类-->
     <ul class="routeType_list route_List_ul">
-        <li>BCI<i></i></li>
-        <li>BDTI<i></i></li>
-        <li>BCTI<i></i></li>
-        <li>BITR<i></i></li>
-        <li>BLPGR<i></i></li>
-        <li>BPI<i></i></li>
-        <li>BSI<i></i></li>
-        <li>BHSI<i></i></li>
+        <li type="0">BCI<i></i></li>
+        <li type ="1">BDTI<i></i></li>
+        <li type ="2">BCTI<i></i></li>
+        <li type ="3">BITR<i></i></li>
+        <li type ="4">BLPGR<i></i></li>
+        <li type ="5">BPI<i></i></li>
+        <li type ="6">BSI<i></i></li>
+        <li type ="7">BHSI<i></i></li>
     </ul>
     <ul class="oneRoute_List route_List_ul">
         <li>Route C2</li>
@@ -348,11 +352,11 @@
     <div class="routeStartEnd">
         <div class="routePort_Select">
             <div class="routePort_Start">
-                标准出发港:<span class="routePoint_infoShow">Tubarao</span>
+                标准出发港:<span class="routePoint_infoShow" lon="120.0" lat="37.0">Tubarao</span>
                 <i></i>
             </div>
             <div class="routePort_End">
-                标准目的港:<span class="routePoint_infoShow">Rotterdam</span>
+                标准目的港:<span class="routePoint_infoShow" lon="120.0" lat="37.0">Rotterdam</span>
                 <i></i>
             </div>
         </div>
@@ -367,7 +371,7 @@
             </span>
             <div class="AllStartEndPort_List">
                 <input class="StartEndPort_input" type="text" placeholder="请选择港口或输入港口">
-                <ul>
+                <ul class = "startPort">
                     <li>asdasd</li>
                     <li>basdasd</li>
                     <li>casdasd</li>
@@ -379,14 +383,14 @@
             <span>目的港：</span>
             <span>
                 <ul class="StartEndPort_List">
-                    <li><span>sadasdqw</span><i></i></li>
+                    <li><span>sadasdqw</span><i class="close"></i></li>
                     <li><span>sadasdqw</span><i></i></li>
                     <li class = "add_Port add_EndPort"><span> + 增加目的港口</span></li>
                 </ul>
             </span>
             <div class="AllStartEndPort_List">
                 <input class="StartEndPort_input" type="text" placeholder="请选择港口或输入港口">
-                <ul>
+                <ul class="endPort">
                     <li>asdasd</li>
                     <li>basdasd</li>
                     <li>casdasd</li>
@@ -406,7 +410,7 @@
             <li>装载等待时长: <input type="text"> h</li>
             <li>卸载等待时长: <input type="text"> h</li>
             <li>DTPH: <input type="text"> t/h</li>
-            <li>Sun&Holiday: <input type="checkbox" name="Sun&Holiday"></li>
+            <li>Sun&Holiday: <input type="checkbox" name="Sun&Holiday" checked=true></li>
         </ul>
     </div>
     <div class="dividing_line"></div>
@@ -1084,7 +1088,7 @@
     });
 
     // 被选择的图标
-    var choosedAnch = new ol.style.Style({
+    var choosed = new ol.style.Style({
         image: new ol.style.Icon({
             src: 'images/anch-yes.png'
         })
@@ -1159,7 +1163,7 @@
     // 定位图标显示层
     var position = blmol.layer.createVectorLayer('position', 0, 20);
     // 锚地区域图层
-    var current_anch = blmol.layer.createVectorLayer('current_anch', 0, 20);
+    var current = blmol.layer.createVectorLayer('current', 0, 20);
     // 锚地区域图层
     var anch = blmol.layer.createVectorLayer('anch', 0, 20);
 
@@ -1181,7 +1185,7 @@
     blmol.map.addLayer(map, vector);
     blmol.map.addLayer(map, position);
     blmol.map.addLayer(map, anch);
-    blmol.map.addLayer(map, current_anch);
+    blmol.map.addLayer(map, current);
 
 //    blmol.map.addLayer(map, start_end);
 
@@ -1289,11 +1293,37 @@
 </script><script type="text/javascript" src="/javascripts/route.js"></script>
 <!--<script type="text/javascript" src="/javascripts/interaction.js"></script>-->
 
-<script type="text/javascript" src="/javascripts/datePicker/dcalendar.picker.js"></script>
-<script type="text/javascript">
-    $('#shipInfo_EnterTime').dcalendarpicker();
-    $('#shipInfo_LeaveTime').dcalendarpicker();
+<!--1-->
+<!--<script src="/javascripts/datePicker/foundation-datepicker.min.js"></script>-->
+<!--<script src="/javascripts/datePicker/foundation-datepicker.zh-CN.js"></script>-->
+<!--<script>-->
+    <!--$('#shipInfo_EnterTime').fdatepicker({format: 'yyyy-mm-dd'});-->
+    <!--$('#shipInfo_LeaveTime').fdatepicker({format: 'yyyy-mm-dd'});-->
+    <!--$('#shipInfo_EnterTime').val('2017-05-01');-->
+<!--</script>-->
+<!--2-->
+<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+<script src="/javascripts/datePicker/moment.min.js"></script>
+<script src="/javascripts/datePicker/moment.zh-cn.js"></script>
+<script src="/javascripts/datePicker/ion.calendar.min.js"></script>
+<script>
+    $(function(){
+        $('#shipInfo_EnterTime').each(function(){
+            $(this).ionDatePicker({
+                lang: 'zh-cn',
+                format: 'YYYY-MM-DD'
+            });
+        });
+        $('#shipInfo_LeaveTime').each(function(){
+            $(this).ionDatePicker({
+                lang: 'zh-cn',
+                format: 'YYYY-MM-DD'
+            });
+        });
+    });
+    $('#shipInfo_EnterTime').val('2015-01-01');
 </script>
+
 <script type="text/javascript">
     gvChartInit();
 $(function(){

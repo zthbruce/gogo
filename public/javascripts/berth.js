@@ -148,8 +148,6 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n){
                 belongDistanceList = data[1];
             }
             var distanceList = [];
-            // var num = belongDistanceList.length;
-            // console.log("泊位数目：" + num);
             // 遍历所有静止区域中心点
             for(var key in allPoints) {
                 var ele = allPoints[key];

@@ -14,7 +14,7 @@ var router = express.Router();
  * 返回数据{"0":[{RouteID:, Name：}], "1":{})
  */
 router.get("/getRouteBasicInfo", function (req, res, next) {
-    var sql = 'SELECT BelongTo, RouteId, NAME FROM `T4103_Route';
+    var sql = 'SELECT BelongTo, RouteId, Name FROM T4103_Route';
     mysql.query(sql, function (err, results) {
         if(err){
             console.log(utils.eid1);
@@ -34,7 +34,34 @@ router.get("/getRouteBasicInfo", function (req, res, next) {
                 for(var i = 0; i < results.length; i++){
                     var ele = results[i];
                     var routeType = ele.BelongTo;
+                    // console.log(routeType.length);
                     var content = {RouteId:ele.RouteId, Name: ele.Name};
+                    // if(routeType == "0"){
+                    //     console.log("here");
+                    //     route_0.push(content);
+                    // }
+                    // else if(routeType == "1"){
+                    //     route_1.push(content);
+                    // }
+                    // else if(routeType == "2"){
+                    //     route_2.push(content);
+                    // }
+                    // else if(routeType == "3"){
+                    //     route_3.push(content);
+                    // }
+                    // else if(routeType == "4"){
+                    //     route_4.push(content);
+                    // }
+                    // else if(routeType == "5"){
+                    //     route_5.push(content);
+                    // }
+                    // else if(routeType == "6"){
+                    //     route_6.push(content);
+                    // }
+                    // else if(routeType == "7"){
+                    //     route_7.push(content);
+                    // }
+                    //
                     switch (routeType)
                     {
                         case "0":
@@ -61,6 +88,8 @@ router.get("/getRouteBasicInfo", function (req, res, next) {
                         case "7":
                             route_7.push(content);
                             break;
+                        default:
+                            console.log("nothing");
                     }
                 }
                 res.jsonp(['200', {"0": route_0, "1": route_1, "2": route_2, "3": route_3, "4": route_4,
@@ -77,7 +106,28 @@ router.get("/getRouteBasicInfo", function (req, res, next) {
 /**
  * 获取航线的具体信息
  * 请求参数 {RouteId}
+ * 返回信息 航线具体信息
  */
 router.get("/getRouteDetailInfo", function (req, res, next) {
-    var sql = ""
+    var routeId = req.query.RouteId;
+    var sql = util.format("SELECT * FROM `T4103_Route`  WHERE RouteId = '%s'", routeId);
+    mysql.query(sql, function (err, results) {
+        if(err){
+            console.log(utils.eid1);
+            res.jsonp(["404", utils.eid1])
+        }
+        else{
+            if(results.length>0){
+                console.log(["200", results]);
+                res.jsonp(["200", results])
+            }
+            else{
+                console.log(["304", 'return nothing']);
+                res.jsonp(["304", 'return nothing'])
+            }
+        }
+    })
 });
+
+
+module.exports = router;

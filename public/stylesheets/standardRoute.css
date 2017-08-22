@@ -7,6 +7,7 @@
 .route_List_ul{background:rgba(0,0,0,0.8);position:absolute;border-radius:2px;display:none;}
 .route_List_ul>li{height:30px;cursor:pointer;line-height:30px;color:#fff;font-size:14px;padding-left:10px;}
 .route_List_ul>li:hover{background:#217BA2;}
+.route_List_ul>li.choose{background:#217BA2;}
 .routeType_list{width:80px;bottom:40px;left:80px;}
 .routeType_list>li>i{display:inline-block;width:0px;height:0px;border:4px solid transparent;border-left-color:#eee;float:right;margin-top:12px;}
 .oneRoute_List{width:130px;bottom:40px;left:160px;}
@@ -21,7 +22,7 @@
 /*起终点选择*/
 .routeStartEnd>div{font-size:14px;color:#fff;width:90%;margin:0px auto 5px;height:20px;}
 .routePort_Select>div{display:inline-block;width:49%;height:20px;line-height:20px;}
-.routePort_Select i{display:inline-block;width:12px;height:12px;margin-left:5px;background:url('/icon/position_logo.png') no-repeat;position:relative;top:2px;cursor:pointer;}
+.routePort_Select i{display:inline-block;width:14px;height:14px;margin-left:5px;background:url('/images/placeholder.png') no-repeat;position:relative;top:2px;cursor:pointer;}
 .routePoint_infoShow{display:inline-block;margin-left:10px;height:20px;line-height:20px;}
 
 /*出发港、目的港列表选择*/
@@ -30,8 +31,8 @@
 .routeStartEndPort>span:nth-child(2){width:370px;height:40px;cursor:auto;white-space:nowrap;overflow-x:scroll;}
 .StartEndPort_List{width:5000px;}
 .StartEndPort_List>li{float:left;display:inline-block;height:18px;margin-top:2px;margin-left:5px;padding:0px 5px;border:1px solid #989898;border-radius:5px;background: rgba(255,255,255,0.2)}
-.StartEndPort_List>li>span{display:inline-block;height:18px;line-height:18px;font-size:12px;margin-right:6px;position:relative;top:-3px;}
-.StartEndPort_List>li>i{display:inline-block;width:11px;height:11px;position:relative;top:-1px;background:url("/images/cancel.png") no-repeat;cursor:pointer;}
+.StartEndPort_List>li>span{display:inline-block;height:18px;line-height:18px;font-size:12px;margin-right:6px;position:relative;top:-4px;}
+.StartEndPort_List>li>i{display:inline-block;width:11px;height:11px;position:relative;top:-2px;background:url("/images/cancel.png") no-repeat;cursor:pointer;}
 .StartEndPort_List>li>i:hover{background:url("/images/cancel-hover.png") no-repeat;}
 .StartEndPort_List>.add_Port{background: rgba(255,255,255,0.2);cursor: pointer;}
 .add_Port:hover{background: rgba(157, 157, 157, 0.70);}

@@ -166,26 +166,27 @@ function changeBerthSaveButton(saveStatus) {
  * 地图图标单击事件入口(真实入口)
  */
 var anchStatus = false;
-var fleetStatus = false;
+var routeStatus = false;
 var old_feature;
 mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feature, evt) {
     if (feature.length !== 0) {
-        if (feature[0].get('port_id') !== undefined) {
+        var current_feature =  feature[0];
+        if (current_feature.get('port_id') !== undefined) {
             // 点击港口图标
-            console.log(feature[0].get('port_id'));
-            var portId = feature[0].get('port_id');
+            console.log(current_feature.get('port_id'));
+            var portId = current_feature.get('port_id');
             reqOnePortBasicInfo(portId);
-        } else if (feature[0].get('cluster_id') !== undefined || feature[0].get('anchKey') !== undefined) {
-            var type = feature[0].get('type');
-            var lon = feature[0].get('lon');
-            var lat = feature[0].get('lat');
-            // 如果已经进入锚地状态，状态会变成可选择的情况
+        } else if (current_feature.get('cluster_id') !== undefined || current_feature.get('anchKey') !== undefined) {
+            var type = current_feature.get('type');
+            var lon = current_feature.get('lon');
+            var lat = current_feature.get('lat');
+            // 锚地状态
             if(anchStatus){
-                var id = feature[0].get("id");
+                var id = current_feature.get("id");
                 // 当属于本锚地时，点击之后取消选定
                 if(id === "choosed"){
                     // 获取行号
-                    var number = feature[0].get("number");
+                    var number = current_feature.get("number");
                     console.log("行号" + number + "将被取消");
                     var ele = $(".selected_LonLat>li:eq(" + (number - 1) + ")");
                     var lon = parseFloat(ele.attr("lon"));
@@ -221,8 +222,8 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                 }
                 else {
                     // 如果不属于本锚地, 点击之后标为选定
-                    var clusterId = feature[0].get('cluster_id');
-                    var anchKey = feature[0].get('anchKey') === undefined ? "" : feature[0].get('anchKey');
+                    var clusterId = current_feature.get('cluster_id');
+                    var anchKey = current_feature.get('anchKey') === undefined ? "" : current_feature.get('anchKey');
                     console.log(anchKey);
                     // 如果点击旧锚地图标, 将其加入选择列表
                     if (type === 0) {
@@ -243,10 +244,25 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                     }
                 }
             }
-            else if(fleetStatus){
-
+            // 如果是航线模式
+            else if(routeStatus){
+                var zoom =  blmol.operation.getZoom(map);
+                // 如果zoom >= 10 且点击的是泊位图标
+                if(zoom>=10 && type === 1){
+                    var id = current_feature.get("id");
+                    // 如果当前是选择的，那么删除该选择的区域
+                    if(id === "choosed"){
+                        console.log("删去");
+                        current.getSource().removeFeature(current_feature);
+                    }
+                    else{
+                        // 添加该图标
+                        console.log("增加");
+                        current.getSource().addFeature(current_feature);
+                    }
+                }
             }
-            // 原始状态
+            // 原始模式
             else{
                 changeBerthSaveButton(false); // 初始化泊位保存状态
                 // 初始化锚地保存状态
@@ -255,16 +271,16 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                     // 锚地弹出框
                     $("#newAnch").fadeIn("normal");
                     anchStatus = true; // 表示进入锚地状态
-                    var anchKey = feature[0].get('anchKey') === undefined ? "" : feature[0].get('anchKey');
+                    var anchKey = current_feature.get('anchKey') === undefined ? "" : current_feature.get('anchKey');
                     console.log(anchKey);
                     changeAnchSaveButton(false);
-                    old_feature =  feature[0];
-                    feature[0].setId("current"); // 将当前的设为current
+                    old_feature =  current_feature;
+                    current_feature.setId("current"); // 将当前的设为current
                     getAnchInfo(anchKey, lon, lat);
                 }
                 // 泊位管理弹出框
                 if (type === 1) {
-                    var clusterId = feature[0].get('cluster_id');
+                    var clusterId = current_feature.get('cluster_id');
                     // 弹出泊位的弹出框
                     $('#newBerth').fadeIn("normal");
                     // 请求码头整体信息

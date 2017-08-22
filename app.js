@@ -17,13 +17,15 @@ var contour = require('./routes/contour');
 
 var statistic = require('./routes/statistic');
 
-var route = require('./routes/voyage');  // 航线
+var voyage = require('./routes/voyage');  // 航线
 
 var berth = require('./routes/berth'); // 泊位的接口
 
 var anch = require('./routes/anch'); // 锚地的接口
 
 var fleet = require('./routes/fleet'); // 锚地的接口
+
+var route = require('./routes/route'); // 锚地的接口
 
 var app = express();
 
@@ -66,7 +68,7 @@ app.use('/contourShow', contour);
 
 app.use('/statistic', statistic);
 
-app.use('/route', route); // 航次
+app.use('/route', route); // 航线
 
 app.use('/berth', berth); //泊位
 
@@ -74,6 +76,7 @@ app.use('/anch', anch); //锚地
 
 app.use("/fleet", fleet); //船队
 
+app.use("/voyage", voyage); // 航次
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
