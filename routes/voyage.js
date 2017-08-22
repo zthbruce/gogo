@@ -186,6 +186,7 @@ function getDataDuring(table, keyStart, keyEnd, limit, cb){
     }, function (err, httpResponse, data){
         if(!err && data && data.rows) {
             // var result = data.rows;
+            console.log(data.rows);
             cb(["200", data.rows])
         } else{
             cb(["404", err])
@@ -212,9 +213,11 @@ router.get('/getDetailRouteInfo', function(req, res, next) {
                 if (i > 0) {
                     sendData += ",";
                 }
-                var info = lon_lat_info[i].info.split("#");
-                // 获取经纬度信息
-                sendData += util.format('[%s, %s]', info[8], info[9]);
+                if(lon_lat_info[i].info !== undefined){
+                    var info = lon_lat_info[i].info.split("#");
+                    // 获取经纬度信息
+                    sendData += util.format('[%s, %s]', info[8], info[9]);
+                }
             }
             sendData += ']}';
             res.jsonp(['200', sendData]);
