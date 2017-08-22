@@ -532,7 +532,7 @@ $(window).mousemove(function(event){
         if(newLeft>$(document).width()-$('#shipDetails>.fleet_title').width()){newLeft = $(document).width()-$('#shipDetails>.fleet_title').width();}
         if(newTop>$(window).height()-$('#shipDetails>.fleet_title').height()){newTop = $(window).height()-$('#shipDetails>.fleet_title').height();}
         $('#shipDetails').offset({top:newTop,left:newLeft});
-        updateCalenderPosition();
+        // updateCalenderPosition();
     }else if(shipSearchDown){
         if(newLeft>$(document).width()-$('#searchShipList>.fleet_title').width()){newLeft = $(document).width()-$('#searchShipList>.fleet_title').width();}
         if(newTop>$(window).height()-$('#searchShipList>.fleet_title').height()){newTop = $(window).height()-$('#searchShipList>.fleet_title').height();}
