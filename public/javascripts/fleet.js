@@ -416,11 +416,11 @@ $('.imgBtn_left').click(function () {
     // var left = image_ul.css("left");
     curIndex--;
     if(curIndex >= 0){
-        image_ul.animate({left:"+=80"}, 1000)
+        image_ul.animate({left: 0 - curIndex * 80}, 1000);
     }
     else{
         curIndex = imageNum - 1;
-        $(".shipInfo_imgShow>ul").animate({right: 0}, 200);
+        image_ul.animate({right: 0}, 200);
     }
     imageAutoShow() // 恢复自动播放
 }
@@ -437,7 +437,7 @@ $('.imgBtn_right').click(function () {
     var image_ul = $(".shipInfo_imgShow>ul");
     curIndex++;
     if(curIndex < imageNum){
-        image_ul.animate({left:"-=80"}, 1000)
+        $(".shipInfo_imgShow>ul").animate({left: 0 - curIndex * 80}, 1000);
     }
     else{
         image_ul.animate({left: 0}, 200); // 显示第1张

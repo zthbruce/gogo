@@ -21,8 +21,6 @@ blmol.bind.addOnZoomChangeListener(map, function (map, zoom , extent, event) {
  */
 function GradeShowPort(portData,mainPortData,level){
     var portLogoBlock;
-    var portDataLen = portData.length;
-
     var OnePortId;
     var OnePortLat;
     var OnePortLong;
@@ -30,7 +28,6 @@ function GradeShowPort(portData,mainPortData,level){
     var OnePortCNName;
     var OnePortLevel;
     var features = new Array();  //形成图标集合列表,Array<ol.Features>
-    var featuresText = new Array();  //形成图标名称集合列表,Array<ol.Features>
     var currentLongLatRange = blmol.operation.getCurrentExtent(map);
     for(var key in portData){
         OnePortId = portData[key];
@@ -54,44 +51,11 @@ function GradeShowPort(portData,mainPortData,level){
                     break;
                 }
             }
-            if(level>6){
-                var OnePortLatLong1 = [];
-                OnePortLatLong1.push(parseFloat(OnePortLong)+0.0200000);  //插入经度
-                OnePortLatLong1.push(parseFloat(OnePortLat));
-                var marker = new ol.Feature({
-                    id: key,
-                    geometry: new ol.geom.Point(ol.proj.fromLonLat(OnePortLatLong1))
-                });
-                var name = OnePortCNName==''?OnePortENName:OnePortCNName;
-                marker.setStyle(new ol.style.Style({
-                    fill: new ol.style.Fill({ //矢量图层填充颜色，以及透明度
-                        color: 'rgba(255, 255, 255, 0.6)'
-                    }),
-                    stroke: new ol.style.Stroke({ //边界样式
-                        color: '#319FD3',
-                        width: 1
-                    }),
-                    text: new ol.style.Text({ //文本样式
-                        text: name,
-                        font: '13px Calibri,sans-serif',
-                        fill: new ol.style.Fill({
-                            color: '#f0f'
-                        }),
-                        stroke: new ol.style.Stroke({
-                            color: '#fff',
-                            width: 3
-                        })
-                    })
-                }));
-                featuresText.push(marker);
-            }
-
             portLogoBlock = blmol.marker.createIcon(key, OnePortLatLong,0, src);
             features.push(portLogoBlock);
         }
     }
     blmol.layer.clear(portLayer);
-    portLayer.getSource().addFeatures(featuresText);
     portLayer.getSource().addFeatures(features);
     // mapImgClick = blmol.bind.addOnClickListener(map,function(map,coordinate,feature,evt){
     //     if(feature.length != 0){

@@ -57,15 +57,14 @@ function reqOnePortBasicInfo(id){
             // console.log(data);
             var sendData = data[1];
             var jsonData = JSON.parse(sendData);
-            //正常功能
-            // $('#portBasicInfo').attr('port_id',jsonData[0].PortID);
-            // $('#portBasicInfo>.portInfo_title>span').text(jsonData[0].ENName);
-            // $('#portBasicInfo .port_country>span').text(jsonData[0].ISO3);
-            // $('#portBasicInfo .port_position>span:first-child').text(jsonData[0].Longitude+' '+jsonData[0].Latitude);
-            // $('#portBasicInfo .port_position>span:last-child').text(jsonData[0].Timezone);
-            // $('#portBasicInfo .port_authority>span:last-child').text(jsonData[0].CompanyENName);
-            // $('#portBasicInfo .port_chart_number>span:last-child').text(jsonData[0].ChartNo);
-            // $('#portBasicInfo').slideDown(400);
+            $('#portBasicInfo').attr('port_id',jsonData[0].PortID);
+            $('#portBasicInfo>.portInfo_title>span').text(jsonData[0].ENName);
+            $('#portBasicInfo .port_country>span').text(jsonData[0].ISO3);
+            $('#portBasicInfo .port_position>span:first-child').text(jsonData[0].Longitude+' '+jsonData[0].Latitude);
+            $('#portBasicInfo .port_position>span:last-child').text(jsonData[0].Timezone);
+            $('#portBasicInfo .port_authority>span:last-child').text(jsonData[0].CompanyENName);
+            $('#portBasicInfo .port_chart_number>span:last-child').text(jsonData[0].ChartNo);
+            $('#portBasicInfo').slideDown(400);
         },
         error: function(err){
             console.log(err);
