@@ -76,7 +76,12 @@ function iconLayer(level, area){
                 geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
             });
             park_feature.setId(key);
-            park_feature.setStyle(park_style[type]);
+            if(ele['Checked'] == 0){
+                park_feature.setStyle(park_style[type]);
+            }
+            else{
+                park_feature.setStyle(berth_yes);
+            }
             features.push(park_feature);
             areaNum++;
             _cluster_id_list.push(key);

@@ -183,7 +183,25 @@ router.get('/saveBerthList', function(req, res, next) {
                 }
             });
         }
-    })
+    });
+    var sqls  = "UPDATE `T2105_ParkArea` SET Checked = 1 WHERE cluster_id IN (";
+    for(var i = 0; i< berthList.length; i++) {
+        if(i > 0){
+            sqls += ",";
+        }
+        var ele = berthList[i];
+        sqls += util.format('"%s"', ele.StationaryAreaKey);
+    }
+    sqls += ")";
+    mysql.query(sqls, function (err, results) {
+        if (err) {
+            console.log(utils.eid1);
+            res.jsonp(['404', utils.eid1]);
+        } else {
+            console.log("成功连接数据库");
+            res.jsonp(['200', "保存泊位信息成功"]);
+        }
+    });
 });
 
 /**
