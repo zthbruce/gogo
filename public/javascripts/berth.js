@@ -483,7 +483,6 @@ $('#berth_save').click(function () {
         console.log(staticAreaKey);
         var feature = icon.getSource().getFeatureById(staticAreaKey);
         allPoints[staticAreaKey]["Checked"] = 0;
-        feature.setStyle(berth_yes);
     });
     console.log(terminalKey);
     console.log(berthList);
