@@ -471,6 +471,12 @@ $('#berth_save').click(function () {
     // 保存泊位信息
     console.log("保存泊位信息");
     var berthList = getBerthList(portID, terminalKey);
+    $("[status='0']").each(function () {
+        var staticAreaKey = $(this).attr("staticAreaKey");
+        console.log(staticAreaKey);
+        var feature = icon.getSource().getFeatureById(staticAreaKey);
+        feature.setStyle(berth_yes);
+    });
     console.log(terminalKey);
     console.log(berthList);
     $.ajax({

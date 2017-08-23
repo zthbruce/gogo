@@ -1009,7 +1009,7 @@
         // 泊位图标
         1: berth_style,
         // 定位图标
-        2: unknown_style,
+        2: unknown_style
     };
 
     // 起始点
@@ -1097,25 +1097,21 @@
         })
     });
 
-    var exist_anch_style = new ol.style.Style({
+    // 选择了之后显示保存的按钮
+    var berth_yes = new ol.style.Style({
         image: new ol.style.Icon({
-            scale: 0.8,
-            src: 'images/anchor.png'
+            src: 'images/berth_yes.png'
         })
     });
 
-
-
-//    var source = new ol.source.Vector();
-//    var vector = new ol.layer.Vector({
-//        source: source,
-//        style: new ol.style.Style({
-//            stroke: new ol.style.Stroke({
-//                color: '#AE7528',       //测距完成后线颜色
-//                width: 2                //测距完成后线宽度
-//            })
+//    var exist_anch_style = new ol.style.Style({
+//        image: new ol.style.Icon({
+//            scale: 0.8,
+//            src: 'images/anchor.png'
 //        })
 //    });
+
+
 
     // 标尺层
     var range_source = new ol.source.Vector({wrapX:true});

@@ -180,6 +180,7 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
             var type = current_feature.get('type');
             var lon = current_feature.get('lon');
             var lat = current_feature.get('lat');
+            var staticAreaKey = current_feature.get("cluster_id");
             // 锚地状态
             if(anchStatus){
                 var id = current_feature.get("id");

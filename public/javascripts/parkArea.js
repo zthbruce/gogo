@@ -75,6 +75,7 @@ function iconLayer(level, area){
                 'cluster_id' : key,
                 geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
             });
+            park_feature.setId(key);
             park_feature.setStyle(park_style[type]);
             features.push(park_feature);
             areaNum++;
