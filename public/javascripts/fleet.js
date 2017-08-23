@@ -155,22 +155,36 @@ function getTimePointList(fleetNumber){
     })
 }
 
+
+
 /**
  * 图片自动播放
  */
 function imageAutoShow() {
+    $(".shipInfo_imgShow>ul").css("left", 0); // 初始化显示
     autoShow = setInterval(function () {
-        if(curIndex < imageNum){
-            curIndex++;
-            $(".shipInfo_imgShow>ul").animate({"left":"-80"}, 300);
-        }
-        else{
-            // 初始化
-            curIndex = 0;
-            $(".shipInfo_imgShow>ul").css("left", 0);
-        }
+        showImage();
     },3000)
+}
 
+/**
+ * 根据索引显示图片
+ */
+function showImage() {
+    console.log(curIndex);
+    console.log(imageNum);
+    if(curIndex < imageNum){
+        $(".shipInfo_imgShow>ul").animate({left: 0 - curIndex * 80}, 1000);
+        curIndex++;
+    }
+    else {
+        $(".shipInfo_imgShow>ul").animate({left: 0}, 200);
+        curIndex = 1;
+    }
+    // else if(curIndex < 0){
+    //     curIndex = imageNum - 1;
+    //     $(".shipInfo_imgShow>ul").css("right", 0)
+    // }
 }
 
 
@@ -395,26 +409,46 @@ $('.fleetList_List').delegate('.shipDetailInfo', 'click', function () {
 var li_width = 80;
 // 点击图片向左按钮
 $('.imgBtn_left').click(function () {
+    console.log("停止自动播放");
+    clearInterval(autoShow); // 停止计时
     var image_ul = $(".shipInfo_imgShow>ul");
-    var width = image_ul.css("width");
-    var left = image_ul.css("left");
-    if(left + width - li_width > 0){
-        image_ul.animate({"left":"-80"}, 300)
+    // var width = image_ul.css("width");
+    // var left = image_ul.css("left");
+    curIndex--;
+    if(curIndex >= 0){
+        image_ul.animate({left:"+=80"}, 1000)
     }
-});
+    else{
+        curIndex = imageNum - 1;
+        $(".shipInfo_imgShow>ul").animate({right: 0}, 200);
+    }
+    imageAutoShow() // 恢复自动播放
+}
+ // function () {
+ //    console.log("开始自动播放");
+ //    imageAutoShow()
+ // }
+);
 
 // 每一张图片向右按钮
 $('.imgBtn_right').click(function () {
+    console.log("停止自动播放");
+    clearInterval(autoShow); // 停止自动播放
     var image_ul = $(".shipInfo_imgShow>ul");
-    var width = image_ul.css("width");
-    var left = image_ul.css("left");
-    if(left < 0){
-        image_ul.animate({"left":"+80"}, 300)
+    curIndex++;
+    if(curIndex < imageNum){
+        image_ul.animate({left:"-=80"}, 1000)
     }
+    else{
+        image_ul.animate({left: 0}, 200); // 显示第1张
+        curIndex = 1; // 下一次显示第二张
+    }
+    imageAutoShow() // 恢复自动播放
 });
 
 // 悬浮在图片上
-$("#shipInfo_imgShow").hover(function(){
+$(".shipInfo_imgShow").hover(function(){
+    console.log('悬浮');
     //滑入清除定时器
     clearInterval(autoShow);
     // 可以显示大图
@@ -651,7 +685,7 @@ $('.fleet_title>.title_offbtn').click(function(){
     $('.Fleet_List_ul>li').removeClass("choose"); // 清空所选
     // $('.FleetName_List>li').removeClass("choose"); // 清空所选
     $(this).parent().parent().fadeOut(300);
-
+    clearInterval(autoShow); // 清除定时器
 });
 
 
@@ -738,29 +772,26 @@ $(".Search_typeSelect>li").click(function () {
 });
 
 
-//船舶详情弹出框—船舶图片轮播
-$('.imgBtn_left').click(function(){
-    var nowListLeft = parseInt($('.shipInfo_imgShow>ul').css('left'));
-    // console.log(nowListLeft);
-    var nowShowImgNum = -nowListLeft/80;
-    if(nowShowImgNum>0){
-        $('.shipInfo_imgShow>ul').stop();
-        $('.shipInfo_imgShow>ul').animate({'left':nowListLeft+80},200);
-    }
-});
-$('.imgBtn_right').click(function(){
-    var imgListLength = parseInt($('.shipInfo_imgShow>ul>li').length);
-    var nowListLeft = parseInt($('.shipInfo_imgShow>ul').css('left'));
-    // console.log(nowListLeft);
-    var nowShowImgNum = -nowListLeft/80;
-    if(nowShowImgNum<imgListLength-1){
-        $('.shipInfo_imgShow>ul').stop();
-        $('.shipInfo_imgShow>ul').animate({'left':nowListLeft-80},200);
-    }
-});
-
-
-
+// //船舶详情弹出框—船舶图片轮播
+// $('.imgBtn_left').click(function(){
+//     var nowListLeft = parseInt($('.shipInfo_imgShow>ul').css('left'));
+//     // console.log(nowListLeft);
+//     var nowShowImgNum = -nowListLeft/80;
+//     if(nowShowImgNum>0){
+//         $('.shipInfo_imgShow>ul').stop();
+//         $('.shipInfo_imgShow>ul').animate({'left':nowListLeft+80},200);
+//     }
+// });
+// $('.imgBtn_right').click(function(){
+//     var imgListLength = parseInt($('.shipInfo_imgShow>ul>li').length);
+//     var nowListLeft = parseInt($('.shipInfo_imgShow>ul').css('left'));
+//     // console.log(nowListLeft);
+//     var nowShowImgNum = -nowListLeft/80;
+//     if(nowShowImgNum<imgListLength-1){
+//         $('.shipInfo_imgShow>ul').stop();
+//         $('.shipInfo_imgShow>ul').animate({'left':nowListLeft-80},200);
+//     }
+// });
 
 
 
