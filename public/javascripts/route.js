@@ -177,7 +177,8 @@ $('.oneRoute_List').delegate("li", 'click', function () {
  *
  */
 $(".routeInstall_CancelBtn").click(function(){
-    $('#routeInfo').fadeIn(300); //界面消失
+    console.log("here");
+    $('#routeInfo').fadeOut(300); //界面消失
     routeStatus = false; // 退出航线模式
 });
 

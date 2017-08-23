@@ -161,7 +161,6 @@ function getTimePointList(fleetNumber){
  * 图片自动播放
  */
 function imageAutoShow() {
-    $(".shipInfo_imgShow>ul").css("left", 0); // 初始化显示
     autoShow = setInterval(function () {
         showImage();
     },3000)
@@ -415,19 +414,16 @@ $('.imgBtn_left').click(function () {
     // var width = image_ul.css("width");
     // var left = image_ul.css("left");
     curIndex--;
-    if(curIndex >= 0){
+    console.log(curIndex);
+    if (curIndex >= 0) {
         image_ul.animate({left: 0 - curIndex * 80}, 1000);
     }
-    else{
+    else {
         curIndex = imageNum - 1;
         image_ul.animate({right: 0}, 200);
     }
     imageAutoShow() // 恢复自动播放
 }
- // function () {
- //    console.log("开始自动播放");
- //    imageAutoShow()
- // }
 );
 
 // 每一张图片向右按钮
@@ -436,6 +432,7 @@ $('.imgBtn_right').click(function () {
     clearInterval(autoShow); // 停止自动播放
     var image_ul = $(".shipInfo_imgShow>ul");
     curIndex++;
+    console.log(curIndex);
     if(curIndex < imageNum){
         $(".shipInfo_imgShow>ul").animate({left: 0 - curIndex * 80}, 1000);
     }
@@ -640,7 +637,6 @@ $('.fleet_title').mousedown(function(event){
 });
 var fleetDivZIndex = 0;
 $('#fleet,#shipDetails,#searchShipList,#routeInfo').click(function(){
-    console.log("here");
     fleetDivZIndex++;
     $(this).css('zIndex',fleetDivZIndex);
 });
