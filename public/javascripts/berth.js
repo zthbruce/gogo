@@ -184,25 +184,30 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n){
             n = Math.min(len, n);
             // 初始化泊位列表
             $(".berth_list").empty();
+            var num = 0;
             for(var i = 0; i < n; i++){
                 var berthInfo = distanceList[i];
                 var staticAreaKey = berthInfo.cluster_id;
                 status = berthInfo.status;
                 var belongStatus = status === 0 ? "belong" : "notBelong";
                 var ele = allPoints[staticAreaKey];
-                // 将信息写入html, 并赋予一个状态,根据状态进行筛选
-                // 当前静止区域默认属于
-                if(i === 0){
-                    belongStatus = "belong";
-                    status = 0;
+                if(ele.Checked == 0) {
+                    // 将信息写入html, 并赋予一个状态,根据状态进行筛选
+                    // 当前静止区域默认属于
+                    num++;
+                    if (i === 0) {
+                        belongStatus = "belong";
+                        status = 0;
+                    }
+                    var str = '<li><ul class="oneBerth_info"><li>' + num + '</li><li><span class = ' + belongStatus + ' seq=' + num + '>' +
+                        '</span></li> <li> <ul class="oneBerth_list" status=' + status + ' staticAreaKey = ' + staticAreaKey + ' lon = ' + ele.lon + ' lat=' + ele.lat + '><li>LOA: '
+                        + ele.LOA_MAX + ' m</li><li>Beam: ' + ele.BEAM_MAX + ' m</li><li>Draft: ' + ele.DRAFT_MAX + ' m</li> <li>DWT: ' + ele.DWT_MAX
+                        + ' T</li><li>长: <input type="text" placeholder="0.00" value=' + berthInfo.LOA + '>M</li> <li>宽: <input type="text" placeholder="0.00" value=' + berthInfo.Moulded_Beam + '>M</li> ' +
+                        '<li>深: <input type="text" placeholder="0.00" value=' + berthInfo.Draft + '>M</li> <li>装载率: <input type="text" placeholder="0.00" value=' + berthInfo.LoadDischargeRate + '>t/h</li></ul> </li> </ul> </li>';
+                    $(".berth_list").append(str);
                 }
-                var str = '<li><ul class="oneBerth_info"><li>' + (i + 1) + '</li><li><span class = ' + belongStatus +' seq='+ (i + 1) +'>' +
-                    '</span></li> <li> <ul class="oneBerth_list" status=' +  status +  ' staticAreaKey = ' + staticAreaKey + ' lon = ' + ele.lon + ' lat=' + ele.lat + '><li>LOA: '
-                    + ele.LOA_MAX + ' m</li><li>Beam: ' + ele.BEAM_MAX + ' m</li><li>Draft: ' + ele.DRAFT_MAX + ' m</li> <li>DWT: ' + ele.DWT_MAX
-                    +' T</li><li>长: <input type="text" placeholder="0.00" value=' + berthInfo.LOA+ '>M</li> <li>宽: <input type="text" placeholder="0.00" value=' + berthInfo.Moulded_Beam+ '>M</li> ' +
-                    '<li>深: <input type="text" placeholder="0.00" value=' + berthInfo.Draft+ '>M</li> <li>装载率: <input type="text" placeholder="0.00" value=' + berthInfo.LoadDischargeRate + '>t/h</li></ul> </li> </ul> </li>';
-                $(".berth_list").append(str);
             }
+
             $(".oneBerth_info>li:nth-child(2)>span").click(function () {
                 changeBerthSaveButton(true); // 改变保存状态
                 // 第一个不允许修改状态
