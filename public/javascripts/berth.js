@@ -478,6 +478,13 @@ $('#berth_save').click(function () {
         allPoints[staticAreaKey]["Checked"] = 1;
         feature.setStyle(berth_yes);
     });
+    $("[status='1']").each(function () {
+        var staticAreaKey = $(this).attr("staticAreaKey");
+        console.log(staticAreaKey);
+        var feature = icon.getSource().getFeatureById(staticAreaKey);
+        allPoints[staticAreaKey]["Checked"] = 0;
+        feature.setStyle(berth_yes);
+    });
     console.log(terminalKey);
     console.log(berthList);
     $.ajax({
