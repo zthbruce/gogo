@@ -129,5 +129,40 @@ router.get("/getRouteDetailInfo", function (req, res, next) {
     })
 });
 
+/**
+ * 获取相关的码头
+ */
+router.get("/getRelatePort", function (req, res, next) {
+    var sql =   "SELECT portID FROM `T2103_TerminalDetails` t1 LEFT JOIN `T2102_Terminal`  t2 ON t1.`TerminalKey` = t2.`TerminalKey`";
+    mysql.query(sql, function (err, results) {
+        if(err){
+            console.log(utils.eid1);
+            res.jsonp(["404", utils.eid1])
+        }else{
+            // console.log(["200", results]);
+            res.jsonp(["200", results])
+        }
+    })
+});
+
+/**
+ * 保存信息
+ */
+router.get("/saveRouteDetailInfo", function (req, res, next) {
+    var param = req.query;
+    var sql = util.format("UPDATE T4103_Route SET DeparturePort = '%s',  ArrivalPort = '%s', DWT = '%s', LOA = '%s', Beam= '%s', Draft= '%s', LoadingWaitTime= '%s', DischargeWaitTime= '%s', DWTPH= '%s', Sun_Holiday= '%s', ENDes= '%s', CNDes = '%s' WHERE RouteId = '%s'",
+        param.DeparturePort, param.ArrivalPort, param.DWT, param.LOA, param.Beam, param.Draft, param.LoadingWaitTime,
+        param.DischargeWaitTime, param.DWTPH, param.Sun_Holiday, param.ENDes, param.CNDes, param.RouteId);
+    mysql.query(sql, function (err, results) {
+        if(err){
+            console.log(utils.eid1);
+            res.jsonp(["404", utils.eid1])
+        }else{
+            console.log(["200", "成功保存航线信息"]);
+            res.jsonp(["200", "成功保存航线信息"])
+        }
+    })
+});
+
 
 module.exports = router;

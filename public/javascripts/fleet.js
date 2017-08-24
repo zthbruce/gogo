@@ -420,7 +420,7 @@ $('.imgBtn_left').click(function () {
     }
     else {
         curIndex = imageNum - 1;
-        image_ul.animate({right: 0}, 200);
+        image_ul.animate({left: 0 - curIndex * 80}, 500);
     }
     imageAutoShow() // 恢复自动播放
 }
@@ -437,8 +437,8 @@ $('.imgBtn_right').click(function () {
         $(".shipInfo_imgShow>ul").animate({left: 0 - curIndex * 80}, 1000);
     }
     else{
-        image_ul.animate({left: 0}, 200); // 显示第1张
-        curIndex = 1; // 下一次显示第二张
+        image_ul.animate({left: 0}, 500); // 显示第1张
+        curIndex = 0;
     }
     imageAutoShow() // 恢复自动播放
 });

@@ -191,7 +191,8 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n){
                 status = berthInfo.status;
                 var belongStatus = status === 0 ? "belong" : "notBelong";
                 var ele = allPoints[staticAreaKey];
-                if(ele.Checked == 0) {
+                console.log(terminalKey + "," + ele.TerminalKey)
+                if(ele.Checked == 0 || terminalKey === ele.TerminalKey) {
                     // 将信息写入html, 并赋予一个状态,根据状态进行筛选
                     // 当前静止区域默认属于
                     num++;

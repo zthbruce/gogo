@@ -96,7 +96,7 @@
 .shipInfo_List>li>img{width:16px;height:11px;background:#ccc;position:relative;top:2px;}
 /*轮播图*/
 .shipInfo_show>.shipInfo_img{float:left;width:80px;height:80px;position:relative;top:25px;left:20px;}
-.shipInfo_imgShow{width:80px;height:60px;overflow:hidden;}
+.shipInfo_imgShow{width:80px;height:60px;overflow:hidden;border-radius:1px;}
 /*.shipInfo_imgShow{width:80px;height:60px;background:url('http://192.168.0.66/group1/M00/00/01/wKgAQll6m1OAfTMpAAIj217DXV4158.s.jpg') center no-repeat;overflow:hidden;}*/
 .shipInfo_imgShow>ul{width:800px;position:relative;}
 .shipInfo_imgShow>ul>li{display:inline-block;width:80px;height:60px;float:left;}

@@ -14,7 +14,9 @@ var router = express.Router();
  * 返回格式：{cluster_id: {"lon", "lat", "level", "type"}, cluster_id:...}
  */
 router.post('/getInfo', function(req, res, next){
-    var sql = 'SELECT * FROM T2105_ParkArea';
+    // var sql = 'SELECT * FROM T2105_ParkArea';
+    var sql = 'SELECT t1.*, t2.TerminalKey, t3.PortID  FROM `T2105_ParkArea` t1 LEFT JOIN `T2103_TerminalDetails` t2 ON t1.`cluster_id` ' +
+        '= t2.`StationaryAreaKey` LEFT JOIN `T2102_Terminal` t3 ON t2.`TerminalKey` = t3.TerminalKey';
     mysql.query(sql, function (err, results) {
         if(err){
             console.log(utils.eid1);
@@ -27,9 +29,10 @@ router.post('/getInfo', function(req, res, next){
                 if (i > 0) {
                     sendData += ",";
                 }
-                sendData += util.format('"%s":{"lon":%s, "lat":%s, "type":%s, "LOA_MAX":%s, "BEAM_MAX":%s, "DRAFT_MAX":%s, "DWT_MAX": %s, "Checked": %s}',
+                sendData += util.format('"%s":{"lon":%s, "lat":%s, "type":%s, "LOA_MAX":%s, "BEAM_MAX":%s, "DRAFT_MAX":%s,' +
+                    ' "DWT_MAX": %s, "Checked": %s,"PortID":"%s", "TerminalKey":"%s"}',
                     results[i].cluster_id, results[i].lon, results[i].lat, results[i].type, results[i].LOA_MAX,
-                    results[i].BEAM_MAX, results[i].DRAFT_MAX, results[i].DWT_MAX, results[i].Checked);
+                    results[i].BEAM_MAX, results[i].DRAFT_MAX, results[i].DWT_MAX, results[i].Checked, results[i].PortID, results[i].TerminalKey);
                 // sendData += util.format('"%s":{"lon":%s, "lat":%s, "type":%s}',
                 //     results[i].cluster_id, results[i].lon, results[i].lat, results[i].type);
             }

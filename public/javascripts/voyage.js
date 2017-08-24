@@ -191,18 +191,9 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                 route.getSource().addFeatures([start_point, end_point]);
                 // map.getView().setCenter(lonLatInfo[0]);
                 var view = map.getView();
-                // view.animate({
-                //     center: lonLatInfo[0],
-                //     duration: 2000
-                // })
                 var pan = ol.animation.pan({
                     //动画持续时间
                     duration: 2000,
-                    //Todo easing:The easing function to use（官方API）参数表示要使用的easing方法
-                    //自己定义的easing方法（elastic(t)）明明有一个参数t（Input between 0 and 1），可是此处为什么不用传参
-                    //openlayers自带的一些动画效果函数如ol.easing.upAndDown、ol.easing.inAndOut等，感觉不太好，动画有些生硬
-                    // easing: elastic,
-                    //The location to start panning from    从哪个位置开始进行平移
                     source:view.getCenter()
                 });
                 //在地图渲染之前执行平移动画

@@ -161,6 +161,8 @@ function changeBerthSaveButton(saveStatus) {
 
 
 
+
+
 /*********************************分割线*******************************************************************************/
 /**
  * 地图图标单击事件入口(真实入口)
@@ -168,14 +170,62 @@ function changeBerthSaveButton(saveStatus) {
 var anchStatus = false;
 var routeStatus = false;
 var old_feature;
+var port_ul;
 mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feature, evt) {
     if (feature.length !== 0) {
         var current_feature =  feature[0];
         if (current_feature.get('port_id') !== undefined) {
-            // 点击港口图标
-            console.log(current_feature.get('port_id'));
-            var portId = current_feature.get('port_id');
-            reqOnePortBasicInfo(portId);
+            if(routeStatus){
+                console.log("here");
+                // 如果是已选的话，点击标为未选
+                var portID = current_feature.get('port_id');
+                if(port_type === 0){
+                     port_ul = $(".routeStartPort_Select .StartEndPort_List");
+                }
+                else{
+                     port_ul = $(".routeEndPort_Select .StartEndPort_List");
+                }
+                if(current_feature.get("type") === "choosed"){
+                    removePort(portID, current_feature);
+                    // console.log("取消");
+                    // // 将港口取消高亮
+                    // current_feature.set("type", "toChoose");
+                    // current_feature.setStyle(port_nor);
+                    // // 泊位取消高亮
+                    // var features = current.getSource().getFeatures();
+                    // for(var i=0; i< features.length; i++) {
+                    //     var feature = features[i];
+                    //     if(feature.get('portId') === portID){
+                    //         current.getSource().removeFeature(feature);
+                    //     }
+                    // }
+                    // var portList = port_ul.children("li");
+                    // for(var j=0; j< portList.length; j++){
+                    //     var li = portList.eq(j);
+                    //     li.remove();
+                    // }
+                }
+                // 如果是未选的话，点击标为选择
+                else if(current_feature.get("type") === "toChoose"){
+                    console.log("增加");
+                    // 将港口高亮
+                    current_feature.set("type", "choosed");
+                    current_feature.setStyle(port_yes);
+                    // 增加港口
+                    var port = AllPortBasicList[portID];
+                    var port_li =  '<li portID='+ portID+'><span>'+ port.ENName + '</span><i class = "close"></i></li>';
+                    port_ul.append(port_li);
+                    // 将对应的港口下的泊位高亮
+                    showSelectedBerth([portID])
+                }
+            }
+            // 普通模式
+            else{
+                // 点击港口图标
+                console.log(current_feature.get('port_id'));
+                var portId = current_feature.get('port_id');
+                reqOnePortBasicInfo(portId);
+            }
         } else if (current_feature.get('cluster_id') !== undefined || current_feature.get('anchKey') !== undefined) {
             var type = current_feature.get('type');
             var lon = current_feature.get('lon');
@@ -245,24 +295,37 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                     }
                 }
             }
-            // 如果是航线模式
-            else if(routeStatus){
-                var zoom =  blmol.operation.getZoom(map);
-                // 如果zoom >= 10 且点击的是泊位图标
-                if(zoom>=10 && type === 1){
-                    var id = current_feature.get("id");
-                    // 如果当前是选择的，那么删除该选择的区域
-                    if(id === "choosed"){
-                        console.log("删去");
-                        current.getSource().removeFeature(current_feature);
-                    }
-                    else{
-                        // 添加该图标
-                        console.log("增加");
-                        current.getSource().addFeature(current_feature);
-                    }
-                }
-            }
+            //
+            // else if(routeStatus){
+                // var zoom =  blmol.operation.getZoom(map);
+                // // 如果zoom >= 10 且点击的是泊位图标
+                // if(zoom >= 10 && type === 1){
+                //     var id = current_feature.getId();
+                //     console.log(id);
+                //     // 如果当前是选择的，那么删除该选择的区域
+                //     if(id === "choosed"){
+                //         console.log("删去");
+                //         // current_feature.setStyle();
+                //         current.getSource().removeFeature(current_feature);
+                //         // $(".routeStartPort_Select>.StartEndPort_List>li['portID' = " + portID +"]").remove();
+                //     }
+                //     else{
+                //         // 添加该图标
+                //         console.log("增加");
+                //         // current_feature.setStyle(choosed);
+                //         // current_feature.setId("choosed");
+                //         // current.getSource().addFeature(current_feature);
+                //         // 克隆一下, 当下
+                //         feature = current_feature.clone();
+                //         feature.setStyle(choosed);
+                //         feature.setId("choosed");
+                //         current.getSource().addFeature(feature);
+                //         // 获取 portID 和 portName
+                //         // var port_li =  '<li portID='+ portID+'><span>'+ portName + '</span><i></i></li>';
+                //         // $('.add_StartPort').before(port_li)
+                //     }
+                // }
+            // }
             // 原始模式
             else{
                 changeBerthSaveButton(false); // 初始化泊位保存状态

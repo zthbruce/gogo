@@ -348,18 +348,18 @@
 <div id="routeInfo">
     <div class="fleet_title">
         <span>BCI -> Route C2</span>
-        <div class="title_offbtn"></div>
+        <!--<div class="title_offbtn"></div>-->
     </div>
     <div class="dividing_line"></div>
     <!--起终港口设置-->
     <div class="routeStartEnd">
         <div class="routePort_Select">
             <div class="routePort_Start">
-                标准出发港:<span class="routePoint_infoShow" lon="120.0" lat="37.0">Tubarao</span>
+                标准出发港:<span class="routePoint_infoShow"></span>
                 <i></i>
             </div>
             <div class="routePort_End">
-                标准目的港:<span class="routePoint_infoShow" lon="120.0" lat="37.0">Rotterdam</span>
+                标准目的港:<span class="routePoint_infoShow"></span>
                 <i></i>
             </div>
         </div>
@@ -369,18 +369,17 @@
                 <ul class="StartEndPort_List">
                     <li><span>sadasdqw</span><i></i></li>
                     <li><span>sadasdqw</span><i></i></li>
-                    <li class = "add_Port add_StartPort"><span> + 增加出发港口</span></li>
                 </ul>
             </span>
-            <div class="AllStartEndPort_List">
-                <input class="StartEndPort_input" type="text" placeholder="请选择港口或输入港口">
-                <ul class = "startPort">
-                    <li>asdasd</li>
-                    <li>basdasd</li>
-                    <li>casdasd</li>
-                    <li>ddasdasd</li>
-                </ul>
-            </div>
+            <!--<div class="AllStartEndPort_List">-->
+                <!--<input class="StartEndPort_input" type="text" placeholder="请选择港口或输入港口">-->
+                <!--<ul class = "startPort">-->
+                    <!--<li>asdasd</li>-->
+                    <!--<li>basdasd</li>-->
+                    <!--<li>casdasd</li>-->
+                    <!--<li>ddasdasd</li>-->
+                <!--</ul>-->
+            <!--</div>-->
         </div>
         <div class="routeStartEndPort routeEndPort_Select">
             <span>目的港：</span>
@@ -388,18 +387,17 @@
                 <ul class="StartEndPort_List">
                     <li><span>sadasdqw</span><i class="close"></i></li>
                     <li><span>sadasdqw</span><i></i></li>
-                    <li class = "add_Port add_EndPort"><span> + 增加目的港口</span></li>
                 </ul>
             </span>
-            <div class="AllStartEndPort_List">
-                <input class="StartEndPort_input" type="text" placeholder="请选择港口或输入港口">
-                <ul class="endPort">
-                    <li>asdasd</li>
-                    <li>basdasd</li>
-                    <li>casdasd</li>
-                    <li>ddasdasd</li>
-                </ul>
-            </div>
+            <!--<div class="AllStartEndPort_List">-->
+                <!--<input class="StartEndPort_input" type="text" placeholder="请选择港口或输入港口">-->
+                <!--<ul class="endPort">-->
+                    <!--<li>asdasd</li>-->
+                    <!--<li>basdasd</li>-->
+                    <!--<li>casdasd</li>-->
+                    <!--<li>ddasdasd</li>-->
+                <!--</ul>-->
+            <!--</div>-->
         </div>
     </div>
     <div class="dividing_line"></div>
@@ -1054,12 +1052,6 @@
             })
         });
     }
-//    var point_style = new ol.style.Style({
-//        image: new ol.style.Icon({
-//            scale: 0.05,
-//            src: 'icon/signal.png'
-//        })
-//    });
 
     var contour_style =  new ol.style.Style({
         stroke: new ol.style.Stroke({
@@ -1093,16 +1085,32 @@
     // 被选择的图标
     var choosed = new ol.style.Style({
         image: new ol.style.Icon({
-            src: 'images/anch-yes.png'
+            src: 'images/choose.png'
         })
     });
 
-    // 选择了之后显示保存的按钮
+    // 泊位确认的按钮
     var berth_yes = new ol.style.Style({
         image: new ol.style.Icon({
-            src: 'images/berth_yes.png'
+            src: 'images/berth_nor.png'
         })
     });
+
+    // 已添加港口
+    var port_yes =  new ol.style.Style({
+        image: new ol.style.Icon({
+            src: 'images/port_yes.png'
+        })
+    });
+
+    // 待选港口
+    var port_nor =  new ol.style.Style({
+        image: new ol.style.Icon({
+            src: 'images/port_nor.png'
+        })
+    });
+
+    //
 
 //    var exist_anch_style = new ol.style.Style({
 //        image: new ol.style.Icon({
@@ -1161,7 +1169,7 @@
     var  route = blmol.layer.createVectorLayer('route', 0, 20);
     // 定位图标显示层
     var position = blmol.layer.createVectorLayer('position', 0, 20);
-    // 锚地区域图层
+    // 当前操作图层
     var current = blmol.layer.createVectorLayer('current', 0, 20);
     // 锚地区域图层
     var anch = blmol.layer.createVectorLayer('anch', 0, 20);

@@ -44,6 +44,7 @@ function GradeShowPort(portData,mainPortData,level){
             OnePortLatLong.push(parseFloat(OnePortLong));  //插入经度
             OnePortLatLong.push(parseFloat(OnePortLat));   //插入纬度
             var src = 'images/port.png';
+            // var src = ""
             //筛选港口用
             for(var j=0;j<mainPortData.length;j++){
                 if(mainPortData[j].PortID == key){
