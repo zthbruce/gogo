@@ -418,7 +418,14 @@ $('.routePort_Select i').click(function () {
     //在地图渲染之前执行平移动画
     map.beforeRender(pan);
     view.setCenter(ol.proj.fromLonLat([lon, lat]));
-    // map.getView().setZoom(14);
+    // 放大动画
+    var zoom = ol.animation.zoom({
+        duration: 2000,
+        resolution: view.getResolution()
+    });
+    map.beforeRender(zoom);
+    view.setZoom(14);
+    map.getView().setZoom(14);
     // 进入航线模式
     routeStatus = true;
     // 清空临时操作层

@@ -70,8 +70,8 @@ function iconLayer(level, area){
             park_feature = new ol.Feature({
                 'lon' : lon,
                 'lat': lat,
-                // 'portID': ele["PortID"],
-                // 'name': "park_icon",
+                'CargoTypeKey': ele["CargoTypeKey"], //装载类型
+                'portID': ele["PortID"],
                 'type': type,
                 'cluster_id' : key,
                 geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
