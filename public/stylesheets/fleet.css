@@ -82,7 +82,7 @@
 
 
 /*船舶详情页面*/
-#shipDetails{width:385px;height:365px;top:10px;left:400px;display:none;}
+#shipDetails{width:385px;height:366px;top:10px;left:400px;display:none;}
 .shipName{font-size:14px;color:#fff;padding-top:3px;}
 .shipInfo_show{width:96%;height:130px;margin:5px auto;}
 .shipInfo_show>.shipInfo_List{width:250px;height:100px;float:right;}
@@ -131,7 +131,7 @@
 .shipInfo_btn{width:96%;height:30px;margin:5px auto;}
 .shipInfo_btn>div{width:90px;height:32px;cursor:pointer;border-radius:5px;}
 /*.shipInfo_btn>.ship_track{margin-left:130px;background:rgba(255, 255, 255, 0.40);}*/
-.shipInfo_btn>.ship_track{margin-left:130px;background:url("/images/route.png") center no-repeat;}
+.shipInfo_btn>.ship_track{margin-left:130px;background:url("/images/route.png") center no-repeat;border:1px solid transparent;}
 .shipInfo_btn>.ship_track:hover{border:1px solid #999;}
 /*.ship_track>span{width:32px;height:32px; margin-left: 29px;background:url("/images/route.png") center no-repeat;}*/
 
