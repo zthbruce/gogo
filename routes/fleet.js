@@ -68,14 +68,16 @@ router.get("/getFleetDetailInfo", function (req, res, next) {
     console.log(fleetNumber);
     // 如果请求当前的船舶信息
     if(timePoint === ""){
-        var sql = util.format('SELECT t1.ShipNumber, LEVEL2EN, LEVEL3EN, IMO, MMSI, ENMV, DWT, ShipStatus, BuiltDate, JoinTime, LeaveTime FROM T4101_Fleet t1 LEFT JOIN ' +
-            'T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber LEFT JOIN T0105_Tonage t3 ON t1.ShipNumber = t3.ShipNumber LEFT JOIN T9904_ShipType t4 on t2.ShipType = t4.ShipTypeKey' +
-            ' WHERE FleetNumber = "%s" AND ShipStatus IN ("1", "2", "3")', fleetNumber);
+        var sql = util.format('SELECT t1.ShipNumber, t2.Name AS ShipName, IMO, MMSI, t3.Name AS Type, DWT, ShipStatus, ' +
+            'BuiltDate, JoinTime, LeaveTime FROM T4101_Fleet t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber' +
+            ' LEFT JOIN `T0181_ShipType` t3 ON t2.ShipType = t3.TypeKey ' +
+            'WHERE FleetNumber = "%s" AND ShipStatus IN ("1", "2", "3")', fleetNumber);
     }
     // 请求历史上某一天的船舶信息
     else{
-         sql = util.format('SELECT t1.ShipNumber, LEVEL2EN, LEVEL3EN, IMO, MMSI, ENMV, DWT, ShipStatus, BuiltDate, JoinTime, LeaveTime FROM T4101_Fleet t1 LEFT JOIN ' +
-            'T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber LEFT JOIN T0105_Tonage t3 ON t1.ShipNumber = t3.ShipNumber LEFT JOIN T9904_ShipType t4 on t2.ShipType = t4.ShipTypeKey' +
+         sql = util.format('SELECT t1.ShipNumber, t2.Name AS ShipName, IMO, MMSI, t3.Name AS Type, DWT, ShipStatus, ' +
+             'BuiltDate, JoinTime, LeaveTime FROM T4101_Fleet t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber ' +
+             'LEFT JOIN `T0181_ShipType` t3 ON t2.ShipType = t3.TypeKey' +
             ' WHERE FleetNumber = "%s" AND (((JoinTime IS NULL OR JoinTime <= "%s") AND ShipStatus IN ("1", "2", "3")) OR (ShipStatus = "4" AND LeaveTime = "%s")) ORDER BY DWT DESC', fleetNumber, timePoint, timePoint);
     }
     mysql.query(sql, function (err, results) {
@@ -182,11 +184,11 @@ router.get("/getFleetTimePoint", function (req, res, next) {
  */
 router.get("/getShipDetailInfo", function (req, res, next) {
     var shipNumber = req.query.ShipNumber;
-    var sql = util.format('SELECT t1.Flag, Builder, BuiltDate, Class_Notation, LOA, MouldedBeam, Height,  ' +
-        'DesignedDraft, t4.FleetNumber, t5.ENName, t5.CNName, JoinTime, LeaveTime, t6.ENName AS PortName FROM T0101_Ship t1 LEFT JOIN T9904_ShipType t2 ' +
-        'ON t1.ShipType = t2.ShipTypeKey LEFT JOIN T0106_Size t3 ON t1.ShipNumber = t3.ShipNumber LEFT JOIN T4101_Fleet t4 ' +
-        'ON t1.ShipNumber = t4.ShipNumber LEFT JOIN T4102_FleetType t5 ON t4.FleetNumber = t5.FleetNumber LEFT JOIN `T2101_Port` t6 ' +
-        'ON t1.PortID = t6.PortID WHERE t1.ShipNumber = "%s"', shipNumber);
+    var sql = util.format('SELECT t1.Flag, BuildNumber, BuiltDate, CS, LOA, BM, Draft, t3.FleetNumber, t4.ENName,' +
+        ' t4.CNName, JoinTime, LeaveTime, t5.Name AS PortName FROM T0101_Ship t1 LEFT JOIN  `T0181_ShipType` t2 ON t1.ShipType = t2.TypeKey ' +
+        'LEFT JOIN T4101_Fleet t3 ON t1.ShipNumber = t3.ShipNumber LEFT JOIN T4102_FleetType t4 ON t3.FleetNumber = t4.FleetNumber ' +
+        'LEFT JOIN `T2101_Port` t5 ON t1.RegistryPort = t5.PortID ' +
+        'WHERE t1.ShipNumber = "%s"', shipNumber);
     mysql.query(sql, function (err, results) {
         if(err){
             console.log(utils.eid1);
@@ -284,7 +286,7 @@ router.get("/saveShip2Fleet", function (req, res, next) {
  */
 router.get("/getShipImage", function (req, res, next) {
     var IMO = req.query.IMO;
-    var sql = util.format('SELECT URL FROM T0129_Pics WHERE IMO = "%s"', IMO);
+    var sql = util.format('SELECT URL FROM T0107_ShipPics WHERE IMO = "%s"', IMO);
     mysql.query(sql, function (err, results) {
         if(err){
             console.log(utils.eid1);

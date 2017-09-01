@@ -57,7 +57,8 @@ function getShipList2Fleet(fleetNumber, timePoint){
                     var detailInfo = fleetDetailInfo[i];
                     var MMSI = detailInfo.MMSI === null?"":detailInfo.MMSI;
                     var DWT = detailInfo.DWT;
-                    var type = detailInfo.LEVEL3EN === ""? detailInfo.LEVEL2EN: detailInfo.LEVEL3EN;
+                    // var type = detailInfo.LEVEL3EN === ""? detailInfo.LEVEL2EN: detailInfo.LEVEL3EN;
+                    var type = detailInfo.Type;
                     var today = new Date();
                     var this_year = today.getFullYear();
                     var shipAge = this_year - parseInt(detailInfo.BuiltDate.slice(0, 4));
@@ -78,7 +79,7 @@ function getShipList2Fleet(fleetNumber, timePoint){
                         num_less += 1;
                     }
                     var shipInfoStr= '<li class=' + leaveOrJoin +'><span>' + type + '</span><span>' + detailInfo.IMO + '</span><span>' + MMSI +
-                        '</span><span>' + detailInfo.ENMV + '</span><span>' + DWT + '</span><span>' + shipAge + '</span><span>' +
+                        '</span><span>' + detailInfo.ShipName + '</span><span>' + DWT + '</span><span>' + shipAge + '</span><span>' +
                         shipStatus + '</span><span><i class= "shipDetailInfo" shipNumber=' + detailInfo.ShipNumber + '></i></span></li>';
                     if(leaveOrJoin !== ""){
                         shipList.prepend(shipInfoStr);
@@ -94,12 +95,6 @@ function getShipList2Fleet(fleetNumber, timePoint){
                 // 吨位增减
                 $(".fleet_AddDWTBtn").text("+" + DWT_add);
                 $(".fleet_LessDWTBtn").text("-" + DWT_less);
-                // if(DWT_add > 0){
-                //     $(".fleet_AddDWTBtn").text("+" + DWT_add);
-                // }
-                // if(DWT_less > 0){
-                //     $(".fleet_LessDWTBtn").text("-" + DWT_less);
-                // }
                 // 总船舶数目
                 fleet_div.find('.fleetInfo_Num>span:nth-child(2)').text(fleetDetailInfo.length - num_less);
                 $(".fleet_AddNumBtn").text("+" + num_add);
@@ -360,15 +355,15 @@ $('.fleetList_List').delegate('.shipDetailInfo', 'click', function () {
             if(data[0] === "200") {
                 // console.log(data[1]);
                 var shipInfo = data[1][0];
-                var class_notation = shipInfo.Class_Notation === null?"":shipInfo.Class_Notation;
+                var class_notation = shipInfo.CS;
                 var builtDate = shipInfo.BuiltDate === null?"":shipInfo.BuiltDate;
                 var flag = shipInfo.Flag === null?"":shipInfo.Flag;
-                var draft = shipInfo.DesignedDraft === null?0 : shipInfo.DesignedDraft;
+                var draft = shipInfo.DesignedDraft === ""? 0 : shipInfo.Draft;
                 var PortName = shipInfo.PortName === null?"":shipInfo.PortName;
                 var LOA = shipInfo.LOA === null?0 : shipInfo.LOA;
-                var beam = shipInfo.MouldedBeam === null?0:shipInfo.MouldedBeam;
-                var height = shipInfo.Height === null?0:shipInfo.Height;
-                var builder = shipInfo.Builder === null ? "" : shipInfo.Builder;
+                var beam = shipInfo.BM === null?0:shipInfo.BM;
+                // var height = shipInfo.Height === null?0:shipInfo.Height;
+                var builder = shipInfo.BuildNumber === null ? "" : shipInfo.BuildNumber;
                 var name = shipInfo.ENName === ""?shipInfo.CNName: shipInfo.ENName;
                 // 船的详细信息
                 $('.shipInfo_List>li:nth-child(1)').text('船名: ' + shipName );
@@ -382,7 +377,7 @@ $('.fleetList_List').delegate('.shipDetailInfo', 'click', function () {
                 $('.shipInfo_List>li:nth-child(9)').text('吃水: ' + draft + ' m');
                 $('.shipInfo_List>li:nth-child(10)').text('状态: ' + shipStatus);
                 $('.shipInfo_List>li:nth-child(11)').text('船籍港: ' + PortName);
-                $('.shipInfo_List>li:nth-child(12)').text('长*宽*高: ' + LOA + '*' + beam + '*' + height + ' m');
+                $('.shipInfo_List>li:nth-child(12)').text('长*宽: ' + LOA + '*' + beam + ' m');
                 // 船的管理公司
                 $(".shipInfo_company>ul>li:nth-child(2)").text('建造商: ' + builder);
                 // 所属船队
@@ -597,7 +592,8 @@ $(".check").click(function () {
  * 点击轨迹按钮显示一个月或者选择相应的日期
  */
 $('.ship_track').click(function () {
-    var MMSI = $('.shipInfo_List>li:nth-child(3)').text().slice(6,15);
+    var MMSI = $('.shipInfo_List>li:nth-child(4)').text().slice(6,15);
+    console.log(MMSI);
     if(MMSI !==""){
         // if(startTime !== ""){
         // var startTime = *.val() // 根据选择的日期进行显示

@@ -26,7 +26,7 @@ function getRouteBasicInfo(){
 }
 
 /**
- * 获得相关港口
+ * 获得相关港口, 即存在泊位的港口
  */
 function getRelatePortList() {
     $.ajax({
@@ -50,6 +50,7 @@ function showRelatePort() {
     // 显示待选择的港口, 如果不在已增加的列表中
     for(var j = 0; j< relatePortList.length; j++ ){
         var portID = relatePortList[j].portID + '';
+        console.log(portID);
         // console.log(portID);
         // 当不在增加列表中
         // if(portList.indexOf(portID) === -1 && portID !== standardPortID){
@@ -446,7 +447,6 @@ $('.routePort_Select i').click(function () {
     console.log("选择港口" + standardPortID);
     // 显示增家
     // 高亮已增加的港口和泊位
-    // cosonle.log(allPortList);
     updateBerth2Port(allPortList);
 
 });

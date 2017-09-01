@@ -133,7 +133,7 @@ router.get("/getRouteDetailInfo", function (req, res, next) {
  * 获取相关的码头
  */
 router.get("/getRelatePort", function (req, res, next) {
-    var sql =   "SELECT portID FROM `T2103_TerminalDetails` t1 LEFT JOIN `T2102_Terminal`  t2 ON t1.`TerminalKey` = t2.`TerminalKey`";
+    var sql =   "SELECT DISTINCT(portID)  FROM `T2103_TerminalDetails` t1 LEFT JOIN `T2102_Terminal`  t2 ON t1.`TerminalKey` = t2.`TerminalKey`";
     mysql.query(sql, function (err, results) {
         if(err){
             console.log(utils.eid1);

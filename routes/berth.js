@@ -91,7 +91,7 @@ router.get('/getBerthListFromPier', function(req, res, next){
  */
 router.get('/getTerminal', function(req, res, next){
     var staticAreaKey = req.query.staticAreaKey;
-    var sqls = util.format('SELECT  t1.*, t2.ENName AS PortName, t3.Name AS CompanyName FROM T2102_Terminal t1 LEFT JOIN T2101_Port t2 ON t1.PortID = t2.PortID LEFT JOIN T2107_Company t3 ON t1.BelongtoCompany = t3.CompanyNumber WHERE TerminalKey = (SELECT TerminalKey FROM T2103_TerminalDetails ' +
+    var sqls = util.format('SELECT  t1.*, t2.Name AS PortName, t3.Name AS CompanyName FROM T2102_Terminal t1 LEFT JOIN T2101_Port t2 ON t1.PortID = t2.PortID LEFT JOIN T2107_Company t3 ON t1.BelongtoCompany = t3.CompanyNumber WHERE TerminalKey = (SELECT TerminalKey FROM T2103_TerminalDetails ' +
         ' WHERE StationaryAreaKey = "%s")', staticAreaKey);
     mysql.query(sqls, function (err, results) {
         if(err){

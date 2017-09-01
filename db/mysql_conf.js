@@ -6,7 +6,7 @@ var mysql_conf = {
     user     : 'root',
     password :'123456',
     port:      '3306',
-    database: 'imn',
+    database: 'imn1',
     insecureAuth: true
 };
 module.exports = mysql_conf;

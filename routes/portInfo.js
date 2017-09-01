@@ -2,7 +2,8 @@
  * Created by ShiTianCi on 2017/6/19.
  */
 // 引入依赖
-var blmDbmysql = require('../db/BlmDbMysql');
+// var blmDbmysql = require('../db/BlmDbMysql');
+var blmDbmysql = require('../db/BlmMysql');
 var util = require('util');
 var express = require('express');
 var router = express.Router();
@@ -10,7 +11,7 @@ var utils = require('../util/Utils');
 
 //获取港口位置列表
 router.get('/', function(req, res, next){
-    var sql = util.format('SELECT PortID, ENName, CNName, LatitudeNumeric, LongitudeNumeric,Level FROM T2101_Port');
+    var sql = util.format('SELECT PortID, Name, CNName, LatitudeNumeric, LongitudeNumeric,Level FROM T2101_Port');
     blmDbmysql.query(sql, function (err, results) {
         if(err){
             console.log(utils.eid1);
@@ -20,17 +21,19 @@ router.get('/', function(req, res, next){
             console.log("成功连接数据库");
             var sendData = "{";
             for (var i = 0; i < results.length; i++) {
+                // console.log(results.length);
                 if (i > 0) {
                     sendData += ",";
                 }
                 sendData += util.format('"%s":{"ENName":"%s", "CNName":"%s", "LatitudeNumeric":"%s", "LongitudeNumeric":"%s", "Level":"%s"}',
-                    results[i].PortID, results[i].ENName, results[i].CNName, results[i].LatitudeNumeric, results[i].LongitudeNumeric, results[i].Level);
+                    results[i].PortID, results[i].Name, results[i].CNName, results[i].LatitudeNumeric, results[i].LongitudeNumeric, results[i].Level);
             }
             sendData += "}";
             res.jsonp(['200', sendData]);
         }
     });
 });
+
 //获取主要港口位置列表
 router.get('/reqMainPortList', function(req, res, next){
     var sql = util.format('SELECT PortID FROM world_port_tmp');
@@ -53,13 +56,14 @@ router.get('/reqMainPortList', function(req, res, next){
         }
     });
 });
+
 //获取单个港口基本信息
 router.get('/reqOnePortBasic', function(req, res, next){
     var data=req.query;
     var reqParam=JSON.parse(data.param);
     console.log(reqParam.PortID);
-    var sql = util.format('SELECT t1.PortID,t1.ISO3,t1.ENName,t1.CNName,t1.Timezone,t1.ChartNo,t1.Latitude,t1.Longitude,' +
-        't2.ENName AS CompanyENName FROM T2101_Port AS t1 ' +
+    var sql = util.format('SELECT t1.PortID,t1.ISO3,t1.Name,t1.CNName,t1.Timezone,t1.ChartNo,t1.Latitude,t1.Longitude,' +
+        't2.Name AS CompanyENName FROM T2101_Port AS t1 ' +
         'LEFT JOIN T1101_Company AS t2 ON t1.CompanyNumber = t2.CompanyNumber WHERE t1.PortID = '+reqParam.PortID);
     blmDbmysql.query(sql, function (err, results) {
         if(err){
@@ -75,7 +79,7 @@ router.get('/reqOnePortBasic', function(req, res, next){
             results[0].Longitude = results[0].Longitude.replace('"','\\"');
             results[0].CompanyENName = results[0].CompanyENName==null ? '' : results[0].CompanyENName;
             sendData += util.format('{"PortID":"%s", "ISO3":"%s", "ENName":"%s", "CNName":"%s", "Timezone":"%s", "ChartNo":"%s", "Latitude":"%s", "Longitude":"%s", "CompanyENName":"%s"}',
-                results[0].PortID, results[0].ISO3, results[0].ENName, results[0].CNName, results[0].Timezone, results[0].ChartNo, results[0].Latitude, results[0].Longitude, results[0].CompanyENName);
+                results[0].PortID, results[0].ISO3, results[0].Name, results[0].CNName, results[0].Timezone, results[0].ChartNo, results[0].Latitude, results[0].Longitude, results[0].CompanyENName);
             sendData += "]";
             console.log(sendData);
             res.jsonp(['200', sendData]);
