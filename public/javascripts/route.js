@@ -55,15 +55,17 @@ function showRelatePort() {
         // 当不在增加列表中
         // if(portList.indexOf(portID) === -1 && portID !== standardPortID){
         var port = AllPortBasicList[portID];
-        var lon = parseFloat(port.LongitudeNumeric);
-        var lat = parseFloat(port.LatitudeNumeric);
-        var port_to_choose = new ol.Feature({
-            type: "toChoose",
-            port_id: portID,
-            geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
-        });
-        port_to_choose.setStyle(port_nor);
-        current.getSource().addFeature(port_to_choose)
+        if(port !== undefined) {
+            var lon = parseFloat(port.LongitudeNumeric);
+            var lat = parseFloat(port.LatitudeNumeric);
+            var port_to_choose = new ol.Feature({
+                type: "toChoose",
+                port_id: portID,
+                geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
+            });
+            port_to_choose.setStyle(port_nor);
+            current.getSource().addFeature(port_to_choose)
+        }
     }
 }
 
