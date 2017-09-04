@@ -172,7 +172,8 @@ function showImage() {
         curIndex++;
     }
     else {
-        $(".shipInfo_imgShow>ul").animate({left: 0}, 200);
+        // $(".shipInfo_imgShow>ul").animate({left: 0}, 200);
+        $(".shipInfo_imgShow>ul").css("left", 0);
         curIndex = 1;
     }
     // else if(curIndex < 0){
@@ -326,6 +327,10 @@ $('.fleetList_List').delegate('.shipDetailInfo', 'click', function () {
                 var imageURLList = data[1];
                 imageNum = imageURLList.length;
                 for(var i = 0; i < imageURLList.length;i++){
+                    if(i === 0){
+                        var firstImage = imageHost + imageURLList[i].URL;
+                        var first_image_li = '<li url='+ firstImage + '></li>';
+                    }
                     var bigImageURL = imageHost + imageURLList[i].URL;
                     console.log(bigImageURL);
                     var image_li = '<li url='+ bigImageURL + '></li>';
@@ -333,6 +338,11 @@ $('.fleetList_List').delegate('.shipDetailInfo', 'click', function () {
                     var smallImageURL = bigImageURL.slice(0, -4) + ".s.jpg";
                     $(shipImageList.find('>li:eq('+ i + ')')).css("background","url(" + smallImageURL+ ") center no-repeat");
                 }
+                // 添加第一张图片
+                shipImageList.append(first_image_li);
+                smallImageURL = firstImage.slice(0, -4) + ".s.jpg";
+                $(shipImageList.find('>li:eq('+ imageURLList.length + ')')).css("background","url(" + smallImageURL+ ") center no-repeat");
+                imageNum ++;
                 $(".shipInfo_imgShow>ul").css("width", imageNum * li_width);
             }
         },
