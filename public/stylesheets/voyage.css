@@ -1,4 +1,4 @@
-#route_Show{width:120px;height:40px;background:#fff;position:fixed;bottom:50px;left:50px;}
+#route_Show{width:160px;height:40px;background:#fff;position:fixed;bottom:50px;left:50px;}
 #route_Show>div{display:inline-block;width:32px;height:32px;margin:4px;cursor:pointer;float:left;}
 #route_Show>.route_Ship_btn{background:url('/icon/route.png') no-repeat 4px 4px;}
 #route_Show>.route_Ship_btn:hover{background-position:-24px 4px;}

@@ -695,7 +695,7 @@ $('.fleet_title>.title_offbtn').click(function(){
 var SearchShow = false;
 $('.ShipSearch_ShowBtn').click(function(){
     if(!SearchShow){$('#ShipSearch_DWTRange').animate({'left':'0px'},300);}
-    else{$('#ShipSearch_DWTRange').animate({'left':'-364px'},300);}
+    else{$('#ShipSearch_DWTRange').animate({'left':'-454px'},300);}
     SearchShow = !SearchShow;
     $(".min_dwt").val("");
 });
@@ -757,9 +757,41 @@ $('.fleetInfo_timeSelect .timeLine_LeftBtn').click(function(){
     }
 });
 
-//搜索选择类型
-$(".Search_typeText").click(function () {
-    $(this).next("ul").slideDown(200)
+//选择类型的输入
+// $(".Search_typeText").click(function () {
+//     $(this).next("ul").slideDown(200)
+// });
+$(".Search_typeText").keyup(function() {
+    console.log("输入信息");
+    var nowVal = $(this).val();
+    var type_ul = $(this).next("ul");
+    // 清空列表
+    type_ul.empty();
+    // 做一下规范化,将" '等符号正则化
+    nowVal = nowVal.replace(/[\'\"]/g, "");
+    if(nowVal === "")
+    $.ajax({
+        url: "/fleet/getSearchTypeList",
+        data:{Name:nowVal},
+        type: "get",
+        success:function (data) {
+            if(data[0] === "200"){
+                console.log("获取类型数据成功");
+                var typeList = data[1];
+                for(var i = 0; i< typeList.length;i++){
+                    var typeInfo = typeList[i];
+                    var typeKey = typeInfo.TypeKey;
+                    var name = typeInfo.CNName === null? typeInfo.Name:typeInfo.CNName;
+                    var type_li = '<li type=' + typeKey +'>' + name +'</li>';
+                    type_ul.append(type_li)
+                }
+            }
+        },
+        err:function (err) {
+            console.log(err);
+        }
+
+    })
 });
 
 $(".Search_typeSelect").mouseleave(function () {
@@ -772,29 +804,6 @@ $(".Search_typeSelect>li").click(function () {
     search_type.text($(this).text());
     $(".Search_typeSelect").slideUp(200)
 });
-
-
-// //船舶详情弹出框—船舶图片轮播
-// $('.imgBtn_left').click(function(){
-//     var nowListLeft = parseInt($('.shipInfo_imgShow>ul').css('left'));
-//     // console.log(nowListLeft);
-//     var nowShowImgNum = -nowListLeft/80;
-//     if(nowShowImgNum>0){
-//         $('.shipInfo_imgShow>ul').stop();
-//         $('.shipInfo_imgShow>ul').animate({'left':nowListLeft+80},200);
-//     }
-// });
-// $('.imgBtn_right').click(function(){
-//     var imgListLength = parseInt($('.shipInfo_imgShow>ul>li').length);
-//     var nowListLeft = parseInt($('.shipInfo_imgShow>ul').css('left'));
-//     // console.log(nowListLeft);
-//     var nowShowImgNum = -nowListLeft/80;
-//     if(nowShowImgNum<imgListLength-1){
-//         $('.shipInfo_imgShow>ul').stop();
-//         $('.shipInfo_imgShow>ul').animate({'left':nowListLeft-80},200);
-//     }
-// });
-
 
 
 /**

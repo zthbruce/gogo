@@ -3,7 +3,7 @@
  */
 // require('javascripts/route')
 // getShipList();
-
+var util = require('util');
 // var status = {'0': "在建", '1': "正服役", '2': "维护中", '3': "闲置", '4': "已拆解", '5': "未知", '6': "数据不再维护"};
 // console.log(status[1]);
 //
@@ -23,4 +23,5 @@
 //
 // console.log(30*24*36000);
 
-console.log(JSON.parse('{"asas": ["5","2"]}'));
+var name = "as";
+console.log(util.format("SELECT * FROM `T0181_ShipType` SELECT * FROM `T0181_ShipType` WHERE NAME LIKE '%s%' OR CNName LIKE '%s%'", name, name));

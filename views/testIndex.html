@@ -9,6 +9,7 @@
     <link rel='stylesheet' href='/stylesheets/voyage.css' />
     <link rel='stylesheet' href='/stylesheets/newberth.css' />
     <link rel='stylesheet' href='/stylesheets/fleet.css' />
+    <link rel='stylesheet' href='/stylesheets/voyageManagement.css' />
     <link rel='stylesheet' href='/stylesheets/standardRoute.css' />
     <link rel="stylesheet" href="/stylesheets/datePicker/ion.calendar.css">
 
@@ -77,6 +78,7 @@
     <div class="route_Fleet_btn"></div>
     <div class="route_Ship_btn"></div>
     <div class="route_Info_btn"></div>
+    <div class="route_Voyage_btn"></div>
 
     <!--船队分类-->
     <ul class="ShipType_list Fleet_List_ul">
@@ -300,13 +302,15 @@
 <!--船舶范围搜索-->
 <div id="ShipSearch_DWTRange">
     <div class="Search_Info">
-        类型: <span type="0" class="Search_typeText" >散货</span>
+        类型: <input type="text" type="0" class="Search_typeText">
         <ul class="Search_typeSelect">
             <li type="0">散货</li>
             <li type="1">原油</li>
             <li type="2">集装箱</li>
+            <li type="3">AAAAAAAAAAAAAAAAAAAA</li>
+            <li type="4">AAAAAAAAAAAAAAA</li>
         </ul>
-        &nbsp;&nbsp;DWT范围: <input type="text" placeholder="20000" class="min_dwt"> t ～ <input type="text" placeholder="400000" class="max_dwt"> t
+        &nbsp;DWT范围: <input type="text" placeholder="20000" class="min_dwt"> t ～ <input type="text" placeholder="400000" class="max_dwt"> t
         <div class="DWTSearch_btn"></div>
         <div class="ShipSearch_ShowBtn"></div>
     </div>
@@ -433,6 +437,89 @@
         <div class="routeInstall_CancelBtn">取消</div>
     </div>
 </div>
+
+<!--
+    航次管理
+-->
+<!--航次列表-->
+<div id="voyageList">
+    <div class="fleet_title">
+        <span>航次列表</span>
+    </div>
+    <div class="dividing_line"></div>
+    <div class="voyageList_select">
+        <div><label><input name="voyageType" type="checkbox" value="" checked/>未处理 </label></div>
+        <div><label><input name="voyageType" type="checkbox" value="" />已处理 </label></div>
+        <div><span>船队：</span>
+            <span>Mini Cape</span>
+            <ul>
+                <li FleetNumber="F1">Capesize</li>
+                <li FleetNumber="F2">VLOC</li>
+                <li FleetNumber="F3">Panamax</li>
+                <li FleetNumber="F4">Mini Cape</li>
+                <li FleetNumber="F5">Supramax</li>
+                <li FleetNumber="F6">Handysize</li>
+                <li FleetNumber="F7">Handymax</li>
+                <li FleetNumber="F8">VLCC</li>
+                <li FleetNumber="F9">Aframax</li>
+                <li FleetNumber="F10">MR Tanker</li>
+                <li FleetNumber="F11">成品油</li>
+                <li FleetNumber="F12">BLPGR</li>
+                <li FleetNumber="F13">Q-Max</li>
+            </ul>
+        </div>
+    </div>
+    <div class="dividing_line"></div>
+    <div class="voyageList_List">
+        <ul>
+            <li>
+                <span>船名</span><span>IMO</span><span>出发港</span><span>出发时间</span><span>到达港</span><span>到达时间</span>
+            </li>
+        </ul>
+        <ul class="voyageList_content">
+            <li><span>AAAAAAAAAAA</span><span>1234567</span><span>AAAAAAAAAAA</span><span>2007-02-03</span><span>AAAAAAAAAAA</span><span>2007-03-02</span></li>
+            <li><span>AAAAAAAAAAA</span><span>1234567</span><span>AAAAAAAAAAA</span><span>2007-02-03</span><span>AAAAAAAAAAA</span><span>2007-03-02</span></li>
+            <li><span>AAAAAAAAAAA</span><span>1234567</span><span>AAAAAAAAAAA</span><span>2007-02-03</span><span>AAAAAAAAAAA</span><span>2007-03-02</span></li>
+            <li><span>AAAAAAAAAAA</span><span>1234567</span><span>AAAAAAAAAAA</span><span>2007-02-03</span><span>AAAAAAAAAAA</span><span>2007-03-02</span></li>
+            <li><span>AAAAAAAAAAA</span><span>1234567</span><span>AAAAAAAAAAA</span><span>2007-02-03</span><span>AAAAAAAAAAA</span><span>2007-03-02</span></li>
+            <li><span>AAAAAAAAAAA</span><span>1234567</span><span>AAAAAAAAAAA</span><span>2007-02-03</span><span>AAAAAAAAAAA</span><span>2007-03-02</span></li>
+            <li><span>AAAAAAAAAAA</span><span>1234567</span><span>AAAAAAAAAAA</span><span>2007-02-03</span><span>AAAAAAAAAAA</span><span>2007-03-02</span></li>
+            <li><span>AAAAAAAAAAA</span><span>1234567</span><span>AAAAAAAAAAA</span><span>2007-02-03</span><span>AAAAAAAAAAA</span><span>2007-03-02</span></li>
+            <li><span>AAAAAAAAAAA</span><span>1234567</span><span>AAAAAAAAAAA</span><span>2007-02-03</span><span>AAAAAAAAAAA</span><span>2007-03-02</span></li>
+            <li><span>AAAAAAAAAAA</span><span>1234567</span><span>AAAAAAAAAAA</span><span>2007-02-03</span><span>AAAAAAAAAAA</span><span>2007-03-02</span></li>
+            <li><span>AAAAAAAAAAA</span><span>1234567</span><span>AAAAAAAAAAA</span><span>2007-02-03</span><span>AAAAAAAAAAA</span><span>2007-03-02</span></li>
+            <li><span>AAAAAAAAAAA</span><span>1234567</span><span>AAAAAAAAAAA</span><span>2007-02-03</span><span>AAAAAAAAAAA</span><span>2007-03-02</span></li>
+        </ul>
+    </div>
+</div>
+<!--航次详情-->
+<div id="voyageDetails">
+    <div class="fleet_title">
+        <span>航次详情(未确认)</span>
+    </div>
+    <div class="dividing_line"></div>
+    <div class="shipVoyageList">
+        <div class="shipVoyageList_leftbtn"></div>
+        <div class="shipVoyageList_content">
+            <ul class="shipVoyageList_List">
+                <li><div></div><span>2007-02-03</span></li>
+                <li><div></div><span>2007-02-03</span></li>
+                <li><div></div><span>2007-02-03</span></li>
+                <li><div></div><span>2007-02-03</span></li>
+                <li><div></div><span>2007-02-03</span></li>
+                <li><div></div><span>2007-02-03</span></li>
+                <li><div></div><span>2007-02-03</span></li>
+                <li><div></div><span>2007-02-03</span></li>
+                <li><div></div><span>2007-02-03</span></li>
+                <li><div></div><span>2007-02-03</span></li>
+            </ul>
+        </div>
+        <div class="shipVoyageList_rightbtn"></div>
+    </div>
+    <div class="dividing_line"></div>
+
+</div>
+
 
 
 <div id="portBasicInfo">
