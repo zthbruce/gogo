@@ -213,7 +213,7 @@ router.get("/getShipDetailInfo", function (req, res, next) {
  */
 router.get("/getSearchTypeList", function (req, res, next) {
     var name = req.query.Name;
-    var sql = util.format("SELECT * FROM `T0181_ShipType` WHERE NAME LIKE '%s%' OR CNName LIKE '%s%'", name, name);
+    var sql = "SELECT * FROM `T0181_ShipType` WHERE NAME LIKE '" + name + "%' OR CNName LIKE '" + name + "%'";
     mysql.query(sql, function (err, results) {
         if(err){
             console.log(utils.eid1);

@@ -65,7 +65,7 @@
 .oneVoyageInfo>ul>li:nth-child(10),.oneVoyageInfo>ul>li:nth-child(14),.oneVoyageInfo>ul>li:nth-child(18){margin-right:0px;}
 
 /*航次详情——停靠信息*/
-.oneVoyage_DockedInfo{width:100%;background:#ccc;height:160px;margin-top:5px;}
+.oneVoyage_DockedInfo{width:100%;background:#ccc;height:168px;margin:5px auto;}
 .oneVoyage_DockedInfo>ul:first-child{background:#000;}
 .oneVoyage_DockedInfo>ul>li{width:100%;height:24px;line-height:24px;position:relative;}
 .oneVoyage_DockedInfo>ul>li>span{display:inline-block;text-align:center;font-size:13px;color:#fff;}
@@ -73,12 +73,12 @@
 .oneVoyage_DockedInfo>ul>li>span:nth-child(2){width:260px;}
 .oneVoyage_DockedInfo>ul>li>span:nth-child(3){width:100px;}
 .oneVoyage_DockedInfo>ul>li>span:nth-child(4){width:80px;}
+.oneVoyage_DockedList{height:144px;overflow-y:scroll;}
+.oneVoyage_EndBtn{width:80px;height:20px;line-height:20px;text-align:center;font-size:13px;color:#fff;background:#00B7FF;border-radius:7px;position: absolute;top:2px;right:50px;cursor:pointer;display:none;}
+.oneVoyage_DockedList>li:hover{background:#217BA2;}
 
-.oneVoyage_EndBtn{width:80px;height:20px;line-height:20px;text-align:center;font-size:13px;color:#fff;background:#00B7FF;border-radius:5px;position: absolute;top:2px;}
-.oneVoyage_DockedList>li:hover{background:#217BA2;cursor:pointer;}
-
-
-
+/*航次详情——按钮操作*/
+.voyageDetails_btn{display:inline-block;width:100px;height:30px;line-height:30px;text-align:center;background:#ccc;border-radius:5px;margin-left:100px;margin-top:8px;cursor:pointer;}
 
 
 
