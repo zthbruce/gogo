@@ -182,6 +182,42 @@ function showImage() {
     // }
 }
 
+/**
+ * 根据输入的名字前缀匹配
+ * @param name
+ */
+function getTypeList() {
+    console.log("输入信息");
+    var nowVal = search_input.val();
+    var type_ul = search_input.next("ul");
+    // 清空列表
+    type_ul.empty();
+    // 做一下规范化,将" '等符号正则化
+    nowVal = nowVal.replace(/[\'\"]/g, "");
+    $.ajax({
+        url: "/fleet/getSearchTypeList",
+        data:{Name:nowVal},
+        type: "get",
+        success:function (data) {
+            if(data[0] === "200"){
+                console.log("获取类型数据成功");
+                var typeList = data[1];
+                for(var i = 0; i< typeList.length;i++){
+                    var typeInfo = typeList[i];
+                    var typeKey = typeInfo.TypeKey;
+                    var name = typeInfo.CNName === ""? typeInfo.Name:typeInfo.CNName;
+                    var type_li = '<li type=' + typeKey +'>' + name +'</li>';
+                    type_ul.append(type_li)
+                }
+            }
+            type_ul.slideDown(200)
+        },
+        err:function (err) {
+            console.log(err);
+        }
+    })
+}
+
 
 
 
@@ -375,19 +411,23 @@ $('.fleetList_List').delegate('.shipDetailInfo', 'click', function () {
                 // var height = shipInfo.Height === null?0:shipInfo.Height;
                 var builder = shipInfo.BuildNumber === null ? "" : shipInfo.BuildNumber;
                 var name = shipInfo.ENName === ""?shipInfo.CNName: shipInfo.ENName;
+                var source = shipInfo.Source;
+                var updateDate = shipInfo.UpdateDate;
                 // 船的详细信息
                 $('.shipInfo_List>li:nth-child(1)').text('船名: ' + shipName );
                 $('.shipInfo_List>li:nth-child(2)').text('IMO: ' + IMO);
                 $('.shipInfo_List>li:nth-child(3)').text('船级社: ' + class_notation);
                 $('.shipInfo_List>li:nth-child(4)').text('MMSI: ' + MMSI);
-                $('.shipInfo_List>li:nth-child(5)').text('类型: ' + shipType);
+                $('.shipInfo_List>li:nth-child(5)').text('船旗: ' + flag);
                 $('.shipInfo_List>li:nth-child(6)').text('建造年代: ' + builtDate);
-                $('.shipInfo_List>li:nth-child(7)').text('船旗: ' + flag);
-                $('.shipInfo_List>li:nth-child(8)').text('DWT: ' + DWT + " t");
-                $('.shipInfo_List>li:nth-child(9)').text('吃水: ' + draft + ' m');
-                $('.shipInfo_List>li:nth-child(10)').text('状态: ' + shipStatus);
+                $('.shipInfo_List>li:nth-child(7)').text('吃水: ' + draft + ' m');
+                $('.shipInfo_List>li:nth-child(8)').text('状态: ' + shipStatus);
+                $('.shipInfo_List>li:nth-child(9)').text('DWT: ' + DWT + " t");
+                $('.shipInfo_List>li:nth-child(10)').text('类型: ' + shipType);
                 $('.shipInfo_List>li:nth-child(11)').text('船籍港: ' + PortName);
                 $('.shipInfo_List>li:nth-child(12)').text('长*宽: ' + LOA + '*' + beam + ' m');
+                $('.shipInfo_List>li:nth-child(13)').text('Source: ' + source);
+                $('.shipInfo_List>li:nth-child(14)').text('更新时间: ' + updateDate);
                 // 船的管理公司
                 $(".shipInfo_company>ul>li:nth-child(2)").text('建造商: ' + builder);
                 // 所属船队
@@ -529,41 +569,40 @@ $(".DWTSearch_btn").click(function () {
         success: function (data) {
             // 获取成功
             // console.log("获取数据成功");
+            // 初始化
+            var shipListInfo = [];
+            var count = 0;
             if (data[0] === "200") {
-                var shipListInfo = data[1];
-                var count = 0;
-                for(var i = 0; i < shipListInfo.length; i++){
+                shipListInfo = data[1];
+                for (var i = 0; i < shipListInfo.length; i++) {
                     var detailInfo = shipListInfo[i];
-                    var MMSI = detailInfo.MMSI === null?"":detailInfo.MMSI;
+                    var MMSI = detailInfo.MMSI === null ? "" : detailInfo.MMSI;
                     var DWT = detailInfo.DWT;
-                    var type = detailInfo.LEVEL3EN === ""? detailInfo.LEVEL2EN: detailInfo.LEVEL3EN;
+                    var type = detailInfo.Type;
                     var today = new Date();
                     var this_year = today.getFullYear();
                     var shipAge = this_year - parseInt(detailInfo.BuiltDate.slice(0, 4));
                     var shipStatus = ShipStatusInfo[1];
                     var fleetNumber = detailInfo.FleetNumber;
-                    if(fleetNumber !== null){
-                        var shipInfoStr= '<li class="belong2Fleet"><span>' + type + '</span><span>' + detailInfo.IMO + '</span><span>' + MMSI +
-                            '</span><span>' + detailInfo.ENMV + '</span><span>' + DWT + '</span><span>' + shipAge + '</span><span>' +
+                    if (fleetNumber !== null) {
+                        var shipInfoStr = '<li class="belong2Fleet"><span>' + type + '</span><span>' + detailInfo.IMO + '</span><span>' + MMSI +
+                            '</span><span>' + detailInfo.ShipName + '</span><span>' + DWT + '</span><span>' + shipAge + '</span><span>' +
                             shipStatus + '</span><span><i class= "shipDetailInfo" shipNumber=' + detailInfo.ShipNumber + '></i></span></li>';
-                    }else{
-                        shipInfoStr= '<li class="notBelong2Fleet"><span>' + type + '</span><span>' + detailInfo.IMO + '</span><span>' + MMSI +
-                            '</span><span>' + detailInfo.ENMV + '</span><span>' + DWT + '</span><span>' + shipAge + '</span><span>' +
+                    } else {
+                        shipInfoStr = '<li class="notBelong2Fleet"><span>' + type + '</span><span>' + detailInfo.IMO + '</span><span>' + MMSI +
+                            '</span><span>' + detailInfo.ShipName + '</span><span>' + DWT + '</span><span>' + shipAge + '</span><span>' +
                             shipStatus + '</span><span><i class= "shipDetailInfo" shipNumber=' + detailInfo.ShipNumber + '></i></span></li>';
                         count++;
                     }
                     shipList.append(shipInfoStr);
                 }
                 $(".belong2Fleet").hide();
-                // 总船舶数目
-                var shipNum = $(' #searchShipList .fleetInfo_Num>span:nth-child(2)');
-                shipNum.text(count);
-                shipNum.attr("total", shipListInfo.length);
-                shipNum.attr("notBelong", count);
             }
-            else{
-                console.log(data[1]);
-            }
+            // 总船舶数目
+            var shipNum = $(' #searchShipList .fleetInfo_Num>span:nth-child(2)');
+            shipNum.text(count);
+            shipNum.attr("total", shipListInfo.length);
+            shipNum.attr("notBelong", count);
         },
         error: function (err) {
             console.log(err);
@@ -758,50 +797,19 @@ $('.fleetInfo_timeSelect .timeLine_LeftBtn').click(function(){
 });
 
 //选择类型的输入
-// $(".Search_typeText").click(function () {
-//     $(this).next("ul").slideDown(200)
-// });
-$(".Search_typeText").keyup(function() {
-    console.log("输入信息");
-    var nowVal = $(this).val();
-    var type_ul = $(this).next("ul");
-    // 清空列表
-    type_ul.empty();
-    // 做一下规范化,将" '等符号正则化
-    nowVal = nowVal.replace(/[\'\"]/g, "");
-    if(nowVal === "")
-    $.ajax({
-        url: "/fleet/getSearchTypeList",
-        data:{Name:nowVal},
-        type: "get",
-        success:function (data) {
-            if(data[0] === "200"){
-                console.log("获取类型数据成功");
-                var typeList = data[1];
-                for(var i = 0; i< typeList.length;i++){
-                    var typeInfo = typeList[i];
-                    var typeKey = typeInfo.TypeKey;
-                    var name = typeInfo.CNName === null? typeInfo.Name:typeInfo.CNName;
-                    var type_li = '<li type=' + typeKey +'>' + name +'</li>';
-                    type_ul.append(type_li)
-                }
-            }
-        },
-        err:function (err) {
-            console.log(err);
-        }
 
-    })
-});
+var search_input = $(".Search_typeText");
+search_input.click(function() {getTypeList()});
+search_input.keyup(function() {getTypeList()});
 
 $(".Search_typeSelect").mouseleave(function () {
     $(this).slideUp(200)
 });
 
-$(".Search_typeSelect>li").click(function () {
+$(".Search_typeSelect").delegate("li", "click", function () {
     var search_type = $('.Search_typeText');
     search_type.attr('type', $(this).attr('type'));
-    search_type.text($(this).text());
+    search_type.val($(this).text());
     $(".Search_typeSelect").slideUp(200)
 });
 

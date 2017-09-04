@@ -186,7 +186,7 @@ router.get("/getFleetTimePoint", function (req, res, next) {
 router.get("/getShipDetailInfo", function (req, res, next) {
     var shipNumber = req.query.ShipNumber;
     var sql = util.format('SELECT t1.Flag, BuildNumber, BuiltDate, CS, LOA, BM, Draft, t3.FleetNumber, t4.ENName,' +
-        ' t4.CNName, JoinTime, LeaveTime, t5.Name AS PortName FROM T0101_Ship t1 LEFT JOIN  `T0181_ShipType` t2 ON t1.ShipType = t2.TypeKey ' +
+        ' t4.CNName, JoinTime, LeaveTime, t5.Name AS PortName, t1.Source, t1.UpdateDate FROM T0101_Ship t1 LEFT JOIN  `T0181_ShipType` t2 ON t1.ShipType = t2.TypeKey ' +
         'LEFT JOIN T4101_Fleet t3 ON t1.ShipNumber = t3.ShipNumber LEFT JOIN T4102_FleetType t4 ON t3.FleetNumber = t4.FleetNumber ' +
         'LEFT JOIN `T2101_Port` t5 ON t1.RegistryPort = t5.PortID ' +
         'WHERE t1.ShipNumber = "%s"', shipNumber);
@@ -211,9 +211,9 @@ router.get("/getShipDetailInfo", function (req, res, next) {
 /**
  * 获得所有的筛选条件
  */
-route.get("/getSearchTypeList", function (req, res, next) {
+router.get("/getSearchTypeList", function (req, res, next) {
     var name = req.query.Name;
-    var sql = util.format("SELECT * FROM `T0181_ShipType` SELECT * FROM `T0181_ShipType` WHERE NAME LIKE '%s%' OR CNName LIKE '%s%'", name, name);
+    var sql = util.format("SELECT * FROM `T0181_ShipType` WHERE NAME LIKE '%s%' OR CNName LIKE '%s%'", name, name);
     mysql.query(sql, function (err, results) {
         if(err){
             console.log(utils.eid1);
@@ -241,7 +241,9 @@ router.get("/getSearchShipList", function (req, res, next) {
     var type = req.query.Type; //货物类型
     var min_DWT = req.query.Min_DWT;
     var max_DWT = req.query.Max_DWT;
-    // // 散货船
+    var sql = util.format('SELECT t1.ShipNumber, t2.Name AS Type, IMO, MMSI, t1.Name AS ShipName, DWT, ShipStatus, BuiltDate, FleetNumber ' +
+        'FROM T0101_Ship t1 LEFT JOIN T0181_ShipType t2 ON t1.ShipType = t2.TypeKey LEFT JOIN imn.`T4101_Fleet` t3 ON ' +
+        't1.ShipNumber = t3.ShipNumber  WHERE TypeKey = "%s" AND DWT >= %s AND DWT <= %s AND ShipStatus IN ("1", "2", "3")  ORDER BY DWT DESC' , type, min_DWT, max_DWT);  // // 散货船
     // if(type === "0"){
     //     var sql = util.format('SELECT t1.ShipNumber, LEVEL2EN, LEVEL3EN, IMO, MMSI, ENMV, DWT, ShipStatus, BuiltDate, ' +
     //         'FleetNumber FROM imn.`T0101_Ship` t1 LEFT JOIN T9904_ShipType t2 ON t1.ShipType = t2.ShipTypeKey LEFT JOIN ' +
