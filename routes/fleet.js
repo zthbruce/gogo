@@ -243,27 +243,7 @@ router.get("/getSearchShipList", function (req, res, next) {
     var max_DWT = req.query.Max_DWT;
     var sql = util.format('SELECT t1.ShipNumber, t2.Name AS Type, IMO, MMSI, t1.Name AS ShipName, DWT, ShipStatus, BuiltDate, FleetNumber ' +
         'FROM T0101_Ship t1 LEFT JOIN T0181_ShipType t2 ON t1.ShipType = t2.TypeKey LEFT JOIN imn.`T4101_Fleet` t3 ON ' +
-        't1.ShipNumber = t3.ShipNumber  WHERE TypeKey = "%s" AND DWT >= %s AND DWT <= %s AND ShipStatus IN ("1", "2", "3")  ORDER BY DWT DESC' , type, min_DWT, max_DWT);  // // 散货船
-    // if(type === "0"){
-    //     var sql = util.format('SELECT t1.ShipNumber, LEVEL2EN, LEVEL3EN, IMO, MMSI, ENMV, DWT, ShipStatus, BuiltDate, ' +
-    //         'FleetNumber FROM imn.`T0101_Ship` t1 LEFT JOIN T9904_ShipType t2 ON t1.ShipType = t2.ShipTypeKey LEFT JOIN ' +
-    //         'imn.`T4101_Fleet`  t3 ON t1.ShipNumber = t3.ShipNumber LEFT JOIN T0105_Tonage t4 ON t1.ShipNumber = t4.ShipNumber ' +
-    //         'WHERE ShipStatus IN ("1", "2", "3") AND DWT >= %s AND DWT <= %s AND Level2EN = "Bulk Carrier" ORDER BY DWT DESC' , min_DWT, max_DWT);
-    // }
-    // // 原油船
-    // else if(type === "1"){
-    //     sql = util.format('SELECT t1.ShipNumber, LEVEL2EN, LEVEL3EN, IMO, MMSI, ENMV, DWT, ShipStatus, BuiltDate, ' +
-    //         'FleetNumber FROM imn.`T0101_Ship` t1 LEFT JOIN T9904_ShipType t2 ON t1.ShipType = t2.ShipTypeKey LEFT JOIN ' +
-    //         'imn.`T4101_Fleet`  t3 ON t1.ShipNumber = t3.ShipNumber LEFT JOIN T0105_Tonage t4 ON t1.ShipNumber = t4.ShipNumber ' +
-    //         'WHERE  ShipStatus IN ("1", "2", "3") AND DWT >= %s AND DWT <= %s AND Level3EN IN ("Crude oil", "LNG", "LPG", "Product carrier") ORDER BY DWT DESC', min_DWT, max_DWT);
-    // }
-    // // 集装箱
-    // else{
-    //     sql = util.format('SELECT t1.ShipNumber, LEVEL2EN, LEVEL3EN, IMO, MMSI, ENMV, DWT, ShipStatus, BuiltDate, ' +
-    //         'FleetNumber FROM imn.`T0101_Ship` t1 LEFT JOIN T9904_ShipType t2 ON t1.ShipType = t2.ShipTypeKey LEFT JOIN ' +
-    //         'imn.`T4101_Fleet`  t3 ON t1.ShipNumber = t3.ShipNumber LEFT JOIN T0105_Tonage t4 ON t1.ShipNumber = t4.ShipNumber ' +
-    //         'WHERE  ShipStatus IN ("1", "2", "3") AND DWT >= %s AND DWT <= %s AND Level2EN = "Container Ship" ORDER BY DWT DESC', min_DWT, max_DWT);
-    // }
+        't1.ShipNumber = t3.ShipNumber  WHERE TypeKey = "%s" AND DWT >= %s AND DWT <= %s AND ShipStatus IN ("1", "2", "3")  ORDER BY DWT DESC' , type, min_DWT, max_DWT);
     mysql.query(sql, function (err, results) {
         if(err){
             console.log(utils.eid1);

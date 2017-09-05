@@ -8,9 +8,9 @@
 .route_List_ul>li{height:30px;cursor:pointer;line-height:30px;color:#fff;font-size:14px;padding-left:10px;}
 .route_List_ul>li:hover{background:#217BA2;}
 .route_List_ul>li.choose{background:#217BA2;}
-.routeType_list{width:80px;bottom:40px;left:80px;}
+.routeType_list{width:80px;bottom:40px;left:40px;}
 .routeType_list>li>i{display:inline-block;width:0px;height:0px;border:4px solid transparent;border-left-color:#eee;float:right;margin-top:12px;}
-.oneRoute_List{width:130px;bottom:40px;left:160px;}
+.oneRoute_List{width:130px;bottom:40px;left:120px;}
 .oneRoute_List>li{font-size:12px;}
 
 /*航线信息管理弹出框*/

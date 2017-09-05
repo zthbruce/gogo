@@ -279,7 +279,7 @@ $('.oneRoute_List').delegate("li", 'click', function () {
                         var portID = departurePortList[i];
                         allDeparturePortList.push(portID);
                         var port = AllPortBasicList[portID];
-                        var port_li =  '<li portID='+ portID+'><span>'+ port.ENName + '</span><i></i></li>';
+                        var port_li =  '<li portID='+ portID+'><span>'+ port.ENName + '</span><i class="close"></i></li>';
                         $(".routeStartPort_Select .StartEndPort_List").append(port_li)
                     }
                 }
@@ -291,7 +291,7 @@ $('.oneRoute_List').delegate("li", 'click', function () {
                         allArrivalPortList.push(portID);
                         console.log(portID);
                         var port = AllPortBasicList[portID];
-                        var port_li =  '<li portID='+ portID+'><span>'+ port.ENName + '</span><i></i></li>';
+                        var port_li =  '<li portID='+ portID+'><span>'+ port.ENName + '</span><i class="close"></i></li>';
                         $(".routeEndPort_Select .StartEndPort_List").append(port_li)
                     }
                 }
