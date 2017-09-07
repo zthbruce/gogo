@@ -280,7 +280,7 @@ router.get("/saveShip2Fleet", function (req, res, next) {
     var remark =  req.query.Remark;
 
     var sql = util.format('REPLACE INTO `T4101_Fleet` (ShipNumber, JoinTime, LeaveTime, FleetNumber, Checked, Remark) ' +
-        'VALUE ("%s", %s, %s, "%s", "1",  "%s")', shipNumber, joinTime, leaveTime, fleetNumber, remark);
+        'VALUE ("%s", "%s", "%s", "%s", "1",  "%s")', shipNumber, joinTime, leaveTime, fleetNumber, remark);
     console.log(sql);
     // mysql.query(sql, function (err, results) {
     //     if(err){

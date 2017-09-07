@@ -19,7 +19,9 @@
 .FleetName_List>li>i:nth-child(2){color:#0af50a; margin-left:8px;}
 
 /*船舶列表弹出框*/
-#fleet,#shipDetails,#ShipSearch_DWTRange,#searchShipList,#fleetShipRemarks{position:fixed;z-index:100;display:none; border-radius: 10px;background: rgba(6, 2, 5, 0.8)}
+#fleet,#shipDetails,#searchShipList,#fleetShipRemarks{position:fixed;z-index:100;display:none; border-radius: 10px;background: rgba(6, 2, 5, 0.8)}
+#ShipSearch_DWTRange{position:fixed;z-index:100;display:none;background: rgba(6, 2, 5, 0.8)}
+
 #fleet{width:650px;height:400px;top:70px;left:300px;display:none;}
 .fleet_title{width:100%;height:30px;position:relative;}
 .fleet_title>span{display:block;width:100%;text-align:center;height:28px;line-height:28px;margin:0 auto;color:#fff;}
@@ -140,9 +142,10 @@
 .shipInfo_FleetList>li:hover{background:#217BA2;}
 .shipInfo_fleet>ul>.shipInfo_Time{top:-5px;}
 .shipInfo_fleet>ul>.shipInfo_Time>span:first-child{top:0px;}
-.shipInfo_updateBtn{width:40px;height:24px;cursor:pointer;line-height:24px;text-align:center;border-radius:5px;font-size:13px;color:#fff;background:#217BA2;position:absolute;bottom:10px;right:5px;}
-.shipInfo_updateBtn:hover{background:#2EB1EA;}
-.shipInfo_updateBtn:active{background:#4cb4e0;}
+/*.shipInfo_updateBtn{width:40px;height:24px;cursor:pointer;line-height:24px;text-align:center;border-radius:5px;font-size:13px;color:#fff;background:#217BA2;position:absolute;bottom:10px;right:5px;}*/
+.shipInfo_updateBtn {width:40px;height:24px;cursor:pointer;line-height:24px;text-align:center;border-radius:5px;font-size:13px;color:#fff;background:grey;position:absolute;bottom:10px;right:5px;}
+/*.shipInfo_updateBtn:hover{background:#2EB1EA;}*/
+/*.shipInfo_updateBtn:active{background:#4cb4e0;}*/
 .shipInfo_btn{width:96%;height:30px;margin:5px auto;}
 .shipInfo_btn>div{width:90px;height:32px;cursor:pointer;border-radius:5px;}
 /*.shipInfo_btn>.ship_track{margin-left:130px;background:rgba(255, 255, 255, 0.40);}*/
@@ -152,17 +155,18 @@
 
 
 /*船舶范围搜索条*/
-#ShipSearch_DWTRange{width:720px;height:40px;top:70px;left:-704px;display:block;border-top-left-radius:0px;border-bottom-left-radius:0px;}
-.Search_Info{margin-left:150px;height:40px;line-height:40px;font-size:13px;color:#fff;position:relative;}
+#ShipSearch_DWTRange{width:720px;height:40px;top:70px;left:-685px;display:block;border-top-left-radius:0px;border-bottom-left-radius:0px;}
+.Search_Info{margin-left:100px;height:40px;line-height:40px;font-size:13px;color:#fff;position:relative;}
 .Search_Info>.Search_typeText{display:inline-block;line-height:24px;width:140px;padding-left:5px;cursor:pointer;border:1px solid #fff;border-radius:5px;}
 .Search_Info>.Search_typeSelect{width:142px;height:200px;background: rgba(6, 2, 5, 0.8);border:1px solid #323232;border-radius:5px;;position:absolute;top:33px;left:33px;display:none;overflow-y:scroll;overflow-x:hidden;}
 .Search_typeSelect>li{width:120px;height:20px;line-height:20px;padding-left:5px;color:white;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .Search_typeSelect>li:hover{background:#217BA2;}
 .Search_Info>input{width:50px;height:20px;line-height:20px;background:transparent;border:1px solid #fff;color:#fff;font-size:12px;border-radius:5px;padding-left:5px;outline:none;}
 .Search_Info>input:focus{box-shadow:0px 0px 1px 1px #fff;}
-.DWTSearch_btn{display:inline-block;width:20px;height:20px;background:url("/images/search.png") no-repeat;position: absolute;top:10px;right:25px;cursor:pointer;}
-.ShipSearch_ShowBtn{display:inline-block;width:16px;height:40px;background:#fff;position: absolute;top:0px;right:0px;cursor:pointer;}
-/*.ShipSearch_ShowBtn{display:inline-block;width:16px;height:40px;background:url('/images/top_right.png') no-repeat 0px -287px;;position: absolute;top:0px;right:0px;cursor:pointer;}*/
+.DWTSearch_btn{display:inline-block;width:20px;height:20px;background:url("/images/search.png") no-repeat;position: absolute;top:10px;right:180px;cursor:pointer;}
+/*.ShipSearch_ShowBtn{display:inline-block;width:16px;height:40px;background:#fff;position: absolute;top:0px;right:0px;cursor:pointer;}*/
+.ShipSearch_ShowBtn{display:inline-block;width:35px;height:40px;background:url('/images/search-big.png') no-repeat center;position: absolute;top:0px;right:0px;cursor:pointer;}
+/*.ShipSearch_ShowBtn{display:inline-block;width:40px;height:40px;background:url('/images/fold-right.png') no-repeat center;position: absolute;top:0px;right:0px;cursor:pointer;}*/
 
 /*船舶搜索结果*/
 #searchShipList{width:720px;height:320px;top:110px;left:0px;display:none;border-top-left-radius:0px;border-top-right-radius:0px;}
