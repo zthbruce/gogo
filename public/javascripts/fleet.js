@@ -324,7 +324,7 @@ $('.route_Fleet_btn').click(function(){
 /** 鼠标移动到船队上显示船队的信息*/
 $('.ShipType_list>li').mouseenter(function(){
     // var fleetName = $(this).text().replace(" ","");
-    console.log(fleetBasicInfo)
+    // console.log(fleetBasicInfo)
     var fleetType = $(this).attr("id");
     $('.ShipType_list>li').removeClass("choose");
     $(this).addClass("choose");
@@ -352,7 +352,7 @@ $('.ShipType_list>li').mouseenter(function(){
         var name = info.ENName === ""?info.CNName: info.ENName;
         var number = parseInt(uncheckNum) + parseInt(checkedNum);
         // fleet_ul.append('<li fleetNumber=' + fleetNumber + '>' + name + '<i>(' + number + ')</i></li>')
-        fleet_ul.append('<li fleetNumber=' + fleetNumber + ' fleetName="' + name + '" number=' + number + '>' + name + '(<i>' + uncheckNum + "</i><i>" + checkedNum + '</i>)</li>')
+        fleet_ul.append('<li fleetNumber=' + fleetNumber + ' fleetName="' + name + '" number=' + number + '>' + name + '(<i>' + checkedNum + "</i> /<i>" +  uncheckNum+ '</i>)</li>')
     }
     // 显示船队信息
     fleet_ul.css('display','none');
@@ -906,7 +906,8 @@ $('.ShipSearch_ShowBtn').click(function(){
     $(".ShipSearch_ShowBtn").css("background", "url('/images/fold-left.png') no-repeat center");
     if(!SearchShow){$('#ShipSearch_DWTRange').animate({'left':'0px'},300);}
     else{
-        $('#searchShipList').slideUp(400);
+        // $('#searchShipList').slideUp(400);
+        $('#searchShipList').fadeOut(300);
         $('#ShipSearch_DWTRange').animate({'left':'-685px'},300);
         $(".ShipSearch_ShowBtn").css("background", "url('/images/search-big.png') no-repeat center");
     }

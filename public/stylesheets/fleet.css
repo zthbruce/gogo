@@ -15,8 +15,9 @@
 /*.ShipType_list>.choose{height:40px;line-height:40px;}*/
 .ShipType_list>li>i{display:inline-block;width:0px;height:0px;border:4px solid transparent;border-left-color:#eee;float:right;margin-top:17px;}
 .FleetName_List>li>i{font-style:normal;}
-.FleetName_List>li>i:nth-child(1){color:#fbfafa}
-.FleetName_List>li>i:nth-child(2){color:#0af50a; margin-left:8px;}
+.FleetName_List>li>i:nth-child(1){color:#0af50a}
+.FleetName_List>li>i:nth-child(2){color:#fbfafa;}
+/*.FleetName_List>li>i:nth-child(2){color:#fbfafa; margin-left:8px;}*/
 
 /*船舶列表弹出框*/
 #fleet,#shipDetails,#searchShipList,#fleetShipRemarks{position:fixed;z-index:100;border-radius:10px;background:rgba(6, 2, 5, 0.8);}
