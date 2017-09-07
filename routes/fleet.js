@@ -278,20 +278,19 @@ router.get("/saveShip2Fleet", function (req, res, next) {
     var joinTime = req.query.JoinTime;
     var leaveTime = req.query.LeaveTime;
     var remark =  req.query.Remark;
-
     var sql = util.format('REPLACE INTO `T4101_Fleet` (ShipNumber, JoinTime, LeaveTime, FleetNumber, Checked, Remark) ' +
         'VALUE ("%s", "%s", "%s", "%s", "1",  "%s")', shipNumber, joinTime, leaveTime, fleetNumber, remark);
-    console.log(sql);
-    // mysql.query(sql, function (err, results) {
-    //     if(err){
-    //         console.log(utils.eid1);
-    //         res.jsonp(['404', utils.eid1])
-    //     }
-    //     else{
-    //         console.log("成功连接数据库");
-    //         res.jsonp(['200', "成功保存数据"])
-    //     }
-    // })
+    // console.log(sql);
+    mysql.query(sql, function (err, results) {
+        if(err){
+            console.log(utils.eid1);
+            res.jsonp(['404', utils.eid1])
+        }
+        else{
+            console.log("成功连接数据库");
+            res.jsonp(['200', "成功保存数据"])
+        }
+    })
 });
 
 /**

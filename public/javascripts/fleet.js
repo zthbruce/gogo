@@ -539,6 +539,7 @@ $('.fleetList_List').delegate('.shipDetailInfo', 'click', function () {
                  */
                 $(".shipInfo_updateBtn").click(function () {
                     if(saveStatus) { // 如果可以保存
+                        console.log("保存信息");
                         var fleetNumber = $('.shipInfo_FleetName').attr("fleetNumber");
                         var enterTime_input = $('#shipInfo_EnterTime');
                         var leaveTime_input = $('#shipInfo_LeaveTime');
@@ -1087,11 +1088,12 @@ $(".fleetList_List").delegate(".shipDelete", "click", function () {
 /**
  * 监听输入域的改变
  */
-// $("#shipInfo_LeaveTime, #shipInfo_EnterTime, .remarks").bind('input change',function() {
-//     console.log("备注变化");
-//     changeSaveStatus(true);
-// });
-$("#shipInfo_LeaveTime, #shipInfo_EnterTime, .remarks").blur(function() {
+$(".remarks").bind('input change',function() {
+    console.log("备注变化");
+    changeSaveStatus(true);
+});
+
+$("#shipInfo_LeaveTime, #shipInfo_EnterTime").blur(function() {
     console.log("备注变化");
     changeSaveStatus(true);
 });
