@@ -110,6 +110,8 @@ function getShipList2Fleet(fleetNumber, timePoint){
                         num_add += 1;
                     }
                     if(leaveTime === timePoint){
+                        console.log(leaveTime + ":" + timePoint);
+                        console.log("已经离开");
                         leaveOrJoin = "leave";
                         DWT_less += DWT;
                         num_less += 1;
@@ -380,7 +382,7 @@ $('.FleetName_List').delegate('li', 'click', function () {
     fleet_div.css('zIndex',fleetDivZIndex);
     fleet_div.fadeIn(600);
     // 获取船队列表
-    getShipList2Fleet(fleetNumber, "");
+    getShipList2Fleet(fleetNumber, "~");
 
 });
 
@@ -390,7 +392,7 @@ $('.today_btn').click(function () {
     // 充分利用当前所选船队的信息
     $(".TimePointList>li>i").removeClass('selected');
     var fleetNumber = $('.fleet_title>span').attr("fleetNumber"); //船队ID
-    getShipList2Fleet(fleetNumber, "");
+    getShipList2Fleet(fleetNumber, "~");
 });
 
 /**
@@ -468,48 +470,6 @@ $('.fleetList_List').delegate('.shipDetailInfo', 'click', function () {
                 }
                 $(".shipInfo_imgShow>ul").css("width", imageNum * li_width);
             }
-
-            /**
-             * 保存所属船队信息
-             */
-            $(".shipInfo_updateBtn").click(function () {
-                if(saveStatus) { // 如果可以保存
-                    var fleetNumber = $('.shipInfo_FleetName').attr("fleetNumber");
-                    var enterTime_input = $('#shipInfo_EnterTime');
-                    var leaveTime_input = $('#shipInfo_LeaveTime');
-                    var joinTime = enterTime_input.val() === "" ? null : enterTime_input.val();
-                    var leaveTime = leaveTime_input.val() === "" ? null : leaveTime_input.val();
-                    var shipNumber = $(".shipName").attr("shipNumber");
-                    var remarks = $(".remarks").val(); // 备注信息保存
-                    if (fleetNumber !== "") {
-                        current_li.find(".toCheck").attr("class", "checked");
-                        $.ajax({
-                            url: '/fleet/saveShip2Fleet',
-                            type: 'get',
-                            data: {
-                                ShipNumber: shipNumber,
-                                JoinTime: joinTime,
-                                LeaveTime: leaveTime,
-                                FleetNumber: fleetNumber,
-                                Remark: remarks
-                            },
-                            success: function (data) {
-                                if (data[0] === "200") {
-                                    console.log("保存成功");
-                                    ship_li.find(".toCheck").attr("class", "checked") // 本行显示显示为绿色
-                                }
-                                else {
-                                    console.log("保存失败");
-                                }
-                            }
-                        })
-                    }
-                    else {
-                        // 如果为空，默认为将该船移除该船队
-                        removeShipFromFleet();
-                    }
-                }
-            });
         },
         error:function(err){
             console.log(err);
@@ -518,6 +478,7 @@ $('.fleetList_List').delegate('.shipDetailInfo', 'click', function () {
             console.log("图片加载结束");
             $(".shipInfo_imgShow").css("background", ""); // 清除背景
             $(".shipInfo_imgShow>ul").css("left", 0);
+
             if(imageNum > 1){
                 imageAutoShow();
             }
@@ -572,6 +533,49 @@ $('.fleetList_List').delegate('.shipDetailInfo', 'click', function () {
                 fleetName.attr("FleetNumber", shipInfo.FleetNumber);
                 $("#shipInfo_EnterTime").val(joinTime);
                 $("#shipInfo_LeaveTime").val(leaveTime);
+
+                /**
+                 * 保存所属船队信息
+                 */
+                $(".shipInfo_updateBtn").click(function () {
+                    if(saveStatus) { // 如果可以保存
+                        var fleetNumber = $('.shipInfo_FleetName').attr("fleetNumber");
+                        var enterTime_input = $('#shipInfo_EnterTime');
+                        var leaveTime_input = $('#shipInfo_LeaveTime');
+                        var joinTime = enterTime_input.val() === "" ? null : enterTime_input.val();
+                        var leaveTime = leaveTime_input.val() === "" ? null : leaveTime_input.val();
+                        var shipNumber = $(".shipName").attr("shipNumber");
+                        var remarks = $(".remarks").val(); // 备注信息保存
+                        if (fleetNumber !== "") {
+                            current_li.find(".toCheck").attr("class", "checked");
+                            $.ajax({
+                                url: '/fleet/saveShip2Fleet',
+                                type: 'get',
+                                data: {
+                                    ShipNumber: shipNumber,
+                                    JoinTime: joinTime,
+                                    LeaveTime: leaveTime,
+                                    FleetNumber: fleetNumber,
+                                    Remark: remarks
+                                },
+                                success: function (data) {
+                                    if (data[0] === "200") {
+                                        console.log("保存成功");
+                                        ship_li.find(".toCheck").attr("class", "checked"); // 本行显示显示为绿色
+                                        changeSaveStatus(false);
+                                    }
+                                    else {
+                                        console.log("保存失败");
+                                    }
+                                }
+                            })
+                        }
+                        else {
+                            // 如果为空，默认为将该船移除该船队
+                            removeShipFromFleet();
+                        }
+                    }
+                });
             }
         },
         error: function (err) {
@@ -663,38 +667,38 @@ $(".shipInfo_FleetList>li").click(function () {
     $(".shipInfo_FleetList").slideUp(200)
 });
 
-/**
- * 保存所属船队信息
- */
-$(".shipInfo_updateBtn").click(function () {
-    var fleetNumber = $('.shipInfo_FleetName').attr("fleetNumber");
-    var enterTime_input = $('#shipInfo_EnterTime');
-    var leaveTime_input =$('#shipInfo_LeaveTime');
-    var joinTime = enterTime_input.val() ==="" ? null:enterTime_input.val();
-    var leaveTime = leaveTime_input.val() ===""? null:leaveTime_input.val();
-    var shipNumber = $(".shipName").attr("shipNumber");
-    var remarks = $(".remarks").val(); // 备注信息保存
-    if(fleetNumber !== "") {
-        $.ajax({
-            url: '/fleet/saveShip2Fleet',
-            type: 'get',
-            data: {ShipNumber: shipNumber, JoinTime: joinTime, LeaveTime: leaveTime, FleetNumber: fleetNumber, Remark:remarks},
-            success: function (data) {
-                if (data[0] === "200") {
-                    console.log("保存成功");
-
-                }
-                else {
-                    console.log("保存失败");
-                }
-            }
-        })
-    }
-    else{
-        // 如果为空，默认为将该船移除该船队
-        removeShipFromFleet();
-    }
-});
+// /**
+//  * 保存所属船队信息
+//  */
+// $(".shipInfo_updateBtn").click(function () {
+//     var fleetNumber = $('.shipInfo_FleetName').attr("fleetNumber");
+//     var enterTime_input = $('#shipInfo_EnterTime');
+//     var leaveTime_input =$('#shipInfo_LeaveTime');
+//     var joinTime = enterTime_input.val() ==="" ? null:enterTime_input.val();
+//     var leaveTime = leaveTime_input.val() ===""? null:leaveTime_input.val();
+//     var shipNumber = $(".shipName").attr("shipNumber");
+//     var remarks = $(".remarks").val(); // 备注信息保存
+//     if(fleetNumber !== "") {
+//         $.ajax({
+//             url: '/fleet/saveShip2Fleet',
+//             type: 'get',
+//             data: {ShipNumber: shipNumber, JoinTime: joinTime, LeaveTime: leaveTime, FleetNumber: fleetNumber, Remark:remarks},
+//             success: function (data) {
+//                 if (data[0] === "200") {
+//                     console.log("保存成功");
+//
+//                 }
+//                 else {
+//                     console.log("保存失败");
+//                 }
+//             }
+//         })
+//     }
+//     else{
+//         // 如果为空，默认为将该船移除该船队
+//         removeShipFromFleet();
+//     }
+// });
 
 // 点击搜索按钮进行搜索
 // 当满足条件时才可以搜索
@@ -1083,7 +1087,11 @@ $(".fleetList_List").delegate(".shipDelete", "click", function () {
 /**
  * 监听输入域的改变
  */
-$("#shipInfo_LeaveTime, #shipInfo_EnterTime, .remarks").bind('input propertychange',function() {
+// $("#shipInfo_LeaveTime, #shipInfo_EnterTime, .remarks").bind('input change',function() {
+//     console.log("备注变化");
+//     changeSaveStatus(true);
+// });
+$("#shipInfo_LeaveTime, #shipInfo_EnterTime, .remarks").blur(function() {
     console.log("备注变化");
     changeSaveStatus(true);
 });

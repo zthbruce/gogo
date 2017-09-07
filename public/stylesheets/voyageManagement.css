@@ -84,7 +84,7 @@
 
 
 /*航次——标准航线*/
-#voyage_StandardRoute{width:965px;height:185px;top:70px;left:150px;display:block;}
+#voyage_StandardRoute{width:965px;height:185px;top:70px;left:150px;display:none;}
 .StandardRoute_Data{width:96%;height:120px;margin:5px auto;}
 .StandardRoute_Data>ul>li{height:24px;width:100%;}
 .StandardRoute_Data>ul>li:last-child{margin-top:10px;}

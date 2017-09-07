@@ -74,7 +74,7 @@ router.get("/getFleetDetailInfo", function (req, res, next) {
     console.log(fleetNumber);
 
     // 如果请求当前的船舶信息
-    if(timePoint === ""){
+    if(timePoint === "~"){
         var sql = util.format('SELECT t1.ShipNumber, t2.Name AS ShipName, IMO, MMSI, t3.Name AS Type, DWT, ShipStatus, ' +
             'BuiltDate, JoinTime, LeaveTime, Checked FROM T4101_Fleet t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber' +
             ' LEFT JOIN `T0181_ShipType` t3 ON t2.ShipType = t3.TypeKey ' +
