@@ -7,7 +7,7 @@
 #voyageList,#voyageDetails,#voyage_StandardRoute{position:fixed;z-index:100;display:none;border-radius:10px;background:rgba(6,2,5,0.8);}
 #voyageList{width:650px;height:350px;top:50px;left:300px;display:none;}
 #voyageDetails{width:700px;height:440px;top:70px;left:300px;display:none;}
-#voyage_StandardRoute{width:780px;height:185px;top:70px;left:300px;display:none;}
+#voyage_StandardRoute{width:960px;height:185px;top:70px;left:150px;display:none;}
 
 /*航次列表分类选项*/
 .voyageList_select{width:90%;height:40px;margin:0 auto;}
@@ -84,4 +84,30 @@
 
 
 /*航次——标准航线*/
+.StandardRoute_Data{width:96%;height:120px;background:#ccc;margin:5px auto;}
+.StandardRoute_Data>ul>li{height:24px;width:100%;}
+.StandardRoute_Data>ul>li:last-child{margin-top:20px;}
+.StandardRoute_Data>ul>li>span{display:inline-block;height:24px;line-height:24px;font-size:13px;color:#fff;text-align:center;overflow:hidden;}
+.StandardRoute_Data>ul>li>span:nth-child(1){width:140px;}
+.StandardRoute_Data>ul>li>span:nth-child(2){width:150px;}
+.StandardRoute_Data>ul>li>span:nth-child(3){width:150px;}
+.StandardRoute_Data>ul>li>span:nth-child(4){width:45px;}
+.StandardRoute_Data>ul>li>span:nth-child(5){width:60px;}
+.StandardRoute_Data>ul>li>span:nth-child(6){width:50px;}
+.StandardRoute_Data>ul>li>span:nth-child(7){width:60px;}
+.StandardRoute_Data>ul>li>span:nth-child(8){width:60px;}
+.StandardRoute_Data>ul>li>span:nth-child(9){width:65px;}
+.StandardRoute_Data>ul>li>span:nth-child(10){width:65px;}
+.StandardRoute_Data>ul>li>span:nth-child(11){width:35px;}
+.StandardRoute_Data>ul>li>span:nth-child(12){width:40px;}
+/*.StandardRoute_Data>ul>li>span>select{}*/
+
+
+
+
+
+
+
+
+
 

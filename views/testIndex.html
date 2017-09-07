@@ -258,7 +258,6 @@
             <li>长*宽*高: 172*26*14 m</li>
             <li>source:AAAAAAAAAAAAAA</li>
             <li>更新时间:2007-02-03</li>
-            <li><span class = "remarks">备注:啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊</span> <i class="shipInfo_remarkBtn"></i></li>
         </ul>
     </div>
     <div class="dividing_line"></div>
@@ -293,6 +292,8 @@
             </li>
             <li class="shipInfo_Time"><span>进入时间: </span><input id="shipInfo_EnterTime" size="12"/></li>
             <li class="shipInfo_Time"><span>离开时间: </span><input id="shipInfo_LeaveTime" size="12"/></li>
+            <li><span>备注:</span><textarea class = "remarks"></textarea></li>
+
         </ul>
         <div class="shipInfo_updateBtn">保存</div>
     </div>
@@ -686,7 +687,20 @@
         <div class="title_offbtn"></div>
     </div>
     <div class="dividing_line"></div>
-    <div class=""></div>
+    <div class="StandardRoute_Data">
+        <ul>
+            <li><span></span><span>装港</span><span>卸港</span><span>航程</span><span>货量</span><span>货物</span><span>装卸</span><span>SH</span><span>LoadWait</span><span>Diswait</span><span>Age</span><span>系数</span></li>
+            <li><span>123456</span><span>Loyang Offshore Base</span><span>Pulau Ayer Merbau</span><span>00000</span><span>200000</span><span>铁矿石</span><span><select>
+                <option value="">FIO</option>
+                <option value="">FIO</option>
+            </select></span><span><select>
+                <option value="">SHInc</option>
+                <option value="">SHInc</option>
+            </select></span><span>00h00m</span><span>00h00m</span><span>20</span><span><input type="text" value="0.0"></span></li>
+            <li><span>BITR-Asia Route 12</span><span>Pulau Ayer Merbau</span><span>Pulau Ayer Merbau</span><span>00000</span><span>200000</span><span>铁矿石</span><span>FIO</span><span>SHInc</span><span>00h00m</span><span>00h00m</span><span>20</span><span>1.0</span></li>
+            <li><span>基差</span><span>不符合</span><span>不符合</span><span>+0000</span><span>+000000</span><span>不符合</span><span>不符合</span><span>不符合</span><span>+00h00m</span><span>+00h00m</span><span>+00</span><span></span></li>
+        </ul>
+    </div>
 
 </div>
 
@@ -1562,19 +1576,21 @@
 <script>
     $(function(){
         $('#shipInfo_EnterTime').each(function(){
+            changeSaveStatus(true);
             $(this).ionDatePicker({
                 lang: 'zh-cn',
                 format: 'YYYY-MM-DD'
             });
         });
         $('#shipInfo_LeaveTime').each(function(){
+            changeSaveStatus(true);
             $(this).ionDatePicker({
                 lang: 'zh-cn',
                 format: 'YYYY-MM-DD'
             });
         });
     });
-    $('#shipInfo_EnterTime').val('2015-01-01');
+//    $('#shipInfo_EnterTime').val('2015-01-01');
 </script>
 
 <script type="text/javascript">
