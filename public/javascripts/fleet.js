@@ -191,6 +191,8 @@ function getTimePointList(fleetNumber){
 /**
  * 图片自动播放
  */
+// 每一张图片的宽度
+var li_width = 140;
 function imageAutoShow() {
     autoShow = setInterval(function () {
         showImage();
@@ -201,11 +203,12 @@ function imageAutoShow() {
  * 根据索引显示图片
  *
  */
+
 function showImage() {
     console.log(curIndex);
     console.log(imageNum);
     if(curIndex < imageNum){
-        $(".shipInfo_imgShow>ul").animate({left: 0 - curIndex * 80}, 1000);
+        $(".shipInfo_imgShow>ul").animate({left: 0 - curIndex * li_width}, 1000);
         curIndex++;
     }
     else {
@@ -582,8 +585,7 @@ $('.fleetList_List').delegate('.shipDetailInfo', 'click', function () {
     event.stopPropagation();
 });
 
-// 每一张图片的宽度
-var li_width = 80;
+
 // 点击图片向左按钮
 $('.imgBtn_left').click(function () {
     console.log("停止自动播放");
@@ -594,11 +596,11 @@ $('.imgBtn_left').click(function () {
     curIndex--;
     console.log(curIndex);
     if (curIndex >= 0) {
-        image_ul.animate({left: 0 - curIndex * 80}, 1000);
+        image_ul.animate({left: 0 - curIndex * li_width}, 1000);
     }
     else {
         curIndex = imageNum - 1;
-        image_ul.animate({left: 0 - curIndex * 80}, 500);
+        image_ul.animate({left: 0 - curIndex * li_width}, 500);
     }
     imageAutoShow() // 恢复自动播放
 }
@@ -612,7 +614,7 @@ $('.imgBtn_right').click(function () {
     curIndex++;
     console.log(curIndex);
     if(curIndex < imageNum){
-        $(".shipInfo_imgShow>ul").animate({left: 0 - curIndex * 80}, 1000);
+        $(".shipInfo_imgShow>ul").animate({left: 0 - curIndex * li_width}, 1000);
     }
     else{
         image_ul.animate({left: 0}, 500); // 显示第1张
