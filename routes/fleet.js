@@ -19,9 +19,13 @@ router.get("/getFleetBasicInfo", function (req, res, next) {
     // var fleetType = req.query.FleetType;
     // var sql = util.format('SELECT t1.FleetNumber, t2.ENName, t2.CNName, COUNT(*) AS Number FROM T4101_Fleet t1 INNER JOIN T4102_FleetType t2 ' +
     //     'ON t1.FleetNumber = t2.FleetNumber WHERE TYPE = "%s" AND LeaveTime IS NULL GROUP BY t1.FleetNumber', fleetType);
-    var sql = util.format('SELECT Type, t1.FleetNumber, t2.ENName, t2.CNName, COUNT(*) AS Number FROM T4101_Fleet t1 INNER JOIN T4102_FleetType t2 ' +
-        'ON t1.FleetNumber = t2.FleetNumber LEFT JOIN T0101_Ship t3 ON t1.ShipNumber = t3.ShipNumber ' +
-        'WHERE ShipStatus IN ("1", "2", "3") GROUP BY t1.FleetNumber');
+    // var sql = util.format('SELECT Type, t1.FleetNumber, t2.ENName, t2.CNName, COUNT(*) AS Number FROM T4101_Fleet t1 INNER JOIN T4102_FleetType t2 ' +
+    //     'ON t1.FleetNumber = t2.FleetNumber LEFT JOIN T0101_Ship t3 ON t1.ShipNumber = t3.ShipNumber ' +
+    //     'WHERE ShipStatus IN ("1", "2", "3") GROUP BY t1.FleetNumber');
+    var sql = 'SELECT Type, t.FleetNumber, t.ENName, t.CNName, GROUP_CONCAT(CONCAT(t.checked, "#", t.Number) ORDER BY ' +
+        't.Checked SEPARATOR " ") AS CheckNum FROM (SELECT TYPE, t1.FleetNumber, t2.ENName, t2.CNName, t1.Checked, ' +
+        'COUNT(Checked) AS Number FROM T4101_Fleet t1 INNER JOIN T4102_FleetType t2 ON t1.FleetNumber = t2.FleetNumber ' +
+        'LEFT JOIN T0101_Ship t3 ON t1.ShipNumber = t3.ShipNumber WHERE ShipStatus IN ("1", "2", "3") GROUP BY t1.FleetNumber, t1.Checked) AS t GROUP BY FleetNumber';
     mysql.query(sql, function (err, results) {
       if(err){
           console.log(utils.eid1);
@@ -36,7 +40,9 @@ router.get("/getFleetBasicInfo", function (req, res, next) {
               for(var i = 0; i < results.length; i++){
                   var ele = results[i];
                   var fleetType = ele.Type;
-                  var content = {FleetNumber:ele.FleetNumber, ENName: ele.ENName, CNName: ele.CNName, Number: ele.Number};
+                  var checkNumInfo = ele.CheckNum; // 表示确认的情况
+                  var content = {FleetNumber:ele.FleetNumber, ENName: ele.ENName, CNName: ele.CNName, Number: ele.Number, CheckNumInfo: checkNumInfo};
+                  // var content = { :{ENName: ele.ENName, CNName: ele.CNName, Number: ele.Number}};
                   if(fleetType === "0"){
                       fleet_0.push(content)
                   }
@@ -70,16 +76,16 @@ router.get("/getFleetDetailInfo", function (req, res, next) {
     // 如果请求当前的船舶信息
     if(timePoint === ""){
         var sql = util.format('SELECT t1.ShipNumber, t2.Name AS ShipName, IMO, MMSI, t3.Name AS Type, DWT, ShipStatus, ' +
-            'BuiltDate, JoinTime, LeaveTime FROM T4101_Fleet t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber' +
+            'BuiltDate, JoinTime, LeaveTime, Checked FROM T4101_Fleet t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber' +
             ' LEFT JOIN `T0181_ShipType` t3 ON t2.ShipType = t3.TypeKey ' +
-            'WHERE FleetNumber = "%s" AND ShipStatus IN ("1", "2", "3")', fleetNumber);
+            'WHERE FleetNumber = "%s" AND ShipStatus IN ("1", "2", "3") ORDER BY Checked DESC, DWT DESC', fleetNumber);
     }
     // 请求历史上某一天的船舶信息
     else{
          sql = util.format('SELECT t1.ShipNumber, t2.Name AS ShipName, IMO, MMSI, t3.Name AS Type, DWT, ShipStatus, ' +
-             'BuiltDate, JoinTime, LeaveTime FROM T4101_Fleet t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber ' +
+             'BuiltDate, JoinTime, LeaveTime, Checked FROM T4101_Fleet t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber ' +
              'LEFT JOIN `T0181_ShipType` t3 ON t2.ShipType = t3.TypeKey' +
-            ' WHERE FleetNumber = "%s" AND (((JoinTime IS NULL OR JoinTime <= "%s") AND ShipStatus IN ("1", "2", "3")) OR (ShipStatus = "4" AND LeaveTime = "%s")) ORDER BY DWT DESC', fleetNumber, timePoint, timePoint);
+            ' WHERE FleetNumber = "%s" AND (((JoinTime IS NULL OR JoinTime <= "%s") AND ShipStatus IN ("1", "2", "3")) OR (ShipStatus = "4" AND LeaveTime = "%s")) ORDER BY Checked DESC, DWT DESC', fleetNumber, timePoint, timePoint);
     }
     mysql.query(sql, function (err, results) {
         if(err){
@@ -185,7 +191,7 @@ router.get("/getFleetTimePoint", function (req, res, next) {
  */
 router.get("/getShipDetailInfo", function (req, res, next) {
     var shipNumber = req.query.ShipNumber;
-    var sql = util.format('SELECT t1.Flag, BuildNumber, BuiltDate, CS, LOA, BM, Draft, t3.FleetNumber, t4.ENName,' +
+    var sql = util.format('SELECT t1.Flag, BuildNumber, BuiltDate, CS, LOA, BM, Draft, t3.FleetNumber, t3.Remark, t4.ENName,' +
         ' t4.CNName, JoinTime, LeaveTime, t5.Name AS PortName, t1.Source, t1.UpdateDate FROM T0101_Ship t1 LEFT JOIN  `T0181_ShipType` t2 ON t1.ShipType = t2.TypeKey ' +
         'LEFT JOIN T4101_Fleet t3 ON t1.ShipNumber = t3.ShipNumber LEFT JOIN T4102_FleetType t4 ON t3.FleetNumber = t4.FleetNumber ' +
         'LEFT JOIN `T2101_Port` t5 ON t1.RegistryPort = t5.PortID ' +
@@ -241,9 +247,10 @@ router.get("/getSearchShipList", function (req, res, next) {
     var type = req.query.Type; //货物类型
     var min_DWT = req.query.Min_DWT;
     var max_DWT = req.query.Max_DWT;
-    var sql = util.format('SELECT t1.ShipNumber, t2.Name AS Type, IMO, MMSI, t1.Name AS ShipName, DWT, ShipStatus, BuiltDate, FleetNumber ' +
-        'FROM T0101_Ship t1 LEFT JOIN T0181_ShipType t2 ON t1.ShipType = t2.TypeKey LEFT JOIN imn.`T4101_Fleet` t3 ON ' +
-        't1.ShipNumber = t3.ShipNumber  WHERE TypeKey = "%s" AND DWT >= %s AND DWT <= %s AND ShipStatus IN ("1", "2", "3")  ORDER BY DWT DESC' , type, min_DWT, max_DWT);
+    var sql = util.format('SELECT t1.ShipNumber, t2.Name AS Type, IMO, MMSI, t1.Name AS ShipName, DWT, ShipStatus, BuiltDate, t3.FleetNumber, t4.ENName, t4.CNName ' +
+        'FROM T0101_Ship t1 LEFT JOIN T0181_ShipType t2 ON t1.ShipType = t2.TypeKey LEFT JOIN `T4101_Fleet` t3 ON ' +
+        't1.ShipNumber = t3.ShipNumber LEFT JOIN T4102_FleetType t4 ON t3.FleetNumber = t4.FleetNumber WHERE TypeKey = "%s" ' +
+        'AND DWT >= %s AND DWT <= %s  ORDER BY CNName DESC, ENName DESC,DWT DESC' , type, min_DWT, max_DWT);
     mysql.query(sql, function (err, results) {
         if(err){
             console.log(utils.eid1);
@@ -270,9 +277,10 @@ router.get("/saveShip2Fleet", function (req, res, next) {
     var fleetNumber = req.query.FleetNumber;
     var joinTime = req.query.JoinTime;
     var leaveTime = req.query.LeaveTime;
+    var remark =  req.query.Remark;
 
-    var sql = util.format('REPLACE INTO `T4101_Fleet` (ShipNumber, JoinTime, LeaveTime, FleetNumber) ' +
-        'VALUE ("%s", %s, %s, "%s")', shipNumber, joinTime, leaveTime, fleetNumber);
+    var sql = util.format('REPLACE INTO `T4101_Fleet` (ShipNumber, JoinTime, LeaveTime, FleetNumber, Checked, Remark) ' +
+        'VALUE ("%s", %s, %s, "%s", "1",  "%s")', shipNumber, joinTime, leaveTime, fleetNumber, remark);
     console.log(sql);
     // mysql.query(sql, function (err, results) {
     //     if(err){
@@ -309,6 +317,44 @@ router.get("/getShipImage", function (req, res, next) {
         }
     })
 });
+
+/**
+ * 保存备注信息
+ */
+router.get("/saveRemarks",function (req, res, next) {
+    var remarks = req.query.Remarks;
+    var shipNumber =  req.query.ShipNumber;
+    var sql = util.format('UPDATE T4101_Fleet SET Checked = "1", Remark ="%s" WHERE ShipNumber = "%s"',remarks, shipNumber)
+    mysql.query(sql, function (err, result) {
+        if(err){
+            console.log(utils.eid1);
+            res.jsonp(['404', utils.eid1])
+        }
+        else{
+            console.log("成功保存信息");
+            res.jsonp(['200', "成功保存信息"])
+            }
+    })
+});
+
+/**
+ * 删除该船
+ */
+router.get("/removeShip",function (req, res, next) {
+    var shipNumber =  req.query.ShipNumber;
+    var sql = util.format('DELETE FROM T4101_Fleet WHERE ShipNumber = "%s"', shipNumber);
+        mysql.query(sql, function (err, result) {
+        if(err){
+            console.log(utils.eid1);
+            res.jsonp(['404', utils.eid1])
+        }
+        else{
+            console.log("成功删除信息");
+            res.jsonp(['200', "成功删除信息"])
+        }
+    })
+});
+
 
 module.exports = router;
 

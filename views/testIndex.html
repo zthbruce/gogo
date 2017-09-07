@@ -34,10 +34,9 @@
     <!--<link href="/stylesheets/datePicker/foundation-datepicker.min.css" rel="stylesheet" type="text/css">-->
     <!--2-->
 
-
 </head>
 <body style="overflow:hidden;">
-<div id="map" class="map" tabindex="0"></div>
+<div id="map" class="map" tabindex="0" ></div>
 <!--<map id="map" class="map"></map>-->
 <div id="optain_topLeft_text"></div>
 <div id="mouse_rightBottom_text"></div>
@@ -259,6 +258,7 @@
             <li>长*宽*高: 172*26*14 m</li>
             <li>source:AAAAAAAAAAAAAA</li>
             <li>更新时间:2007-02-03</li>
+            <li><span class = "remarks">备注:啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊</span> <i class="shipInfo_remarkBtn"></i></li>
         </ul>
     </div>
     <div class="dividing_line"></div>
@@ -312,22 +312,22 @@
             <li type="3">AAAAAAAAAAAAAAAAAAAA</li>
             <li type="4">AAAAAAAAAAAAAAA</li>
         </ul>
-        &nbsp;DWT范围: <input type="text" placeholder="20000" class="min_dwt"> t ～ <input type="text" placeholder="400000" class="max_dwt"> t
+        &nbsp;DWT: <input type="text" placeholder="0" class="min_dwt"> &nbsp; 至 &nbsp; <input type="text" placeholder="9999999" class="max_dwt">
         <div class="DWTSearch_btn"></div>
         <div class="ShipSearch_ShowBtn"></div>
     </div>
 </div>
 <!--船舶搜索结果-->
 <div id="searchShipList">
-    <div class="fleet_title">
-        <span>船舶列表</span>
-        <div class="title_offbtn"></div>
-    </div>
-    <div class="dividing_line"></div>
+    <!--<div class="fleet_title">-->
+        <!--<span>船舶列表</span>-->
+        <!--<div class="title_offbtn"></div>-->
+    <!--</div>-->
+    <!--<div class="dividing_line"></div>-->
     <div class="fleetInfo_content">
         <ul class="fleetList_title">
             <li>
-                <span>船舶类型</span><span>IMO</span><span>MMSI</span><span>船名</span><span>DWT(t)</span><span>船龄</span><span>状态</span>
+                <span>船舶类型</span><span>IMO</span><span>MMSI</span><span>船名</span><span>DWT(t)</span><span>船龄</span><span>状态</span><span>船队</span>
             </li>
         </ul>
         <ul class="fleetList_List">
@@ -346,8 +346,16 @@
         </div>
     </div>
 </div>
-
-
+<!--船队船舶备注编辑-->
+<div id="fleetShipRemarks">
+    <div class="fleet_title">
+        <span>船舶备注</span>
+    </div>
+    <div class="dividing_line"></div>
+    <textarea class="fleetShip_RemarksInfo"></textarea>
+    <div class="ShipRemark_SaveBtn">保存</div>
+    <div class="ShipRemark_CancelBtn">取消</div>
+</div>
 <!--
     航线管理
 -->
@@ -410,14 +418,18 @@
     <!--航线信息设置-->
     <div class="routeInfo_Install">
         <ul class="routeInfo_List">
-            <li>DWT: <input type="text"> t</li>
-            <li>LOA: <input type="text"> m</li>
-            <li>BEAM: <input type="text"> m</li>
-            <li>DEPTH: <input type="text"> m</li>
-            <li>装载等待时长: <input type="text"> h</li>
-            <li>卸载等待时长: <input type="text"> h</li>
-            <li>DTPH: <input type="text"> t/h</li>
-            <li>Sun&Holiday: <input type="checkbox" name="Sun&Holiday" checked=true></li>
+            <li>DWT: <input type="text"></li>
+            <li>LOA: <input type="text"></li>
+            <li>BM: <input type="text"></li>
+            <li>DM: <input type="text"></li>
+            <li>装载港: </li>
+            <li>装载等待时长: <input type="text"></li>
+            <li>DTPH: <input type="text"></li>
+            <li>SHInc: <input type="checkbox" name="SHInc" checked=true></li>
+            <li>卸载港: </li>
+            <li>卸载等待时长: <input type="text"></li>
+            <li>DTPH: <input type="text"></li>
+            <li>SHInc: <input type="checkbox" name="SHInc" checked=true></li>
         </ul>
     </div>
     <div class="dividing_line"></div>
@@ -440,6 +452,7 @@
     </div>
 </div>
 
+
 <!--
     航次管理
 -->
@@ -447,6 +460,7 @@
 <div id="voyageList">
     <div class="fleet_title">
         <span>航次列表</span>
+        <div class="title_offbtn"></div>
     </div>
     <div class="dividing_line"></div>
     <div class="voyageList_select">
@@ -498,6 +512,7 @@
 <div id="voyageDetails">
     <div class="fleet_title">
         <span>航次详情(未确认)</span>
+        <div class="title_offbtn"></div>
     </div>
     <div class="dividing_line"></div>
     <div class="shipVoyageList">
@@ -524,11 +539,11 @@
             <li>船名：GIOVANNI BATTISTA DE CARLINI</li>
             <li>IMO：1234567</li>
             <li><span>货物：</span>
-                <span> ads</span>
+                <span>铁矿石</span>
             </li>
             <li>吨位：<input type="text" value="400000"> t</li>
-            <li>出发港：<input type="text" value="Wilmington (N Carolina)" title="Wilmington (N Carolina)"> <i></i><span>2007-02-03 20:00</span></li>
-            <li>到达港：<input type="text" value="Wilmington (N Carolina)" title="Wilmington (N Carolina)"> <i></i><span>2007-02-03 20:00</span></li>
+            <li>出发港：<input type="text" value="Wilmington (N Carolina)" title="Wilmington (N Carolina)" disabled> <i></i><span>2007-02-03 20:00</span></li>
+            <li>到达港：<input type="text" value="Wilmington (N Carolina)" title="Wilmington (N Carolina)" disabled> <i></i><span>2007-02-03 20:00</span></li>
             <li>航行时长：20d20h20m</li>
             <li>航速：00.00kts</li>
             <li>航程：45678nm</li>
@@ -661,7 +676,16 @@
         <div class="voyageDetails_btn voyageBtn_SaveOrConfirm">保存</div>
     </div>
 </div>
+<!--航次——标准航线-->
+<div id="voyage_StandardRoute">
+    <div class="fleet_title">
+        <span>标准航线</span>
+        <div class="title_offbtn"></div>
+    </div>
+    <div class="dividing_line"></div>
+    <div class=""></div>
 
+</div>
 
 
 <div id="portBasicInfo">
@@ -1525,19 +1549,9 @@
 <script type="text/javascript" src="/javascripts/berthInfo.js"></script>
 <script type="text/javascript" src="/javascripts/util.js"></script>
 <script type="text/javascript" src="/javascripts/berth.js"></script>
-<script type="text/javascript" src="/javascripts/anch.js">
-</script><script type="text/javascript" src="/javascripts/route.js"></script>
-<!--<script type="text/javascript" src="/javascripts/interaction.js"></script>-->
-
-<!--1-->
-<!--<script src="/javascripts/datePicker/foundation-datepicker.min.js"></script>-->
-<!--<script src="/javascripts/datePicker/foundation-datepicker.zh-CN.js"></script>-->
-<!--<script>-->
-    <!--$('#shipInfo_EnterTime').fdatepicker({format: 'yyyy-mm-dd'});-->
-    <!--$('#shipInfo_LeaveTime').fdatepicker({format: 'yyyy-mm-dd'});-->
-    <!--$('#shipInfo_EnterTime').val('2017-05-01');-->
-<!--</script>-->
-<!--2-->
+<script type="text/javascript" src="/javascripts/anch.js"></script>
+<script type="text/javascript" src="/javascripts/route.js"></script>
+<script type="text/javascript" src="/javascripts/voyageManagement.js"></script>
 <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
 <script src="/javascripts/datePicker/moment.min.js"></script>
 <script src="/javascripts/datePicker/moment.zh-cn.js"></script>
@@ -1561,17 +1575,5 @@
 </script>
 
 <script type="text/javascript">
-//    gvChartInit();
-//$(function(){
-//    $('#myTable5').gvChart({
-//        chartType: 'PieChart',
-//        gvSettings: {
-//            vAxis: {title: 'No of players'},
-//            hAxis: {title: 'Month'},
-//            width: 260,
-//            height: 240
-//        }
-//    });
-//});
 </script>
 </html>

@@ -163,6 +163,8 @@ function removePort(portID, current_feature) {
 
 /** 点击最外层航线按钮 */
 $(".route_Info_btn").click(function () {
+    // 初始化所选
+    $('.routeType_list>li').removeClass("choose");
     $('.routeType_list').fadeToggle(300);
     $('.oneRoute_List').fadeOut(300);
     $('#routeInfo').fadeOut(600);
