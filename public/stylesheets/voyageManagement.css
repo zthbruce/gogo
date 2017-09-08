@@ -17,8 +17,8 @@
 .voyageList_select>div input{margin-right:3px;position:relative;top:2px;}
 .voyageList_select>div:last-child>span:nth-child(2){display:inline-block;height:20px;width:80px;line-height:20px;padding-left:5px;border:1px solid #fff;background:transparent;cursor:pointer;border-radius:5px;}
 .voyageList_select>div:last-child>ul{width:85px;position:absolute;z-index:1000;overflow:hidden;background:rgba(6,2,5,0.8);top:31px;right:6px;border-radius:5px;display:none;}
-.voyageList_select>div:last-child>ul>li{height:20px;font-size:12px;line-height:20px;padding-left:6px;}
-.voyageList_select>div:last-child>ul>li:hover{background:#217BA2;}
+.voyageList_select>div:last-child>ul>li{height:20px;font-size:12px;line-height:20px;padding-left:6px;cursor: pointer;}
+.voyageList_select>div:last-child>ul>li:hover{background:#217BA2; }
 
 /*航次列表内容*/
 .voyageList_List{width:94%;height:260px;margin:5px auto;}

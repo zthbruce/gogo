@@ -23,9 +23,11 @@ var berth = require('./routes/berth'); // 泊位的接口
 
 var anch = require('./routes/anch'); // 锚地的接口
 
-var fleet = require('./routes/fleet'); // 锚地的接口
+var fleet = require('./routes/fleet'); // 船队的接口
 
-var route = require('./routes/route'); // 锚地的接口
+var route = require('./routes/route'); // 航线的接口
+
+var voyageManagement = require("./routes/voyageManagment"); //航次管理接口
 
 var app = express();
 
@@ -77,6 +79,9 @@ app.use('/anch', anch); //锚地
 app.use("/fleet", fleet); //船队
 
 app.use("/voyage", voyage); // 航次
+
+app.use("/voyageManagement", voyageManagement); // 航次管理
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

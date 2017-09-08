@@ -659,6 +659,7 @@ $(".shipInfo_fleet>ul>li:first-child").mouseleave(function () {
 });
 
 
+
 // 点击选择相应船队
 $(".shipInfo_FleetList>li").click(function () {
     changeSaveStatus(true); // 改变保存状态
@@ -978,8 +979,8 @@ var search_input = $(".Search_typeText");
 search_input.click(function() {getTypeList()});
 search_input.keyup(function() {getTypeList()});
 
-$(".Search_typeSelect").mouseleave(function () {
-    $(this).slideUp(200)
+$(".search_type").mouseleave(function () {
+    $('.Search_typeSelect').slideUp(200)
 });
 
 $(".Search_typeSelect").delegate("li", "click", function () {

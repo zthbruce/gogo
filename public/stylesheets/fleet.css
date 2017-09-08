@@ -166,14 +166,21 @@
 
 
 /*船舶范围搜索条*/
+
 #ShipSearch_DWTRange{width:720px;height:40px;top:70px;left:-685px;display:block;border-top-left-radius:0px;border-bottom-left-radius:0px;}
 .Search_Info{margin-left:100px;height:40px;line-height:40px;font-size:13px;color:#fff;position:relative;}
-.Search_Info>.Search_typeText{display:inline-block;line-height:24px;width:140px;padding-left:5px;cursor:pointer;border:1px solid #fff;border-radius:5px;}
-.Search_Info>.Search_typeSelect{width:142px;height:200px;background: rgba(6, 2, 5, 0.8);border:1px solid #323232;border-radius:5px;;position:absolute;top:33px;left:33px;display:none;overflow-y:scroll;overflow-x:hidden;}
+.search_type{width:180px;}
+.search_type>.Search_typeText{display:inline-block;line-height:24px;width:140px;padding-left:5px;cursor:pointer;border:1px solid #fff;border-radius:5px;}
+/*.Search_Info>.Search_typeText{display:inline-block;line-height:24px;width:140px;padding-left:5px;cursor:pointer;border:1px solid #fff;border-radius:5px;}*/
+.search_type>.Search_typeSelect{width:142px;height:200px;background: rgba(6, 2, 5, 0.8);border:1px solid #323232;border-radius:5px;;position:absolute;top:33px;left:33px;display:none;overflow-y:scroll;overflow-x:hidden;}
+/*.Search_Info>.Search_typeSelect{width:142px;height:200px;background: rgba(6, 2, 5, 0.8);border:1px solid #323232;border-radius:5px;;position:absolute;top:33px;left:33px;display:none;overflow-y:scroll;overflow-x:hidden;}*/
 .Search_typeSelect>li{width:120px;height:20px;line-height:20px;padding-left:5px;color:white;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .Search_typeSelect>li:hover{background:#217BA2;}
-.Search_Info>input{width:50px;height:20px;line-height:20px;background:transparent;border:1px solid #fff;color:#fff;font-size:12px;border-radius:5px;padding-left:5px;outline:none;}
-.Search_Info>input:focus{box-shadow:0px 0px 1px 1px #fff;}
+.Search_Info input{width:50px;height:20px;line-height:20px;background:transparent;border:1px solid #fff;color:#fff;font-size:12px;border-radius:5px;padding-left:5px;outline:none;}
+.Search_Info input:focus{box-shadow:0px 0px 1px 1px #fff;}
+/*.search_type>input{width:50px;height:20px;line-height:20px;background:transparent;border:1px solid #fff;color:#fff;font-size:12px;border-radius:5px;padding-left:5px;outline:none;}*/
+/*.search_type>input:focus{box-shadow:0px 0px 1px 1px #fff;}*/
+.DWT_range{margin-left:185px;margin-top:-39px}
 .DWTSearch_btn{display:inline-block;width:20px;height:20px;background:url("/images/search.png") no-repeat;position: absolute;top:10px;right:180px;cursor:pointer;}
 /*.ShipSearch_ShowBtn{display:inline-block;width:16px;height:40px;background:#fff;position: absolute;top:0px;right:0px;cursor:pointer;}*/
 .ShipSearch_ShowBtn{display:inline-block;width:35px;height:40px;background:url('/images/search-big.png') no-repeat center;position: absolute;top:0px;right:0px;cursor:pointer;}

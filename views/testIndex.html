@@ -306,6 +306,7 @@
 <div id="ShipSearch_DWTRange">
     <!--<span>船舶搜索</span>-->
     <div class="Search_Info">
+        <div class="search_type">
         类型: <input type="text" type="0" class="Search_typeText">
         <ul class="Search_typeSelect">
             <li type="0">散货</li>
@@ -314,7 +315,10 @@
             <li type="3">AAAAAAAAAAAAAAAAAAAA</li>
             <li type="4">AAAAAAAAAAAAAAA</li>
         </ul>
+        </div>
+        <div class="DWT_range">
         &nbsp;DWT: <input type="text" placeholder="0" class="min_dwt"> &nbsp; 至 &nbsp; <input type="text" placeholder="9999999" class="max_dwt">
+        </div>
         <div class="DWTSearch_btn"></div>
         <!--<div class="ShipSearch_ShowBtn"></div>-->
     </div>
@@ -468,11 +472,11 @@
     </div>
     <div class="dividing_line"></div>
     <div class="voyageList_select">
-        <div><label><input name="voyageType" type="checkbox" value="" checked/>未处理 </label></div>
-        <div><label><input name="voyageType" type="checkbox" value="" />已处理 </label></div>
-        <div><span>船队：</span>
-            <span>Mini Cape</span>
-            <ul>
+        <div><label><input name="voyageType" type="checkbox" value="" class="voyage_toCheck" checked/>未处理 </label></div>
+        <div><label><input name="voyageType" type="checkbox" value="" class="voyage_checked" />已处理 </label></div>
+        <div class ="fleet_select"><span>船队：</span>
+            <span FleetNumber="F2" class = "selected_fleet">VLOC</span>
+            <ul class="FleetList">
                 <li FleetNumber="F1">Capesize</li>
                 <li FleetNumber="F2">VLOC</li>
                 <li FleetNumber="F3">Panamax</li>
@@ -1246,6 +1250,8 @@
 <!--<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1RjvgLx-N8yWBBa639e1jHw1wCh6KJUU&callback=initMap" type="text/javascript"></script>-->
 
 <script>
+//    $(".voyage_toCheck").prop("checked", false);
+//    $(".voyage_checked").prop("checked", false);
     var unknown_style = new ol.style.Style({
         image: new ol.style.Icon({
             scale: 0.1,
