@@ -87,6 +87,7 @@ function getShipList2Fleet(fleetNumber, timePoint){
                 var num_add = 0;
                 var num_less = 0;
                 // fleetBasicInfo = data[1];
+                var shipInfoStr = "";
                 for(var i = 0; i < fleetDetailInfo.length; i++){
                     var detailInfo = fleetDetailInfo[i];
                     var MMSI = detailInfo.MMSI === null?"":detailInfo.MMSI;
@@ -116,18 +117,21 @@ function getShipList2Fleet(fleetNumber, timePoint){
                         DWT_less += DWT;
                         num_less += 1;
                     }
-                    var shipInfoStr= '<li class=' + leaveOrJoin +'><span>' + type + '</span><span>' + detailInfo.IMO + '</span><span>' + MMSI +
+                    var shipInfo_li = '<li class=' + leaveOrJoin +'><span>' + type + '</span><span>' + detailInfo.IMO + '</span><span>' + MMSI +
                         '</span><span>' + detailInfo.ShipName + '</span><span>' + DWT + '</span><span>' + shipAge + '</span><span>' +
                         shipStatus + '</span><span><i class= "shipDetailInfo" shipNumber=' + detailInfo.ShipNumber + '></i></span><span><i class= "' + shipCheck+ '"></i></span><span><i class="shipDelete"></i></span></li>';
                     if(leaveOrJoin !== ""){
-                        shipList.prepend(shipInfoStr);
+                        shipInfoStr =  shipInfo_li + shipInfoStr;
+                        // shipList.prepend(shipInfo_li);
                     }
                     else{
-                        shipList.append(shipInfoStr);
+                        shipInfoStr +=  shipInfo_li;
+                        // shipList.append(shipInfo_li);
                     }
                     // 总吨重
                     DWT_Sum += DWT;
                 }
+                shipList.append(shipInfoStr);
                 // 总吨位
                 fleet_div.find('.fleetInfo_DWT>span:nth-child(2)').text(DWT_Sum - DWT_less);
                 // 吨位增减
@@ -737,6 +741,7 @@ $(".DWTSearch_btn").click(function () {
                 var count = 0;
                 if (data[0] === "200") {
                     shipListInfo = data[1];
+                    var shipInfoStr = "";
                     for (var i = 0; i < shipListInfo.length; i++) {
                         var detailInfo = shipListInfo[i];
                         var MMSI = detailInfo.MMSI === null ? "" : detailInfo.MMSI;
@@ -749,17 +754,19 @@ $(".DWTSearch_btn").click(function () {
                         var fleetNumber = detailInfo.FleetNumber;
                         if (fleetNumber !== null) {
                             var fleetName = detailInfo.CNName === ""? detailInfo.ENName: detailInfo.CNName;
-                            var shipInfoStr = '<li class="belong2Fleet"><span>' + type + '</span><span>' + detailInfo.IMO + '</span><span>' + MMSI +
+                            shipInfoStr += '<li class="belong2Fleet"><span>' + type + '</span><span>' + detailInfo.IMO + '</span><span>' + MMSI +
                                 '</span><span>' + detailInfo.ShipName + '</span><span>' + DWT + '</span><span>' + shipAge + '</span><span>' +
                                 shipStatus + '</span><span>' + fleetName + '</span><span><i class= "shipDetailInfo" shipNumber=' + detailInfo.ShipNumber + '></i></span></li>';
                         } else {
-                            shipInfoStr = '<li class="notBelong2Fleet"><span>' + type + '</span><span>' + detailInfo.IMO + '</span><span>' + MMSI +
+                            shipInfoStr += '<li class="notBelong2Fleet"><span>' + type + '</span><span>' + detailInfo.IMO + '</span><span>' + MMSI +
                                 '</span><span>' + detailInfo.ShipName + '</span><span>' + DWT + '</span><span>' + shipAge + '</span><span>' +
                                 shipStatus + '</span><span>' + "" + '</span><span><i class= "shipDetailInfo" shipNumber=' + detailInfo.ShipNumber + '></i></span></li>';
                             count++;
                         }
-                        shipList.append(shipInfoStr);
+                        // shipList.append(shipInfoStr);
                     }
+                    console.log(shipInfoStr);
+                    shipList.append(shipInfoStr); // 增加数据
                     $(".belong2Fleet").hide();
                 }
                 // 总船舶数目
@@ -911,9 +918,10 @@ $('.ShipSearch_ShowBtn').click(function(){
         $('#searchShipList').fadeOut(300);
         $('#ShipSearch_DWTRange').animate({'left':'-685px'},300);
         $(".ShipSearch_ShowBtn").css("background", "url('/images/search-big.png') no-repeat center");
+        $(".min_dwt").val("");
+        $(".Search_typeText").val("");
     }
     SearchShow = !SearchShow;
-    $(".min_dwt").val("");
 });
 
 

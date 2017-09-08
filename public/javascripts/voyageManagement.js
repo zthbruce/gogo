@@ -108,26 +108,29 @@ var voyageBtn_saveStatus = false;
  */
 function updateCheckInfo(){
     voyageBtn_saveStatus = true;
+    updateSaveStatus();
+    var saveButton = $(".voyageBtn_SaveOrConfirm");
     var checkedNum = $(".oneVoyageInfo>ul .checked").length;
     if(checkedNum === 3){
         console.log("三项全部确认");
         voyageBtn_ConfirmStatus = true;
-        standardGoodsStatus  = true;
-        standardRouteStatus = true;
-        var detailButton = $(".voyageDetails_btn");
-        detailButton.css("background", "#4d90fe");// 蓝底
-        detailButton.css("color", "#FFF"); // 白字
-        $(".voyageBtn_SaveOrConfirm").text("确认");
+        // standardGoodsStatus  = true;
+        // standardRouteStatus = true;
+        // var saveButton = $(".voyageBtn_SaveOrConfirm")
+        // var detailButton = $(".voyageDetails_btn");
+        // saveButton.css("background", "#4d90fe");// 蓝底
+        // saveButton.css("color", "#FFF"); // 白字
+        saveButton.text("确认");
     }
     else{
         voyageBtn_ConfirmStatus = false;
-        standardGoodsStatus  = false;
-        standardRouteStatus = false;
-        var routeAndGoods = $(".voyageBtn_StandardRoute, .voyageBtn_StandardGoods");
-        routeAndGoods.css("background", "#ccc"); // 灰底
-        routeAndGoods.css("color", "#060205"); // 黑字
-        updateSaveStatus();
-        $(".voyageBtn_SaveOrConfirm").text("保存");
+        // standardGoodsStatus  = false;
+        // standardRouteStatus = false;
+        // var routeAndGoods = $(".voyageBtn_StandardRoute, .voyageBtn_StandardGoods");
+        // routeAndGoods.css("background", "#ccc"); // 灰底
+        // routeAndGoods.css("color", "#060205"); // 黑字
+        // updateSaveStatus();
+        saveButton.text("保存");
     }
 }
 
@@ -375,14 +378,26 @@ $(".voyageBtn_SaveOrConfirm").click(function(){
     // routeAndGoods.css("background", "#ccc"); // 灰底
     // routeAndGoods.css("color", "#060205"); // 黑字
     voyageBtn_saveStatus = false; // 状态发生改变
+    var title = $("#voyageDetails").find(">.fleet_title>span:nth-child(1)");
+    var routeAndGoods = $(".voyageBtn_StandardRoute, .voyageBtn_StandardGoods");
     // 如果当前是确认, 保存相应信息
     if(voyageBtn_ConfirmStatus){
         $(".voyageBtn_SaveOrConfirm").text("保存");
         voyage_checked = "1"; // check状态信息
-        $("#voyageDetails>.fleet_title>span:nth-child(1)").text("航次详情(已确认)")
+        title.text("航次详情(已确认)");
+        // 标准航线和标准货物可点击
+        standardGoodsStatus  = true;
+        standardRouteStatus = true;
+        routeAndGoods.css("background", "#4d90fe");// 蓝底
+        routeAndGoods.css("color", "#FFF"); // 白字
     }
     else{
-        $("#voyageDetails>.fleet_title>span:nth-child(1)").text("航次详情(未确认)")
+        title.text("航次详情(未确认)");
+        // 标准航线和标准货物不能点击
+        standardGoodsStatus  = false;
+        standardRouteStatus = false;
+        routeAndGoods.css("background", "#ccc"); // 灰底
+        routeAndGoods.css("color", "#060205"); // 黑字
     }
     updateSaveStatus(); // 更新保存按钮状态
 });

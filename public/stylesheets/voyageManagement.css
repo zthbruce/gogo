@@ -128,7 +128,7 @@
 
 
 /*航次——标准货物*/
-#voyage_StandardGoods{width:1040px;height:220px;top:70px;left:150px;display:none;}
+#voyage_StandardGoods{width:1040px;height:220px;top:70px;left:150px;display:block;}
 .productTypeSelect{width:94%;margin:5px auto;}
 .productTypeSelect>ul>li{display:inline-block;height:24px;margin-right:20px;}
 .productTypeSelect>ul>li>span{height:24px;line-height:24px;color:#fff;font-size:14px;}
@@ -138,16 +138,16 @@
 .StandardGoods_List{width:96%;margin:0 auto;}
 .StandardGoods_List>ul{border-bottom:1px dashed #fff;position:relative;margin-bottom:5px;}
 .StandardGoods_List>ul>li{height:24px;line-height:24px;}
-.StandardGoods_List>ul>li>span{display:inline-block;height:24px;line-height:24px;font-size:12px;color:#fff;text-align:center;overflow:hidden;}
+.StandardGoods_List>ul>li>span{display:inline-block;width:65px;height:24px;line-height:24px;font-size:12px;color:#fff;text-align:center;overflow:hidden;}
 .StandardGoods_List>ul:first-child>li:first-child>span{font-size:13px;}
 .StandardGoods_List>ul>li>span:nth-child(1){width:80px;}
-.StandardGoods_List>ul>li>span:nth-child(2){width:65px;}
-.StandardGoods_List>ul>li>span:nth-child(3){width:65px;}
-.StandardGoods_List>ul>li>span:nth-child(4){width:65px;}
-.StandardGoods_List>ul>li>span:nth-child(5){width:65px;}
-.StandardGoods_List>ul>li>span:nth-child(6){width:65px;}
-.StandardGoods_List>ul>li>span:nth-child(7){width:65px;}
-.StandardGoods_List>ul>li>span:nth-child(8){width:65px;}
+/*.StandardGoods_List>ul>li>span:nth-child(2){width:65px;}*/
+/*.StandardGoods_List>ul>li>span:nth-child(3){width:65px;}*/
+/*.StandardGoods_List>ul>li>span:nth-child(4){width:65px;}*/
+/*.StandardGoods_List>ul>li>span:nth-child(5){width:65px;}*/
+/*.StandardGoods_List>ul>li>span:nth-child(6){width:65px;}*/
+/*.StandardGoods_List>ul>li>span:nth-child(7){width:65px;}*/
+/*.StandardGoods_List>ul>li>span:nth-child(8){width:65px;}*/
 .StandardGoods_List>ul>li>span:nth-child(9){width:350px;}
 .StandardGoods_List>ul>li>span:nth-child(10){width:100px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .StandardGoods_List>ul>li>span:nth-child(10)>input{width:96px;height:22px;color:#fff;font-size:12px;background:transparent;border:1px solid transparent;outline:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;}
@@ -160,7 +160,7 @@
 .ProductDifference_ModulusCount{height:24px;width:320px;position:absolute;right:0px;bottom:5px;}
 .ProductDifference_ModulusCount>div{display:inline-block;width:100px;height:22px;border:1px solid #fff;border-radius:5px;}
 .ProductDifference_ModulusCount>div>span{display:inline-block;height:22px;line-height:22px;font-size:13px;color:#fff;overflow:hidden;}
-.ProductDifference_ModulusCount>div>input{display:inline-block;width:55px;padding-left:5px;height:18px;position:relative;top:-7px;font-size:12px;border-radius:5px;border:1px solid #fff;}
+.ProductDifference_ModulusCount>div>input{display:inline-block;width:40px;padding-left:2px;height:18px;position:relative;top:-7px;font-size:12px;border-radius:5px;border:1px solid #fff;}
 .ProductDifference_ModulusCount>div:last-child>span:last-child{font-size:12px;}
 
 /*添加对比按钮*/
