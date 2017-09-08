@@ -98,11 +98,52 @@ function updateVoyageList(fleetNumber){
         })
 }
 
+var standardGoodsStatus = false;
+var standardRouteStatus = false;
+var voyageBtn_ConfirmStatus = false;
+var voyageBtn_saveStatus = false;
+
 /**
  * 根据操作更新确认信息
  */
 function updateCheckInfo(){
+    voyageBtn_saveStatus = true;
+    var checkedNum = $(".oneVoyageInfo>ul .checked").length;
+    if(checkedNum === 3){
+        console.log("三项全部确认");
+        voyageBtn_ConfirmStatus = true;
+        standardGoodsStatus  = true;
+        standardRouteStatus = true;
+        var detailButton = $(".voyageDetails_btn");
+        detailButton.css("background", "#4d90fe");// 蓝底
+        detailButton.css("color", "#FFF"); // 白字
+        $(".voyageBtn_SaveOrConfirm").text("确认");
+    }
+    else{
+        voyageBtn_ConfirmStatus = false;
+        standardGoodsStatus  = false;
+        standardRouteStatus = false;
+        var routeAndGoods = $(".voyageBtn_StandardRoute, .voyageBtn_StandardGoods");
+        routeAndGoods.css("background", "#ccc"); // 灰底
+        routeAndGoods.css("color", "#060205"); // 黑字
+        updateSaveStatus();
+        $(".voyageBtn_SaveOrConfirm").text("保存");
+    }
+}
 
+/**
+ * 改变保存状态
+ */
+function updateSaveStatus() {
+    var saveButton = $(".voyageBtn_SaveOrConfirm");
+    if(voyageBtn_saveStatus){
+        saveButton.css("background", "#4d90fe");// 蓝底
+        saveButton.css("color", "#FFF"); // 白字
+    }
+    else{
+        saveButton.css("background", "#ccc"); // 灰底
+        saveButton.css("color", "#060205"); // 黑字
+    }
 }
 
 
@@ -269,13 +310,13 @@ $('.shipVoyageList_leftbtn').click(function(){
 $('.ProductDifference_addBtn').click(function(){
     $('.StandardGoods_List').append('<ul><li class="ComparedSelect_ProductInfo"><span><select>' +
         '<option value="">大商所</option><option value="">巴西</option><option value="">印度</option>' +
-        '</select></span><span>00.00%</span><span>00.0000%</span><span>00.0000%</span><span>0.0000%</span><span>0.0000%</span><span>00.0000%</span><span>00.0000%</span><span>+00.00mm:00.00% -00.00mm:00.00% +00.00mm:00.00%</span><span>品位较高、粒度好，烧结较好，但含碱金属，不宜多用</span></li>' +
+        '</select></span><span>00.00%</span><span>00.0000%</span><span>00.0000%</span><span>0.0000%</span><span>0.0000%</span><span>00.0000%</span><span>00.0000%</span><span>+00.00mm:00.00% -00.00mm:00.00% +00.00mm:00.00%</span><span><input type="text" value="品位较高、粒度好，烧结较好，但含碱金属，不宜多用" title="品位较高、粒度好，烧结较好，但含碱金属，不宜多用" disabled></span></li>' +
         '<li class="ProductDifference"><span>差值</span><span>+00.00%</span><span>+00.0000%</span><span>+00.0000%</span><span>+0.0000%</span><span>+0.0000%</span><span>+00.0000%</span><span>+00.0000%</span><span>符合</span><span></span></li>' +
-        '<div class="ProductDifference_ModulusCount"><div><span>吨位:</span> <input type="text" value="000.00%"></div>' +
-        '<div><span>价格:</span> <input type="text"></div><div><span>总系数:</span> <span>000.00%</span></div></div>' +
+        '<div class="ProductDifference_ModulusCount"><div><span>吨位:</span> <input type="text" value="000.00%"></div> ' +
+        '<div><span>价格:</span> <input type="text"></div> <div><span>总系数:</span> <span>000.00%</span></div></div>' +
         '</ul>');
     var nowWidth = parseInt($('#voyage_StandardGoods').height());
-    $('#voyage_StandardGoods').css('height',nowWidth+54);
+    $('#voyage_StandardGoods').css('height',nowWidth+59);
 });
 
 
@@ -286,7 +327,6 @@ $(".oneVoyageInfo>ul").delegate(".checked", "click", function () {
     console.log("here");
     $(this).attr("class", "toCheck");
     updateCheckInfo();
-
 });
 
 
@@ -294,3 +334,118 @@ $(".oneVoyageInfo>ul").delegate(".toCheck", "click", function () {
     $(this).attr("class", "checked");
     updateCheckInfo();
 });
+
+/**
+ * 点击标准航线按钮
+ */
+$(".voyageBtn_StandardRoute").click(function () {
+    if (standardRouteStatus) {
+        console.log("标准航线");
+        fleetDivZIndex++;
+        console.log(fleetDivZIndex);
+        var standardRouteDetails = $("#voyage_StandardRoute");
+        standardRouteDetails.css('zIndex',fleetDivZIndex);
+        event.stopPropagation();
+        standardRouteDetails.fadeIn(300)
+    }
+});
+
+/**
+ * 点击标准货物按钮
+ */
+$(".voyageBtn_StandardGoods").click(function(){
+    if(standardGoodsStatus){
+        console.log("标准货物");
+        // 等待数据填充
+        fleetDivZIndex++;
+        console.log(fleetDivZIndex);
+        var standardGoodsDetails = $("#voyage_StandardGoods");
+        standardGoodsDetails.css('zIndex',fleetDivZIndex);
+        event.stopPropagation();
+        standardGoodsDetails.fadeIn(300)
+    }
+});
+
+
+/**
+ * 确认或保存按钮点击之后都是会保存的
+ */
+$(".voyageBtn_SaveOrConfirm").click(function(){
+    var voyage_checked = "0"; // 初始化为0
+    // routeAndGoods.css("background", "#ccc"); // 灰底
+    // routeAndGoods.css("color", "#060205"); // 黑字
+    voyageBtn_saveStatus = false; // 状态发生改变
+    // 如果当前是确认, 保存相应信息
+    if(voyageBtn_ConfirmStatus){
+        $(".voyageBtn_SaveOrConfirm").text("保存");
+        voyage_checked = "1"; // check状态信息
+        $("#voyageDetails>.fleet_title>span:nth-child(1)").text("航次详情(已确认)")
+    }
+    else{
+        $("#voyageDetails>.fleet_title>span:nth-child(1)").text("航次详情(未确认)")
+    }
+    updateSaveStatus(); // 更新保存按钮状态
+});
+
+
+/**
+ * 监听select的变化
+ */
+
+$(".oneVoyageInfo select").change(function () {
+    console.log("change");
+    voyageBtn_saveStatus = true;
+    updateSaveStatus(); // 更新保存按钮状态
+});
+
+
+/**
+ * 监听DWT的变化
+ */
+$(".oneVoyageInfo .DWT").bind("input", function () {
+    voyageBtn_saveStatus = true;
+    updateSaveStatus(); // 更新保存按钮状态
+});
+
+
+/**
+ * 悬浮在停靠列表上时会出现结束航次按钮
+ */
+$(".oneVoyage_DockedList>li").mouseover(function () {
+    var endButton = $(this).find(".oneVoyage_EndBtn");
+    endButton.css("display", "block");
+});
+
+/**
+ * 离开列表
+ */
+$(".oneVoyage_DockedList>li").mouseout(function () {
+    console.log("结束航次");
+    var endButton = $(this).find(".oneVoyage_EndBtn");
+    endButton.css("display", "none");
+});
+
+/**
+ * 点击结束航次
+ */
+
+$(".oneVoyage_DockedList").delegate(".oneVoyage_EndBtn", "click", function () {
+    console.log("结束航次");
+    $(this).parent().nextAll().remove();
+    // 更新上面的信息
+});
+
+/**
+ * 标准航线取消按钮
+ */
+$(".StandardRoute_CancelBtn").click(function () {
+    $("#voyage_StandardRoute").fadeOut(300)
+});
+
+/**
+ * 标准货物取消按钮
+ */
+$(".StandardGoods_CancelBtn").click(function () {
+    $("#voyage_StandardGoods").fadeOut(300)
+});
+
