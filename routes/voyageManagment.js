@@ -16,7 +16,7 @@ router.get("/getVoyageList", function (req, res, next) {
     console.log(fleetNumber);
     var sql = util.format('SELECT t1.ID,t1.ShipNumber, Name, IMO, StartTime, StartPortID, StopTime, StopPortID,  t1.Checked FROM voyage_tmp t1 ' +
         'LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber LEFT JOIN T4101_Fleet t3 ON t2.ShipNumber = t3.ShipNumber ' +
-        'WHERE FleetNumber = "%s" ORDER BY StopTime DESC, t1.Checked DESC', fleetNumber);
+        'WHERE FleetNumber = "%s" ORDER BY t1.Checked DESC, StopTime DESC', fleetNumber);
     mysql.query(sql, function (err, results) {
         if(err){
             res.jsonp(["404", utils.eid1])
@@ -32,4 +32,11 @@ router.get("/getVoyageList", function (req, res, next) {
     })
 });
 
+
+/**
+ * 请求该船历史航次
+ */
+router.get("/getHistoryVoyage", function (req, res, next) {
+
+});
 module.exports = router;

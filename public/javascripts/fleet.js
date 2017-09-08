@@ -950,7 +950,7 @@ function updateTimeLineWidth(){
 //     $('.TimePointList').css('left',timeLeft);
 // });
 
-// 历史事件点击右边
+// 历史列表点击右箭头
 $('.fleetInfo_timeSelect .timeLine_RightBtn').click(function(){
     console.log("here");
     var timePoint_ul = $('.TimePointList');
@@ -962,7 +962,7 @@ $('.fleetInfo_timeSelect .timeLine_RightBtn').click(function(){
     }
 });
 
-// 历史事件点击左边
+// 历史列表点击左箭头
 $('.fleetInfo_timeSelect .timeLine_LeftBtn').click(function(){
     console.log("here");
     var timePoint_ul = $('.TimePointList');
@@ -1094,11 +1094,11 @@ $(".remarks").bind('input change',function() {
     console.log("备注变化");
     changeSaveStatus(true);
 });
-
 $("#shipInfo_LeaveTime, #shipInfo_EnterTime").blur(function() {
     console.log("备注变化");
     changeSaveStatus(true);
 });
+
 
 
 

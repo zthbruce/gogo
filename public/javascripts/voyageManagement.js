@@ -26,12 +26,13 @@ function updateByCheckSelect(){
     }
     if(lastCheckedStatus !== checkedStatus){
         // 如果没勾上的话
+        var checked = $(".voyageList_content>.checked");
+        console.log(checked);
         if (!checkedStatus){
-            $(".voyageList_content>.checked").hide() // 默认隐藏已经确认的选项
+            checked.hide() // 默认隐藏已经确认的选项
         }
+        // checked.find("span").css("color", "#1aea1a");
         else{
-            var checked = $(".voyageList_content>.checked")
-            checked.css("color", "green");
             checked.show()
         }
         lastCheckedStatus = checkedStatus
@@ -58,6 +59,7 @@ function updateVoyageList(fleetNumber){
                 if (data[0] === "200") {
                     console.log("获取数据成功");
                     var result = data[1];
+                    var voyage_ul = ""; // 列表元素
                     for (var i = 0; i < result.length; i++) {
                         var ele = result[i];
                         var startPortName = "";
@@ -74,17 +76,19 @@ function updateVoyageList(fleetNumber){
                         var stopTime = ele.StopTime.slice(0, 10);
                         var checked = ele.Checked;
                         if (checked === "1") {
-                            var voyage_li = "<li class=checked ShipNumber=" + ele.ShipNumber + " voyageID=" + ele.ID + "><span>" + ele.Name + "</span>" +
+                            voyage_ul += "<li class=checked ShipNumber=" + ele.ShipNumber + " voyageID=" + ele.ID + "><span>" + ele.Name + "</span>" +
                                 "<span>" + ele.IMO + "</span><span>" + startPortName + "</span><span>" + startTime + "</span><span>" +
                                 stopPortName + "</span><span>" + stopTime + "</span></li>";
                         } else {
-                            var voyage_li = "<li class=toCheck ShipNumber=" + ele.ShipNumber + " voyageID=" + ele.ID + "><span>" + ele.Name + "</span>" +
+                            voyage_ul += "<li class=toCheck ShipNumber=" + ele.ShipNumber + " voyageID=" + ele.ID + "><span>" + ele.Name + "</span>" +
                                 "<span>" + ele.IMO + "</span><span>" + startPortName + "</span><span>" + startTime + "</span><span>" +
                                 stopPortName + "</span><span>" + stopTime + "</span></li>";
                         }
-                        $(".voyageList_content").append(voyage_li);
+                        // $(".voyageList_content").append(voyage_li);
                     }
-                    updateByCheckSelect()
+                    $(".voyageList_content").append(voyage_ul);
+                    // updateByCheckSelect()
+                    $(".voyageList_content>.checked").hide() // 默认隐藏已经确认的
                 }
             },
             complete: function () {
@@ -95,8 +99,11 @@ function updateVoyageList(fleetNumber){
 }
 
 /**
- * 根据操作更新
+ * 根据操作更新确认信息
  */
+function updateCheckInfo(){
+
+}
 
 
 
@@ -172,7 +179,11 @@ $(".route_Voyage_btn").click(function () {
     console.log("航次管理");
     var defaultFleetNumber = "F2";
     updateVoyageList(defaultFleetNumber);
-    $("#voyageList").fadeIn(500);
+    var voyageList = $("#voyageList");
+    fleetDivZIndex++;
+    console.log(fleetDivZIndex);
+    voyageList.css('zIndex',fleetDivZIndex);
+    voyageList.fadeIn(500);
     $('.route_List_ul').fadeOut(300);
     $(".Fleet_List_ul").fadeOut(300);
 });
@@ -191,7 +202,7 @@ $(".voyageList_select .selected_fleet").click(function () {
 $(".FleetList>li").click(function () {
     $(".FleetList").slideUp(200);
     var select = $(".voyageList_select .selected_fleet");
-    var fleetNumber = $(this).attr("FleetNumber")
+    var fleetNumber = $(this).attr("FleetNumber");
     select.attr("FleetNumber", fleetNumber);
     select.text($(this).text());
     if(fleetNumber !== lastFleetNumber){
@@ -216,8 +227,70 @@ $(".voyage_toCheck, .voyage_checked").click(function () {
     updateByCheckSelect()
 });
 
-
+/**
+ *
+ */
 $(".voyageList_content").delegate("li", "click", function () {
     console.log("航次详情");
-    $('#voyageDetails').fadeIn(300);
+    fleetDivZIndex++;
+    console.log(fleetDivZIndex);
+    var voyageDetails = $('#voyageDetails');
+    voyageDetails.css('zIndex',fleetDivZIndex);
+    event.stopPropagation();
+    // 设置宽度
+    $('.shipVoyageList_List').css("width", 80 * 14);
+    voyageDetails.fadeIn(300);
+});
+
+
+
+// 历史列表点击右箭头
+$('.shipVoyageList_rightbtn').click(function(){
+    var timePoint_ul = $('.shipVoyageList_List');
+    var timeLeft = parseInt(timePoint_ul.css('margin-left'));
+    var width = parseInt(timePoint_ul.css("width"));
+    if(timeLeft - 560 + width  > 0) {
+        console.log("here");
+        timePoint_ul.animate({"margin-left" : "-=560"}, 300);
+    }
+});
+
+// 历史列表点击左箭头
+$('.shipVoyageList_leftbtn').click(function(){
+    var timePoint_ul = $('.shipVoyageList_List');
+    var timeLeft = parseInt(timePoint_ul.css('margin-left'));
+    if(timeLeft < 0){
+        timePoint_ul.animate({"margin-left" : "+=560"}, 300);
+    }
+});
+
+
+//标准货物弹出框——添加按钮单击事件模拟
+$('.ProductDifference_addBtn').click(function(){
+    $('.StandardGoods_List').append('<ul><li class="ComparedSelect_ProductInfo"><span><select>' +
+        '<option value="">大商所</option><option value="">巴西</option><option value="">印度</option>' +
+        '</select></span><span>00.00%</span><span>00.0000%</span><span>00.0000%</span><span>0.0000%</span><span>0.0000%</span><span>00.0000%</span><span>00.0000%</span><span>+00.00mm:00.00% -00.00mm:00.00% +00.00mm:00.00%</span><span>品位较高、粒度好，烧结较好，但含碱金属，不宜多用</span></li>' +
+        '<li class="ProductDifference"><span>差值</span><span>+00.00%</span><span>+00.0000%</span><span>+00.0000%</span><span>+0.0000%</span><span>+0.0000%</span><span>+00.0000%</span><span>+00.0000%</span><span>符合</span><span></span></li>' +
+        '<div class="ProductDifference_ModulusCount"><div><span>吨位:</span> <input type="text" value="000.00%"></div>' +
+        '<div><span>价格:</span> <input type="text"></div><div><span>总系数:</span> <span>000.00%</span></div></div>' +
+        '</ul>');
+    var nowWidth = parseInt($('#voyage_StandardGoods').height());
+    $('#voyage_StandardGoods').css('height',nowWidth+54);
+});
+
+
+/**
+ * 确认小按钮的切换
+ */
+$(".oneVoyageInfo>ul").delegate(".checked", "click", function () {
+    console.log("here");
+    $(this).attr("class", "toCheck");
+    updateCheckInfo();
+
+});
+
+
+$(".oneVoyageInfo>ul").delegate(".toCheck", "click", function () {
+    $(this).attr("class", "checked");
+    updateCheckInfo();
 });
