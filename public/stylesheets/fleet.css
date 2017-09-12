@@ -93,7 +93,7 @@
 
 /*船舶详情页面*/
 /*#shipDetails{width:385px;height:436px;top:10px;left:400px;display:block;}*/
-#shipDetails{width:450px;height:436px;top:10px;left:400px;display:none;}
+#shipDetails{width:450px;height:415px;top:10px;left:400px;display:none;}
 .shipName{font-size:14px;color:#fff;padding-top:3px;}
 .shipInfo_show{width:96%;height:160px;margin:5px auto;}
 .shipInfo_show>.shipInfo_List{width:250px;height:176px;float:right;}
@@ -132,7 +132,7 @@
 .shipInfo_company>ul>li{height:20px;line-height:20px;margin-left:20px;font-size:12px;color:#fff;}
 
 /*船队管理*/
-.shipInfo_fleet{width:96%;height:85px;margin:4px auto 6px;position:relative;}
+.shipInfo_fleet{width:96%;height:63px;margin:4px auto 6px;position:relative;}
 .shipInfo_fleet>ul>li{display:inline-block;height:20px;line-height:20px;position:relative;margin-left:20px;font-size:12px;color:#fff;margin-top:3px;}
 .shipInfo_fleet>ul>li{display:inline-block;height:20px;line-height:20px;position:relative;margin-left:20px;font-size:12px;color:#fff;margin-top:3px;}
 .shipInfo_fleet>ul>li>span{overflow:hidden;}
@@ -153,7 +153,7 @@
 .shipInfo_fleet>ul>li:last-child>textarea{width:300px;height:32px;resize:none;border-radius:5px;border:1px solid #fff;background:transparent;color:#fff;}
 .shipInfo_fleet>ul>li:last-child>textarea:focus{box-shadow:0px 0px 2px 2px #00B7FF;}
 /*.shipInfo_updateBtn{width:40px;height:24px;cursor:pointer;line-height:24px;text-align:center;border-radius:5px;font-size:13px;color:#fff;background:#217BA2;position:absolute;bottom:10px;right:5px;}*/
-.shipInfo_updateBtn {width:40px;height:24px;cursor:pointer;line-height:24px;text-align:center;border-radius:5px;font-size:13px;color:#fff;background:grey;position:absolute;bottom:25px;right:5px;}
+.shipInfo_updateBtn {width:40px;height:24px;cursor:pointer;line-height:24px;text-align:center;border-radius:5px;font-size:13px;color:#fff;background:grey;position:absolute;bottom:0px;right:5px;}
 /*.shipInfo_updateBtn {width:40px;height:24px;cursor:pointer;line-height:24px;text-align:center;border-radius:5px;font-size:13px;color:#fff;background:grey;position:absolute;bottom:5px;right:5px;}*/
 /*.shipInfo_updateBtn:hover{background:#2EB1EA;}*/
 /*.shipInfo_updateBtn:active{background:#4cb4e0;}*/

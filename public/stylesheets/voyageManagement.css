@@ -100,7 +100,7 @@
 
 
 /*航次——标准航线*/
-#voyage_StandardRoute{width:965px;height:185px;top:70px;left:150px;display:none;}
+#voyage_StandardRoute{width:975px;height:185px;top:70px;left:150px;display:none;}
 .StandardRoute_Data{width:96%;height:120px;margin:5px auto;}
 .StandardRoute_Data>ul>li{height:24px;width:100%;}
 .StandardRoute_Data>ul>li:last-child{margin-top:10px;}
@@ -111,8 +111,8 @@
 .StandardRoute_Data>ul>li>span:nth-child(4){width:45px;}
 .StandardRoute_Data>ul>li>span:nth-child(5){width:60px;}
 .StandardRoute_Data>ul>li>span:nth-child(6){width:50px;}
-.StandardRoute_Data>ul>li>span:nth-child(7){width:60px;}
-.StandardRoute_Data>ul>li>span:nth-child(8){width:65px;}
+.StandardRoute_Data>ul>li>span:nth-child(7){width:65px;}
+.StandardRoute_Data>ul>li>span:nth-child(8){width:70px;}
 .StandardRoute_Data>ul>li>span:nth-child(9){width:65px;}
 .StandardRoute_Data>ul>li>span:nth-child(10){width:65px;}
 .StandardRoute_Data>ul>li>span:nth-child(11){width:35px;}
@@ -128,7 +128,7 @@
 
 
 /*航次——标准货物*/
-#voyage_StandardGoods{width:1040px;height:220px;top:70px;left:150px;display:block;}
+#voyage_StandardGoods{width:1040px;height:220px;top:70px;left:150px;display:none;}
 .productTypeSelect{width:94%;margin:5px auto;}
 .productTypeSelect>ul>li{display:inline-block;height:24px;margin-right:20px;}
 .productTypeSelect>ul>li>span{height:24px;line-height:24px;color:#fff;font-size:14px;}
