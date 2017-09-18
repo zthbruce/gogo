@@ -1045,6 +1045,7 @@ $('.fleetList_List').scroll(function(){
  */
 $('.fleetList_List').delegate(".toCheck", "click", function () {
     console.log("点击确认");
+    var toCheck = $(this);
     var remark = $("#fleetShipRemarks");
     fleetDivZIndex++;
     remark.css('zIndex',fleetDivZIndex);
@@ -1064,7 +1065,7 @@ $('.fleetList_List').delegate(".toCheck", "click", function () {
             success:function (data) {
                 if(data[0] === "200"){
                     console.log(data[1]);
-                    $(this).attr("class", "checked") // 显示为绿色
+                    toCheck.attr("class", "checked") // 显示为绿色
                 }
             }
         });
