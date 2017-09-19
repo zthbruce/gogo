@@ -320,9 +320,13 @@ $('.route_Fleet_btn').click(function(){
     $('#fleet').fadeOut(600);
     $('#searchShipList').fadeOut(600);
     $('#shipDetails').fadeOut(600);
-    //隐藏航线列表和弹出框
+    //隐藏航线列表和航次列表、航次详情弹出框
     $('.route_List_ul').fadeOut(300);
     $('#routeInfo').fadeOut(600);
+    $('#voyageList').fadeOut(600);
+    $('#voyageDetails').fadeOut(600);
+    $('#voyage_StandardRoute').fadeOut(600);
+    $('#voyage_StandardGoods').fadeOut(600);
 });
 
 /** 鼠标移动到船队上显示船队的信息*/
@@ -356,7 +360,7 @@ $('.ShipType_list>li').mouseenter(function(){
         var name = info.ENName === ""?info.CNName: info.ENName;
         var number = parseInt(uncheckNum) + parseInt(checkedNum);
         // fleet_ul.append('<li fleetNumber=' + fleetNumber + '>' + name + '<i>(' + number + ')</i></li>')
-        fleet_ul.append('<li fleetNumber=' + fleetNumber + ' fleetName="' + name + '" number=' + number + '>' + name + '(<i>' + checkedNum + "</i> /<i>" +  uncheckNum+ '</i>)</li>')
+        fleet_ul.append('<li fleetNumber=' + fleetNumber + ' fleetName="' + name + '" number=' + number + '>' + name + '(<i>' + checkedNum + "</i> /<i>" +  (parseInt(uncheckNum) + parseInt(checkedNum)) +  '</i>)</li>')
     }
     // 显示船队信息
     fleet_ul.css('display','none');
@@ -643,14 +647,6 @@ $(".shipInfo_imgShow").hover(function(){
     imageAutoShow()
 });
 
-// 单击备注按钮弹出备注编辑框
-$('.shipInfo_remarkBtn').click(function(){
-    fleetDivZIndex++;
-    $('#fleetShipRemarks').css('zIndex',fleetDivZIndex);
-    $('#fleetShipRemarks').fadeIn(200);
-    event.stopPropagation();
-});
-
 // 点击船队获取下拉船队列表选项
 $(".shipInfo_FleetName").click(function () {
     console.log("船队下拉框");
@@ -831,20 +827,11 @@ $('.ship_track').click(function () {
 });
 
 /**
- * 船舶信息备注编辑框事件
- */
-//弹出框关闭
-$('.ShipRemark_CancelBtn').click(function(){
-    $('#fleetShipRemarks').fadeOut(200);
-});
-
-/**
  * 地图弹出框拖动事件
  */
 var fleetDown = false; //船队列表弹出框
 var shipDetailsDown = false; //船舶详情弹出框
 var routeInfoDown = false; //航线信息管理弹出框
-var shipRemarkDown = false; //船舶备注信息管理弹出框
 var DivLeft;
 var DivTop;
 
@@ -853,13 +840,12 @@ $('.fleet_title').mousedown(function(event){
     if(changeDivId=='fleet'){fleetDown = true;}
     if(changeDivId=='shipDetails'){shipDetailsDown = true;}
     if(changeDivId=='routeInfo'){routeInfoDown = true;}
-    if(changeDivId=='fleetShipRemarks'){shipRemarkDown = true;}
     DivLeft = event.clientX - $(this).offset().left;
     DivTop = event.clientY - $(this).offset().top;
 });
 var fleetDivZIndex = 0;
 
-$('#fleet,#shipDetails,#searchShipList,#routeInfo,#fleetShipRemarks').click(function(){
+$('#fleet,#shipDetails,#searchShipList,#routeInfo').click(function(){
     fleetDivZIndex++;
     $(this).css('zIndex',fleetDivZIndex);
 });
@@ -869,7 +855,6 @@ $('.fleet_title').mouseup(function(){
     if(changeDivId==='fleet'){fleetDown = false;}
     if(changeDivId==='shipDetails'){shipDetailsDown = false;}
     if(changeDivId==='routeInfo'){routeInfoDown = false;}
-    if(changeDivId==='fleetShipRemarks'){shipRemarkDown = false;}
     $(this).css('cursor','auto');
 });
 
@@ -891,10 +876,6 @@ $(window).mousemove(function(event){
         if(newLeft>$(document).width()-$('#routeInfo>.fleet_title').width()){newLeft = $(document).width()-$('#routeInfo>.fleet_title').width();}
         if(newTop>$(window).height()-$('#routeInfo>.fleet_title').height()){newTop = $(window).height()-$('#routeInfo>.fleet_title').height();}
         $('#routeInfo').offset({top:newTop,left:newLeft});
-    }else if(shipRemarkDown){
-        if(newLeft>$(document).width()-$('#fleetShipRemarks>.fleet_title').width()){newLeft = $(document).width()-$('#fleetShipRemarks>.fleet_title').width();}
-        if(newTop>$(window).height()-$('#fleetShipRemarks>.fleet_title').height()){newTop = $(window).height()-$('#fleetShipRemarks>.fleet_title').height();}
-        $('#fleetShipRemarks').offset({top:newTop,left:newLeft});
     }
 });
 
@@ -1044,33 +1025,18 @@ $('.fleetList_List').scroll(function(){
  * 点击确认按钮，弹出备注框
  */
 $('.fleetList_List').delegate(".toCheck", "click", function () {
-    console.log("点击确认");
-    var toCheck = $(this);
-    var remark = $("#fleetShipRemarks");
-    fleetDivZIndex++;
-    remark.css('zIndex',fleetDivZIndex);
-    remark.fadeIn(300);
-    event.stopPropagation();
+    // console.log("点击确认");
+    var checked = $(this);
     var shipNumber = $(this).parent().prev().children("i").attr("shipNumber");
-    console.log(shipNumber);
-    // 备注信息保存
-    $(".ShipRemark_SaveBtn").click(function(){
-        console.log("保存备注信息, 将船设为确认");
-        var remarks = $(".fleetShip_RemarksInfo").val();
-        console.log(remarks);
-        $.ajax({
-            url:"/fleet/saveRemarks",
-            type:"get",
-            data:{Remarks:remarks, ShipNumber:shipNumber},
-            success:function (data) {
-                if(data[0] === "200"){
-                    console.log(data[1]);
-                    toCheck.attr("class", "checked") // 显示为绿色
-                }
-            }
-        });
-        remark.fadeOut(300);
-    })
+    $.ajax({
+        url:"/fleet/confirmFleet",
+        type:"get",
+        data:{ShipNumber:shipNumber},
+        success:function (data) {
+            checked.attr("class", "checked"); // 显示为绿色
+        }
+    });
+    event.stopPropagation();
 });
 
 /**

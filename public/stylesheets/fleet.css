@@ -20,7 +20,7 @@
 /*.FleetName_List>li>i:nth-child(2){color:#fbfafa; margin-left:8px;}*/
 
 /*船舶列表弹出框*/
-#fleet,#shipDetails,#searchShipList,#fleetShipRemarks{position:fixed;z-index:100;border-radius:10px;background:rgba(6, 2, 5, 0.8);}
+#fleet,#shipDetails,#searchShipList{position:fixed;z-index:100;border-radius:10px;background:rgba(6, 2, 5, 0.8);}
 #ShipSearch_DWTRange{position:fixed;z-index:100;display:none;background: rgba(6, 2, 5, 0.8)}
 
 #fleet{width:650px;height:400px;top:70px;left:300px;display:none;}
@@ -211,13 +211,4 @@
 :-ms-input-placeholder {
   color: #d6d6d6;
 }
-
-/*船队备注弹出框*/
-#fleetShipRemarks{width:240px;height:210px;top:100px;left:300px;display:none;}
-.fleetShip_RemarksInfo{width:210px;height:120px;margin:10px 15px;resize:none;}
-.ShipRemark_SaveBtn,.ShipRemark_CancelBtn{display:inline-block;width:60px;height:24px;text-align:center;line-height:24px;font-size:13px;color:#fff;background:#217BA2;border-radius:5px;margin-left:38px;cursor:pointer;}
-.ShipRemark_SaveBtn:hover,.ShipRemark_CancelBtn:hover{background:#2EB1EA;}
-.ShipRemark_SaveBtn:active,.ShipRemark_CancelBtn:active{background:#4cb4e0;}
-
-
 

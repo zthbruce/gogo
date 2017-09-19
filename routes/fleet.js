@@ -318,12 +318,11 @@ router.get("/getShipImage", function (req, res, next) {
 });
 
 /**
- * 保存备注信息
+ * 确认船队信息
  */
-router.get("/saveRemarks",function (req, res, next) {
-    var remarks = req.query.Remarks;
+router.get("/confirmFleet",function (req, res, next) {
     var shipNumber =  req.query.ShipNumber;
-    var sql = util.format('UPDATE T4101_Fleet SET Checked = "1", Remark ="%s" WHERE ShipNumber = "%s"',remarks, shipNumber)
+    var sql = util.format('UPDATE T4101_Fleet SET Checked = "1" WHERE ShipNumber = "%s"',shipNumber)
     mysql.query(sql, function (err, result) {
         if(err){
             console.log(utils.eid1);
@@ -332,7 +331,7 @@ router.get("/saveRemarks",function (req, res, next) {
         else{
             console.log("成功保存信息");
             res.jsonp(['200', "成功保存信息"])
-            }
+        }
     })
 });
 

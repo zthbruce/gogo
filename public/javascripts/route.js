@@ -168,11 +168,15 @@ $(".route_Info_btn").click(function () {
     $('.routeType_list').fadeToggle(300);
     $('.oneRoute_List').fadeOut(300);
     $('#routeInfo').fadeOut(600);
-    //隐藏船队列表和相关弹出框
+    //隐藏船队列表和航次相关弹出框
     $('.Fleet_List_ul').fadeOut(300);
     $('#fleet').fadeOut(600);
     $('#searchShipList').fadeOut(600);
     $('#shipDetails').fadeOut(600);
+    $('#voyageList').fadeOut(600);
+    $('#voyageDetails').fadeOut(600);
+    $('#voyage_StandardRoute').fadeOut(600);
+    $('#voyage_StandardGoods').fadeOut(600);
 });
 
 /** 鼠标移动到航线上显示航线的二级信息*/
