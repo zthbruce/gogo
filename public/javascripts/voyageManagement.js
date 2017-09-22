@@ -230,6 +230,10 @@ $(".route_Voyage_btn").click(function () {
     voyageList.fadeIn(500);
     $('.route_List_ul').fadeOut(300);
     $(".Fleet_List_ul").fadeOut(300);
+    //隐藏船队相关弹出框和标准航线相关弹出框
+    $("#fleet").fadeOut(300);
+    $("#shipDetails").fadeOut(300);
+    $("#routeInfo").fadeOut(300);
 });
 
 /**
