@@ -3,9 +3,9 @@
  * 用于
  */
 
-/**
- * Define a namespace for the application.
- */
+// /**
+//  * Define a namespace for the application.
+//  */
 
 var app = {};
 
