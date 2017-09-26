@@ -124,9 +124,14 @@ router.get("/getRelatePort", function (req, res, next) {
  */
 router.get("/saveRouteDetailInfo", function (req, res, next) {
     var param = req.query;
-    var sql = util.format("UPDATE T4103_Route SET DeparturePort = '%s',  ArrivalPort = '%s', DWT = '%s', LOA = '%s', Beam= '%s', Draft= '%s', LoadingWaitTime= '%s', DischargeWaitTime= '%s', DWTPH= '%s', Sun_Holiday= '%s', ENDes= '%s', CNDes = '%s' WHERE RouteId = '%s'",
-        param.DeparturePort, param.ArrivalPort, param.DWT, param.LOA, param.Beam, param.Draft, param.LoadingWaitTime,
-        param.DischargeWaitTime, param.DWTPH, param.Sun_Holiday, param.ENDes, param.CNDes, param.RouteId);
+    var sql = util.format("UPDATE T4103_Route SET DeparturePort = '%s',  ArrivalPort = '%s', DWT = '%s', Draft= '%s', MaxAge= '%s', " +
+        "LoadingWaitTime= '%s', LoadSunHoliday= '%s', LoadTPH = '%s', LoadDWTPH= '%s', " +
+        "DischargeWaitTime= '%s', DischargeSunHoliday= '%s', DischargeTPH='%s', DischargeDWTPH= '%s', " +
+        "ENDes= '%s', CNDes = '%s' WHERE RouteId = '%s'",
+        param.DeparturePort, param.ArrivalPort, param.DWT,  param.Draft, param.MaxAge,
+        param.LoadingWaitTime, param.LoadSunHoliday, param.LoadTPH, param.LoadDWTPH,
+        param.DischargeWaitTime, param.DischargeSunHoliday, param.DischargeTPH, param.DischargeDWTPH,
+        param.ENDes, param.CNDes, param.RouteId);
     mysql.query(sql, function (err, results) {
         if(err){
             console.log(utils.eid1);

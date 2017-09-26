@@ -310,37 +310,38 @@ $('.oneRoute_List').delegate("li", 'click', function () {
                         $(".routeEndPort_Select .StartEndPort_List").append(port_li)
                     }
                 }
+                var info_li = $(".routeInfo_List>li");
                 // 填上输入值
                 // 基本信息
-                $(".routeInfo_List>li:nth-child(1)>input").val(DWT);
-                $(".routeInfo_List>li:nth-child(2)>input").val(draft);
-                $(".routeInfo_List>li:nth-child(3)>input").val(max_age);
+                info_li.eq(0).children('input').val(DWT);
+                info_li.eq(1).children('input').val(draft);
+                info_li.eq(2).children('input').val(max_age);
                 // $(".routeInfo_List>li:nth-child(4)>input").val(draft);
                 // 装载港信息
-                $(".routeInfo_List>li:nth-child(5)>input").val(loadingWaitTime);
-                $(".routeInfo_List>li:nth-child(6)>input").val(load_TPH);
-                $(".routeInfo_List>li:nth-child(7)>input").val(load_DTPH);
+                info_li.eq(4).children('input').val(loadingWaitTime);
+                info_li.eq(5).children('input').val(load_TPH);
+                info_li.eq(6).children('input').val(load_DTPH);
                 // $(".routeInfo_List>li:nth-child(8)>input").val(load_Sun_Holiday);
                 // 装载港信息
-                $(".routeInfo_List>li:nth-child(10)>input").val(dischargeWaitTime);
-                $(".routeInfo_List>li:nth-child(11)>input").val(discharge_TPH);
-                $(".routeInfo_List>li:nth-child(12)>input").val(discharge_DTPH);
+                info_li.eq(9).children('input').val(dischargeWaitTime);
+                info_li.eq(10).children('input').val(discharge_TPH);
+                info_li.eq(11).children('input').val(discharge_DTPH);
                 // $(".routeInfo_List>li:nth-child(13)>input").val(discharge_Sun_Holiday);
                 // 周日假期休息框
                 // 装载
                 console.log(load_Sun_Holiday);
                 if(load_Sun_Holiday === "1"){
-                    $(".routeInfo_List>li:nth-child(8)>input").attr("checked", true)
+                    info_li.eq(7).children('input').attr("checked", true)
                 }
                 else{
-                    $(".routeInfo_List>li:nth-child(8)>input").attr("checked", false)
+                    info_li.eq(7).children('input').attr("checked", false)
                 }
                 //卸载
                 if(discharge_Sun_Holiday === "1"){
-                    $(".routeInfo_List>li:nth-child(13)>input").attr("checked", true)
+                    info_li.eq(12).children('input').attr("checked", true)
                 }
                 else{
-                    $(".routeInfo_List>li:nth-child(13)>input").attr("checked", false)
+                    info_li.eq(12).children('input').attr("checked", false)
                 }
                 // 中英文说明
                 $(".routeDes_Chinese>textarea").val(CNDes);
@@ -513,23 +514,48 @@ $('.routeInstall_SaveBtn').click(function () {
         arrivalPort += portID;
     }
     // 信息
-    var DWT = $(".routeInfo_List>li:nth-child(1)>input").val();
-    var LOA = $(".routeInfo_List>li:nth-child(2)>input").val();
-    var beam = $(".routeInfo_List>li:nth-child(3)>input").val();
-    var draft = $(".routeInfo_List>li:nth-child(4)>input").val();
-    var loadingWaitTime = $(".routeInfo_List>li:nth-child(5)>input").val();
-    var dischargeWaitTime = $(".routeInfo_List>li:nth-child(6)>input").val();
-    var DWTPH = $(".routeInfo_List>li:nth-child(7)>input").val();
-    var Sun_Holiday = "0";
-    if($(".routeInfo_List>li:nth-child(8)>input").attr("checked")){
-        Sun_Holiday  = "1";
+    // $(".routeInfo_List>li:nth-child(1)>input").val(DWT);
+    // $(".routeInfo_List>li:nth-child(2)>input").val(draft);
+    // $(".routeInfo_List>li:nth-child(3)>input").val(max_age);
+    // // $(".routeInfo_List>li:nth-child(4)>input").val(draft);
+    // // 装载港信息
+    // $(".routeInfo_List>li:nth-child(5)>input").val(loadingWaitTime);
+    // $(".routeInfo_List>li:nth-child(6)>input").val(load_TPH);
+    // $(".routeInfo_List>li:nth-child(7)>input").val(load_DTPH);
+    // // $(".routeInfo_List>li:nth-child(8)>input").val(load_Sun_Holiday);
+    // // 装载港信息
+    // $(".routeInfo_List>li:nth-child(10)>input").val(dischargeWaitTime);
+    // $(".routeInfo_List>li:nth-child(11)>input").val(discharge_TPH);
+    // $(".routeInfo_List>li:nth-child(12)>input").val(discharge_DTPH);
+    // // $(".routeInfo_List>li:nth-child(13)>input").val(discharge_Sun_Holiday);
+
+    var info_li = $(".routeInfo_List>li");
+    var DWT = info_li.eq(0).children('input').val();
+    var draft = info_li.eq(1).children('input').val();
+    var max_age = info_li.eq(2).children('input').val();
+    var loadingWaitTime = info_li.eq(4).children('input').val();
+    var load_TPH = info_li.eq(5).children('input').val();
+    var load_DTPH = info_li.eq(6).children('input').val();
+    var dischargeWaitTime = info_li.eq(9).children('input').val();
+    var dischargeTPH = info_li.eq(10).children('input').val();
+    var discharge_DTPH = info_li.eq(11).children('input').val();
+    var load_Sun_Holiday = "0";
+    if(info_li.eq(7).children('input').prop("checked")){
+        console.log("here");
+        load_Sun_Holiday  = "1";
+    }
+    var discharge_Sun_Holiday = "0";
+    if(info_li.eq(12).children('input').prop("checked")){
+        console.log("here");
+        discharge_Sun_Holiday = "1";
     }
     // 中英文说明
     var CNDes = $(".routeDes_Chinese>textarea").val();
     var ENDes = $(".routeDes_English>textarea").val();
-    var reqParam = {RouteId:routeId, DeparturePort:departurePort, ArrivalPort:arrivalPort, DWT:DWT, LOA:LOA, Beam:beam,
-        Draft:draft, LoadingWaitTime:loadingWaitTime, DischargeWaitTime:dischargeWaitTime, DWTPH:DWTPH,
-        Sun_Holiday:Sun_Holiday, ENDes:ENDes, CNDes:CNDes};
+    var reqParam = {RouteId:routeId, DeparturePort:departurePort, ArrivalPort:arrivalPort, DWT: DWT, MaxAge: max_age, Draft:draft,
+        LoadingWaitTime:loadingWaitTime, LoadSunHoliday:load_Sun_Holiday, LoadTPH:load_TPH, LoadDWTPH:load_DTPH,
+        DischargeWaitTime:dischargeWaitTime, DischargeSunHoliday: discharge_Sun_Holiday, DischargeDWTPH: discharge_DTPH,
+        DischargeTPH: dischargeTPH, ENDes:ENDes, CNDes:CNDes};
     console.log(reqParam);
     // var reqParam = {};
     $.ajax({
