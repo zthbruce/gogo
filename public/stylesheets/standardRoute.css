@@ -46,15 +46,15 @@
 /*标准信息管理*/
 .routeInfo_Install{width:96%;height:70px;margin:5px auto;}
 .routeInfo_List{padding-top:1px;}
-.routeInfo_List>li{display:inline-block;height:20px;font-size:13px;color:#fff;margin:0px 11px 0px;padding-right:2px;overflow:hidden;}
-.routeInfo_List>li:nth-child(3){display:inline-block;height:20px;font-size:13px;color:#fff;margin-right:100px;padding-right:2px;overflow:hidden;}
+.routeInfo_List>li{display:inline-block;height:20px;font-size:13px;color:#fff;margin:0px 7px 0px;padding-right:2px;overflow:hidden;}
+.routeInfo_List>li:nth-child(3){display:inline-block;height:20px;font-size:13px;color:#fff;margin-right:110px;padding-right:2px;overflow:hidden;}
 
 .routeInfo_List>li>input{width:40px;height:16px;line-height:16px;padding-left:5px;border:1px solid #ccc;background:transparent;color:#fff;border-radius:5px;}
-.routeInfo_List>li:first-child>input,.routeInfo_List>li:nth-child(7)>input,.routeInfo_List>li:nth-child(11)>input{width:50px;}
+.routeInfo_List>li:first-child>input,.routeInfo_List>li:nth-child(6)>input, .routeInfo_List>li:nth-child(7)>input,.routeInfo_List>li:nth-child(11)>input,.routeInfo_List>li:nth-child(12)>input{width:50px;}
 
 /*.routeInfo_List>li:nth-child(6)>input,.routeInfo_List>li:nth-child(10)>input{width:30px;}*/
 /*.routeInfo_List>li:nth-child(8),.routeInfo_List>li:nth-child(12){width:110px;}*/
-.routeInfo_List>li:nth-child(8)>input,.routeInfo_List>li:nth-child(12)>input{width:14px;height:14px;cursor:pointer;position:relative;top:3px;}
+.routeInfo_List>li:nth-child(8)>input,.routeInfo_List>li:nth-child(13)>input{width:14px;height:14px;cursor:pointer;position:relative;top:3px;}
 
 /*中英文说明*/
 .routeDes>div{display:inline-block;width:49%;height:160px;font-size:14px;color:#fff;text-align:center;}

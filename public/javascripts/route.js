@@ -240,11 +240,17 @@ $('.oneRoute_List').delegate("li", 'click', function () {
                 // var LOA = routeInfo.LOA === null? "":routeInfo.LOA;
                 // var beam = routeInfo.Beam === null? "":routeInfo.Beam;
                 var draft =  routeInfo.Draft === null? "":routeInfo.Draft;
-                var max_age = routeInfo.MaxAge === null?"":routeInfo.MaxAge;
+                var max_age = routeInfo.MaxAge === null?'':routeInfo.MaxAge;
+                // 装载信息
                 var loadingWaitTime = routeInfo.LoadingWaitTime === null? "":routeInfo.LoadingWaitTime;
+                var load_TPH = routeInfo.LoadTPH === null? "":routeInfo.LoadTPH;
+                var load_DTPH =  routeInfo.LoadDWTPH === null? "":routeInfo.LoadDWTPH;
+                var load_Sun_Holiday = routeInfo.LoadSunHoliday === null? "":routeInfo.LoadSunHoliday;
+                // 卸载信息
                 var dischargeWaitTime = routeInfo.DischargeWaitTime === null? "":routeInfo.DischargeWaitTime;
-                var DWTPH =  routeInfo.DWTPH === null? "":routeInfo.DWTPH;
-                var Sun_Holiday = routeInfo.Sun_Holiday === null? "":routeInfo.Sun_Holiday;
+                var discharge_DTPH = routeInfo.DischargeDWTPH === null? "":routeInfo.DischargeDWTPH;
+                var discharge_TPH = routeInfo.DischargeTPH === null? "":routeInfo.DischargeTPH;
+                var discharge_Sun_Holiday = routeInfo.DischargeSunHoliday === null? "":routeInfo.DischargeSunHoliday;
                 var ENDes  = routeInfo.ENDes === null? "":routeInfo.ENDes;
                 var CNDes = routeInfo.CNDes === null? "":routeInfo.CNDes;
                 // 标题
@@ -305,20 +311,36 @@ $('.oneRoute_List').delegate("li", 'click', function () {
                     }
                 }
                 // 填上输入值
+                // 基本信息
                 $(".routeInfo_List>li:nth-child(1)>input").val(DWT);
-                $(".routeInfo_List>li:nth-child(2)>input").val(LOA);
-                $(".routeInfo_List>li:nth-child(3)>input").val(beam);
-                $(".routeInfo_List>li:nth-child(4)>input").val(draft);
+                $(".routeInfo_List>li:nth-child(2)>input").val(draft);
+                $(".routeInfo_List>li:nth-child(3)>input").val(max_age);
+                // $(".routeInfo_List>li:nth-child(4)>input").val(draft);
+                // 装载港信息
                 $(".routeInfo_List>li:nth-child(5)>input").val(loadingWaitTime);
-                $(".routeInfo_List>li:nth-child(6)>input").val(dischargeWaitTime);
-                $(".routeInfo_List>li:nth-child(7)>input").val(DWTPH);
+                $(".routeInfo_List>li:nth-child(6)>input").val(load_TPH);
+                $(".routeInfo_List>li:nth-child(7)>input").val(load_DTPH);
+                // $(".routeInfo_List>li:nth-child(8)>input").val(load_Sun_Holiday);
+                // 装载港信息
+                $(".routeInfo_List>li:nth-child(10)>input").val(dischargeWaitTime);
+                $(".routeInfo_List>li:nth-child(11)>input").val(discharge_TPH);
+                $(".routeInfo_List>li:nth-child(12)>input").val(discharge_DTPH);
+                // $(".routeInfo_List>li:nth-child(13)>input").val(discharge_Sun_Holiday);
                 // 周日假期休息框
-                console.log(Sun_Holiday);
-                if(Sun_Holiday === "1"){
+                // 装载
+                console.log(load_Sun_Holiday);
+                if(load_Sun_Holiday === "1"){
                     $(".routeInfo_List>li:nth-child(8)>input").attr("checked", true)
                 }
                 else{
                     $(".routeInfo_List>li:nth-child(8)>input").attr("checked", false)
+                }
+                //卸载
+                if(discharge_Sun_Holiday === "1"){
+                    $(".routeInfo_List>li:nth-child(13)>input").attr("checked", true)
+                }
+                else{
+                    $(".routeInfo_List>li:nth-child(13)>input").attr("checked", false)
                 }
                 // 中英文说明
                 $(".routeDes_Chinese>textarea").val(CNDes);
