@@ -331,17 +331,19 @@ $('.oneRoute_List').delegate("li", 'click', function () {
                 // 装载
                 console.log(load_Sun_Holiday);
                 if(load_Sun_Holiday === "1"){
-                    info_li.eq(7).children('input').attr("checked", true)
+                    console.log("here");
+                    info_li.eq(7).children('input').prop("checked", true)
                 }
                 else{
-                    info_li.eq(7).children('input').attr("checked", false)
+                    // info_li.eq(7).children('input').removeAttr("checked")
+                    info_li.eq(7).children('input').prop("checked", false)
                 }
                 //卸载
                 if(discharge_Sun_Holiday === "1"){
-                    info_li.eq(12).children('input').attr("checked", true)
+                    info_li.eq(12).children('input').prop("checked", true)
                 }
                 else{
-                    info_li.eq(12).children('input').attr("checked", false)
+                    info_li.eq(12).children('input').prop("checked", false)
                 }
                 // 中英文说明
                 $(".routeDes_Chinese>textarea").val(CNDes);
@@ -541,12 +543,10 @@ $('.routeInstall_SaveBtn').click(function () {
     var discharge_DTPH = info_li.eq(11).children('input').val();
     var load_Sun_Holiday = "0";
     if(info_li.eq(7).children('input').prop("checked")){
-        console.log("here");
         load_Sun_Holiday  = "1";
     }
     var discharge_Sun_Holiday = "0";
     if(info_li.eq(12).children('input').prop("checked")){
-        console.log("here");
         discharge_Sun_Holiday = "1";
     }
     // 中英文说明
@@ -556,7 +556,7 @@ $('.routeInstall_SaveBtn').click(function () {
         LoadingWaitTime:loadingWaitTime, LoadSunHoliday:load_Sun_Holiday, LoadTPH:load_TPH, LoadDWTPH:load_DTPH,
         DischargeWaitTime:dischargeWaitTime, DischargeSunHoliday: discharge_Sun_Holiday, DischargeDWTPH: discharge_DTPH,
         DischargeTPH: dischargeTPH, ENDes:ENDes, CNDes:CNDes};
-    console.log(reqParam);
+    // console.log(reqParam);
     // var reqParam = {};
     $.ajax({
         url:'/route/saveRouteDetailInfo',

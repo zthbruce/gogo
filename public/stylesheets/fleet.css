@@ -23,7 +23,7 @@
 #fleet,#shipDetails,#searchShipList{position:fixed;z-index:100;border-radius:10px;background:rgba(6, 2, 5, 0.8);}
 #ShipSearch_DWTRange{position:fixed;z-index:100;display:none;background: rgba(6, 2, 5, 0.8)}
 
-#fleet{width:650px;height:400px;top:70px;left:300px;display:none;}
+#fleet{width:650px;height:460px;top:70px;left:300px;display:none;}
 .fleet_title{width:100%;height:30px;position:relative;}
 .fleet_title>span{display:block;width:100%;text-align:center;height:28px;line-height:28px;margin:0 auto;color:#fff;}
 .title_offbtn{display:inline-block;width:12px;height:12px;position:absolute;top:9px;right:10px;background:url("/images/close_nor.png") no-repeat;cursor:pointer;}
@@ -55,10 +55,10 @@
 
 
 /*船队信息列表*/
-.fleetInfo_content{width:100%;height:270px;margin:5px auto;}
+.fleetInfo_content{width:96%;height:150px;margin:5px auto;}
 .fleetList_title{width:100%;height:30px;background:#000;border-top-left-radius:5px;border-top-right-radius:5px;}
 .fleetList_title>li>span{height:30px;line-height:30px;color:#fff;font-size:13px;}
-.fleetList_List{width:100%;height:240px;overflow-y:scroll;}
+.fleetList_List{width:100%;height:120px;overflow-y:scroll;border-bottom:1px solid #000;}
 .fleetList_List>li{height:20px;color:#fff;font-size:12px;line-height:20px;}
 .fleetList_List>#choose{height:20px;color:#fff;font-size:12px;line-height:20px;background:#217BA2;}
 .fleetList_List>li:hover{background:#217BA2;}
@@ -78,18 +78,37 @@
 .fleetInfo_content>ul>li>span:nth-child(9)>i{display:inline-block;width:14px;height:14px;cursor:pointer;position:relative;top:2px;}
 .fleetInfo_content>ul>li>span:nth-child(9)>.checked{background:url("/images/shipChecked.png") no-repeat;}
 .fleetInfo_content>ul>li>span:nth-child(9)>.toCheck{background:url("/images/ship2Check.png") no-repeat;}
-.fleetInfo_content>ul>li>span:nth-child(10){margin-left:9px;}
-.fleetInfo_content>ul>li>span:nth-child(10)>i{display:inline-block;width:14px;height:14px;cursor:pointer;background:url("/images/delete.png") no-repeat;position:relative;top:2px;}
+/*.fleetInfo_content>ul>li>span:nth-child(10){margin-left:9px;}*/
+/*.fleetInfo_content>ul>li>span:nth-child(10)>i{display:inline-block;width:14px;height:14px;cursor:pointer;background:url("/images/delete.png") no-repeat;position:relative;top:2px;}*/
 /*.fleetInfo_content>ul>li>span:nth-child(8)>i{color: #ffffff;display:inline-block;width:14px;height:14px;cursor:pointer;border:2px solid #ccc; border-radius:50%;position:relative;top:2px;}*/
 /*.fleetInfo_content>ul>li>span:nth-child(8)>i:hover{color: #ffffff;display:inline-block;width:14px;height:14px;cursor:pointer;border:2px solid #ccc; border-radius:50%;position:relative;top:2px;}*/
 
 /*船队信息合计*/
-.fleetInfo_total{width:96%;height:20px;line-height:20px;font-size:13px;color:#fff;margin:10px auto;}
-.fleetInfo_total>div{display:inline-block;width:40%;}
-.fleetInfo_total>.fleetInfo_DWT{width:59%;}
+.fleetInfo_total{width:96%;height:20px;line-height:20px;font-size:13px;color:#fff;margin:5px auto;}
+.fleetInfo_total>div{display:inline-block;width:40%;margin-left:20px;}
+.fleetInfo_total>.fleetInfo_DWT{width:50%;}
 .fleet_TotalBtn{display:inline-block;height:20px;cursor:pointer;padding:0px 5px;line-height:20px;text-align:center;border-radius:5px;background:#000;}
 .fleet_AddBtn{color:#00ff00;margin-left:15px;}
 .fleet_LessBtn{color:#ff0000;margin-left:8px;}
+
+/*船队列表弹出框船舶搜索条*/
+.ShipSearch{width:96%;height:24px;margin:5px auto;}
+.ShipSearch>.Search_Info{margin-left:0px;height:24px;line-height:24px;font-size:13px;color:#fff;position:relative;}
+.ShipSearch>.Search_Info>div{display:inline-block;position:relative;margin-left:20px;}
+.ShipSearch .search_type{width:180px;}
+.ShipSearch .search_status{width:120px;}
+.ShipSearch>.Search_Info .Search_Text{display:inline-block;line-height:24px;width:140px;padding-left:5px;cursor:pointer;border:1px solid #fff;border-radius:5px;overflow:hidden;}
+.ShipSearch>.Search_Info .Search_Select{width:142px;height:200px;background: rgba(6, 2, 5, 0.8);border:1px solid #323232;border-radius:5px;position:absolute;top:24px;left:33px;display:none;overflow-y:scroll;overflow-x:hidden;}
+.ShipSearch>.Search_Info .Search_Select>li{width:120px;height:20px;line-height:20px;padding-left:5px;color:white;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ShipSearch>.Search_Info .Search_Select>li:hover{background:#217BA2;}
+.ShipSearch>.Search_Info .Search_statusText{width:80px;}
+.ShipSearch>.Search_Info .Search_statusSelect{width:82px;height:100px;}
+.ShipSearch>.Search_Info .Search_statusSelect>li{width:60px;}
+.ShipSearch>.Search_Info .DWT_range{margin-left:20px;margin-top:0px;}
+.ShipSearch>.Search_Info .DWT_range input{width:50px;height:20px;line-height:20px;background:transparent;border:1px solid #fff;color:#fff;font-size:12px;border-radius:5px;padding-left:5px;outline:none;}
+.ShipSearch>.Search_Info .DWT_range input:focus{box-shadow:0px 0px 1px 1px #fff;}
+.ShipSearch>.Search_Info .DWTSearch_btn{display:inline-block;width:20px;height:20px;background:url("/images/search.png") no-repeat;position: absolute;top:3px;right:30px;cursor:pointer;}
+
 
 /*船舶详情页面*/
 /*#shipDetails{width:385px;height:436px;top:10px;left:400px;display:block;}*/

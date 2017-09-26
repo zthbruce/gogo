@@ -197,10 +197,11 @@
         </ul>
         <!--<div class="loading"></div>-->
         <ul class="fleetList_List">
+            <li><span>AAAAAAAAAA</span><span>1234567</span><span>0000000000</span><span>AAAAAAAAAAAA</span><span>1111111</span><span>22</span><span>正服役</span><span><i class= "shipDetailInfo" ></i></span><span><i class="checked"></i></span></li>
         </ul>
 
     </div>
-    <div class="dividing_line"></div>
+    <!--<div class="dividing_line"></div>-->
     <div class="fleetInfo_total">
         <div class="fleetInfo_Num">
             <span>船舶数量：</span>
@@ -214,6 +215,42 @@
             <span class="fleet_TotalBtn fleet_AddBtn fleet_AddDWTBtn"></span>
             <span class="fleet_TotalBtn fleet_LessBtn fleet_LessDWTBtn"></span>
         </div>
+    </div>
+    <div class="dividing_line"></div>
+    <div class="ShipSearch">
+        <div class="Search_Info">
+            <div class="search_type">
+                类型: <input type="text" type="0" class="Search_typeText Search_Text">
+                <ul class="Search_typeSelect Search_Select">
+                    <li type="0">散货</li>
+                    <li type="1">原油</li>
+                    <li type="2">集装箱</li>
+                </ul>
+            </div>
+            <div class="search_status">
+                状态: <input type="text" type="0" class="Search_statusText Search_Text" disabled>
+                <ul class="Search_statusSelect Search_Select">
+                    <li type="0">建造中</li>
+                    <li type="1">正服役</li>
+                    <li type="2">已拆解</li>
+                    <li type="3">闲置</li>
+                </ul>
+            </div>
+            <div class="DWT_range">
+                DWT: <input type="text" placeholder="0" class="min_dwt">  至  <input type="text" placeholder="9999999" class="max_dwt">
+            </div>
+            <div class="DWTSearch_btn"></div>
+        </div>
+    </div>
+    <div class="fleetInfo_content">
+        <ul class="fleetList_title">
+            <li>
+                <span>船舶类型</span><span>IMO</span><span>MMSI</span><span>船名</span><span>DWT(t)</span><span>船龄</span><span>状态</span>
+            </li>
+        </ul>
+        <ul class="fleetList_List">
+            <li><span>AAAAAAAAAA</span><span>1234567</span><span>0000000000</span><span>AAAAAAAAAAAA</span><span>1111111</span><span>22</span><span>正服役</span><span><i class= "shipDetailInfo" ></i></span><span><i class="checked"></i></span></li>
+        </ul>
     </div>
 </div>
 <!--船舶详情-->
@@ -348,6 +385,8 @@
         </div>
     </div>
 </div>
+
+
 <!--
     航线管理
 -->
@@ -420,12 +459,13 @@
             <li>等待时长: <input type="text"></li>
             <li>TPH: <input type="text"></li>
             <li>DTPH: <input type="text"></li>
-            <li>SHInc: <input type="checkbox" name="SHInc" checked=true></li>
+            <!--<li>SHInc: <input type="checkbox" checked=true></li>-->
+            <li>SHInc: <input type="checkbox" class="SHInc"></li>
             <li>卸港: </li>
             <li>等待时长: <input type="text"></li>
             <li>TPH: <input type="text"></li>
             <li>DTPH: <input type="text"></li>
-            <li>SHInc: <input type="checkbox" name="SHInc" checked=true></li>
+            <li>SHInc: <input type="checkbox" class="SHInc"></li>
         </ul>
     </div>
     <div class="dividing_line"></div>
