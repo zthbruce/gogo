@@ -47,6 +47,8 @@
 .routeInfo_Install{width:96%;height:70px;margin:5px auto;}
 .routeInfo_List{padding-top:1px;}
 .routeInfo_List>li{display:inline-block;height:20px;font-size:13px;color:#fff;margin:0px 11px 0px;padding-right:2px;overflow:hidden;}
+.routeInfo_List>li:nth-child(3){display:inline-block;height:20px;font-size:13px;color:#fff;margin-right:100px;padding-right:2px;overflow:hidden;}
+
 .routeInfo_List>li>input{width:40px;height:16px;line-height:16px;padding-left:5px;border:1px solid #ccc;background:transparent;color:#fff;border-radius:5px;}
 .routeInfo_List>li:first-child>input,.routeInfo_List>li:nth-child(7)>input,.routeInfo_List>li:nth-child(11)>input{width:50px;}
 

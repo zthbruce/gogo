@@ -213,14 +213,15 @@ var allArrivalPortList;
  * 鼠标点击某一条具体的航线
  */
 $('.oneRoute_List').delegate("li", 'click', function () {
-    allDeparturePortList = [];
-    allArrivalPortList = [];
+    // 航线列表的显示操作
     $('.routeType_list').fadeToggle(300);
     $('.oneRoute_List').fadeOut(300);
     var routeId = $(this).attr("routeId");
     $('.oneRoute_List>li').removeClass("choose");
     $(this).addClass("choose");
-    console.log(routeId);
+    // 显示详细信息
+    allDeparturePortList = [];
+    allArrivalPortList = [];
     $.ajax({
         url: "/route/getRouteDetailInfo",
         type: "get",
@@ -235,9 +236,11 @@ $('.oneRoute_List').delegate("li", 'click', function () {
                 var departurePort = routeInfo.DeparturePort; // PortIDListStr
                 var arrivalPort = routeInfo.ArrivalPort; // PortIDListStr
                 var DWT = routeInfo.DWT === null? "":routeInfo.DWT;
-                var LOA = routeInfo.LOA === null? "":routeInfo.LOA;
-                var beam = routeInfo.Beam === null? "":routeInfo.Beam;
+                console.log(DWT);
+                // var LOA = routeInfo.LOA === null? "":routeInfo.LOA;
+                // var beam = routeInfo.Beam === null? "":routeInfo.Beam;
                 var draft =  routeInfo.Draft === null? "":routeInfo.Draft;
+                var max_age = routeInfo.MaxAge === null?"":routeInfo.MaxAge;
                 var loadingWaitTime = routeInfo.LoadingWaitTime === null? "":routeInfo.LoadingWaitTime;
                 var dischargeWaitTime = routeInfo.DischargeWaitTime === null? "":routeInfo.DischargeWaitTime;
                 var DWTPH =  routeInfo.DWTPH === null? "":routeInfo.DWTPH;
@@ -255,7 +258,7 @@ $('.oneRoute_List').delegate("li", 'click', function () {
                 // 标准出发港显示
                 var standardDeparturePort_span = $('.routePort_Start>.routePoint_infoShow');
                 standardDeparturePort_span.text(""); // 初始化
-                if(standardDeparturePortID !== null) {
+                if(standardDeparturePortID !== '') {
                     console.log(standardDeparturePortID);
                     var departure_port = AllPortBasicList[standardDeparturePortID];
                     standardDeparturePort_span.text(departure_port.ENName);
@@ -267,7 +270,7 @@ $('.oneRoute_List').delegate("li", 'click', function () {
                 // 标准目的港显示
                 var standardArrivalPort_span = $('.routePort_End>.routePoint_infoShow');
                 standardArrivalPort_span.text(""); // 初始化
-                if(standardArrivalPortID !== null){
+                if(standardArrivalPortID !== ''){
                     console.log(standardArrivalPortID);
                     var arrival_port = AllPortBasicList[standardArrivalPortID];
                     standardArrivalPort_span.text(arrival_port.ENName);
@@ -310,6 +313,7 @@ $('.oneRoute_List').delegate("li", 'click', function () {
                 $(".routeInfo_List>li:nth-child(6)>input").val(dischargeWaitTime);
                 $(".routeInfo_List>li:nth-child(7)>input").val(DWTPH);
                 // 周日假期休息框
+                console.log(Sun_Holiday);
                 if(Sun_Holiday === "1"){
                     $(".routeInfo_List>li:nth-child(8)>input").attr("checked", true)
                 }
@@ -392,7 +396,7 @@ $('.StartEndPort_List').delegate('li>.close', 'click', function () {
         var feature = current_features[i];
         if(feature.get('port_id') === portID){
             m++;
-            console.log(m)
+            // console.log(m)
             var current_feature = feature;
             current_feature.set("type", "toChoose");
             current_feature.setStyle(port_nor);

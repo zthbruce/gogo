@@ -36,32 +36,6 @@ router.get("/getRouteBasicInfo", function (req, res, next) {
                     var routeType = ele.BelongTo;
                     // console.log(routeType.length);
                     var content = {RouteId:ele.RouteId, Name: ele.Name};
-                    // if(routeType == "0"){
-                    //     console.log("here");
-                    //     route_0.push(content);
-                    // }
-                    // else if(routeType == "1"){
-                    //     route_1.push(content);
-                    // }
-                    // else if(routeType == "2"){
-                    //     route_2.push(content);
-                    // }
-                    // else if(routeType == "3"){
-                    //     route_3.push(content);
-                    // }
-                    // else if(routeType == "4"){
-                    //     route_4.push(content);
-                    // }
-                    // else if(routeType == "5"){
-                    //     route_5.push(content);
-                    // }
-                    // else if(routeType == "6"){
-                    //     route_6.push(content);
-                    // }
-                    // else if(routeType == "7"){
-                    //     route_7.push(content);
-                    // }
-                    //
                     switch (routeType)
                     {
                         case "0":
