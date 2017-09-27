@@ -331,7 +331,7 @@ $('.oneRoute_List').delegate("li", 'click', function () {
                 // 装载
                 console.log(load_Sun_Holiday);
                 if(load_Sun_Holiday === "1"){
-                    console.log("here");
+                    // console.log("here");
                     info_li.eq(7).children('input').prop("checked", true)
                 }
                 else{

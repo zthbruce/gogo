@@ -331,15 +331,13 @@ $('.route_Fleet_btn').click(function(){
 
 /** 鼠标移动到船队上显示船队的信息*/
 $('.ShipType_list>li').mouseenter(function(){
-    // var fleetName = $(this).text().replace(" ","");
-    // console.log(fleetBasicInfo)
-    var fleetType = $(this).attr("id");
+    // 初始化
     $('.ShipType_list>li').removeClass("choose");
     $(this).addClass("choose");
+    var fleetType = $(this).attr("id");
     var fleet_ul = $(".FleetName_List");
-    // var fleet_ul =  $('.'+fleetName);
-    //列表第一次需要初始化
     fleet_ul.empty();
+    // 显示问题
     var fleetInfo = fleetBasicInfo[fleetType];
     for(var i = 0; i< fleetInfo.length; i++){
         var uncheckNum = 0;
