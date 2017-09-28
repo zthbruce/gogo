@@ -183,6 +183,17 @@
             <div class="timeLine_List">
                 <div class="timeLine_Axle"></div>
                 <ul class="TimePointList">
+                    <li><span>20171</span><i></i></li>
+                    <li><span>20172</span><i></i></li>
+                    <li><span>20173</span><i></i></li>
+                    <li><span>20174</span><i></i></li>
+                    <li><span>20175</span><i></i></li>
+                    <li><span>20176</span><i></i></li>
+                    <li><span>20178</span><i></i></li>
+                    <li><span>20179</span><i></i></li>
+                    <li><span>201710</span><i></i></li>
+                    <li><span>201711</span><i></i></li>
+                    <li><span>201712</span><i></i></li>
                 </ul>
             </div>
             <div class="timeLine_RightBtn"></div>
@@ -197,7 +208,7 @@
         </ul>
         <!--<div class="loading"></div>-->
         <ul class="fleetList_List">
-            <li><span>AAAAAAAAAA</span><span>1234567</span><span>0000000000</span><span>AAAAAAAAAAAA</span><span>1111111</span><span>22</span><span>正服役</span><span><i class= "shipDetailInfo" ></i></span><span><i class="checked"></i></span></li>
+            <li><span>AAAAAAAAAA</span><span>1234567</span><span>0000000000</span><span>AAAAAAAAAAAA</span><span>1111111</span><span>22</span><span>正服役</span><span><i class= "shipDetailInfo" ></i></span><span><i class="checked"></i></span><span><i class="checked"></i></span></li>
         </ul>
 
     </div>
@@ -228,12 +239,18 @@
                 </ul>
             </div>
             <div class="search_status">
-                状态: <input type="text" type="0" class="Search_statusText Search_Text" disabled>
+                <!--状态: <input type="text" type="0" class="Search_statusText Search_Text" disabled>-->
+                状态: <span type="1" class="Search_statusText">服役中</span>
                 <ul class="Search_statusSelect Search_Select">
-                    <li type="0">建造中</li>
-                    <li type="1">正服役</li>
-                    <li type="2">已拆解</li>
-                    <li type="3">闲置</li>
+                    <li type="0">在建中</li>
+                    <li type="1">服役中</li>
+                    <li type="2">维修中</li>
+                    <li type="3">停航</li>
+                    <li type="4">已拆解</li>
+                    <li type="8">改建中</li>
+                    <li type="9">暂停服务</li>
+                    <li type="A">即将拆解</li>
+                    <li type="B">已下水</li>
                 </ul>
             </div>
             <div class="DWT_range">
@@ -242,15 +259,21 @@
             <div class="DWTSearch_btn"></div>
         </div>
     </div>
-    <div class="fleetInfo_content">
+    <div class="fleetInfo_content Search_fleetInfo_content">
         <ul class="fleetList_title">
             <li>
                 <span>船舶类型</span><span>IMO</span><span>MMSI</span><span>船名</span><span>DWT(t)</span><span>船龄</span><span>状态</span>
             </li>
         </ul>
-        <ul class="fleetList_List">
-            <li><span>AAAAAAAAAA</span><span>1234567</span><span>0000000000</span><span>AAAAAAAAAAAA</span><span>1111111</span><span>22</span><span>正服役</span><span><i class= "shipDetailInfo" ></i></span><span><i class="checked"></i></span></li>
+        <ul class="search_ship_List">
+            <!--<li><span>AAAAAAAAAA</span><span>1234567</span><span>0000000000</span><span>AAAAAAAAAAAA</span><span>1111111</span><span>22</span><span>正服役</span><span><i class= "shipDetailInfo" ></i></span><span><i class="add"></i></span></li>-->
         </ul>
+    </div>
+    <div class="searchInfo_total">
+        <div class="fleetInfo_Num">
+            <span>船舶数量：</span>
+            <span>0</span>
+        </div>
     </div>
 </div>
 <!--船舶详情-->

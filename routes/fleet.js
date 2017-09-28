@@ -135,8 +135,9 @@ router.get("/getFleetDetailInfo", function (req, res, next) {
  */
 router.get("/getFleetTimePoint", function (req, res, next) {
     var fleetNumber = req.query.FleetNumber;
-    var sql = util.format('SELECT JoinTime FROM T4101_Fleet WHERE LENGTH(JoinTime) = 10 AND fleetNumber = "%s" UNION ' +
-        'SELECT LeaveTime FROM T4101_Fleet WHERE LENGTH(LeaveTime) = 10 AND fleetNumber = "%s" ORDER BY JoinTime DESC', fleetNumber, fleetNumber);
+    var sql = util.format('SELECT JoinTime FROM T4101_Fleet WHERE LENGTH(JoinTime) = 10 AND fleetNumber = "%s" AND Checked = "1" UNION ' +
+        'SELECT LeaveTime FROM T4101_Fleet WHERE LENGTH(LeaveTime) = 10 AND fleetNumber = "%s" AND Checked = "1" ' +
+        'ORDER BY JoinTime DESC', fleetNumber, fleetNumber);
     mysql.query(sql, function (err, results) {
         if(err){
             console.log(utils.eid1);
@@ -236,21 +237,56 @@ router.get("/getSearchTypeList", function (req, res, next) {
     })
 });
 
+// /**
+//  * 根据条件筛选对应的船舶
+//  * 请求参数1 type 0: 散货, 1: 原油 2：集装箱
+//  * 请求参数2 Min_DWT DWT下限
+//  * 请求参数3 MIN_DWT DWT上限
+//  */
+
+// router.get("/getSearchShipList", function (req, res, next) {
+//     var type = req.query.Type; //货物类型
+//     var min_DWT = req.query.Min_DWT;
+//     var max_DWT = req.query.Max_DWT;
+//     var sql = util.format('SELECT t1.ShipNumber, t2.Name AS Type, IMO, MMSI, t1.Name AS ShipName, DWT, ShipStatus, BuiltDate, t3.FleetNumber, t4.ENName, t4.CNName ' +
+//         'FROM T0101_Ship t1 LEFT JOIN T0181_ShipType t2 ON t1.ShipType = t2.TypeKey LEFT JOIN `T4101_Fleet` t3 ON ' +
+//         't1.ShipNumber = t3.ShipNumber LEFT JOIN T4102_FleetType t4 ON t3.FleetNumber = t4.FleetNumber WHERE TypeKey = "%s" ' +
+//         'AND DWT >= %s AND DWT <= %s ORDER BY CNName DESC, ENName DESC,DWT DESC' , type, min_DWT, max_DWT);
+//     mysql.query(sql, function (err, results) {
+//         if(err){
+//             console.log(utils.eid1);
+//             res.jsonp(['404', utils.eid1])
+//         }
+//         else{
+//             if(results.length > 0){
+//                 console.log("成功连接数据库");
+//                 res.jsonp(['200', results])
+//             }
+//             else{
+//                 console.log("无返回数据");
+//                 res.jsonp(['304', "return nothing"])
+//             }
+//         }
+//     })
+// });
+
 /**
  * 根据条件筛选对应的船舶
- * 请求参数1 type 0: 散货, 1: 原油 2：集装箱
- * 请求参数2 Min_DWT DWT下限
- * 请求参数3 MIN_DWT DWT上限
+ * 请求参数1 船舶类型
+ * 请求参数2 船舶状态
+ * 请求参数3 Min_DWT DWT下限
+ * 请求参数4 MIN_DWT DWT上限
  */
-
 router.get("/getSearchShipList", function (req, res, next) {
-    var type = req.query.Type; //货物类型
+    var type = req.query.Type; //船舶类型
+    var status = req.query.Status; //船舶状态
     var min_DWT = req.query.Min_DWT;
     var max_DWT = req.query.Max_DWT;
-    var sql = util.format('SELECT t1.ShipNumber, t2.Name AS Type, IMO, MMSI, t1.Name AS ShipName, DWT, ShipStatus, BuiltDate, t3.FleetNumber, t4.ENName, t4.CNName ' +
-        'FROM T0101_Ship t1 LEFT JOIN T0181_ShipType t2 ON t1.ShipType = t2.TypeKey LEFT JOIN `T4101_Fleet` t3 ON ' +
-        't1.ShipNumber = t3.ShipNumber LEFT JOIN T4102_FleetType t4 ON t3.FleetNumber = t4.FleetNumber WHERE TypeKey = "%s" ' +
-        'AND DWT >= %s AND DWT <= %s  ORDER BY CNName DESC, ENName DESC,DWT DESC' , type, min_DWT, max_DWT);
+    var sql = util.format('SELECT t1.ShipNumber, t2.Name AS Type, IMO, MMSI, t1.Name AS ShipName, DWT, ShipStatus, ' +
+        'BuiltDate, t3.FleetNumber, t4.ENName, t4.CNName FROM T0101_Ship t1 LEFT JOIN T0181_ShipType t2 ON t1.ShipType = t2.TypeKey ' +
+        'LEFT JOIN `T4101_Fleet` t3 ON t1.ShipNumber = t3.ShipNumber LEFT JOIN T4102_FleetType t4 ON t3.FleetNumber = t4.FleetNumber ' +
+        'WHERE t4.`FleetNumber` IS NULL AND TypeKey = "%s" AND ShipStatus = "%s" AND DWT >= %s AND DWT <= %s ' +
+        'ORDER BY t1.UpdateDate DESC, ShipName DESC', type, status, min_DWT, max_DWT);
     mysql.query(sql, function (err, results) {
         if(err){
             console.log(utils.eid1);
@@ -267,6 +303,51 @@ router.get("/getSearchShipList", function (req, res, next) {
             }
         }
     })
+
+});
+
+/**
+ * 保存搜索记录
+ */
+router.get('/saveSearchRecord', function (req, res, next) {
+    var user = req.query.User;
+    var type = req.query.Type;
+    var status = req.query.Status;
+    var min_DWT = req.query.Min_DWT;
+    var max_DWT = req.query.Max_DWT;
+    var current_date = req.query.current_date;
+    var sql = util.format('REPLACE INTO T4105_Search_Record (user, shipStatus, shipType, min_DWT, max_DWT, last_date) ' +
+        'VALUE ("%s", "%s", "%s", "%s","%s", "%s")', user, status, type, min_DWT, max_DWT, current_date)
+    mysql.query(sql, function (err, results) {
+        if (err) {
+            console.log(utils.eid1);
+            res.jsonp(['404', utils.eid1])
+        } else {
+            res.jsonp(['200', '插入记录成功'])
+        }
+    })
+});
+
+/**
+ * 请求上次的搜索记录
+ */
+router.get('/getLastRecord', function (req, res, next) {
+    var user = req.query.User;
+    var sql = util.format('SELECT ShipStatus, shipType, NAME, CNName, min_DWT, max_DWT FROM T4105_Search_Record t1 ' +
+        'LEFT JOIN T0181_ShipType t2 ON t1.shipType = t2.TypeKey WHERE USER = "%s"', user);
+    mysql.query(sql, function (err, results) {
+        if(err){
+            console.log(utils.eid1);
+            res.jsonp(['404', utils.eid1])
+        } else{
+            if(results.length>0){
+                res.jsonp(['200', results])
+            }
+            else{
+                res.jsonp(['304', 'no search record'])
+            }
+        }
+    })
 });
 
 /**
@@ -278,8 +359,9 @@ router.get("/saveShip2Fleet", function (req, res, next) {
     var joinTime = req.query.JoinTime;
     var leaveTime = req.query.LeaveTime;
     var remark =  req.query.Remark;
+    var checked = req.query.Checked;
     var sql = util.format('REPLACE INTO `T4101_Fleet` (ShipNumber, JoinTime, LeaveTime, FleetNumber, Checked, Remark) ' +
-        'VALUE ("%s", "%s", "%s", "%s", "1",  "%s")', shipNumber, joinTime, leaveTime, fleetNumber, remark);
+        'VALUE ("%s", "%s", "%s", "%s", "%s",  "%s")', shipNumber, joinTime, leaveTime, fleetNumber, checked, remark);
     // console.log(sql);
     mysql.query(sql, function (err, results) {
         if(err){
@@ -322,7 +404,9 @@ router.get("/getShipImage", function (req, res, next) {
  */
 router.get("/confirmFleet",function (req, res, next) {
     var shipNumber =  req.query.ShipNumber;
-    var sql = util.format('UPDATE T4101_Fleet SET Checked = "1" WHERE ShipNumber = "%s"',shipNumber)
+    var sql = util.format('UPDATE T4101_Fleet t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber ' +
+        'SET Checked = "1", joinTime=BuiltDate WHERE t1.ShipNumber = "%s"',shipNumber);
+    // var sql = util.format('UPDATE T4101_Fleet SET Checked = "1" WHERE ShipNumber = "%s"',shipNumber);
     mysql.query(sql, function (err, result) {
         if(err){
             console.log(utils.eid1);
