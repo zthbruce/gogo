@@ -182,7 +182,7 @@ function getShipList2Fleet(fleetNumber, timePoint){
                 type_ele.val(typeName);
                 var status_ele = $('.Search_statusText');
                 status_ele.attr("type", status);
-                status_ele .text(ShipStatusInfo[status]);
+                status_ele.text(ShipStatusInfo[status]);
                 $(".ShipSearch  .min_dwt").val(min_DWT);
                 $(".ShipSearch  .max_dwt").val(max_DWT);
                 $(".search_ship_List").empty();
@@ -392,7 +392,7 @@ function getSearchShipList(type, status, min_DWT, max_DWT) {
                     var today = new Date();
                     var this_year = today.getFullYear();
                     var shipAge = this_year - parseInt(detailInfo.BuiltDate.slice(0, 4));
-                    var shipStatus = ShipStatusInfo[1];
+                    var shipStatus = ShipStatusInfo[detailInfo.ShipStatus];
                     shipInfoStr += '<li><span>' + type + '</span><span>' + detailInfo.IMO + '</span><span>' + MMSI +
                         '</span><span>' + detailInfo.ShipName + '</span><span>' + DWT + '</span><span>' + shipAge + '</span><span>' +
                         shipStatus + '</span><span><i class= "shipDetailInfo" shipNumber=' + detailInfo.ShipNumber + '></i></span><span><i class="add"></i></span></li>';
@@ -884,7 +884,7 @@ $("#ShipSearch_DWTRange .DWTSearch_btn").click(function () {
                         var today = new Date();
                         var this_year = today.getFullYear();
                         var shipAge = this_year - parseInt(detailInfo.BuiltDate.slice(0, 4));
-                        var shipStatus = ShipStatusInfo[1];
+                        var shipStatus = ShipStatusInfo[detailInfo.ShipStatus];
                         var fleetNumber = detailInfo.FleetNumber;
                         if (fleetNumber !== null) {
                             var fleetName = detailInfo.CNName === ""? detailInfo.ENName: detailInfo.CNName;
