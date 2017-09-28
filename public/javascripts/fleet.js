@@ -450,7 +450,7 @@ function saveSearchRecord(type, status, min_DWT, max_DWT) {
 // 船队的交互事件
 var fleetBasicInfo = {};
 var ShipStatusInfo = {'0': "在建中", '1': "服役中", '2': "维护中", '3': "停航", '4': "已拆解", '5': "未知",
-                        '6': "Equasis不更新", '7': 'Equasis不存在', '8': '改建中', '9':'暂停服务', '10': '即将拆解', '11':'已下水'};
+                        '6': "Equasis不更新", '7': 'Equasis不存在', '8': '改建中', '9':'暂停服务', 'A': '即将拆解', 'B':'已下水'};
 /*** 船队列表弹出框操作 */
 $('.route_Fleet_btn').click(function(){
     $('.ShipType_list').fadeToggle(300);

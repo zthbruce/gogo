@@ -46,7 +46,8 @@
 .TimePointList{height:40px;position:relative;top:4px;}
 .TimePointList>li{width:80px;height:30px;display:inline-block;float:left;position:relative;cursor:pointer;}
 /*.TimePointList>li{width:80px;height:30px;margin:0px 10px;display:inline-block;float:left;position:relative;cursor:pointer;}*/
-.TimePointList>li>span{display:inline-block;height:14px;line-height:14px;color:#fff;font-size:12px;position:absolute;bottom:6px;}
+.TimePointList>li>span{display:inline-block;height:14px;color:#fff;font-size:12px;position:absolute;bottom:6px;width:80px;text-align: center;}
+/*.TimePointList>li>span{display:inline-block;height:14px;line-height:14px;color:#fff;font-size:12px;position:absolute;bottom:6px;}*/
 .TimePointList>li>i{width:12px;height:12px;background: #ffffff;border-radius:8px;position:absolute;left:31px;}
 .TimePointList>li>i:hover{width:12px;height:12px;background:#42ffd3;border-radius:8px;position:absolute;left:31px;}
 .TimePointList>li>.selected{width:12px;height:12px;background:#42ffd3;border-radius:8px;position:absolute;left:31px;}

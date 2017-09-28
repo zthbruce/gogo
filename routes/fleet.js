@@ -140,9 +140,12 @@ router.get("/getFleetDetailInfo", function (req, res, next) {
  */
 router.get("/getFleetTimePoint", function (req, res, next) {
     var fleetNumber = req.query.FleetNumber;
-    var sql = util.format('SELECT JoinTime FROM T4101_Fleet WHERE LENGTH(JoinTime) = 10 AND fleetNumber = "%s" AND Checked = "1" UNION ' +
-        'SELECT LeaveTime FROM T4101_Fleet WHERE LENGTH(LeaveTime) = 10 AND fleetNumber = "%s" AND Checked = "1" ' +
-        'ORDER BY JoinTime DESC', fleetNumber, fleetNumber);
+    // var sql = util.format('SELECT JoinTime FROM T4101_Fleet WHERE LENGTH(JoinTime) = 10 AND fleetNumber = "%s" AND Checked = "1" UNION ' +
+    //     'SELECT LeaveTime FROM T4101_Fleet WHERE LENGTH(LeaveTime) = 10 AND fleetNumber = "%s" AND Checked = "1" ' +
+    //     'ORDER BY JoinTime DESC', fleetNumber, fleetNumber);
+    var sql = util.format('SELECT JoinTime FROM T4101_Fleet WHERE fleetNumber = "%s" AND Checked = "1" AND ' +
+        'joinTime REGEXP "^[0-9\-]{4,10}$" UNION SELECT LeaveTime FROM T4101_Fleet WHERE fleetNumber = "%s" AND ' +
+        'Checked = "1" AND LeaveTime REGEXP "^[0-9\-]{4,10}$" ORDER BY JoinTime DESC', fleetNumber, fleetNumber);
     mysql.query(sql, function (err, results) {
         if(err){
             console.log(utils.eid1);
