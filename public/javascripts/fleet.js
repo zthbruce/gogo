@@ -1182,7 +1182,7 @@ $('.fleetList_List').delegate(".toCheck", "click", function () {
     // 左侧列表数目更新
     var checked_num_ele = $('.FleetName_List>.choose>i:nth-child(1)');
     console.log(parseInt(checked_num_ele.text()));
-    // checked_num_ele.text(parseInt(checked_num_ele.text()) + 1);
+    checked_num_ele.text(parseInt(checked_num_ele.text()) + 1);
     event.stopPropagation();
 });
 
