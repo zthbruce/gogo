@@ -87,6 +87,7 @@ function getShipList2Fleet(fleetNumber, timePoint){
                 var DWT_less = 0;
                 var num_add = 0;
                 var num_less = 0;
+                // var checkedNum = 0;
                 // fleetBasicInfo = data[1];
                 var shipInfoStr = "";
                 for(var i = 0; i < fleetDetailInfo.length; i++){
@@ -123,33 +124,29 @@ function getShipList2Fleet(fleetNumber, timePoint){
                         shipStatus + '</span><span><i class= "shipDetailInfo" shipNumber=' + detailInfo.ShipNumber + '></i></span><span><i class= "' + shipCheck+ '"></i></span><span><i class="shipDelete"></i></span></li>';
                     if(leaveOrJoin !== ""){
                         shipInfoStr =  shipInfo_li + shipInfoStr;
-                        // shipList.prepend(shipInfo_li);
                     }
                     else{
                         shipInfoStr +=  shipInfo_li;
-                        // shipList.append(shipInfo_li);
                     }
                     // 总吨重
                     DWT_Sum += DWT;
                 }
+                /* 显示列表 */
                 shipList.append(shipInfoStr);
                 shipList.find('li:nth-child(n+51)').hide(); // 默认只显示50条
-                // 总吨位
-                fleet_div.find('.fleetInfo_DWT>span:nth-child(2)').text(DWT_Sum - DWT_less);
-                // 吨位增减
-                $(".fleet_AddDWTBtn").text("+" + DWT_add);
-                $(".fleet_LessDWTBtn").text("-" + DWT_less);
+                /* 列表下栏 */
+                // 确认数
+                $('.fleetInfo_total>.fleetInfo_checkedNum>span:nth-child(2)').text($('.FleetName_List>.choose>i:nth-child(1)').text());
                 // 总船舶数目
                 $('.fleetInfo_total>.fleetInfo_Num>span:nth-child(2)').text(fleetDetailInfo.length - num_less);
                 // fleet_div.find('.fleetInfo_Num>span:nth-child(2)').text(fleetDetailInfo.length - num_less);
                 $(".fleet_AddNumBtn").text("+" + num_add);
                 $('.fleet_LessNumBtn').text("-" + num_less);
-                // if(num_add > 0){
-                //     $(".fleet_AddNumBtn").text("+" + num_add);
-                // }
-                // if(num_less < 0){
-                //     $('.fleet_LessNumBtn').text("-" + num_less);
-                // }
+                // 总吨位
+                fleet_div.find('.fleetInfo_DWT>span:nth-child(2)').text(DWT_Sum - DWT_less);
+                // 吨位增减
+                $(".fleet_AddDWTBtn").text("+" + DWT_add);
+                $(".fleet_LessDWTBtn").text("-" + DWT_less);
             }
             else{
                 console.log(data[1]);
@@ -182,7 +179,8 @@ function getShipList2Fleet(fleetNumber, timePoint){
                 type_ele.val(typeName);
                 var status_ele = $('.Search_statusText');
                 status_ele.attr("type", status);
-                status_ele.text(ShipStatusInfo[status]);
+                // console.log(status);
+                status_ele.val(ShipStatusInfo[status]);
                 $(".ShipSearch  .min_dwt").val(min_DWT);
                 $(".ShipSearch  .max_dwt").val(max_DWT);
                 $(".search_ship_List").empty();
@@ -449,7 +447,7 @@ function saveSearchRecord(type, status, min_DWT, max_DWT) {
 /*********************************分割线*******************************************************************************/
 // 船队的交互事件
 var fleetBasicInfo = {};
-var ShipStatusInfo = {'0': "在建中", '1': "服役中", '2': "维护中", '3': "停航", '4': "已拆解", '5': "未知",
+var ShipStatusInfo = {'-1':"All", '0': "在建中", '1': "服役中", '2': "维护中", '3': "停航", '4': "已拆解", '5': "未知",
                         '6': "Equasis不更新", '7': 'Equasis不存在', '8': '改建中', '9':'暂停服务', 'A': '即将拆解', 'B':'已下水'};
 /*** 船队列表弹出框操作 */
 $('.route_Fleet_btn').click(function(){
@@ -671,8 +669,8 @@ $('#fleet').delegate('.shipDetailInfo', 'click', function () {
                 // 船的管理公司
                 $(".shipInfo_company>ul>li:nth-child(2)").text('建造商: ' + builder);
                 // 所属船队
-                var fleetName = $(".shipInfo_FleetName");
-                fleetName.text(name);
+                var fleetName = $("#shipInfo_FleetName");
+                fleetName.val(name);
                 fleetName.attr("FleetNumber", shipInfo.FleetNumber);
                 $("#shipInfo_EnterTime").val(joinTime);
                 $("#shipInfo_LeaveTime").val(leaveTime);
@@ -683,7 +681,7 @@ $('#fleet').delegate('.shipDetailInfo', 'click', function () {
                 $(".shipInfo_updateBtn").click(function () {
                     if(saveStatus) { // 如果可以保存
                         console.log("保存信息");
-                        var fleetNumber = $('.shipInfo_FleetName').attr("fleetNumber");
+                        var fleetNumber = $('#shipInfo_FleetName').attr("fleetNumber");
                         var enterTime_input = $('#shipInfo_EnterTime');
                         var leaveTime_input = $('#shipInfo_LeaveTime');
                         var joinTime = enterTime_input.val() === "" ? null : enterTime_input.val();
@@ -786,7 +784,7 @@ $(".shipInfo_imgShow").hover(function(){
 });
 
 // 点击船队获取下拉船队列表选项
-$(".shipInfo_FleetName").click(function () {
+$("#shipInfo_FleetName").click(function () {
     console.log("船队下拉框");
     $(this).next("ul").slideDown(200)
 });
@@ -801,9 +799,9 @@ $(".shipInfo_fleet>ul>li:first-child").mouseleave(function () {
 // 点击选择相应船队
 $(".shipInfo_FleetList>li").click(function () {
     changeSaveStatus(true); // 改变保存状态
-    var fleetNameSpan = $(".shipInfo_FleetName");
-    fleetNameSpan.text($(this).text());
-    fleetNameSpan.attr("FleetNumber", $(this).attr("FleetNumber"));
+    var fleetNameInput = $("#shipInfo_FleetName");
+    fleetNameInput.val($(this).text());
+    fleetNameInput.attr("FleetNumber", $(this).attr("FleetNumber"));
     $(".shipInfo_FleetList").slideUp(200)
 });
 
@@ -1179,10 +1177,16 @@ $('.fleetList_List').delegate(".toCheck", "click", function () {
             getTimePointList(fleetNumber)
         }
     });
+    // 界面上确认数目更新
+    var checked_num_ele = $('.fleetInfo_total>.fleetInfo_checkedNum>span:nth-child(2)');
+    var current_checkedNum = parseInt(checked_num_ele.text()) + 1;
+    console.log(current_checkedNum);
+    checked_num_ele.text(current_checkedNum);
     // 左侧列表数目更新
-    var checked_num_ele = $('.FleetName_List>.choose>i:nth-child(1)');
-    console.log(parseInt(checked_num_ele.text()));
-    checked_num_ele.text(parseInt(checked_num_ele.text()) + 1);
+    $('.FleetName_List>.choose>i:nth-child(1)').text(current_checkedNum);
+    // var checked_num_ele = $('.FleetName_List>.choose>i:nth-child(1)');
+    // console.log(parseInt(checked_num_ele.text()));
+    // checked_num_ele.text(parseInt(checked_num_ele.text()) + 1);
     event.stopPropagation();
 });
 
@@ -1216,7 +1220,10 @@ $(".fleetList_List").delegate(".shipDelete", "click", function () {
     // 如果为确认的情况，则已确认船数-1
     if ($(this).parent().prev().children("i").attr("class") === "checked"){
         var check_num_ele = $('.FleetName_List>.choose>i:nth-child(1)');
-        check_num_ele.text(parseInt(check_num_ele.text()) - 1);
+        var current_num =  parseInt(check_num_ele.text()) - 1;
+        check_num_ele.text(current_num);
+        // fleet界面上的已确认数目
+        $('.fleetInfo_total>.fleetInfo_checkedNum>span:nth-child(2)').text(current_num)
     }
     /*从数据库中删除该船*/
     var shipNumber = current_li.find('.shipDetailInfo').attr('shipnumber');
@@ -1285,7 +1292,7 @@ $('.search_status').mouseleave(function(){
  */
 $('.Search_statusSelect>li').click(function () {
     var status_text = $('.Search_statusText');
-    status_text.text($(this).text());
+    status_text.val($(this).text());
     status_text.attr('type', $(this).attr('type'));
     $('.Search_statusSelect').slideUp(300);
 });

@@ -84,24 +84,26 @@
 
 /*船队信息合计*/
 .fleetInfo_total,.searchInfo_total{width:96%;height:20px;line-height:20px;font-size:13px;color:#fff;margin:5px auto;}
-.fleetInfo_total>div{display:inline-block;width:40%;margin-left:20px;}
-.fleetInfo_total>.fleetInfo_DWT{width:50%;}
+.fleetInfo_total>div{display:inline-block;margin-left:40px;}
+/*.fleetInfo_total>.fleetInfo_Num{margin-left:40px}*/
+/*.fleetInfo_total>.fleetInfo_DWT{margin-left:40px}*/
 .fleet_TotalBtn{display:inline-block;height:20px;cursor:pointer;padding:0px 5px;line-height:20px;text-align:center;border-radius:5px;background:#000;}
 .fleet_AddBtn{color:#00ff00;margin-left:15px;}
 .fleet_LessBtn{color:#ff0000;margin-left:8px;}
+.fleetInfo_total>.fleetInfo_checkedNum>span:nth-child(2){color:#00ff00}
 
 /*船队列表弹出框船舶搜索条*/
 .ShipSearch{width:96%;height:24px;margin:5px auto;}
 .ShipSearch>.Search_Info{margin-left:0px;height:24px;line-height:24px;font-size:13px;color:#fff;position:relative;}
-.ShipSearch>.Search_Info>div{display:inline-block;position:relative;margin-left:20px;top:-5px;}
+.ShipSearch>.Search_Info>div{display:inline-block;position:relative;margin-left:20px;top:0px;}
 .ShipSearch .search_type{width:180px;}
 .ShipSearch .search_status{width:120px;}
-.ShipSearch>.Search_Info .Search_Text{display:inline-block;line-height:24px;width:140px;padding-left:5px;cursor:pointer;border:1px solid #fff;border-radius:5px;overflow:hidden;}
+.ShipSearch>.Search_Info .Search_Text{display:inline-block;line-height:20px;height:20px;width:140px;padding-left:5px;cursor:pointer;border:1px solid #fff;border-radius:5px;overflow:hidden;}
 .ShipSearch>.Search_Info .Search_Select{width:142px;height:200px;background: rgba(6, 2, 5, 0.8);border:1px solid #323232;border-radius:5px;position:absolute;top:24px;left:33px;display:none;overflow-y:scroll;overflow-x:hidden;}
 .ShipSearch>.Search_Info .Search_Select>li{width:120px;height:20px;line-height:20px;padding-left:5px;color:white;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .ShipSearch>.Search_Info .Search_Select>li:hover{background:#217BA2;}
-.ShipSearch>.Search_Info .Search_statusText{display:inline-block;width:80px;height:20px;line-height:20px;padding-left:5px;cursor:pointer;border:1px solid #fff;border-radius:5px;overflow:hidden;position:relative;top:7px;}
-.ShipSearch>.Search_Info .Search_statusSelect{width:82px;height:100px;top:29px;}
+.ShipSearch>.Search_Info .Search_statusText{display:inline-block;width:80px;height:20px;line-height:20px;}
+.ShipSearch>.Search_Info .Search_statusSelect{width:82px;height:100px;}
 .ShipSearch>.Search_Info .Search_statusSelect>li{width:60px;}
 .ShipSearch>.Search_Info .DWT_range{margin-left:20px;margin-top:0px;}
 .ShipSearch>.Search_Info .DWT_range input{width:50px;height:20px;line-height:20px;background:transparent;border:1px solid #fff;color:#fff;font-size:12px;border-radius:5px;padding-left:5px;outline:none;}
@@ -153,37 +155,27 @@
 
 /*船队管理*/
 .shipInfo_fleet{width:96%;height:63px;margin:4px auto 6px;position:relative;}
-.shipInfo_fleet>ul>li{display:inline-block;height:20px;line-height:20px;position:relative;margin-left:20px;font-size:12px;color:#fff;margin-top:3px;}
-.shipInfo_fleet>ul>li{display:inline-block;height:20px;line-height:20px;position:relative;margin-left:20px;font-size:12px;color:#fff;margin-top:3px;}
-.shipInfo_fleet>ul>li>span{overflow:hidden;}
-.shipInfo_fleet>ul>li:first-child>span{}
-.shipInfo_fleet>ul>li>span:first-child{margin-right:5px;position:relative;top:-5px;}
-.shipInfo_fleet>ul>li>span:nth-child(2){display:inline-block;width:75px;height:16px;line-height:16px;border:1px solid #ccc;border-radius:5px;cursor:pointer;padding-left:5px;}
-/*.shipInfo_fleet>ul>li>input{display:inline-block;width:90px;height:18px;line-height:18px;background:transparent;color:#fff;border:1px solid #ccc;border-radius:5px;cursor:pointer;padding-left:5px;overflow:hidden;}*/
+.shipInfo_fleet>ul>li{display:inline-block;height:20px;line-height:20px;position:relative;margin-left:20px;font-size:12px;color:#fff;}
+.shipInfo_fleet>ul>li>span{overflow:hidden;margin-right:5px;position:relative;top:0px;}
 /*#shipInfo_EnterTime,#shipInfo_LeaveTime{display:inline-block;width:90px;height:18px;line-height:18px;background:transparent;color:#fff;border:1px solid #ccc;border-radius:5px;cursor:pointer;padding-left:5px;overflow:hidden;}*/
 /*.shipInfo_fleet>ul>li>input{display:inline-block;width:70px;height:18px;line-height:18px;background:transparent;color:#fff;border:1px solid #ccc;border-radius:5px;cursor:pointer;padding-left:5px;overflow:hidden;}*/
-#shipInfo_EnterTime,#shipInfo_LeaveTime{display:inline-block;width:70px;height:18px;line-height:18px;background:transparent;color:#fff;border:1px solid #ccc;border-radius:5px;cursor:pointer;padding-left:5px;overflow:hidden;}
+#shipInfo_FleetName,#shipInfo_EnterTime,#shipInfo_LeaveTime{display:inline-block;width:70px;height:18px;line-height:18px;background:transparent;color:#fff;border:1px solid #ccc;border-radius:5px;cursor:pointer;padding-left:5px;overflow:hidden;}
 .shipInfo_FleetList{width:77px;position:absolute;background:rgba(6, 2, 5, 0.8);z-index:100;top:18px;left:36px;border:1px solid #323232;border-radius:5px;display:none;}
 .shipInfo_FleetList>li{height:16px;line-height:16px;padding-left:5px;font-size:12px;color:white;cursor:pointer;}
 .shipInfo_FleetList>li:hover{background:#217BA2;}
-.shipInfo_fleet>ul>.shipInfo_Time{top:-5px;margin-left:5px}
-.shipInfo_fleet>ul>.shipInfo_Time>span:first-child{top:0px;}
-.shipInfo_fleet>ul>li:last-child{height:34px;}
-.shipInfo_fleet>ul>li:last-child>span{display:inline-block;height:34px;line-height:34px;position:relative;top:0px;}
+.shipInfo_fleet>ul>.shipInfo_Time{margin-left:5px}
+/*.shipInfo_fleet>ul>.shipInfo_Time>span:first-child{top:0px;}*/
+.shipInfo_fleet>ul>li:last-child{height:34px;margin-top:8px;}
+.shipInfo_fleet>ul>li:last-child>div{display:inline-block;height:34px;line-height:34px;position:relative;top:-12px;margin-right: 8px;}
 .shipInfo_fleet>ul>li:last-child>textarea{width:300px;height:32px;resize:none;border-radius:5px;border:1px solid #fff;background:transparent;color:#fff;}
 .shipInfo_fleet>ul>li:last-child>textarea:focus{box-shadow:0px 0px 2px 2px #00B7FF;}
-/*.shipInfo_updateBtn{width:40px;height:24px;cursor:pointer;line-height:24px;text-align:center;border-radius:5px;font-size:13px;color:#fff;background:#217BA2;position:absolute;bottom:10px;right:5px;}*/
-.shipInfo_updateBtn {width:40px;height:24px;cursor:pointer;line-height:24px;text-align:center;border-radius:5px;font-size:13px;color:#fff;background:grey;position:absolute;bottom:0px;right:5px;}
-/*.shipInfo_updateBtn {width:40px;height:24px;cursor:pointer;line-height:24px;text-align:center;border-radius:5px;font-size:13px;color:#fff;background:grey;position:absolute;bottom:5px;right:5px;}*/
-/*.shipInfo_updateBtn:hover{background:#2EB1EA;}*/
-/*.shipInfo_updateBtn:active{background:#4cb4e0;}*/
+
+.shipInfo_updateBtn {width:40px;height:24px;cursor:pointer;line-height:24px;text-align:center;border-radius:5px;font-size:13px;color:#fff;background:grey;position:absolute;bottom:0px;right:8px;}
+
 .shipInfo_btn{width:96%;height:30px;margin:5px auto;}
 .shipInfo_btn>div{width:90px;height:32px;cursor:pointer;border-radius:5px;}
-/*.shipInfo_btn>.ship_track{margin-left:130px;background:rgba(255, 255, 255, 0.40);}*/
 .shipInfo_btn>.ship_track{margin-left:150px;background:url("/images/route.png") center no-repeat;border:1px solid transparent;}
 .shipInfo_btn>.ship_track:hover{border:1px solid #999;}
-/*.ship_track>span{width:32px;height:32px; margin-left: 29px;background:url("/images/route.png") center no-repeat;}*/
-
 
 /*船舶范围搜索条*/
 
@@ -232,3 +224,17 @@
   color: #d6d6d6;
 }
 
+
+.a{
+  width:100px;
+}
+@media screen and (max-device-width:434px) {
+  .a{
+    width:80px;
+  }
+}
+@media screen and (max-device-width:120px) {
+  .a{
+    width:80px;
+  }
+}
