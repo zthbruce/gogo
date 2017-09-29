@@ -25,7 +25,8 @@ router.get("/getFleetBasicInfo", function (req, res, next) {
     var sql = 'SELECT Type, t.FleetNumber, t.ENName, t.CNName, GROUP_CONCAT(CONCAT(t.checked, "#", t.Number) ORDER BY ' +
         't.Checked SEPARATOR " ") AS CheckNum FROM (SELECT TYPE, t1.FleetNumber, t2.ENName, t2.CNName, t1.Checked, ' +
         'COUNT(Checked) AS Number FROM T4101_Fleet t1 INNER JOIN T4102_FleetType t2 ON t1.FleetNumber = t2.FleetNumber ' +
-        'LEFT JOIN T0101_Ship t3 ON t1.ShipNumber = t3.ShipNumber WHERE ShipStatus IN ("1", "2", "3") GROUP BY t1.FleetNumber, t1.Checked) AS t GROUP BY FleetNumber';
+        'LEFT JOIN T0101_Ship t3 ON t1.ShipNumber = t3.ShipNumber WHERE LeaveTime IS NULL OR LeaveTime = "" ' +
+        'GROUP BY t1.FleetNumber, t1.Checked) AS t GROUP BY FleetNumber';
     mysql.query(sql, function (err, results) {
       if(err){
           console.log(utils.eid1);
@@ -71,26 +72,24 @@ router.get("/getFleetBasicInfo", function (req, res, next) {
 router.get("/getFleetDetailInfo", function (req, res, next) {
     var fleetNumber = req.query.FleetNumber;
     var timePoint = req.query.TimePoint;
-    console.log(fleetNumber);
-
     // 如果请求当前的船舶信息
     if(timePoint === "~"){
+        // var sql = util.format('SELECT t1.ShipNumber, t2.Name AS ShipName, IMO, MMSI, t3.Name AS Type, DWT, ShipStatus, ' +
+        //     'BuiltDate, JoinTime, LeaveTime, Checked FROM T4101_Fleet t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber' +
+        //     ' LEFT JOIN `T0181_ShipType` t3 ON t2.ShipType = t3.TypeKey ' +
+        //     'WHERE FleetNumber = "%s" AND ShipStatus IN ("1", "2", "3") ORDER BY Checked DESC, DWT DESC', fleetNumber);
         var sql = util.format('SELECT t1.ShipNumber, t2.Name AS ShipName, IMO, MMSI, t3.Name AS Type, DWT, ShipStatus, ' +
-            'BuiltDate, JoinTime, LeaveTime, Checked FROM T4101_Fleet t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber' +
-            ' LEFT JOIN `T0181_ShipType` t3 ON t2.ShipType = t3.TypeKey ' +
-            'WHERE FleetNumber = "%s" AND ShipStatus IN ("1", "2", "3") ORDER BY Checked DESC, DWT DESC', fleetNumber);
+            'BuiltDate, JoinTime, LeaveTime, Checked FROM T4101_Fleet t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber ' +
+            'LEFT JOIN `T0181_ShipType` t3 ON t2.ShipType = t3.TypeKey WHERE FleetNumber = "%s" AND (LeaveTime IS NULL OR LeaveTime = "")  ' +
+            'ORDER BY JoinTime DESC', fleetNumber)
     }
     // 请求历史上某一天的船舶信息
     else{
-         // sql = util.format('SELECT t1.ShipNumber, t2.Name AS ShipName, IMO, MMSI, t3.Name AS Type, DWT, ShipStatus, ' +
-         //     'BuiltDate, JoinTime, LeaveTime, Checked FROM T4101_Fleet t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber ' +
-         //     'LEFT JOIN `T0181_ShipType` t3 ON t2.ShipType = t3.TypeKey' +
-         //    ' WHERE FleetNumber = "%s" AND (((JoinTime IS NULL OR JoinTime <= "%s") AND ShipStatus IN ("1", "2", "3")) OR (ShipStatus = "4" AND LeaveTime = "%s")) ORDER BY Checked DESC, DWT DESC', fleetNumber, timePoint, timePoint);
          sql = util.format('SELECT t1.ShipNumber, t2.Name AS ShipName, IMO, MMSI, t3.Name AS Type, DWT, ShipStatus, ' +
              'BuiltDate, JoinTime, LeaveTime, Checked FROM T4101_Fleet t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber ' +
              'LEFT JOIN `T0181_ShipType` t3 ON t2.ShipType = t3.TypeKey ' +
-             'WHERE FleetNumber = "%s" AND JoinTime <= "%s" AND (LeaveTime >= "%s" OR LeaveTime IS NULL) AND Checked = "1" ' +
-             'ORDER BY DWT DESC', fleetNumber, timePoint, timePoint)
+             'WHERE FleetNumber = "%s" AND JoinTime <= "%s" AND (LeaveTime >= "%s" OR LeaveTime IS NULL OR LeaveTime = "") AND Checked = "1" ' +
+             'ORDER BY JoinTime DESC', fleetNumber, timePoint, timePoint)
     }
     mysql.query(sql, function (err, results) {
         if(err){

@@ -23,7 +23,7 @@
 #fleet,#shipDetails,#searchShipList{position:fixed;z-index:100;border-radius:10px;background:rgba(6, 2, 5, 0.8);}
 #ShipSearch_DWTRange{position:fixed;z-index:100;display:none;background: rgba(6, 2, 5, 0.8)}
 
-#fleet{width:670px;height:480px;top:70px;left:300px;display:none;}
+#fleet{width:705px;height:480px;top:70px;left:300px;display:none;}
 .fleet_title{width:100%;height:30px;position:relative;}
 .fleet_title>span{display:block;width:100%;text-align:center;height:28px;line-height:28px;margin:0 auto;color:#fff;}
 .title_offbtn{display:inline-block;width:12px;height:12px;position:absolute;top:9px;right:10px;background:url("/images/close_nor.png") no-repeat;cursor:pointer;}
@@ -70,7 +70,7 @@
 .fleetInfo_content>ul>li>span:nth-child(4){width:135px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .fleetInfo_content>ul>li>span:nth-child(5){width:60px;}
 .fleetInfo_content>ul>li>span:nth-child(6){width:35px;}
-.fleetInfo_content>ul>li>span:nth-child(7){width:60px;}
+.fleetInfo_content>ul>li>span:nth-child(7){width:90px;}
 .fleetInfo_content>ul>li>span:nth-child(8){width:20px;}
 .fleetInfo_content>ul>li>span:nth-child(8)>i{display:inline-block;width:14px;height:14px;cursor:pointer;background:url("/images/info.png") no-repeat;position:relative;top:2px;}
 .fleetInfo_content>ul>li>span:nth-child(9){margin-left:9px;}
@@ -95,9 +95,9 @@
 /*船队列表弹出框船舶搜索条*/
 .ShipSearch{width:96%;height:24px;margin:5px auto;}
 .ShipSearch>.Search_Info{margin-left:0px;height:24px;line-height:24px;font-size:13px;color:#fff;position:relative;}
-.ShipSearch>.Search_Info>div{display:inline-block;position:relative;margin-left:20px;top:0px;}
-.ShipSearch .search_type{width:180px;}
-.ShipSearch .search_status{width:120px;}
+.ShipSearch>.Search_Info>div{display:inline-block;position:relative;margin-left:5px;top:0px;}
+.ShipSearch .search_type{width:200px;min-width:180px;}
+.ShipSearch .search_status{width:140px;min-width:120px;}
 .ShipSearch>.Search_Info .Search_Text{display:inline-block;line-height:20px;height:20px;width:140px;padding-left:5px;cursor:pointer;border:1px solid #fff;border-radius:5px;overflow:hidden;}
 .ShipSearch>.Search_Info .Search_Select{width:142px;height:200px;background: rgba(6, 2, 5, 0.8);border:1px solid #323232;border-radius:5px;position:absolute;top:24px;left:33px;display:none;overflow-y:scroll;overflow-x:hidden;}
 .ShipSearch>.Search_Info .Search_Select>li{width:120px;height:20px;line-height:20px;padding-left:5px;color:white;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -105,7 +105,7 @@
 .ShipSearch>.Search_Info .Search_statusText{display:inline-block;width:80px;height:20px;line-height:20px;}
 .ShipSearch>.Search_Info .Search_statusSelect{width:82px;height:100px;}
 .ShipSearch>.Search_Info .Search_statusSelect>li{width:60px;}
-.ShipSearch>.Search_Info .DWT_range{margin-left:20px;margin-top:0px;}
+.ShipSearch>.Search_Info .DWT_range{margin-left:20px;margin-top:0px;width:190px;min-width:175px;}
 .ShipSearch>.Search_Info .DWT_range input{width:50px;height:20px;line-height:20px;background:transparent;border:1px solid #fff;color:#fff;font-size:12px;border-radius:5px;padding-left:5px;outline:none;}
 .ShipSearch>.Search_Info .DWT_range input:focus{box-shadow:0px 0px 1px 1px #fff;}
 .ShipSearch>.Search_Info .DWTSearch_btn{display:inline-block;width:20px;height:20px;background:url("/images/search.png") no-repeat;position: absolute;top:3px;right:30px;cursor:pointer;}
@@ -115,10 +115,10 @@
 
 /*船舶详情页面*/
 /*#shipDetails{width:385px;height:436px;top:10px;left:400px;display:block;}*/
-#shipDetails{width:450px;height:415px;top:10px;left:400px;display:none;}
+#shipDetails{width:500px;height:415px;top:10px;left:400px;display:none;}
 .shipName{font-size:14px;color:#fff;padding-top:3px;}
 .shipInfo_show{width:96%;height:160px;margin:5px auto;}
-.shipInfo_show>.shipInfo_List{width:250px;height:176px;float:right;}
+.shipInfo_show>.shipInfo_List{width:300px;height:176px;float:right;}
 .shipInfo_List>li{height:16px;line-height:16px;float:left;color:#fff;font-size:12px;margin-right:5px;}
 .shipInfo_List>li:nth-child(even){width:52%;}
 .shipInfo_List>li:nth-child(odd){width:44%;}
@@ -155,7 +155,7 @@
 
 /*船队管理*/
 .shipInfo_fleet{width:96%;height:63px;margin:4px auto 6px;position:relative;}
-.shipInfo_fleet>ul>li{display:inline-block;height:20px;line-height:20px;position:relative;margin-left:20px;font-size:12px;color:#fff;}
+.shipInfo_fleet>ul>li{display:inline-block;width:130px;min-width:120px;height:20px;line-height:20px;position:relative;margin-left:20px;font-size:12px;color:#fff;}
 .shipInfo_fleet>ul>li>span{overflow:hidden;margin-right:5px;position:relative;top:0px;}
 /*#shipInfo_EnterTime,#shipInfo_LeaveTime{display:inline-block;width:90px;height:18px;line-height:18px;background:transparent;color:#fff;border:1px solid #ccc;border-radius:5px;cursor:pointer;padding-left:5px;overflow:hidden;}*/
 /*.shipInfo_fleet>ul>li>input{display:inline-block;width:70px;height:18px;line-height:18px;background:transparent;color:#fff;border:1px solid #ccc;border-radius:5px;cursor:pointer;padding-left:5px;overflow:hidden;}*/
@@ -163,9 +163,9 @@
 .shipInfo_FleetList{width:77px;position:absolute;background:rgba(6, 2, 5, 0.8);z-index:100;top:18px;left:36px;border:1px solid #323232;border-radius:5px;display:none;}
 .shipInfo_FleetList>li{height:16px;line-height:16px;padding-left:5px;font-size:12px;color:white;cursor:pointer;}
 .shipInfo_FleetList>li:hover{background:#217BA2;}
-.shipInfo_fleet>ul>.shipInfo_Time{margin-left:5px}
+.shipInfo_fleet>ul>.shipInfo_Time{margin-left:5px;width:155px;min-width:140px;}
 /*.shipInfo_fleet>ul>.shipInfo_Time>span:first-child{top:0px;}*/
-.shipInfo_fleet>ul>li:last-child{height:34px;margin-top:8px;}
+.shipInfo_fleet>ul>li:last-child{height:34px;margin-top:8px;width:350px;min-width:330px;}
 .shipInfo_fleet>ul>li:last-child>div{display:inline-block;height:34px;line-height:34px;position:relative;top:-12px;margin-right: 8px;}
 .shipInfo_fleet>ul>li:last-child>textarea{width:300px;height:32px;resize:none;border-radius:5px;border:1px solid #fff;background:transparent;color:#fff;}
 .shipInfo_fleet>ul>li:last-child>textarea:focus{box-shadow:0px 0px 2px 2px #00B7FF;}

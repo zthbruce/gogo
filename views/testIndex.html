@@ -208,16 +208,12 @@
         </ul>
         <!--<div class="loading"></div>-->
         <ul class="fleetList_List">
-            <li><span>AAAAAAAAAA</span><span>1234567</span><span>0000000000</span><span>AAAAAAAAAAAA</span><span>1111111</span><span>22</span><span>正服役</span><span><i class= "shipDetailInfo" ></i></span><span><i class="checked"></i></span><span><i class="checked"></i></span></li>
+            <li><span>AAAAAAAAAA</span><span>1234567</span><span>0000000000</span><span>AAAAAAAAAAAA</span><span>1111111</span><span>22</span><span>Equasis不更新</span><span><i class= "shipDetailInfo" ></i></span><span><i class="checked"></i></span><span><i class="checked"></i></span></li>
         </ul>
 
     </div>
     <!--<div class="dividing_line"></div>-->
     <div class="fleetInfo_total">
-        <div class="fleetInfo_checkedNum">
-            <span>已确认:</span>
-            <span>0</span>
-        </div>
         <div class="fleetInfo_Num">
             <span>总船舶数量：</span>
             <span>0</span>
@@ -349,8 +345,8 @@
                     <li FleetNumber="F13">Q-Max</li>
                 </ul>
             </li>
-            <li class="shipInfo_Time"><span>进入时间: </span><input id="shipInfo_EnterTime" size="12" readonly/></li>
-            <li class="shipInfo_Time"><span>离开时间: </span><input id="shipInfo_LeaveTime" size="12" readonly/></li>
+            <li class="shipInfo_Time"><span>进入时间: </span><input id="shipInfo_EnterTime" size="12"/></li>
+            <li class="shipInfo_Time"><span>离开时间: </span><input id="shipInfo_LeaveTime" size="12"/></li>
             <li><div>备注:</div><textarea class = "remarks"></textarea></li>
 
         </ul>
@@ -418,6 +414,7 @@
 <!--
     航线管理
 -->
+<!--整租航线-->
 <div id="routeInfo">
     <div class="fleet_title">
         <span>BCI -> Route C2</span>
@@ -513,6 +510,50 @@
     <div class="routeInstall_Btn">
         <div class="routeInstall_SaveBtn">保存</div>
         <div class="routeInstall_CancelBtn">取消</div>
+    </div>
+</div>
+<!--期租航线-->
+<div id="LeaseRouteInfo">
+    <div class="fleet_title">
+        <span>BCI -> Route C8 03</span>
+        <!--<div class="title_offbtn"></div>-->
+    </div>
+    <div class="dividing_line"></div>
+    <!--航线信息设置-->
+    <div class="LeaseRouteInfo_Install">
+        <ul class="LeaseRouteInfo_List">
+            <li><span>交船范围: </span> <input type="text" disabled value="Amsterdam-Rotterdam-Antwerp"></li>
+            <li><span>还船范围: </span> <input type="text" disabled></li>
+            <li><span>租期: </span> <input type="text" value="30-40"></li>
+            <li><span>佣金: </span> <input type="text" value="0.00%"></li>
+            <li><span>权重: </span> <input type="text" value="00.00%"></li>
+            <li><span>货物: </span> <input type="text" value=""></li>
+            <li><span>船舶规范: </span> <input type="text" value="172000"></li>
+            <li><span>最大船龄: </span> <input type="text" value="00"></li>
+            <li><span>吃水: </span> <input type="text" value="00.00"></li>
+            <li><span>LOA: </span> <input type="text" value="0000"></li>
+            <li><span>BEAM: </span> <input type="text" value="000"></li>
+            <li><span>空载航速: </span> <input type="text" value="00.00"></li>
+            <li><span>满载航速: </span> <input type="text" value="00.00"></li>
+        </ul>
+    </div>
+    <div class="dividing_line"></div>
+    <!--期租航线中英文说明设置-->
+    <div class="LeaseRouteDes">
+        <div class="routeDes_Chinese">
+            <span>中文说明:</span>
+            <textarea></textarea>
+        </div>
+        <div class="routeDes_English">
+            <span>英文说明:</span>
+            <textarea></textarea>
+        </div>
+    </div>
+    <div class="dividing_line"></div>
+    <!--航线按钮操作-->
+    <div class="LeaseRouteInstall_Btn">
+        <div class="LeaseRouteInstall_SaveBtn">保存</div>
+        <div class="LeaseRouteInstall_CancelBtn">取消</div>
     </div>
 </div>
 

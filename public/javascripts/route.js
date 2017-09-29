@@ -2,10 +2,54 @@
  * Created by Truth on 2017/8/21.
  * 标准航线
  */
+
 var routeBasicInfo = {};
 var relatePortList = [];
 getRouteBasicInfo(); // 获取航线基本信息
 getRelatePortList(); // 获取相关的港口列表
+
+
+/**
+ * 地图弹出框拖动事件
+ */
+var routeInfoDown = false; //航线信息管理弹出框
+var LeaseRouteInfoDown = false; //期租航线信息管理弹出框
+var DivLeft;
+var DivTop;
+$('.fleet_title').mousedown(function(event){
+    var changeDivId = $(this).parent().attr('id');
+    if(changeDivId=='routeInfo'){routeInfoDown = true;}
+    if(changeDivId=='LeaseRouteInfo'){LeaseRouteInfoDown = true;}
+    DivLeft = event.clientX - $(this).offset().left;
+    DivTop = event.clientY - $(this).offset().top;
+});
+var fleetDivZIndex = 0;
+$('#LeaseRouteInfoDown,#routeInfo').click(function(){
+    fleetDivZIndex++;
+    $(this).css('zIndex',fleetDivZIndex);
+});
+$('.fleet_title').mouseup(function(){
+    var changeDivId = $(this).parent().attr('id');
+    if(changeDivId==='LeaseRouteInfo'){LeaseRouteInfoDown = false;}
+    if(changeDivId==='routeInfo'){routeInfoDown = false;}
+    $(this).css('cursor','auto');
+});
+$(window).mousemove(function(event){
+    var newLeft = event.clientX-DivLeft;
+    var newTop = event.clientY-DivTop;
+    if(newLeft<=0){newLeft = 0;}
+    if(newTop<=0){newTop = 0;}
+    if(LeaseRouteInfoDown){
+        if(newLeft>$(document).width()-$('#LeaseRouteInfo>.fleet_title').width()){newLeft = $(document).width()-$('#LeaseRouteInfo>.fleet_title').width();}
+        if(newTop>$(window).height()-$('#LeaseRouteInfo>.fleet_title').height()){newTop = $(window).height()-$('#LeaseRouteInfo>.fleet_title').height();}
+        $('#LeaseRouteInfo').offset({top:newTop,left:newLeft});
+    }else if(routeInfoDown){
+        if(newLeft>$(document).width()-$('#routeInfo>.fleet_title').width()){newLeft = $(document).width()-$('#routeInfo>.fleet_title').width();}
+        if(newTop>$(window).height()-$('#routeInfo>.fleet_title').height()){newTop = $(window).height()-$('#routeInfo>.fleet_title').height();}
+        $('#routeInfo').offset({top:newTop,left:newLeft});
+    }
+});
+
 
 /**
  * 获取航线的基本信息
