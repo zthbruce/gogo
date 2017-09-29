@@ -295,14 +295,14 @@ router.get("/getSearchShipList", function (req, res, next) {
             'BuiltDate, t3.FleetNumber, t4.ENName, t4.CNName FROM T0101_Ship t1 LEFT JOIN T0181_ShipType t2 ON t1.ShipType = t2.TypeKey ' +
             'LEFT JOIN `T4101_Fleet` t3 ON t1.ShipNumber = t3.ShipNumber LEFT JOIN T4102_FleetType t4 ON t3.FleetNumber = t4.FleetNumber ' +
             'WHERE t4.`FleetNumber` IS NULL AND TypeKey = "%s" AND DWT >= %s AND DWT <= %s ' +
-            'ORDER BY t1.UpdateDate DESC, ShipName DESC',  type, min_DWT, max_DWT);
+            'ORDER BY t1.BuiltDate DESC, ShipName DESC',  type, min_DWT, max_DWT);
     }
     else{
         var sql = util.format('SELECT t1.ShipNumber, t2.Name AS Type, IMO, MMSI, t1.Name AS ShipName, DWT, ShipStatus, ' +
             'BuiltDate, t3.FleetNumber, t4.ENName, t4.CNName FROM T0101_Ship t1 LEFT JOIN T0181_ShipType t2 ON t1.ShipType = t2.TypeKey ' +
             'LEFT JOIN `T4101_Fleet` t3 ON t1.ShipNumber = t3.ShipNumber LEFT JOIN T4102_FleetType t4 ON t3.FleetNumber = t4.FleetNumber ' +
             'WHERE t4.`FleetNumber` IS NULL AND TypeKey = "%s" AND ShipStatus = "%s" AND DWT >= %s AND DWT <= %s ' +
-            'ORDER BY t1.UpdateDate DESC, ShipName DESC', type, status, min_DWT, max_DWT);
+            'ORDER BY t1.BuiltDate DESC, ShipName DESC', type, status, min_DWT, max_DWT);
     }
     mysql.query(sql, function (err, results) {
         if(err){
