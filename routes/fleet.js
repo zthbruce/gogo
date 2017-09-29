@@ -81,7 +81,7 @@ router.get("/getFleetDetailInfo", function (req, res, next) {
         var sql = util.format('SELECT t1.ShipNumber, t2.Name AS ShipName, IMO, MMSI, t3.Name AS Type, DWT, ShipStatus, ' +
             'BuiltDate, JoinTime, LeaveTime, Checked FROM T4101_Fleet t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber ' +
             'LEFT JOIN `T0181_ShipType` t3 ON t2.ShipType = t3.TypeKey WHERE FleetNumber = "%s" AND (LeaveTime IS NULL OR LeaveTime = "")  ' +
-            'ORDER BY JoinTime DESC', fleetNumber)
+            'ORDER BY BuiltDate DESC', fleetNumber)
     }
     // 请求历史上某一天的船舶信息
     else{

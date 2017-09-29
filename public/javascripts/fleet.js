@@ -159,7 +159,6 @@ function getFleetInfo(fleetNumber, timePoint) {
             shipList.css("background", ""); // 清除背景
         }
     });
-
 }
 
 /**
@@ -810,7 +809,7 @@ $('#fleet').delegate('.shipDetailInfo', 'click', function () {
                             var table_name = ship_li.parent().attr('class');
                             // 如果处于船队列表
                             // 如果处于搜索栏，那么删除该搜索记录
-                            if(table_name.attr('class') === 'search_ship_List'){
+                            if(table_name=== 'search_ship_List'){
                                 ship_li.remove();
                             }
                             $.ajax({
