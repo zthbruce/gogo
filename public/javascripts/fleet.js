@@ -1404,8 +1404,24 @@ $("#shipInfo_LeaveTime, #shipInfo_EnterTime").blur(function() {
  * 船队列表搜索栏的状态点击出现下拉列表
  */
 $('.Search_statusText').click(function(){
-    console.log("here");
-    $('.Search_statusSelect').slideDown(300);
+    var status_ul = $('.Search_statusSelect');
+    $.ajax({
+        url:'/fleet/getStatus',
+        type:'get',
+        success:function (data) {
+            if(data[0]==='200') {
+                status_ul.empty();
+                var info = data[1];
+                var li_str = '<li type="-1">All</li>';
+                for (var i = 0; i < info.length; i++) {
+                    var detail = info[i];
+                    li_str += '<li type=' + detail.StatusKey + '>' + detail.CNName + '</li>'
+                }
+                status_ul.append(li_str)
+            }
+        }
+    });
+    status_ul.slideDown(300);
 });
 
 /**
@@ -1419,7 +1435,7 @@ $('.search_status').mouseleave(function(){
 /**
  * 选择状态列表元素
  */
-$('.Search_statusSelect>li').click(function () {
+$('.Search_statusSelect').delegate('li', 'click', function () {
     var status_text = $('.Search_statusText');
     status_text.val($(this).text());
     status_text.attr('type', $(this).attr('type'));

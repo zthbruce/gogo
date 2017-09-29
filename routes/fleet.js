@@ -455,6 +455,20 @@ router.get("/removeShip",function (req, res, next) {
 });
 
 
+router.get("/getStatus", function (req, res, next) {
+    var sql = 'SELECT StatusKey, CNName FROM T0183_ShipStatus';
+    mysql.query(sql, function (err, result) {
+        if(err){
+            console.log(utils.eid1);
+            res.jsonp(['404', utils.eid1])
+        }
+        else{
+            res.jsonp(['200', result])
+        }
+    })
+});
+
+
 module.exports = router;
 
 
