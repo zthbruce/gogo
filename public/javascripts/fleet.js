@@ -95,7 +95,8 @@ function getFleetInfo(fleetNumber, timePoint) {
                     var this_year = today.getFullYear();
                     var shipAge = this_year - parseInt(detailInfo.BuiltDate.slice(0, 4));
                     // console.log(detailInfo.ShipStatus);
-                    var shipStatus = ShipStatusInfo[detailInfo.ShipStatus];
+                    var shipStatus = detailInfo.ShipStatus;
+                    // var shipStatus = ShipStatusInfo[detailInfo.ShipStatus];
                     var leaveOrJoin = '';
                     var joinTime = detailInfo.JoinTime;
                     var leaveTime = detailInfo.LeaveTime;
