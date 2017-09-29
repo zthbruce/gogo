@@ -76,11 +76,12 @@
 .LeaseRouteInfo_List>li>input{width:40px;height:16px;line-height:16px;padding-left:5px;border:1px solid #ccc;position:relative;top:-1px;background:transparent;color:#fff;border-radius:5px;}
 .LeaseRouteInfo_List>li:nth-child(1),.LeaseRouteInfo_List>li:nth-child(2){width:96%;min-width:96%;}
 .LeaseRouteInfo_List>li:nth-child(1)>input,.LeaseRouteInfo_List>li:nth-child(2)>input{border-color:transparent;width:300px;}
-.LeaseRouteInfo_List>li:nth-child(3)>input{width:40px;}
-.LeaseRouteInfo_List>li:nth-child(4)>input{width:50px;}
-.LeaseRouteInfo_List>li:nth-child(5)>input{width:50px;}
-.LeaseRouteInfo_List>li:nth-child(6){width:200px;}
-.LeaseRouteInfo_List>li:nth-child(6)>input{width:40px;}
+.LeaseRouteInfo_List>li:nth-child(3){width:248px;}
+.LeaseRouteInfo_List>li:nth-child(3)>input{width:200px;border-color:transparent;}
+.LeaseRouteInfo_List>li:nth-child(6)>input{width:20px;}
+.LeaseRouteInfo_List>li:nth-child(8)>input{width:50px;}
+.LeaseRouteInfo_List>li:nth-child(9)>input{width:52px;}
+.LeaseRouteInfo_List>li:nth-child(10)>input{width:45px;}
 
 
 /*中英文说明*/

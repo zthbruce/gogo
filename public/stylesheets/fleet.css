@@ -114,7 +114,6 @@
 
 
 /*船舶详情页面*/
-/*#shipDetails{width:385px;height:436px;top:10px;left:400px;display:block;}*/
 #shipDetails{width:500px;height:415px;top:10px;left:400px;display:none;}
 .shipName{font-size:14px;color:#fff;padding-top:3px;}
 .shipInfo_show{width:96%;height:160px;margin:5px auto;}
@@ -155,7 +154,7 @@
 
 /*船队管理*/
 .shipInfo_fleet{width:96%;height:63px;margin:4px auto 6px;position:relative;}
-.shipInfo_fleet>ul>li{display:inline-block;width:130px;min-width:120px;height:20px;line-height:20px;position:relative;margin-left:20px;font-size:12px;color:#fff;}
+.shipInfo_fleet>ul>li{display:inline-block;width:120px;min-width:120px;height:20px;line-height:20px;position:relative;margin-left:20px;font-size:12px;color:#fff;}
 .shipInfo_fleet>ul>li>span{overflow:hidden;margin-right:5px;position:relative;top:0px;}
 /*#shipInfo_EnterTime,#shipInfo_LeaveTime{display:inline-block;width:90px;height:18px;line-height:18px;background:transparent;color:#fff;border:1px solid #ccc;border-radius:5px;cursor:pointer;padding-left:5px;overflow:hidden;}*/
 /*.shipInfo_fleet>ul>li>input{display:inline-block;width:70px;height:18px;line-height:18px;background:transparent;color:#fff;border:1px solid #ccc;border-radius:5px;cursor:pointer;padding-left:5px;overflow:hidden;}*/
@@ -163,7 +162,7 @@
 .shipInfo_FleetList{width:77px;position:absolute;background:rgba(6, 2, 5, 0.8);z-index:100;top:18px;left:36px;border:1px solid #323232;border-radius:5px;display:none;}
 .shipInfo_FleetList>li{height:16px;line-height:16px;padding-left:5px;font-size:12px;color:white;cursor:pointer;}
 .shipInfo_FleetList>li:hover{background:#217BA2;}
-.shipInfo_fleet>ul>.shipInfo_Time{margin-left:5px;width:155px;min-width:140px;}
+.shipInfo_fleet>ul>.shipInfo_Time{margin-left:0px;width:145px;min-width:140px;}
 /*.shipInfo_fleet>ul>.shipInfo_Time>span:first-child{top:0px;}*/
 .shipInfo_fleet>ul>li:last-child{height:34px;margin-top:8px;width:350px;min-width:330px;}
 .shipInfo_fleet>ul>li:last-child>div{display:inline-block;height:34px;line-height:34px;position:relative;top:-12px;margin-right: 8px;}

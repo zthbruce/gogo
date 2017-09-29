@@ -93,7 +93,11 @@ function getFleetInfo(fleetNumber, timePoint) {
                     var type = detailInfo.Type;
                     var today = new Date();
                     var this_year = today.getFullYear();
-                    var shipAge = this_year - parseInt(detailInfo.BuiltDate.slice(0, 4));
+                    if(detailInfo.BuiltDate !==null){
+                        var shipAge = this_year - parseInt(detailInfo.BuiltDate.slice(0, 4));
+                    }else{
+                        shipAge=''
+                    }
                     // console.log(detailInfo.ShipStatus);
                     var shipStatus = detailInfo.ShipStatus;
                     // var shipStatus = ShipStatusInfo[detailInfo.ShipStatus];
@@ -1348,7 +1352,7 @@ $(".fleetList_List").delegate(".shipDelete", "click", function () {
     // var search_shipNum_ele = $('.searchInfo_total>.fleetInfo_Num>span:nth-child(2)');
     // search_shipNum_ele.text(parseInt(search_shipNum_ele.text()) + 1);
     /* 更新船队统计信息*/
-    getBasicFleetInfo();
+    // getBasicFleetInfo();
     var total_num_ele = $('.FleetName_List>.choose>i:nth-child(2)');
     total_num_ele.text(parseInt(total_num_ele.text()) - 1);
     // 如果为确认的情况，则已确认船数-1
@@ -1362,6 +1366,13 @@ $(".fleetList_List").delegate(".shipDelete", "click", function () {
     /*从数据库中删除该船*/
     var shipNumber = current_li.find('.shipDetailInfo').attr('shipnumber');
     removeShipFromFleet(shipNumber);
+    /*统计列表数目变化*/
+    // var total_num_ele = $('.FleetName_List>.choose>i:nth-child(2)');
+    // total_num_ele.text(parseInt(total_num_ele.text()) - 1);
+    // 如果为确认的情况，则已确认船数-1
+    // if ($(this).parent().prev().children("i").attr("class") === "checked"){
+    //     var check_num_ele = $('.FleetName_List>.choose>i:nth-child(1)');
+    //     check_num_ele.text(parseInt(check_num_ele.text()) - 1);
 
     /* 上下表变化*/
     // 上表减少, 下表增加
