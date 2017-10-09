@@ -56,8 +56,8 @@ function iconLayer(level, area){
     var lat;
     var features = [];
     var areaNum = 0;
-    var _cluster_id;
-    var type = 0;
+    // var _cluster_id;
+    // var type = 0;
     var _cluster_id_list = [];
     for(var key in allPoints){
         ele = allPoints[key];

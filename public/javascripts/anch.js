@@ -162,15 +162,15 @@ function getAnchInfo(anchKey, lon, lat) {
                     console.log(centerLat);
                     var closeAnchList = getCloseAnchList(centerLon, centerLat, allPoints, 20);
                     $(".selected_LonLat").empty();
-                    $(".unselected_LonLat").empty();
+                    // $(".unselected_LonLat").empty();
                     console.log("锚地长度:" + closeAnchList.length);
                     // 未选择列表
-                    for (var i = 0; i < closeAnchList.length; i++) {
-                        var ele = closeAnchList[i];
-                        normalLonLat = transLonLatToNormal(ele.lon, ele.lat);
-                        var unselectedLonLatStr = '<li clusterId=' + ele.clusterId + ' lon=' + ele.lon + ' lat=' + ele.lat + '><span>' + (i + 1) + '</span><span class = "anch_notBelong"></span><span>' + normalLonLat[0] + ", " + normalLonLat[1] + '</span></li>';
-                        $(".unselected_LonLat").append(unselectedLonLatStr);
-                    }
+                    // for (var i = 0; i < closeAnchList.length; i++) {
+                    //     var ele = closeAnchList[i];
+                    //     normalLonLat = transLonLatToNormal(ele.lon, ele.lat);
+                    //     var unselectedLonLatStr = '<li clusterId=' + ele.clusterId + ' lon=' + ele.lon + ' lat=' + ele.lat + '><span>' + (i + 1) + '</span><span class = "anch_notBelong"></span><span>' + normalLonLat[0] + ", " + normalLonLat[1] + '</span></li>';
+                    //     $(".unselected_LonLat").append(unselectedLonLatStr);
+                    // }
                     // 已选择列表
                     var lonLatList = anchInfo.Location.split(";");
                     for (var j = 0; j < lonLatList.length - 1; j++) {
@@ -244,25 +244,25 @@ function getAnchInfo(anchKey, lon, lat) {
                 updateLocationList();
                 // 根据当前所选点，画出轮廓线
                 writeContourLine(locationList);
-                for(var i = 0; i < locationList.length - 1; i++) {
-                    var ele = locationList[i];
-                    var lon = ele[0];
-                    var lat = ele[1];
-                    console.log(lon + "," + lat);
-                    var anch_choosed = new ol.Feature({
-                        'number': i + 1,
-                        'id' : 'choosed',
-                        'lon' : lon,
-                        'lat': lat,
-                        'type': 0,
-                        'anchKey': anchKey,
-                        // 'cluster_id' : key,
-                        geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
-                    });
-                    anch_choosed.setStyle(choosed);
-                    current.getSource().addFeature(anch_choosed);
-                    // features.push(park_feature);
-                }
+                // for(var i = 0; i < locationList.length - 1; i++) {
+                //     var ele = locationList[i];
+                //     var lon = ele[0];
+                //     var lat = ele[1];
+                //     console.log(lon + "," + lat);
+                //     var anch_choosed = new ol.Feature({
+                //         'number': i + 1,
+                //         'id' : 'choosed',
+                //         'lon' : lon,
+                //         'lat': lat,
+                //         'type': 0,
+                //         // 'anchKey': anchKey,
+                //         // 'cluster_id' : key,
+                //         geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
+                //     });
+                //     anch_choosed.setStyle(choosed);
+                //     current.getSource().addFeature(anch_choosed);
+                //     // features.push(park_feature);
+                // }
             },
             error: function (err) {
                 console.log(err);
@@ -332,6 +332,9 @@ function updateLocationList(){
         latSum += lat;
         locationList.push([lon, lat])
     });
+
+    // 已选择列表数据更新
+    // var lonLatList = anchInfo.Location.split(";");
     // // 将几个点的定位显示
     // var positionFeatureList = [];
     // for( var i = 0; i < lonLatList.length; i++){
@@ -349,6 +352,17 @@ function updateLocationList(){
     console.log("中心点为: " + center);
     // 顺时针排序
     locationList.sort(clockCompare);
+    // 刷新已选锚地列表
+    var chooseLonLatStr = '';
+    var selected_lon_lat_list = $(".selected_LonLat");
+    for (var j = 0; j < locationList.length; j++) {
+        var lonLatInfo = locationList[j];
+        var normalLonLat = transLonLatToNormal(lonLatInfo[0], lonLatInfo[1]);
+        chooseLonLatStr += '<li clusterId="" lon=' + lonLatInfo[0] + ' lat=' + lonLatInfo[1] + '><span>' + (j + 1) + '</span><span class = "always_belong"></span><span>' + normalLonLat[0] + ", " + normalLonLat[1] + '</span></li>';
+    }
+    selected_lon_lat_list.empty();
+    selected_lon_lat_list.append(chooseLonLatStr);
+    // 顺时针方向
     var firstPoint = locationList[0];
     locationList.push(firstPoint);
 }
@@ -377,7 +391,7 @@ function writeContourLine(lonLatList) {
     // feature.setStyle();
     anch.getSource().addFeature(feature);
 
-    // 将边界点也显示出来
+    // 显示边界点
     current.getSource().clear(); // 清空图层
     for(var i = 0; i < locationList.length - 1; i++) {
         var ele = locationList[i];
@@ -387,7 +401,7 @@ function writeContourLine(lonLatList) {
             'id' : 'choosed',
             'lon' : lon,
             'lat': lat,
-            'type': 0,
+            // 'type': 0,
             'anchKey': "",
             'number' : i + 1,
             geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
@@ -419,18 +433,18 @@ $('.anchName_select>input').keyup(function(){
 
 
 // 点击对应的锚地列表行， 在地图上突出显示
-$(".unselected_LonLat:not(.anch_notBelong)").delegate("li", "click",function(){
-    var lon = parseFloat($(this).attr("lon"));
-    var lat = parseFloat($(this).attr("lat"));
-    console.log(lon + "," + lat);
-    var position_feature = new ol.Feature({
-        geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
-    });
-    position_feature.setStyle(position_style);
-    position.getSource().clear();
-    // console.log(position_feature);
-    position.getSource().addFeatures([position_feature]);
-});
+// $(".unselected_LonLat:not(.anch_notBelong)").delegate("li", "click",function(){
+//     var lon = parseFloat($(this).attr("lon"));
+//     var lat = parseFloat($(this).attr("lat"));
+//     console.log(lon + "," + lat);
+//     var position_feature = new ol.Feature({
+//         geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
+//     });
+//     position_feature.setStyle(position_style);
+//     position.getSource().clear();
+//     // console.log(position_feature);
+//     position.getSource().addFeatures([position_feature]);
+// });
 
 // 监听输入的改变
 $('.anchInfo_list>.pier_info').bind('input propertychange',function() {
@@ -518,18 +532,18 @@ $('#anch_save').click(function(){
     //     }
     // }
 
-    var closeAnchList = getCloseAnchList(center[0], center[1], allPoints, 20);
-    for(var k = 0; k <  closeAnchList.length; k++){
-        var ele = closeAnchList[k];
-        lon = ele.lon;
-        lat = ele.lat;
-        if(inside([lon, lat], locationList)){
-            var clusterID = ele.clusterId;
-            console.log("包含区域 " +  clusterID);
-            delete allPoints[clusterID];
-            // addClusterIDList.push(clusterID);
-        }
-    }
+    // var closeAnchList = getCloseAnchList(center[0], center[1], allPoints, 20);
+    // for(var k = 0; k <  closeAnchList.length; k++){
+    //     var ele = closeAnchList[k];
+    //     lon = ele.lon;
+    //     lat = ele.lat;
+    //     if(inside([lon, lat], locationList)){
+    //         var clusterID = ele.clusterId;
+    //         console.log("包含区域 " +  clusterID);
+    //         delete allPoints[clusterID];
+    //         // addClusterIDList.push(clusterID);
+    //     }
+    // }
 
     // 把需要的点记录下来
     var location = "";
@@ -600,8 +614,6 @@ $('#anch_save').click(function(){
     position.getSource().clear();
     anchStatus = false; // 将锚地状态还原
     current.getSource().clear();
-    // map.getView().setCenter(ol.proj.fromLonLat(center));
-    // map.getView().setCenter(ol.proj.fromLonLat(center));
 });
 
 // 取消按钮点击之后

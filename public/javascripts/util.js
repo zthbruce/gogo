@@ -229,16 +229,16 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                     var lat = parseFloat(ele.attr("lat"));
                     var clusterId = ele.attr("clusterId"); // 不重新赋予新的
                     // var number = parseInt($(".unselected_LonLat>li:last-child>span:first-child").text()) + 1;
-                    number = isNaN(number) ? 1: number;
+                    // number = isNaN(number) ? 1: number;
                     // var normalLonLatStr = $(this).next().text();
                     // var chooseStr = '<li clusterId=' + ele.attr("clusterId") + ' lon=' + ele.attr("lon")  + ' lat=' + ele.attr("lat") +'><span>' + number + '</span><span class = "anch_notBelong"></span><span>' + normalLonLatStr + '</span></li>';
                     // $(".unselected_LonLat").append(chooseStr);
                     // 移除本行
-                    var nextDomList = ele.nextAll();
-                    for(var i = 0; i < nextDomList.length; i++){
-                        var num = parseInt(nextDomList.eq(i).children("span:first-child").text()) -1;
-                        nextDomList.eq(i).children("span:first-child").text(num);
-                    }
+                    // var nextDomList = ele.nextAll();
+                    // for(var i = 0; i < nextDomList.length; i++){
+                    //     var num = parseInt(nextDomList.eq(i).children("span:first-child").text()) -1;
+                    //     nextDomList.eq(i).children("span:first-child").text(num);
+                    // }
                     ele.remove();
                     updateLocationList();
                     // 根据当前点画出轮廓线
@@ -256,7 +256,7 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                     icon.getSource().addFeature(feature);
                     changeAnchSaveButton(true);
                 }
-                else {
+                else{
                     // 如果不属于本锚地, 点击之后标为选定
                     var clusterId = current_feature.get('cluster_id');
                     var anchKey = current_feature.get('anchKey') === undefined ? "" : current_feature.get('anchKey');
@@ -317,6 +317,7 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                 changeBerthSaveButton(false); // 初始化泊位保存状态
                 // 初始化锚地保存状态
                 // 锚地管理弹出框, 不管是原生锚地区域还是锚地聚类区域, type都设为0, 表示锚地
+                console.log(type);
                 if (type === 0) {
                     // 锚地弹出框
                     $("#newAnch").fadeIn("normal");
