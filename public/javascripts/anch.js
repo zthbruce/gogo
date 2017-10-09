@@ -644,8 +644,8 @@ $('#port_list_to_choose').delegate('li', 'click', function () {
     $(this).remove();
     $(this).parent().slideUp(200);
     // 滚动条到达最右边
-    // $('.anch_IntentPort>span:nth-child(2)').scrollLeft($('.IntentPort_list>li:last-child').position().left);
-    $('.anch_IntentPort>span:nth-child(2)').scrollLeft(4000);
+    $('.anch_IntentPort>span:nth-child(2)').scrollLeft($('.IntentPort_list>li:last-child').position().left);
+    // $('.anch_IntentPort>span:nth-child(2)').scrollLeft(4000);
 });
 
 // 已选港口列表关闭按钮
