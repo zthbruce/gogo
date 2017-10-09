@@ -146,11 +146,11 @@ function getFleetInfo(fleetNumber, timePoint) {
                 /* 列表下栏 */
                 // 确认数
                 $(".fleetInfo_total>.fleetInfo_checkedNum").remove(); // 初始化
-                if(timePoint==="~"){
+                // if(timePoint==="~"){
                     $(".fleetInfo_total").prepend('<div class="fleetInfo_checkedNum"><span>已确认:</span> <span>' + checkedNum + '</span></div>')
                     // $(".fleetInfo_total").prepend('<div class="fleetInfo_checkedNum"><span>已确认:</span> <span>' + $('.FleetName_List>.choose>i:nth-child(1)').text() + '</span></div>')
                     // $('.fleetInfo_total>.fleetInfo_checkedNum>span:nth-child(2)').text($('.FleetName_List>.choose>i:nth-child(1)').text());
-                }
+                // }
                 // 总船舶数目
                 var total_num = fleetDetailInfo.length - num_less;
                 $('.fleetInfo_total>.fleetInfo_Num>span:nth-child(2)').text(total_num );
@@ -634,6 +634,15 @@ $('.ShipType_list>li').mouseenter(function(){
     getBasicFleetInfo(fleetType)
 });
 
+// 获得当下时间
+function getNowFormatDay() {
+    var date = new Date();
+    var seperator1 = "-";
+    var strMonth = format((date.getMonth() + 1));
+    var strDate = format(date.getDate());
+    return date.getFullYear() + seperator1 + strMonth + seperator1 + strDate
+}
+
 
 // 点击船队列表中的船队获取所属船舶列表
 $('.FleetName_List').delegate('li', 'click', function () {
@@ -656,7 +665,9 @@ $('.FleetName_List').delegate('li', 'click', function () {
     fleet_div.css('zIndex',fleetDivZIndex);
     fleet_div.fadeIn(600);
     // 获取船队列表
-    getShipList2Fleet(fleetNumber, "~");
+    var timePoint = getNowFormatDay();
+    getShipList2Fleet(fleetNumber, timePoint);
+    // getShipList2Fleet(fleetNumber, "~");
     $(".fleetList_List").attr("timepoint", "~"); // 标记时间信息
 });
 
@@ -666,7 +677,9 @@ $('.today_btn').click(function () {
     // 充分利用当前所选船队的信息
     $(".TimePointList>li>i").removeClass('selected');
     var fleetNumber = $('.fleet_title>span').attr("fleetNumber"); //船队ID
-    getShipList2Fleet(fleetNumber, "~");
+    var timePoint = getNowFormatDay();
+    getShipList2Fleet(fleetNumber, timePoint);
+    // getShipList2Fleet(fleetNumber, "~");
     $(".fleetList_List").attr("timepoint", "~")
 });
 

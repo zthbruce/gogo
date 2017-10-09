@@ -73,25 +73,30 @@ router.get("/getFleetDetailInfo", function (req, res, next) {
     var fleetNumber = req.query.FleetNumber;
     var timePoint = req.query.TimePoint;
     // 如果请求当前的船舶信息
-    if(timePoint === "~"){
-        // var sql = util.format('SELECT t1.ShipNumber, t2.Name AS ShipName, IMO, MMSI, t3.Name AS Type, DWT, ShipStatus, ' +
-        //     'BuiltDate, JoinTime, LeaveTime, Checked FROM T4101_Fleet t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber' +
-        //     ' LEFT JOIN `T0181_ShipType` t3 ON t2.ShipType = t3.TypeKey ' +
-        //     'WHERE FleetNumber = "%s" AND ShipStatus IN ("1", "2", "3") ORDER BY Checked DESC, DWT DESC', fleetNumber);
-        var sql = util.format('SELECT t1.ShipNumber, t2.Name AS ShipName, IMO, MMSI, t3.Name AS Type, DWT, t4.CNName AS ShipStatus, ' +
+    // if(timePoint === "~"){
+    //     // var sql = util.format('SELECT t1.ShipNumber, t2.Name AS ShipName, IMO, MMSI, t3.Name AS Type, DWT, ShipStatus, ' +
+    //     //     'BuiltDate, JoinTime, LeaveTime, Checked FROM T4101_Fleet t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber' +
+    //     //     ' LEFT JOIN `T0181_ShipType` t3 ON t2.ShipType = t3.TypeKey ' +
+    //     //     'WHERE FleetNumber = "%s" AND ShipStatus IN ("1", "2", "3") ORDER BY Checked DESC, DWT DESC', fleetNumber);
+    //     var sql = util.format('SELECT t1.ShipNumber, t2.Name AS ShipName, IMO, MMSI, t3.Name AS Type, DWT, t4.CNName AS ShipStatus, ' +
+    //         'BuiltDate, JoinTime, LeaveTime, Checked FROM T4101_Fleet t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber ' +
+    //         'LEFT JOIN `T0181_ShipType` t3 ON t2.ShipType = t3.TypeKey LEFT JOIN T0183_ShipStatus t4 ON t2.ShipStatus = t4.StatusKey ' +
+    //         'WHERE FleetNumber = "%s" AND (LeaveTime IS NULL OR LeaveTime = "")' +
+    //         'ORDER BY Checked DESC, BuiltDate DESC', fleetNumber)
+    // }
+    // 请求历史上某一天的船舶信息
+    // else{
+    //      sql = util.format('SELECT t1.ShipNumber, t2.Name AS ShipName, IMO, MMSI, t3.Name AS Type, DWT, t4.CNName AS ShipStatus, ' +
+    //          'BuiltDate, JoinTime, LeaveTime, Checked FROM T4101_Fleet t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber ' +
+    //          'LEFT JOIN `T0181_ShipType` t3 ON t2.ShipType = t3.TypeKey LEFT JOIN T0183_ShipStatus t4 ON t2.ShipStatus = t4.StatusKey ' +
+    //          'WHERE FleetNumber = "%s" AND JoinTime <= "%s" AND (LeaveTime >= "%s" OR LeaveTime IS NULL OR LeaveTime = "")' +
+    //          'ORDER BY BuiltDate DESC', fleetNumber, timePoint, timePoint)
+    // }
+    sql = util.format('SELECT t1.ShipNumber, t2.Name AS ShipName, IMO, MMSI, t3.Name AS Type, DWT, t4.CNName AS ShipStatus, ' +
             'BuiltDate, JoinTime, LeaveTime, Checked FROM T4101_Fleet t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber ' +
             'LEFT JOIN `T0181_ShipType` t3 ON t2.ShipType = t3.TypeKey LEFT JOIN T0183_ShipStatus t4 ON t2.ShipStatus = t4.StatusKey ' +
-            'WHERE FleetNumber = "%s" AND (LeaveTime IS NULL OR LeaveTime = "") AND ShipStatus NOT IN ("B", "0")' +
-            'ORDER BY Checked DESC, BuiltDate DESC', fleetNumber)
-    }
-    // 请求历史上某一天的船舶信息
-    else{
-         sql = util.format('SELECT t1.ShipNumber, t2.Name AS ShipName, IMO, MMSI, t3.Name AS Type, DWT, t4.CNName AS ShipStatus, ' +
-             'BuiltDate, JoinTime, LeaveTime, Checked FROM T4101_Fleet t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber ' +
-             'LEFT JOIN `T0181_ShipType` t3 ON t2.ShipType = t3.TypeKey LEFT JOIN T0183_ShipStatus t4 ON t2.ShipStatus = t4.StatusKey ' +
-             'WHERE FleetNumber = "%s" AND JoinTime <= "%s" AND (LeaveTime >= "%s" OR LeaveTime IS NULL OR LeaveTime = "") AND Checked = "1" ' +
-             'ORDER BY BuiltDate DESC', fleetNumber, timePoint, timePoint)
-    }
+            'WHERE FleetNumber = "%s" AND BuiltDate <= "%s" AND JoinTime <= "%s" AND (LeaveTime >= "%s" OR LeaveTime IS NULL OR LeaveTime = "")' +
+            'ORDER BY BuiltDate DESC', fleetNumber, timePoint, timePoint, timePoint);
     mysql.query(sql, function (err, results) {
         if(err){
             console.log(utils.eid1);
