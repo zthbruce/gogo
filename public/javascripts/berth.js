@@ -485,6 +485,7 @@ $('#berth_save').click(function () {
         console.log(staticAreaKey);
         var feature = icon.getSource().getFeatureById(staticAreaKey);
         allPoints[staticAreaKey]["Checked"] = 1; // 更新状态
+        allPoints[staticAreaKey]['TerminalKey'] = terminalKey;
         feature.setStyle(berth_yes);
     });
     $("[status='1']").each(function () {
@@ -492,6 +493,7 @@ $('#berth_save').click(function () {
         console.log(staticAreaKey);
         var feature = icon.getSource().getFeatureById(staticAreaKey);
         allPoints[staticAreaKey]["Checked"] = 0;
+        allPoints[staticAreaKey]['TerminalKey'] = '';
     });
     console.log(terminalKey);
     console.log(berthList);
