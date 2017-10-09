@@ -1571,8 +1571,7 @@
         })
     });
 
-    //
-
+    // 已存在的锚地图标
     var exist_anch_style = new ol.style.Style({
         image: new ol.style.Icon({
             scale: 0.8,
@@ -1712,10 +1711,13 @@
         var zoom = blmol.operation.getZoom(map);
         console.log(zoom);
         iconLayer(zoom, extent);
-        if((zoom >= 10 && oldLevel < 10) || (zoom < 10  && oldLevel >= 10)){
-            anchLayer(zoom) // 变化锚地显示
+        if(!anchStatus){
+            anchLayer();
         }
-        oldLevel = zoom;
+//        if((zoom >= 10 && oldLevel < 10) || (zoom < 10  && oldLevel >= 10)){
+//            anchLayer(zoom) // 变化锚地显示
+//        }
+//        oldLevel = zoom;
     });
 
 

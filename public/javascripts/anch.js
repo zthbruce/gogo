@@ -238,7 +238,12 @@ function getAnchInfo(anchKey, lon, lat) {
 
                 // 将曲线的点(勾)画出来
                 console.log("画出点");
+                anch.getSource().clear(); // 将锚地层清空
                 current.getSource().clear(); // 清空图层
+                // 更新轮廓
+                updateLocationList();
+                // 根据当前所选点，画出轮廓线
+                writeContourLine(locationList);
                 for(var i = 0; i < locationList.length - 1; i++) {
                     var ele = locationList[i];
                     var lon = ele[0];
@@ -363,7 +368,7 @@ function writeContourLine(lonLatList) {
     // 添加新的feature
     var feature = new ol.Feature({
         type: 0,
-        anchKey: "",
+        // anchKey: "",
         lon: center[0],
         lat: center[1],
         geometry: new ol.geom.Polygon([lonLatInfo])
@@ -537,8 +542,10 @@ $('#anch_save').click(function(){
         location +=  lon + "#" + lat;
     }
     console.log(location);
+    var center_lon = center[0].toFixed(4);
+    var center_lat = center[1].toFixed(4);
     var anchInfo = {AnchorageKey: anchKey, Name: anchName, Purpose: purpose,
-        Des: des, CenterLon: center[0].toFixed(4), CenterLat: center[1].toFixed(4),
+        Des: des, CenterLon: center_lon, CenterLat: center_lat,
         Location: location, DestinationPort: portListStr}; // 向后台请求保存
     console.log(anchInfo);
 
@@ -554,7 +561,6 @@ $('#anch_save').click(function(){
     //         console.log(err);
     //     }
     // });
-
     $.ajax({
         url: '/anch/saveAnchInfo',
         type: 'get',
@@ -566,7 +572,9 @@ $('#anch_save').click(function(){
             console.log(err);
         }
     });
-
+    // 刷新锚地信息
+    getAllAnch();
+    // 锚地样式
     var anch_style =  new ol.style.Style({
         stroke: new ol.style.Stroke({
             color: 'blue',

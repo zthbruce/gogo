@@ -226,7 +226,9 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                 var portId = current_feature.get('port_id');
                 reqOnePortBasicInfo(portId);
             }
-        } else if (current_feature.get('cluster_id') !== undefined || current_feature.get('anchKey') !== undefined) {
+        }
+        // 点击锚地方面的图标
+        else if (current_feature.get('cluster_id') !== undefined || current_feature.get('anchKey') !== undefined) {
             var type = current_feature.get('type');
             var lon = current_feature.get('lon');
             var lat = current_feature.get('lat');
@@ -340,7 +342,7 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                     changeAnchSaveButton(false);
                     old_feature =  current_feature;
                     current_feature.setId("current"); // 将当前的设为current
-                    getAnchInfo(anchKey, lon, lat);
+                    getAnchInfo(anchKey, lon, lat); // 获取信息
                 }
                 // 泊位管理弹出框
                 if (type === 1) {
