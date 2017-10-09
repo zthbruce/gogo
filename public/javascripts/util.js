@@ -187,23 +187,6 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                 }
                 if(current_feature.get("type") === "choosed"){
                     removePort(portID, current_feature);
-                    // console.log("取消");
-                    // // 将港口取消高亮
-                    // current_feature.set("type", "toChoose");
-                    // current_feature.setStyle(port_nor);
-                    // // 泊位取消高亮
-                    // var features = current.getSource().getFeatures();
-                    // for(var i=0; i< features.length; i++) {
-                    //     var feature = features[i];
-                    //     if(feature.get('portId') === portID){
-                    //         current.getSource().removeFeature(feature);
-                    //     }
-                    // }
-                    // var portList = port_ul.children("li");
-                    // for(var j=0; j< portList.length; j++){
-                    //     var li = portList.eq(j);
-                    //     li.remove();
-                    // }
                 }
                 // 如果是未选的话，点击标为选择
                 else if(current_feature.get("type") === "toChoose"){
@@ -227,7 +210,7 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                 reqOnePortBasicInfo(portId);
             }
         }
-        // 点击锚地方面的图标
+        // 点击锚地的图标
         else if (current_feature.get('cluster_id') !== undefined || current_feature.get('anchKey') !== undefined) {
             var type = current_feature.get('type');
             var lon = current_feature.get('lon');
@@ -287,6 +270,7 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                         console.log(clusterId);
                         var chooseStr = '<li clusterId= "' + clusterId +  '" lon=' + lon + ' lat=' + lat + '><span>' + number + '</span><span class = "anch_belong"></span><span>' + normalLonLatStr + '</span></li>';
                         console.log(chooseStr);
+                        // 添加到最后一行
                         $(".selected_LonLat").append(chooseStr);
                         // 更新轮廓点
                         updateLocationList();

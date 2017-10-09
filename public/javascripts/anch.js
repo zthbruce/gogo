@@ -615,7 +615,9 @@ $('#anch_cancel').click(function(){
         anch.getSource().removeFeature(anch.getSource().getFeatureById("current"));
         anch.getSource().addFeature(old_feature);
     }
+    // 回到非锚地状态
     anchStatus = false;
+    anchLayer();
     // 将选择勾去掉
     current.getSource().clear();
 });
