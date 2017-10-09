@@ -49,7 +49,8 @@ function getPierInfo(clusterId, lon, lat){
     // pierStatus = false; // 初始化码头信息修改状态
     // berthStatus = false; // 初始化泊位信息修改状态
     saveStatus = false; //
-    var closePortList = getClosePortList(lon, lat, AllPortBasicList, 5);
+    console.log(lon+ "," + lat);
+    var closePortList = getClosePortList(lon, lat, AllPortBasicList, 10);
     console.log(closePortList);
     /* 港口列表模块 */
     $("#berth_port_list").empty();
@@ -118,7 +119,7 @@ function getPierInfo(clusterId, lon, lat){
             }
             // console.log(terminalKey);
             $(".pierInfo_list").attr("terminalKey", terminalKey);
-            getCloseBerthList(terminalKey, lon, lat, allPoints, 10)
+            getCloseBerthList(terminalKey, lon, lat, allPoints, 10, 20)
         },
         error: function(err){
             console.log(err);
@@ -134,8 +135,9 @@ function getPierInfo(clusterId, lon, lat){
  * @param centerLat
  * @param allPoints
  * @param n
+ * @param maxDistance
  */
-function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n){
+function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxDistance){
     // 首先会获取该码头下的stationAreaKey
     var belongDistanceList = {};
     $.ajax({
@@ -156,7 +158,8 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n){
                     var lon = ele['lon'];
                     var lat = ele['lat'];
                     var distance = getGreatCircleDistance(centerLon, centerLat, lon, lat);
-                    if(distance <= 10.0){
+                    if(distance <= maxDistance){
+                        console.log("here");
                         var status = 1; // 1表示默认不属于该码头
                         var info = {LOA: "", Moulded_Beam: "", Draft: "", LoadDischargeRate: ""};
                         if(key in belongDistanceList){
@@ -176,11 +179,18 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n){
                 if(x.status > y.status){
                     return 1;
                 }
+                if(isNaN(x.distance)){
+                    return 1
+                }
+                if(isNaN(y.distance)){
+                    return -1
+                }
                 return (x.distance  - y.distance)
             });
 
             // 获取最近的N个静止区域的统计信息列表
             var len = distanceList.length;
+            console.log("长度为:" + len)
             n = Math.min(len, n);
             // 初始化泊位列表
             $(".berth_list").empty();
@@ -193,6 +203,7 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n){
                 var ele = allPoints[staticAreaKey];
                 var belongTerminalKey = ele.TerminalKey === 'null'? '': ele.TerminalKey;
                 // console.log(terminalKey + "," + belongTerminalKey);
+                // 如果还没有归属的或者是当前码头的情况
                 if(ele.Checked === 0 || terminalKey === belongTerminalKey) {
                     // 将信息写入html, 并赋予一个状态,根据状态进行筛选
                     // 当前静止区域默认属于
@@ -402,15 +413,6 @@ $('#berth_port_list>li').on('click', function () {
 // 保存按钮单击事件
 // var dataIsEffective=true;
 $('#berth_save').click(function () {
-    // 输入检查
-    // 检查泊位列表输入框的输入问题
-    // for(var i=0;i<$('.berth_list input').length;i++){
-    //     if(isNaN($('.berth_list input').eq(i).val())){
-    //         dataIsEffective=false;
-    //         $('.berth_list input').eq(i).css({'border-color':'#f00','box-shadow':'0px 0px 1px 1px #f00'});
-    //     }
-    // }
-    // if(dataIsEffective) {
     console.log("保存当前信息");
     changeBerthSaveButton(false); // 改变按钮
     var terminalKey = $(".pierInfo_list").attr("terminalKey"); //TerminalKey
@@ -420,7 +422,7 @@ $('#berth_save').click(function () {
     }
 
     // 如果公司的number为0
-    var companyNumber = $("#company_name").attr('companyNumber');
+    var companyNumber = $("#company_name").attr('companynumber');
     // 当还不是公司的时候，生成一个公司key值
     if(companyNumber === ""){
         companyNumber = 'C' + generateNewPierKey();
@@ -482,7 +484,7 @@ $('#berth_save').click(function () {
         var staticAreaKey = $(this).attr("staticAreaKey");
         console.log(staticAreaKey);
         var feature = icon.getSource().getFeatureById(staticAreaKey);
-        allPoints[staticAreaKey]["Checked"] = 1;
+        allPoints[staticAreaKey]["Checked"] = 1; // 更新状态
         feature.setStyle(berth_yes);
     });
     $("[status='1']").each(function () {
@@ -507,6 +509,7 @@ $('#berth_save').click(function () {
         }
     });
     // }
+    position.getSource().clear(); // 将定位图标删除
 });
 
 // 统计按钮

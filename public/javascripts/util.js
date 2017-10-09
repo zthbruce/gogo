@@ -60,13 +60,6 @@ function getClosePortList(lon, lat, portList, n){
     var port;
     var port_lon;
     var port_lat;
-    // for(var i = 0; i< len; i++){
-    //     port = portList[i];
-    //     port_lon = port.LongitudeNumeric;
-    //     port_lat = port.LatitudeNumeric;
-    //     distanceList[i] = {index: i, distance: getDistance(lon, lat, port_lon, port_lat)}
-    // }
-    // var i = 0;
     for(var key in portList){
         port = portList[key];
         port_lon = port.LongitudeNumeric;
@@ -76,6 +69,12 @@ function getClosePortList(lon, lat, portList, n){
     }
     // sort by distance
     distanceList.sort(function (x, y) {
+        if(isNaN(x.distance)){
+            return 1
+        }
+        if(isNaN(y.distance)){
+            return -1
+        }
         return x.distance - y.distance
     });
 
@@ -317,7 +316,7 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                 changeBerthSaveButton(false); // 初始化泊位保存状态
                 // 初始化锚地保存状态
                 // 锚地管理弹出框, 不管是原生锚地区域还是锚地聚类区域, type都设为0, 表示锚地
-                console.log(type);
+                // console.log(type);
                 if (type === 0) {
                     // 锚地弹出框
                     $("#newAnch").fadeIn("normal");
