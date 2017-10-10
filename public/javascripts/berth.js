@@ -20,14 +20,15 @@ function addPierSelectCompanyName(companyStr){
                     var companyName = jsonData[i].Name;
                     var companyNumber =  jsonData[i].CompanyNumber;
                     // 显示公司列表
-                    $("#company_name_list").append('<li "companyNumber" = ' + companyNumber + '>' + companyName + '</li>');
+                    $("#company_name_list").append('<li companyNumber = ' + companyNumber + '>' + companyName + '</li>');
                 }
                 $("#company_name_list").slideDown(200);
                 // 点击选择按钮
                 $('#company_name_list>li').on('click', function () {
                     console.log($(this).text());
+                    console.log($(this).attr("companyNumber"));
                     // $('#company_name').val($(this).text());
-                    $('#company_name').attr("companyNumber", $(this).attr("companyNumber"));
+                    $('#company_name').attr("companyNumber", $(this).attr("companynumber"));
                     $('#company_name').val($(this).text());
                     $(this).slideUp(400)
                 });
@@ -420,7 +421,6 @@ $('#berth_save').click(function () {
         // 生成一个码头ID
         terminalKey = generateNewPierKey();
     }
-
     // 如果公司的number为0
     var companyNumber = $("#company_name").attr('companynumber');
     // 当还不是公司的时候，生成一个公司key值
@@ -537,7 +537,9 @@ $('.pierInfo_list>.pier_info').bind('input propertychange',function() {
     changeBerthSaveButton(true);
 });
 
-
+/**
+ * 公司的输入
+ */
 $('.company_select>input').keyup(function(){
     console.log("输入公司信息");
     var nowVal = $(this).val();
@@ -545,6 +547,7 @@ $('.company_select>input').keyup(function(){
     $("#company_name_list").empty();
     // 做一下规范化,将" '等符号正则化
     nowVal = nowVal.replace(/[\'\"]/g,"");
+    $('#company_name').attr("companyNumber", '');
     // 根据输入字符串请求数据
     addPierSelectCompanyName(nowVal);
     // 根据字符串向数据库请求
