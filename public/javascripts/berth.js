@@ -467,7 +467,7 @@ $('#berth_save').click(function () {
     });
     // 保存公司信息
     $.ajax({
-        url: '/berth//savePierCompany',
+        url: '/berth/savePierCompany',
         type: 'get',
         data: {CompanyNumber: companyNumber, Name:$("#company_name").val()},
         success: function (data) {
