@@ -98,7 +98,7 @@ function getFleetInfo(fleetNumber, timePoint) {
                     var type = detailInfo.Type;
                     var today = new Date();
                     var this_year = today.getFullYear();
-                    if(detailInfo.BuiltDate !==null){
+                    if(detailInfo.BuiltDate !=null && detailInfo.BuiltDate !== ''){
                         var shipAge = this_year - parseInt(detailInfo.BuiltDate.slice(0, 4));
                     }else{
                         shipAge=''
