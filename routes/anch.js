@@ -97,8 +97,10 @@ router.get('/deleteStaticArea', function(req, res, next){
     });
 });
 
+/**
+ * 保存锚地信息
+ */
 router.get('/saveAnchInfo', function(req, res, next){
-    // 直接用都好相连
     var anchInfo = req.query.anchInfo;
     var sqls = util.format("REPLACE INTO `T2104_Anchorage` (AnchorageKey, NAME, Purpose, Des, CenterLon, CenterLat, Location," +
         " DestinationPort) VALUE ('%s', '%s', '%s','%s', '%s', '%s', '%s','%s')", anchInfo.AnchorageKey, anchInfo.Name,

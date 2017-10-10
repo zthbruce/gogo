@@ -4,6 +4,87 @@
  */
 
 /**
+ * 获取码头详细信息
+ * @param terminalKey
+ */
+function getPierDetail(terminalKey) {
+    $.ajax({
+        url: '/berth/getPierInfo',
+        type: 'get',
+        data: {TerminalKey: terminalKey},
+        success: function (data) {
+            console.log(data);
+            if (data[0] === "200") {
+                var jsonData = data[1];
+                var pierInfo = jsonData[0]; // 获取当前码头信息
+                // $(".pierInfo_list").attr("terminalKey", terminalKey);
+                port_name_ele.attr("port_id", pierInfo.PortID);
+                port_name_ele.text(pierInfo.PortName);
+                pier_name_ele.val(pierInfo.Name); // 码头名字
+                // $("#company_name").val(pierInfo.BelongtoCompany); // 公司名字
+                company_name_ele.attr("companyNumber", pierInfo.BelongtoCompany);
+                company_name_ele.val(pierInfo.CompanyName); // 公司名字
+                $("#berth_num").val(pierInfo.BerthQuantity); // 泊位数量
+                $("#tide").val(pierInfo.Tide); // 潮汐
+                $("#import_export_type").text(pierInfo.ImportExportType);
+                $("#cargo_type_key").text(pierInfo.CargoTypeKey);
+                // 经纬度的显示
+                $("#LON_LAT").val(pierInfo.Latitude + ", " + pierInfo.Longitude);
+                $("#LON_LAT").attr("numeric", pierInfo.LatitudeNumeric + "," + pierInfo.LongitudeNumeric);
+                $("#location").val(pierInfo.Location); //位置
+                $("#des").val(pierInfo.Des) // 说明
+                // 获得码头下最近的疑似泊位
+                getCloseBerthList(terminalKey, pierInfo.LongitudeNumeric, pierInfo.LatitudeNumeric, allPoints, 10, 20)
+            }
+            // 如果不属于某个数据, 就显示默认信息
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
+}
+
+/**
+ * 根据输入的部分码头名来获取码头
+ * @param pierStr
+ */
+function addPierSelectPierName(pierStr){
+    $.ajax({
+        url:'/berth/addPierSelectPierName',
+        type:'get',
+        data:{PierStr: pierStr},
+        success: function(data){
+            console.log(data);
+            if(data[0] === "200"){
+                var jsonData = data[1];
+                for(var i=0;i<jsonData.length;i++){
+                    var pierName = jsonData[i].Name;
+                    var terminalKey =  jsonData[i].TerminalKey;
+                    // 显示码头列表
+                    $("#pier_name_list").append('<li terminalKey = ' + terminalKey + '>' + pierName + '</li>');
+                }
+                $("#pier_name_list").slideDown(200);
+                // 点击选择按钮
+                $('#pier_name_list>li').on('click', function () {
+                    console.log($(this).text());
+                    console.log($(this).attr("terminalKey"));
+                    // $('#company_name').val($(this).text());
+                    $('#pier_name').attr("terminalKey", $(this).attr("terminalKey"));
+                    $('#pier_name').val($(this).text());
+                    // 刷新附近泊位信息
+                    getPierDetail(terminalKey);
+                    // getCloseBerthList(terminalKey, current_lon, current_lat, allPoints, 10, 20);
+                    $(this).slideUp(400)
+                });
+            }
+        },
+        error: function(err){
+            console.log(err);
+        }
+    });
+}
+
+/**
  * 根据输入的部分公司名来匹配数据库中的公司名
  * @param companyStr
  */
@@ -39,6 +120,43 @@ function addPierSelectCompanyName(companyStr){
         }
     });
 }
+// /**
+//  * 根据输入的部分码头名来匹配数据库中的码头名
+//  * @param companyStr
+//  */
+// function addPierSelectPierName(pierStr){
+//     $.ajax({
+//         url:'/berth/addPierSelectPierName',
+//         type:'get',
+//         data:{companyStr: pierStr},
+//         success: function(data){
+//             console.log(data);
+//             if(data[0] === "200"){
+//                 var jsonData = data[1];
+//                 for(var i=0;i<jsonData.length;i++){
+//                     var pierName = jsonData[i].Name;
+//                     var pierNumber =  jsonData[i].PierNumber;
+//                     // 显示码头列表
+//                     $("#pier_name_list").append('<li "pierNumber" = ' + pierNumber + '>' + pierName + '</li>');
+//                 }
+//                 $("#pier_name_list").slideDown(200);
+//                 // 点击选择按钮
+//                 $('#pier_name_list>li').on('click', function () {
+//                     console.log($(this).text());
+//                     // $('#company_name').val($(this).text());
+//                     $('#pier_name').attr("pierNumber", $(this).attr("pierNumber"));
+//                     $(".pierInfo_list").attr("terminalKey", $(this).attr("pierNumber"));
+//                     $('#pier_name').val($(this).text());
+//                     $(this).slideUp(400);
+//                 });
+//             }
+//         },
+//         error: function(err){
+//             console.log(err);
+//         }
+//     });
+// }
+
 
 /**
  * 根据静止区域ID获取码头详情信息
@@ -46,9 +164,10 @@ function addPierSelectCompanyName(companyStr){
  * @param lon
  * @param lat
  */
+var port_name_ele = $("#port_name");
+var pier_name_ele = $("#pier_name");
+var company_name_ele = $("#company_name");
 function getPierInfo(clusterId, lon, lat){
-    // pierStatus = false; // 初始化码头信息修改状态
-    // berthStatus = false; // 初始化泊位信息修改状态
     saveStatus = false; //
     console.log(lon+ "," + lat);
     var closePortList = getClosePortList(lon, lat, AllPortBasicList, 10);
@@ -71,42 +190,59 @@ function getPierInfo(clusterId, lon, lat){
         url:'/berth/getTerminal',
         type:'get',
         data:{staticAreaKey : clusterId},
-        success: function(data){
+        success: function(data) {
             console.log(data);
-            // 如果有数据就显示当前码头数据
             var terminalKey = "";
-            if(data[0] === "200"){
+            if (data[0] === "200") {
                 var jsonData = data[1];
                 var pierInfo = jsonData[0]; // 获取当前码头信息
-                console.log(pierInfo);
+                // console.log(pierInfo);
                 terminalKey = pierInfo.TerminalKey;
-                // $(".pierInfo_list").attr("terminalKey", terminalKey);
-                $("#port_name").attr("port_id", pierInfo.PortID);
-                $("#port_name").text(pierInfo.PortName);
-                $("#pier_name").val(pierInfo.Name); // 码头名字
-                // $("#company_name").val(pierInfo.BelongtoCompany); // 公司名字
-                $("#company_name").attr("companyNumber", pierInfo.BelongtoCompany);
-                $("#company_name").val(pierInfo.CompanyName); // 公司名字
-                $("#berth_num").val(pierInfo.BerthQuantity); // 泊位数量
-                $("#tide").val(pierInfo.Tide); // 潮汐
-                $("#import_export_type").text(pierInfo.ImportExportType);
-                $("#cargo_type_key").text(pierInfo.CargoTypeKey);
-                // 经纬度的显示
-                $("#LON_LAT").val(pierInfo.Latitude + ", " + pierInfo.Longitude);
-                $("#LON_LAT").attr("numeric", pierInfo.LatitudeNumeric + "," + pierInfo.LongitudeNumeric);
-                $("#location").val(pierInfo.Location); //位置
-                $("#des").val(pierInfo.Des) // 说明
+                getPierDetail(terminalKey);
+                // $.ajax({
+                //     url: '/berth/getPierInfo',
+                //     type: 'get',
+                //     data: {TerminalKey: terminalKey},
+                //     success: function (data) {
+                //         console.log(data);
+                //         if (data[0] === "200") {
+                //             var jsonData = data[1];
+                //             var pierInfo = jsonData[0]; // 获取当前码头信息
+                //             // $(".pierInfo_list").attr("terminalKey", terminalKey);
+                //             port_name_ele.attr("port_id", pierInfo.PortID);
+                //             port_name_ele.text(pierInfo.PortName);
+                //             pier_name_ele.val(pierInfo.Name); // 码头名字
+                //             // $("#company_name").val(pierInfo.BelongtoCompany); // 公司名字
+                //             company_name_ele.attr("companyNumber", pierInfo.BelongtoCompany);
+                //             company_name_ele.val(pierInfo.CompanyName); // 公司名字
+                //             $("#berth_num").val(pierInfo.BerthQuantity); // 泊位数量
+                //             $("#tide").val(pierInfo.Tide); // 潮汐
+                //             $("#import_export_type").text(pierInfo.ImportExportType);
+                //             $("#cargo_type_key").text(pierInfo.CargoTypeKey);
+                //             // 经纬度的显示
+                //             $("#LON_LAT").val(pierInfo.Latitude + ", " + pierInfo.Longitude);
+                //             $("#LON_LAT").attr("numeric", pierInfo.LatitudeNumeric + "," + pierInfo.LongitudeNumeric);
+                //             $("#location").val(pierInfo.Location); //位置
+                //             $("#des").val(pierInfo.Des) // 说明
+                //             // 获得码头下最近的疑似泊位
+                //             getCloseBerthList(terminalKey, pierInfo.LongitudeNumeric, pierInfo.LatitudeNumeric, allPoints, 10, 20)
+                //         }
+                //         // 如果不属于某个数据, 就显示默认信息
+                //     },
+                //     error: function (err) {
+                //         console.log(err);
+                //     }
+                // });
             }
-            // 如果没有数据, 就显示默认信息
-            else{
+            else {
                 console.log("不属于任何码头");
                 // $(".pierInfo_list").attr("terminalKey", "");
-                var default_port =  closePortList[0];
-                $("#port_name").attr("port_id", default_port.PortID);
-                $("#port_name").text(default_port.ENName);
-                $("#pier_name").val("");
-                $("#company_name").attr("companyNumber", "");
-                $("#company_name").val("");
+                var default_port = closePortList[0];
+                port_name_ele.attr("port_id", default_port.PortID);
+                port_name_ele.text(default_port.ENName);
+                pier_name_ele.val("");
+                company_name_ele.attr("companyNumber", "");
+                company_name_ele.val("");
                 $("#berth_num").val(""); // 泊位数量
                 $("#location").val("");//位置
                 $("#des").val("");// 说明
@@ -115,22 +251,112 @@ function getPierInfo(clusterId, lon, lat){
                 $("#cargo_type_key").text("Iron Ore");
                 // 经纬度显示当前泊位的中心点
                 var latLonInfo = transLonLatToNormal(lat, lon);
-                $("#LON_LAT").val( latLonInfo[0] + ", " + latLonInfo[1]);
+                $("#LON_LAT").val(latLonInfo[0] + ", " + latLonInfo[1]);
                 $("#LON_LAT").attr("numeric", lat + "," + lon);
+                // 获得当前点附近的疑似泊位
+                getCloseBerthList(terminalKey, lon, lat, allPoints, 10, 20)
             }
             // console.log(terminalKey);
-            $(".pierInfo_list").attr("terminalKey", terminalKey);
-            getCloseBerthList(terminalKey, lon, lat, allPoints, 10, 20)
-        },
-        error: function(err){
-            console.log(err);
-        }
-    });
-
+            // 增加码头key值信息
+            // $(".pierInfo_list").attr("terminalKey", terminalKey);
+            pier_name_ele.attr("terminalKey", terminalKey);
+            // getCloseBerthList(terminalKey, lon, lat, allPoints, 10, 20)
+        }, error: function (err) {
+                console.log(err);
+            }
+        })
 }
+// function getPierInfo(clusterId, lon, lat){
+//     saveStatus = false; //
+//     console.log(lon+ "," + lat);
+//     var closePortList = getClosePortList(lon, lat, AllPortBasicList, 10);
+//     console.log(closePortList);
+//     /* 港口列表模块 */
+//     $("#berth_port_list").empty();
+//     for(var i = 0; i < closePortList.length; i++){
+//         var port = closePortList[i];
+//         $("#berth_port_list").append('<li port_id="'+port.PortID+'">'+port.ENName+'</li>');
+//     }
+//     // 可点击选择港口
+//     $('#berth_port_list>li').on('click', function () {
+//         $("#port_name").attr("port_id", $(this).attr("port_id"));
+//         $('#port_name').text($(this).text());
+//         changeBerthSaveButton(true);
+//         $(this).parent().slideUp(200);
+//     });
+//     // 请求码头信息
+//     $.ajax({
+//         url:'/berth/getTerminal',
+//         type:'get',
+//         data:{staticAreaKey : clusterId},
+//         success: function(data){
+//             console.log(data);
+//             // 如果有数据就显示当前码头数据
+//             var terminalKey = "";
+//             var port_name_ele = $("#port_name");
+//             var pier_name_ele = $("#pier_name");
+//             var company_name_ele = $("#company_name");
+//             if(data[0] === "200"){
+//                 var jsonData = data[1];
+//                 var pierInfo = jsonData[0]; // 获取当前码头信息
+//                 console.log(pierInfo);
+//                 terminalKey = pierInfo.TerminalKey;
+//                 // $(".pierInfo_list").attr("terminalKey", terminalKey);
+//                 port_name_ele.attr("port_id", pierInfo.PortID);
+//                 port_name_ele.text(pierInfo.PortName);
+//                 pier_name_ele.val(pierInfo.Name); // 码头名字
+//                 // $("#company_name").val(pierInfo.BelongtoCompany); // 公司名字
+//                 company_name_ele.attr("companyNumber", pierInfo.BelongtoCompany);
+//                 company_name_ele.val(pierInfo.CompanyName); // 公司名字
+//                 $("#berth_num").val(pierInfo.BerthQuantity); // 泊位数量
+//                 $("#tide").val(pierInfo.Tide); // 潮汐
+//                 $("#import_export_type").text(pierInfo.ImportExportType);
+//                 $("#cargo_type_key").text(pierInfo.CargoTypeKey);
+//                 // 经纬度的显示
+//                 $("#LON_LAT").val(pierInfo.Latitude + ", " + pierInfo.Longitude);
+//                 $("#LON_LAT").attr("numeric", pierInfo.LatitudeNumeric + "," + pierInfo.LongitudeNumeric);
+//                 $("#location").val(pierInfo.Location); //位置
+//                 $("#des").val(pierInfo.Des) // 说明
+//                 // 获得码头下最近的
+//                 getCloseBerthList(terminalKey, pierInfo.LongitudeNumeric, pierInfo.LatitudeNumeric, allPoints, 10, 20)
+//             }
+//             // 如果没有数据, 就显示默认信息
+//             else{
+//                 console.log("不属于任何码头");
+//                 // $(".pierInfo_list").attr("terminalKey", "");
+//                 var default_port =  closePortList[0];
+//                 port_name_ele.attr("port_id", default_port.PortID);
+//                 port_name_ele.text(default_port.ENName);
+//                 $("#pier_name").val("");
+//                 company_name_ele.attr("companyNumber", "");
+//                 company_name_ele.val("");
+//                 $("#berth_num").val(""); // 泊位数量
+//                 $("#location").val("");//位置
+//                 $("#des").val("");// 说明
+//                 // $(".pier_info>input").val(""); //初始化输入
+//                 $("#import_export_type").text("进口");
+//                 $("#cargo_type_key").text("Iron Ore");
+//                 // 经纬度显示当前泊位的中心点
+//                 var latLonInfo = transLonLatToNormal(lat, lon);
+//                 $("#LON_LAT").val( latLonInfo[0] + ", " + latLonInfo[1]);
+//                 $("#LON_LAT").attr("numeric", lat + "," + lon);
+//                 // 获得当前点附近的疑似泊位
+//                 getCloseBerthList(terminalKey, lon, lat, allPoints, 10, 20)
+//             }
+//             // console.log(terminalKey);
+//             // 增加码头key值信息
+//             // $(".pierInfo_list").attr("terminalKey", terminalKey);
+//             pier_name_ele.attr("terminalKey", terminalKey);
+//             // getCloseBerthList(terminalKey, lon, lat, allPoints, 10, 20)
+//         },
+//         error: function(err){
+//             console.log(err);
+//         }
+//     });
+// }
 
 /**
- * 根据当前中心点，获取10公里范围内的泊位列表
+ * 根据当前中心点，获取20公里范围内的泊位列表
  * @param terminalKey 码头ID， 如果为空
  * @param centerLon
  * @param centerLat
@@ -140,6 +366,7 @@ function getPierInfo(clusterId, lon, lat){
  */
 function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxDistance){
     // 首先会获取该码头下的stationAreaKey
+    console.log("here");
     var belongDistanceList = {};
     $.ajax({
         url:'/berth/getBerthListFromPier',
@@ -160,7 +387,6 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxD
                     var lat = ele['lat'];
                     var distance = getGreatCircleDistance(centerLon, centerLat, lon, lat);
                     if(distance <= maxDistance){
-                        console.log("here");
                         var status = 1; // 1表示默认不属于该码头
                         var info = {LOA: "", Moulded_Beam: "", Draft: "", LoadDischargeRate: ""};
                         if(key in belongDistanceList){
@@ -191,7 +417,7 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxD
 
             // 获取最近的N个静止区域的统计信息列表
             var len = distanceList.length;
-            console.log("长度为:" + len)
+            console.log("长度为:" + len);
             n = Math.min(len, n);
             // 初始化泊位列表
             $(".berth_list").empty();
@@ -209,6 +435,7 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxD
                     // 将信息写入html, 并赋予一个状态,根据状态进行筛选
                     // 当前静止区域默认属于
                     num++;
+                    // 第一个默认属于
                     if (i === 0) {
                         belongStatus = "belong";
                         status = 0;
@@ -225,10 +452,10 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxD
             $(".oneBerth_info>li:nth-child(2)>span").click(function () {
                 changeBerthSaveButton(true); // 改变保存状态
                 // 第一个不允许修改状态
-                if($(this).attr('seq') === "1"){
-                    console.log("第一个不允许修改");
-                    return;
-                }
+                // if($(this).attr('seq') === "1"){
+                //     console.log("第一个不允许修改");
+                //     return;
+                // }
                 if ($(this).attr('class') === "notBelong") {
                     // $(this).removeClass("notBelong");
                     // $(this).addClass("belong");
@@ -412,20 +639,36 @@ $('#berth_port_list>li').on('click', function () {
 // 关于保存按钮的状态
 
 // 保存按钮单击事件
-// var dataIsEffective=true;
 $('#berth_save').click(function () {
     console.log("保存当前信息");
     changeBerthSaveButton(false); // 改变按钮
-    var terminalKey = $(".pierInfo_list").attr("terminalKey"); //TerminalKey
+
+    // 公司ID
+    var companyNumber = $("#company_name").attr('companynumber');
+    var companyName = $("#company_name").val();
+    // 保存公司信息
+    if(companyName !== '' && companyNumber === ""){
+        companyNumber = 'C' + generateNewPierKey();
+        // 公司信息入库
+        $.ajax({
+            url: '/berth/savePierCompany',
+            type: 'get',
+            data: {CompanyNumber: companyNumber, Name:companyName},
+            success: function (data) {
+                console.log(data[1])
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    }
+
+    // var terminalKey = $(".pierInfo_list").attr("terminalKey"); //TerminalKey
+    // 码头ID 生成
+    var terminalKey = $("#pier_name").attr("terminalKey"); //TerminalKey
     if (terminalKey === "") {
         // 生成一个码头ID
         terminalKey = generateNewPierKey();
-    }
-    // 如果公司的number为0
-    var companyNumber = $("#company_name").attr('companynumber');
-    // 当还不是公司的时候，生成一个公司key值
-    if(companyNumber === ""){
-        companyNumber = 'C' + generateNewPierKey();
     }
     var portID = $("#port_name").attr("port_id");
     // 码头发生改变时保存码头信息
@@ -465,21 +708,11 @@ $('#berth_save').click(function () {
             console.log(err);
         }
     });
-    // 保存公司信息
-    $.ajax({
-        url: '/berth/savePierCompany',
-        type: 'get',
-        data: {CompanyNumber: companyNumber, Name:$("#company_name").val()},
-        success: function (data) {
-            console.log(data[1])
-        },
-        error: function (err) {
-            console.log(err);
-        }
-    });
+
     // 保存泊位信息
     console.log("保存泊位信息");
     var berthList = getBerthList(portID, terminalKey);
+    // 内存信息更新
     $("[status='0']").each(function () {
         var staticAreaKey = $(this).attr("staticAreaKey");
         console.log(staticAreaKey);
@@ -495,8 +728,8 @@ $('#berth_save').click(function () {
         allPoints[staticAreaKey]["Checked"] = 0;
         allPoints[staticAreaKey]['TerminalKey'] = '';
     });
-    console.log(terminalKey);
-    console.log(berthList);
+    // console.log(terminalKey);
+    // console.log(berthList);
     $.ajax({
         url: '/berth/saveBerthList',
         type: 'get',
@@ -537,19 +770,32 @@ $('.pierInfo_list>.pier_info').bind('input propertychange',function() {
     changeBerthSaveButton(true);
 });
 
-/**
- * 公司的输入
- */
+// 公司名称字符匹配
 $('.company_select>input').keyup(function(){
     console.log("输入公司信息");
     var nowVal = $(this).val();
     // 清空列表
+
     $("#company_name_list").empty();
     // 做一下规范化,将" '等符号正则化
     nowVal = nowVal.replace(/[\'\"]/g,"");
     $('#company_name').attr("companyNumber", '');
     // 根据输入字符串请求数据
     addPierSelectCompanyName(nowVal);
+    // 根据字符串向数据库请求
+});
+
+// 码头名称字符匹配
+$('.pier_select>input').keyup(function(){
+    console.log("输入码头名称");
+    var nowVal = $(this).val();
+    // 清空列表
+    $("#pier_name_list").empty();
+    // 做一下规范化,将" '等符号正则化
+    nowVal = nowVal.replace(/[\'\"]/g,"");
+    // $('#pier_name').attr("terminalKey", '');
+    // 根据输入字符串请求数据
+    addPierSelectPierName(nowVal);
     // 根据字符串向数据库请求
 });
 

@@ -14,7 +14,7 @@
 .span_select>span:nth-child(2){color:black;background: white;font-weight: 500}
 .pier_info>input{display:inline-block;width:120px;padding-left:5px;height:22px;line-height:22px;font-size:12px;border:1px solid #989898;border-radius:5px;position:relative;top:-1px;font-weight: 500}
 .pier_info>ul{width:124px;max-height:100px;position:absolute;z-index:1000;cursor:pointer;top:24px;left:43px;background:#fff;border-radius:5px;overflow:hidden;overflow-y:scroll;display:none;}
-.pier_info>ul>li{width:94%;height:20px;font-size:12px;padding-left:5px;font-weight: 300;}
+.pier_info>ul>li{width:96%;height:20px;font-size:12px;padding-left:5px;font-weight: 300;}
 
 .pier_info>ul>li:hover{background:#2EB1EA;color:#fff;}
 .pier_impExpType>ul{left:58px;width:44px;overflow-y:hidden;}
@@ -26,9 +26,9 @@ input:focus{border:1px solid transparent;box-shadow:0px 0px 2px 2px #2EB1EA;}
 .pier_BerthNum{margin-right:96px;}
 .pier_impExpType{margin-right:84px;}
 .port_select>span:nth-child(2){width:120px;}
-.company_select>input{width:127px;}
-.company_select>ul{width:260px;left:-90px;}
-.company_select>ul>li{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.company_select>ul{width:260px;left:-91px;}
+.pier_select>ul{width:200px;left:-5px;}
+.company_select>ul>li,.pier_select>ul>li{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .pier_BerthNum>input{width:30px;}
 .pier_impExpType>span:nth-child(2){width:40px;}
 .pier_CargoType>span:nth-child(2){width:120px;}

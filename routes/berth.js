@@ -12,6 +12,40 @@ var router = express.Router();
 
 /**
  * 根据键盘输入信息进行模糊搜索
+ */
+router.get('/addPierSelectPierName', function(req, res, next){
+    var pierStr = req.query.PierStr;
+    var sqls = util.format("SELECT TerminalKey, Name FROM T2102_Terminal WHERE Name LIKE '%" + pierStr  + "%'  LIMIT 50" );
+    mysql.query(sqls, function (err, results) {
+        if(err){
+            console.log(utils.eid1);
+            res.jsonp(['404', utils.eid1]);
+        }else {
+            console.log("成功连接数据库");
+            // console.log(results);
+            if(results.length>0){
+                // var sendData = "[";
+                // var name = '';
+                // for(var i=0;i<results.length;i++){
+                //     if (i > 0) {sendData += ",";}
+                //     if(results[i].CNName!=null&&results[i].CNName!=''&&(results[i].ENName==''||results[i].ENName==null)){
+                //         name = results[i].CNName;
+                //     }else{}
+                //     sendData += util.format('{"ENName":"%s", "CNName":"%s", "CompanyNumber":"%s"}',
+                //         results[i].ENName, results[i].CNName, results[i].CompanyNumber);
+                // }
+                // sendData += "]";
+                // console.log(sendData);
+                res.jsonp(['200', results]);
+            }else{
+                res.jsonp(['304', "return nothing"]);
+            }
+        }
+    });
+});
+
+/**
+ * 根据键盘输入信息进行模糊搜索
  * 请求参数 companyStr
  */
 router.get('/addPierSelectCompanyName', function(req, res, next){
@@ -51,7 +85,8 @@ router.get('/addPierSelectCompanyName', function(req, res, next){
  */
 router.get('/getBerthListFromPier', function(req, res, next){
     var TerminalKey = req.query.TerminalKey;
-    var sqls = util.format('SELECT StationaryAreaKey, LOA, Moulded_Beam, Draft, LoadDischargeRate FROM T2103_TerminalDetails WHERE TerminalKey = "%s"', TerminalKey);
+    var sqls = util.format('SELECT StationaryAreaKey, LOA, Moulded_Beam, Draft, LoadDischargeRate FROM T2103_TerminalDetails ' +
+        'WHERE TerminalKey = "%s"', TerminalKey);
     mysql.query(sqls, function (err, results) {
         if(err){
             console.log(utils.eid1);
@@ -86,13 +121,13 @@ router.get('/getBerthListFromPier', function(req, res, next){
 });
 
 /**
- * 根据静止区域Id获得码头详情信息
+ * 根据静止区域Id获得码头ID
  * 请求参数 {staticAreaKey}
  */
 router.get('/getTerminal', function(req, res, next){
     var staticAreaKey = req.query.staticAreaKey;
-    var sqls = util.format('SELECT  t1.*, t2.Name AS PortName, t3.Name AS CompanyName FROM T2102_Terminal t1 LEFT JOIN T2101_Port t2 ON t1.PortID = t2.PortID LEFT JOIN T2107_Company t3 ON t1.BelongtoCompany = t3.CompanyNumber WHERE TerminalKey = (SELECT TerminalKey FROM T2103_TerminalDetails ' +
-        ' WHERE StationaryAreaKey = "%s")', staticAreaKey);
+    var sqls = util.format('SELECT TerminalKey FROM T2103_TerminalDetails ' +
+        ' WHERE StationaryAreaKey = "%s"', staticAreaKey);
     mysql.query(sqls, function (err, results) {
         if(err){
             console.log(utils.eid1);
@@ -107,6 +142,49 @@ router.get('/getTerminal', function(req, res, next){
         }
     });
 });
+// router.get('/getTerminal', function(req, res, next){
+//     var staticAreaKey = req.query.staticAreaKey;
+//     var sqls = util.format('SELECT  t1.*, t2.Name AS PortName, t3.Name AS CompanyName FROM T2102_Terminal t1 LEFT JOIN T2101_Port t2 ON t1.PortID = t2.PortID LEFT JOIN T2107_Company t3 ON t1.BelongtoCompany = t3.CompanyNumber WHERE TerminalKey = (SELECT TerminalKey FROM T2103_TerminalDetails ' +
+//         ' WHERE StationaryAreaKey = "%s")', staticAreaKey);
+//     mysql.query(sqls, function (err, results) {
+//         if(err){
+//             console.log(utils.eid1);
+//             res.jsonp(['404', utils.eid1]);
+//         }else {
+//             console.log("成功连接数据库");
+//             if(results.length>0){
+//                 res.jsonp(['200', results]);
+//             }else{
+//                 res.jsonp(['304', "return nothing"]);
+//             }
+//         }
+//     });
+// });
+
+/**
+ * 获取码头详细信息
+ */
+router.get('/getPierInfo', function(req, res, next){
+    var terminalKey = req.query.TerminalKey;
+    var sqls = util.format('SELECT  t1.*, t2.Name AS PortName, t3.Name AS CompanyName FROM T2102_Terminal t1 ' +
+        'LEFT JOIN T2101_Port t2 ON t1.PortID = t2.PortID LEFT JOIN T2107_Company t3 ON t1.BelongtoCompany = t3.CompanyNumber ' +
+        'WHERE TerminalKey = "%s"', terminalKey);
+    mysql.query(sqls, function (err, results) {
+        if(err){
+            console.log(utils.eid1);
+            res.jsonp(['404', utils.eid1]);
+        }else {
+            console.log("成功连接数据库");
+            if(results.length>0){
+                res.jsonp(['200', results]);
+            }else{
+                res.jsonp(['304', "return nothing"]);
+            }
+        }
+    });
+});
+
+
 
 
 /**
@@ -278,6 +356,7 @@ router.get('/reqShipStaticData', function(req, res, next){
         }
     });
 });
+
 
 /**
  * 保存码头公司信息
