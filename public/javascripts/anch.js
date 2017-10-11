@@ -239,7 +239,7 @@ function getAnchInfo(anchKey, lon, lat) {
 
                 // 将曲线的点(勾)画出来
                 console.log("画出点");
-                anch.getSource().clear(); // 将锚地层清空
+                // anch.getSource().clear(); // 将锚地层清空
                 current.getSource().clear(); // 清空当前图层
                 // 更新轮廓
                 updateLocationList();
@@ -387,7 +387,7 @@ function writeContourLine(lonLatList) {
         var ele = lonLatList[i];
         lonLatInfo.push(ol.proj.fromLonLat([ele[0], ele[1]]));
     }
-    // 清空之后再刷新区域
+    // 将当前的锚地删除
     if(anch.getSource().getFeatureById("current") !== null){
         anch.getSource().removeFeature(anch.getSource().getFeatureById("current"));
     }
@@ -400,7 +400,6 @@ function writeContourLine(lonLatList) {
         geometry: new ol.geom.Polygon([lonLatInfo])
     });
     feature.setId('current');
-    // feature.setStyle();
     anch.getSource().addFeature(feature);
     // 显示边界点
     current.getSource().clear(); // 清空图层
@@ -638,7 +637,7 @@ $('#anch_cancel').click(function(){
     }
     // 回到非锚地状态
     anchStatus = false;
-    anchLayer();
+    anchLayer(zoom);
     // 将选择勾去掉
     current.getSource().clear();
 });

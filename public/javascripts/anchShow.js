@@ -21,7 +21,7 @@ function getAllAnch() {
                     // 中心点坐标
                     var lon = ele.CenterLon;
                     var lat = ele.CenterLat;
-                    console.log(name);
+                    // console.log(name);
                     if(location !== "") {
                         var lonLatInfo = location.split(";");
                         var lonLatList = [];
@@ -41,7 +41,7 @@ function getAllAnch() {
                         })
                     }
                 }
-                anchLayer()
+                anchLayer(zoom);
             }
         },
         error: function (data, status, e) {
@@ -58,28 +58,30 @@ function getAllAnch() {
 /**
  *  根据锚地表显示相应的区域
  */
-function anchLayer(){
+function anchLayer(zoom){
     console.log("加载锚地详细区域");
     // console.log(anchInfoList);
     anch.getSource().clear();
     // var features = [];
+    var style = {
+        stroke: new ol.style.Stroke({
+            color: 'blue',
+            lineDash: [1, 2, 3, 4, 5, 6],
+            width: 3
+        }),
+        fill: new ol.style.Fill({
+            color: 'rgba(0, 0, 255, 0.1)'
+        })
+    };
     for (var i = 0; i < anchInfoList.length; i++) {
         var anch_info = anchInfoList[i];
         var name = anch_info.name;
         var anchorageKey = anch_info.anchorageKey;
-        console.log(name);
+        // console.log(name);
         var lon = anch_info.lon;
         var lat = anch_info.lat;
-        var anch_style = new ol.style.Style({
-            stroke: new ol.style.Stroke({
-                color: 'blue',
-                lineDash: [1, 2, 3, 4, 5, 6],
-                width: 3
-            }),
-            fill: new ol.style.Fill({
-                color: 'rgba(0, 0, 255, 0.1)'
-            }),
-            text: new ol.style.Text({
+        if(zoom>=10){
+            style.text=new ol.style.Text({
                 // font: '10px sans-serif' 默认这个字体，可以修改成其他的，格式和css的字体设置一样
                 font: "15px",
                 text: name !== "" ? name : "未命名锚地",
@@ -88,9 +90,10 @@ function anchLayer(){
                 }),
                 textAlign: "center"
             })
-        });
+        }
+        var anch_style = new ol.style.Style(style);
         // 获取特性
-        console.log(anch_info.lonLatList.length);
+        // console.log(anch_info.lonLatList.length);
         var feature = new ol.Feature({
             type: 0,
             anchKey: anchorageKey,

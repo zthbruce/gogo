@@ -1656,6 +1656,7 @@
     blmol.map.addLayer(map, anch);
     blmol.map.addLayer(map, current);
 
+    var zoom = 4;
 //    blmol.map.addLayer(map, start_end);
 
     // 初始区域
@@ -1708,20 +1709,21 @@
     });
 
     // 监听界面变化
-//    var oldLevel = initLevel;
+    var oldLevel = initLevel;
     var anchStatus = false;
     blmol.bind.addOnMapMoveEndListener(map, function (map, extent, event) {
-        var zoom = blmol.operation.getZoom(map);
+        zoom = blmol.operation.getZoom(map);
         console.log(zoom);
+        // 获取所有静止区域
         iconLayer(zoom, extent);
 //        if(!anchStatus){
 //            console.log("加载锚地数据");
 //            anchLayer();
 //        }
-//        if((zoom >= 10 && oldLevel < 10) || (zoom < 10  && oldLevel >= 10)){
-//            anchLayer(zoom) // 变化锚地显示
-//        }
-//        oldLevel = zoom;
+        if((zoom >= 10 && oldLevel < 10) || (zoom < 10  && oldLevel >= 10)){
+            anchLayer(zoom) // 变化锚地显示
+        }
+        oldLevel = zoom;
     });
 
 

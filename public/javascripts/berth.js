@@ -34,7 +34,7 @@ function getPierDetail(terminalKey) {
                 $("#location").val(pierInfo.Location); //位置
                 $("#des").val(pierInfo.Des) // 说明
                 // 获得码头下最近的疑似泊位
-                getCloseBerthList(terminalKey, pierInfo.LongitudeNumeric, pierInfo.LatitudeNumeric, allPoints, 10, 20)
+                getCloseBerthList(terminalKey, pierInfo.LongitudeNumeric, pierInfo.LatitudeNumeric, allPoints, 10, 5)
             }
             // 如果不属于某个数据, 就显示默认信息
         },
@@ -254,7 +254,7 @@ function getPierInfo(clusterId, lon, lat){
                 $("#LON_LAT").val(latLonInfo[0] + ", " + latLonInfo[1]);
                 $("#LON_LAT").attr("numeric", lat + "," + lon);
                 // 获得当前点附近的疑似泊位
-                getCloseBerthList(terminalKey, lon, lat, allPoints, 10, 20)
+                getCloseBerthList(terminalKey, lon, lat, allPoints, 10, 5)
             }
             // console.log(terminalKey);
             // 增加码头key值信息
@@ -356,7 +356,7 @@ function getPierInfo(clusterId, lon, lat){
 // }
 
 /**
- * 根据当前中心点，获取20公里范围内的泊位列表
+ * 根据当前中心点，获取公里范围内的泊位列表
  * @param terminalKey 码头ID， 如果为空
  * @param centerLon
  * @param centerLat

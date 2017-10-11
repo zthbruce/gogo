@@ -46,12 +46,12 @@ function GradeShowPort(portData,mainPortData,level){
             var src = 'images/port.png';
             // var src = ""
             //筛选港口用
-            for(var j=0;j<mainPortData.length;j++){
-                if(mainPortData[j].PortID == key){
-                    src = 'images/port_main.png';
-                    break;
-                }
-            }
+            // for(var j=0;j<mainPortData.length;j++){
+            //     if(mainPortData[j].PortID == key){
+            //         src = 'images/port_main.png';
+            //         break;
+            //     }
+            // }
             portLogoBlock = blmol.marker.createIcon(key, OnePortLatLong,0, src);
             features.push(portLogoBlock);
         }

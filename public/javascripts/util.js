@@ -260,7 +260,7 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                     var anchKey = current_feature.get('anchKey') === undefined ? "" : current_feature.get('anchKey');
                     console.log(anchKey);
                     // 如果点击旧锚地图标, 将其加入选择列表
-                    if (type === 0) {
+                    if (type === 0 && clusterId !== undefined) {
                         console.log("加入");
                         var number = parseInt($(".selected_LonLat>li:last-child>span:first-child").text()) + 1;
                         number = isNaN(number) ? 1 : number;
