@@ -1708,14 +1708,16 @@
     });
 
     // 监听界面变化
-    var oldLevel = initLevel;
+//    var oldLevel = initLevel;
+    var anchStatus = false;
     blmol.bind.addOnMapMoveEndListener(map, function (map, extent, event) {
         var zoom = blmol.operation.getZoom(map);
         console.log(zoom);
         iconLayer(zoom, extent);
-        if(!anchStatus){
-            anchLayer();
-        }
+//        if(!anchStatus){
+//            console.log("加载锚地数据");
+//            anchLayer();
+//        }
 //        if((zoom >= 10 && oldLevel < 10) || (zoom < 10  && oldLevel >= 10)){
 //            anchLayer(zoom) // 变化锚地显示
 //        }
@@ -1750,6 +1752,7 @@
 
 
 </script>
+<script type="text/javascript" src="/javascripts/util.js"></script>
 <script type="text/javascript" src="/javascripts/basicSkills.js"></script>
 <script type="text/javascript" src="/javascripts/portInfo.js"></script>
 <script type="text/javascript" src="/javascripts/manage.js"></script>
@@ -1758,7 +1761,6 @@
 <script type="text/javascript" src="/javascripts/jquery.gvChart-1.0.1.min.js"></script>
 <script type="text/javascript" src="/javascripts/jquery.ba-resize.min.js"></script>
 <script type="text/javascript" src="/javascripts/berthInfo.js"></script>
-<script type="text/javascript" src="/javascripts/util.js"></script>
 <script type="text/javascript" src="/javascripts/berth.js"></script>
 <script type="text/javascript" src="/javascripts/anch.js"></script>
 <script type="text/javascript" src="/javascripts/route.js"></script>

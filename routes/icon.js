@@ -15,7 +15,7 @@ var router = express.Router();
  */
 router.post('/getInfo', function(req, res, next){
     // var sql = 'SELECT * FROM T2105_ParkArea';
-    var sql = 'SELECT t1.*, t2.TerminalKey, t3.PortID, t3.CargoTypeKey FROM `T2105_ParkArea` t1 LEFT JOIN `T2103_TerminalDetails` t2 ON t1.`cluster_id` ' +
+    var sql = 'SELECT t1.*, t2.TerminalKey, t3.PortID, t3.CargoTypeKey FROM `T2105_ParkArea_1011` t1 LEFT JOIN `T2103_TerminalDetails` t2 ON t1.`cluster_id` ' +
         '= t2.`StationaryAreaKey` LEFT JOIN `T2102_Terminal` t3 ON t2.`TerminalKey` = t3.TerminalKey';
     mysql.query(sql, function (err, results) {
         if(err){

@@ -3,6 +3,7 @@
  */
 
 var center = [0, 0];
+var range = 0;
 var locationList = [];
 
 // var chooseLonLatList = [];
@@ -239,7 +240,7 @@ function getAnchInfo(anchKey, lon, lat) {
                 // 将曲线的点(勾)画出来
                 console.log("画出点");
                 anch.getSource().clear(); // 将锚地层清空
-                current.getSource().clear(); // 清空图层
+                current.getSource().clear(); // 清空当前图层
                 // 更新轮廓
                 updateLocationList();
                 // 根据当前所选点，画出轮廓线
@@ -350,6 +351,17 @@ function updateLocationList(){
 
     center = [lonSum / num, latSum / num];
     console.log("中心点为: " + center);
+    // 计算range
+    range = 0;
+    for(var i = 0; i< locationList.length; i++){
+        var lon_lat = locationList[i];
+        var distance = getDistance(center[0], center[1], lon_lat[0], lon_lat[1]);
+        if(distance > range){
+            range = distance;
+        }
+    }
+    range = range.toFixed(4);
+    console.log("范围为: " + range);
     // 顺时针排序
     locationList.sort(clockCompare);
     // 刷新已选锚地列表
@@ -390,7 +402,6 @@ function writeContourLine(lonLatList) {
     feature.setId('current');
     // feature.setStyle();
     anch.getSource().addFeature(feature);
-
     // 显示边界点
     current.getSource().clear(); // 清空图层
     for(var i = 0; i < locationList.length - 1; i++) {
@@ -555,12 +566,12 @@ $('#anch_save').click(function(){
         var lat = locationList[l][1];
         location +=  lon + "#" + lat;
     }
-    console.log(location);
+    // console.log(location);
     var center_lon = center[0].toFixed(4);
     var center_lat = center[1].toFixed(4);
     var anchInfo = {AnchorageKey: anchKey, Name: anchName, Purpose: purpose,
         Des: des, CenterLon: center_lon, CenterLat: center_lat,
-        Location: location, DestinationPort: portListStr}; // 向后台请求保存
+        Location: location, DestinationPort: portListStr, Range: range}; // 向后台请求保存
     console.log(anchInfo);
 
     // // 删除对应的静止区域
@@ -580,14 +591,13 @@ $('#anch_save').click(function(){
         type: 'get',
         data: {anchInfo: anchInfo},
         success: function (data) {
-            console.log(data[1])
+            console.log(data[1]);
+            getAllAnch(); // 刷新锚地信息
         },
         error: function (err) {
             console.log(err);
         }
     });
-    // 刷新锚地信息
-    getAllAnch();
     // 锚地样式
     var anch_style =  new ol.style.Style({
         stroke: new ol.style.Stroke({
@@ -607,20 +617,19 @@ $('#anch_save').click(function(){
             textAlign:"center"
         })
     });
-
-    console.log("保存该锚地");
+    // console.log("保存该锚地");
+    // 将操作状态转换为显示状态
     anch.getSource().getFeatureById("current").setStyle(anch_style);
     anch.getSource().getFeatureById("current").set("anchKey", anchKey);
-    position.getSource().clear();
     anchStatus = false; // 将锚地状态还原
-    current.getSource().clear();
+    current.getSource().clear(); // 当前图层
 });
 
 // 取消按钮点击之后
 $('#anch_cancel').click(function(){
     $('#newAnch').fadeOut("normal");
     // 将定位图层清空
-    position.getSource().clear();
+    // position.getSource().clear();
     // 如果有画图未保存的图层, 清空当前的画图区域
     if(anch.getSource().getFeatureById("current") !== null && anch.getSource().getFeatureById("current").get("anchKey") === ""){
         // 删去正在画的那一层, 还原成

@@ -102,9 +102,9 @@ router.get('/deleteStaticArea', function(req, res, next){
  */
 router.get('/saveAnchInfo', function(req, res, next){
     var anchInfo = req.query.anchInfo;
-    var sqls = util.format("REPLACE INTO `T2104_Anchorage` (AnchorageKey, NAME, Purpose, Des, CenterLon, CenterLat, Location," +
-        " DestinationPort) VALUE ('%s', '%s', '%s','%s', '%s', '%s', '%s','%s')", anchInfo.AnchorageKey, anchInfo.Name,
-        anchInfo.Purpose, anchInfo.Des, anchInfo.CenterLon, anchInfo.CenterLat, anchInfo.Location, anchInfo.DestinationPort);
+    var sqls = util.format("REPLACE INTO `T2104_Anchorage` (AnchorageKey, Name, Purpose, Des, CenterLon, CenterLat, Location," +
+        " DestinationPort, `Range`) VALUE ('%s', '%s', '%s','%s', '%s', '%s', '%s','%s', '%s')", anchInfo.AnchorageKey, anchInfo.Name,
+        anchInfo.Purpose, anchInfo.Des, anchInfo.CenterLon, anchInfo.CenterLat, anchInfo.Location, anchInfo.DestinationPort, anchInfo.Range);
     mysql.query(sqls, function (err, results) {
         if(err){
             console.log(utils.eid1);

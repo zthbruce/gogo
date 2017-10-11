@@ -1,6 +1,7 @@
-var anchInfoList = [];
+var anchInfoList;
 
 function getAllAnch() {
+    anchInfoList =[]; // 初始化
     $.ajax({
         url: "/anch/getAnchShowInfo",
         dataType: 'json',
@@ -40,7 +41,7 @@ function getAllAnch() {
                         })
                     }
                 }
-                anchLayer(4)
+                anchLayer()
             }
         },
         error: function (data, status, e) {
@@ -66,10 +67,9 @@ function anchLayer(){
         var anch_info = anchInfoList[i];
         var name = anch_info.name;
         var anchorageKey = anch_info.anchorageKey;
+        console.log(name);
         var lon = anch_info.lon;
         var lat = anch_info.lat;
-        console.log(anchorageKey);
-        console.log(name);
         var anch_style = new ol.style.Style({
             stroke: new ol.style.Stroke({
                 color: 'blue',
@@ -90,7 +90,7 @@ function anchLayer(){
             })
         });
         // 获取特性
-        console.log(anch_info.lonLatList);
+        console.log(anch_info.lonLatList.length);
         var feature = new ol.Feature({
             type: 0,
             anchKey: anchorageKey,

@@ -166,7 +166,6 @@ function changeBerthSaveButton(saveStatus) {
 /**
  * 地图图标单击事件入口(真实入口)
  */
-var anchStatus = false;
 var routeStatus = false;
 var old_feature;
 var port_ul;
