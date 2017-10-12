@@ -1720,7 +1720,7 @@
 //            console.log("加载锚地数据");
 //            anchLayer();
 //        }
-        if((zoom >= 10 && oldLevel < 10) || (zoom < 10  && oldLevel >= 10)){
+        if(!anchStatus && ((zoom >= 10 && oldLevel < 10) || (zoom < 10  && oldLevel >= 10))){
             anchLayer(zoom) // 变化锚地显示
         }
         oldLevel = zoom;

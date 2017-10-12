@@ -789,7 +789,7 @@ blmol.layer.createBasicTile = function (id) {
     })
 };
 /**
- * 创建谷歌地图
+ * 创建谷歌地图, 利用瓦片图的方式
  * @param id
  * @returns {*}
  */
@@ -801,7 +801,8 @@ blmol.layer.createGoogleTile = function (id) {
     return new ol.layer.Tile({
         id: id,
         source: new ol.source.XYZ({
-            url: 'http://mt{0-3}.google.cn/vt/v=w2.114&hl=zh-CN&gl=cn&x={x}&y={y}&z={z}&s='
+            url: 'http://mt{0-3}.google.cn/vt/lyrs=m&hl=zh-CN&gl=cn&x={x}&y={y}&z={z}'
+            // url: 'http://mt{0-3}.google.cn/vt/v=w2.114&hl=zh-CN&gl=cn&x={x}&y={y}&z={z}&s='
         })
     })
 };

@@ -251,7 +251,7 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                         geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
                     });
                     feature.setStyle(park_style[0]); // 还原成锚地图标
-                    icon.getSource().addFeature(feature);
+                    anch.getSource().addFeature(feature);
                     changeAnchSaveButton(true);
                 }
                 else{
