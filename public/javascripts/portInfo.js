@@ -37,9 +37,12 @@ function GradeShowPort(portData,mainPortData,level){
         OnePortENName = OnePortId['ENName'];
         OnePortCNName = OnePortId['CNName'];
         OnePortLevel = OnePortId['Level'];
+        var newLevel = Math.floor(level/2);
+        if(level==5){newLevel=3;}
+        if(level>=6){newLevel=level;}
         if(OnePortLong!='null'&&OnePortLong>=currentLongLatRange[0]&&OnePortLong<=currentLongLatRange[2]
             &&OnePortLat!='null'&&OnePortLat>=currentLongLatRange[1]&&OnePortLat<=currentLongLatRange[3]
-            &&OnePortLevel<=level){
+            &&OnePortLevel<=newLevel){
             var OnePortLatLong = [];
             OnePortLatLong.push(parseFloat(OnePortLong));  //插入经度
             OnePortLatLong.push(parseFloat(OnePortLat));   //插入纬度
