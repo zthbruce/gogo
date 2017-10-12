@@ -866,7 +866,7 @@ blmol.layer.createGGSatelliteTile = function (id, minZoom, maxZoom) {
             key: 'AIzaSyCabPHEt8IGUv-1ZyCBwH9IfrojCSz6rPQ',
             minZoom: minZoom,
             maxZoom: maxZoom,
-            url: 'http://mt{1-3}.google.com/vt/lyrs=s&hl=zh-CN&gl=cn&x={x}&y={y}&z={z}'
+            url: 'http://mt{1-3}.google.cn/vt/lyrs=s&hl=zh-CN&gl=cn&x={x}&y={y}&z={z}'
         })
     });
 };
