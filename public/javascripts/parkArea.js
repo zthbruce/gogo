@@ -93,7 +93,7 @@ function iconLayer(level, area){
     icon.getSource().clear();
     icon.getSource().addFeatures(features);
     // if(areaNum === 1 && level >= 14 && cluster_id !== _cluster_id){
-    if(level >= 16 && cluster_id_list.toString() !== _cluster_id_list.toString()){
+    if(level >= 17 && cluster_id_list.toString() !== _cluster_id_list.toString()){
         // cluster_id = _cluster_id;
         // console.log("只有一个区域");
         // console.log(cluster_id);
@@ -106,7 +106,7 @@ function iconLayer(level, area){
         // contourLayer(cluster_id);
     }
     else {
-        if(level < 16){
+        if(level < 17){
             //清除图层，并将cluster_id归位
             // cluster_id = '';
             cluster_id_list = [];

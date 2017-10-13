@@ -32,7 +32,7 @@ function getPierDetail(terminalKey) {
                 $("#LON_LAT").val(pierInfo.Latitude + ", " + pierInfo.Longitude);
                 $("#LON_LAT").attr("numeric", pierInfo.LatitudeNumeric + "," + pierInfo.LongitudeNumeric);
                 $("#location").val(pierInfo.Location); //位置
-                $("#des").val(pierInfo.Des) // 说明
+                $("#des").val(pierInfo.Des); // 说明
                 // 获得码头下最近的疑似泊位
                 getCloseBerthList(terminalKey, pierInfo.LongitudeNumeric, pierInfo.LatitudeNumeric, allPoints, 10, 5)
             }
@@ -448,14 +448,14 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxD
                     $(".berth_list").append(str);
                 }
             }
-
+            // 点击是否属于按钮
             $(".oneBerth_info>li:nth-child(2)>span").click(function () {
                 changeBerthSaveButton(true); // 改变保存状态
                 // 第一个不允许修改状态
-                // if($(this).attr('seq') === "1"){
-                //     console.log("第一个不允许修改");
-                //     return;
-                // }
+                if($(this).attr('seq') === "1"){
+                    console.log("第一个不允许修改");
+                    return;
+                }
                 if ($(this).attr('class') === "notBelong") {
                     // $(this).removeClass("notBelong");
                     // $(this).addClass("belong");
@@ -477,11 +477,23 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxD
                     lonSum += parseFloat($(this).attr("lon"));
                     latSum += parseFloat($(this).attr("lat"));
                 });
-                var latCenter = latSum / i;
-                var lonCenter = lonSum / i;
-                var latLonInfo = transLonLatToNormal(latCenter, lonCenter);
-                $("#LON_LAT").val(latLonInfo[0] + "," + latLonInfo[1]);
-                $("#LON_LAT").attr("numeric", latCenter + "," + lonCenter);
+                // if(i === 0){
+                //     var
+                // }
+                var lon_lat_ele = $("#LON_LAT");
+                if(i > 0){
+                    var latCenter = latSum / i;
+                    var lonCenter = lonSum / i;
+                    var latLonInfo = transLonLatToNormal(latCenter, lonCenter);
+                    var lon_lat_info = latLonInfo[0] + "," + latLonInfo[1];
+                }
+                else{
+                    var latCenter = '';
+                    var lonCenter = '';
+                    var lon_lat_info = '';
+                }
+                lon_lat_ele.val(lon_lat_info);
+                lon_lat_ele.attr("numeric", latCenter + "," + lonCenter);
             });
             // 监听输入
             $('.oneBerth_list>li>input, .pier_BerthNum>input').keyup(function(){
@@ -897,52 +909,52 @@ function reqBerthStaticData(shipType,staticareakey){
  * 锚地管理
  */
 
-//锚地目的港列表显示
-$('.add_oneIntentPort_btn').click(function(){
-    $(this).next().slideDown(200);
-});
-$('.anchInfo_intentPort').mouseleave(function(){
-    $(this).children('.anch_IntentPort').children('.AllIntentPort_List').slideUp(200);
-});
-// shiptest();
-function shiptest(){
-    var sendData = "[";
-    sendData += '{"LOA":"111", "BEAM":"111", "DRAFT":"111", "DWT":"111111", "DTPH":"111111", "date":"2017/01/11 11:11:11"},';
-    sendData += '{"LOA":"121", "BEAM":"121", "DRAFT":"121", "DWT":"122221", "DTPH":"112111", "date":"2017/01/12 11:11:11"},';
-    sendData += '{"LOA":"101", "BEAM":"121", "DRAFT":"121", "DWT":"100001", "DTPH":"100001", "date":"2017/01/14 11:11:11"},';
-    sendData += '{"LOA":"222", "BEAM":"222", "DRAFT":"222", "DWT":"222222", "DTPH":"222222", "date":"2017/02/12 11:11:11"},';
-    sendData += '{"LOA":"333", "BEAM":"333", "DRAFT":"333", "DWT":"333333", "DTPH":"333333", "date":"2017/03/13 11:11:11"},';
-    sendData += '{"LOA":"444", "BEAM":"444", "DRAFT":"444", "DWT":"444444", "DTPH":"444444", "date":"2017/04/14 11:11:11"},';
-    sendData += '{"LOA":"123", "BEAM":"123", "DRAFT":"123", "DWT":"112323", "DTPH":"212313", "date":"2017/05/14 11:11:11"},';
-    sendData += '{"LOA":"123", "BEAM":"434", "DRAFT":"234", "DWT":"3232131", "DTPH":"123123", "date":"2017/06/14 11:11:11"},';
-    sendData += '{"LOA":"425", "BEAM":"234", "DRAFT":"345", "DWT":"131232", "DTPH":"341232", "date":"2017/07/14 11:11:11"},';
-    sendData += '{"LOA":"345", "BEAM":"435", "DRAFT":"456", "DWT":"212334", "DTPH":"413223", "date":"2017/08/14 11:11:11"},';
-    sendData += '{"LOA":"879", "BEAM":"345", "DRAFT":"567", "DWT":"312345", "DTPH":"512323", "date":"2017/09/14 11:11:11"},';
-    sendData += '{"LOA":"213", "BEAM":"768", "DRAFT":"567", "DWT":"967123", "DTPH":"412335", "date":"2017/10/14 11:11:11"},';
-    sendData += '{"LOA":"324", "BEAM":"678", "DRAFT":"546", "DWT":"131232", "DTPH":"431235", "date":"2017/11/14 11:11:11"},';
-    sendData += '{"LOA":"456", "BEAM":"678", "DRAFT":"565", "DWT":"312324", "DTPH":"123123", "date":"2017/12/14 11:11:11"}';
-    sendData += "]";
-    var jsonData = JSON.parse(sendData);
-    console.log(jsonData);
-    $('#BerthStatistics>tbody').empty();
-    var date = new Date;
-    var MAXLOA = [0,0,0,0,0,0,0,0,0,0,0,0];
-    var MAXBEAM = [0,0,0,0,0,0,0,0,0,0,0,0];
-    var MAXDRAFT = [0,0,0,0,0,0,0,0,0,0,0,0];
-    var MAXDWT = [0,0,0,0,0,0,0,0,0,0,0,0];
-    var MAXDTPH = [0,0,0,0,0,0,0,0,0,0,0,0];
-    for(var i=0;i<jsonData.length;i++) {
-        date = new Date(jsonData[i].date);
-        var j = date.getMonth();
-        // console.log(j);
-        if(parseFloat(jsonData[i].LOA) > parseFloat(MAXLOA[j])){MAXLOA[j] = parseFloat(jsonData[i].LOA);}
-        if(parseFloat(jsonData[i].BEAM) > parseFloat(MAXBEAM[j])){MAXBEAM[j] = parseFloat(jsonData[i].BEAM);}
-        if(parseFloat(jsonData[i].DRAFT) > parseFloat(MAXDRAFT[j])){MAXDRAFT[j] = parseFloat(jsonData[i].DRAFT);}
-        if(parseInt(jsonData[i].DWT) > parseInt(MAXDWT[j])){MAXDWT[j] = parseInt(jsonData[i].DWT);}
-        if(parseInt(jsonData[i].DTPH) > parseInt(MAXDTPH[j])){MAXDTPH[j] = parseInt(jsonData[i].DTPH);}
-    }
-    for(var i=0;i<12;i++){
-        var StaticInfoStr = '<tr><td>'+parseInt(i+1)+'月</td><td>'+MAXLOA[i]+'</td><td>'+MAXBEAM[i]+'</td><td>'+MAXDRAFT[i]+'</td><td>'+MAXDWT[i]+'</td><td>'+MAXDTPH[i]+'</td></tr>';
-        $('#BerthStatistics>tbody').append(StaticInfoStr);
-    }
-}
+// //锚地目的港列表显示
+// $('.add_oneIntentPort_btn').click(function(){
+//     $(this).next().slideDown(200);
+// });
+// $('.anchInfo_intentPort').mouseleave(function(){
+//     $(this).children('.anch_IntentPort').children('.AllIntentPort_List').slideUp(200);
+// });
+// // shiptest();
+// function shiptest(){
+//     var sendData = "[";
+//     sendData += '{"LOA":"111", "BEAM":"111", "DRAFT":"111", "DWT":"111111", "DTPH":"111111", "date":"2017/01/11 11:11:11"},';
+//     sendData += '{"LOA":"121", "BEAM":"121", "DRAFT":"121", "DWT":"122221", "DTPH":"112111", "date":"2017/01/12 11:11:11"},';
+//     sendData += '{"LOA":"101", "BEAM":"121", "DRAFT":"121", "DWT":"100001", "DTPH":"100001", "date":"2017/01/14 11:11:11"},';
+//     sendData += '{"LOA":"222", "BEAM":"222", "DRAFT":"222", "DWT":"222222", "DTPH":"222222", "date":"2017/02/12 11:11:11"},';
+//     sendData += '{"LOA":"333", "BEAM":"333", "DRAFT":"333", "DWT":"333333", "DTPH":"333333", "date":"2017/03/13 11:11:11"},';
+//     sendData += '{"LOA":"444", "BEAM":"444", "DRAFT":"444", "DWT":"444444", "DTPH":"444444", "date":"2017/04/14 11:11:11"},';
+//     sendData += '{"LOA":"123", "BEAM":"123", "DRAFT":"123", "DWT":"112323", "DTPH":"212313", "date":"2017/05/14 11:11:11"},';
+//     sendData += '{"LOA":"123", "BEAM":"434", "DRAFT":"234", "DWT":"3232131", "DTPH":"123123", "date":"2017/06/14 11:11:11"},';
+//     sendData += '{"LOA":"425", "BEAM":"234", "DRAFT":"345", "DWT":"131232", "DTPH":"341232", "date":"2017/07/14 11:11:11"},';
+//     sendData += '{"LOA":"345", "BEAM":"435", "DRAFT":"456", "DWT":"212334", "DTPH":"413223", "date":"2017/08/14 11:11:11"},';
+//     sendData += '{"LOA":"879", "BEAM":"345", "DRAFT":"567", "DWT":"312345", "DTPH":"512323", "date":"2017/09/14 11:11:11"},';
+//     sendData += '{"LOA":"213", "BEAM":"768", "DRAFT":"567", "DWT":"967123", "DTPH":"412335", "date":"2017/10/14 11:11:11"},';
+//     sendData += '{"LOA":"324", "BEAM":"678", "DRAFT":"546", "DWT":"131232", "DTPH":"431235", "date":"2017/11/14 11:11:11"},';
+//     sendData += '{"LOA":"456", "BEAM":"678", "DRAFT":"565", "DWT":"312324", "DTPH":"123123", "date":"2017/12/14 11:11:11"}';
+//     sendData += "]";
+//     var jsonData = JSON.parse(sendData);
+//     console.log(jsonData);
+//     $('#BerthStatistics>tbody').empty();
+//     var date = new Date;
+//     var MAXLOA = [0,0,0,0,0,0,0,0,0,0,0,0];
+//     var MAXBEAM = [0,0,0,0,0,0,0,0,0,0,0,0];
+//     var MAXDRAFT = [0,0,0,0,0,0,0,0,0,0,0,0];
+//     var MAXDWT = [0,0,0,0,0,0,0,0,0,0,0,0];
+//     var MAXDTPH = [0,0,0,0,0,0,0,0,0,0,0,0];
+//     for(var i=0;i<jsonData.length;i++) {
+//         date = new Date(jsonData[i].date);
+//         var j = date.getMonth();
+//         // console.log(j);
+//         if(parseFloat(jsonData[i].LOA) > parseFloat(MAXLOA[j])){MAXLOA[j] = parseFloat(jsonData[i].LOA);}
+//         if(parseFloat(jsonData[i].BEAM) > parseFloat(MAXBEAM[j])){MAXBEAM[j] = parseFloat(jsonData[i].BEAM);}
+//         if(parseFloat(jsonData[i].DRAFT) > parseFloat(MAXDRAFT[j])){MAXDRAFT[j] = parseFloat(jsonData[i].DRAFT);}
+//         if(parseInt(jsonData[i].DWT) > parseInt(MAXDWT[j])){MAXDWT[j] = parseInt(jsonData[i].DWT);}
+//         if(parseInt(jsonData[i].DTPH) > parseInt(MAXDTPH[j])){MAXDTPH[j] = parseInt(jsonData[i].DTPH);}
+//     }
+//     for(var i=0;i<12;i++){
+//         var StaticInfoStr = '<tr><td>'+parseInt(i+1)+'月</td><td>'+MAXLOA[i]+'</td><td>'+MAXBEAM[i]+'</td><td>'+MAXDRAFT[i]+'</td><td>'+MAXDWT[i]+'</td><td>'+MAXDTPH[i]+'</td></tr>';
+//         $('#BerthStatistics>tbody').append(StaticInfoStr);
+//     }
+// }
