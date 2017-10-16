@@ -66,7 +66,8 @@ input:focus{border:1px solid transparent;box-shadow:0px 0px 2px 2px #2EB1EA;}
 /*泊位列表*/
 .berth_list{width:94%;margin:10px auto;height:200px;background: rgba(6, 2, 5, 0);overflow:hidden;overflow-y:scroll; border-radius: 5px;}
 .berth_list>li{height:50px;width:100%;border-bottom:1px solid #00B7FF;}
-.berth_list>li[highLight="true"]{background:#217BA2;}
+.berth_list>li[highLight="true"]{background:rgba(6, 95, 134, 0.5);}
+/*.berth_list>li[highLight="true"]{background:#217BA2;}*/
 .oneBerth_info>li{height:50px;float:left;}
 .oneBerth_info>li:first-child{width:40px;line-height:53px;text-align:center;}
 .oneBerth_info>li:nth-child(2){width:40px;}

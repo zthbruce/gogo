@@ -394,7 +394,6 @@ function writeContourLine(lonLatList) {
     // 添加新的feature, 表示当前正在操作的feature
     var feature = new ol.Feature({
         type: 0,
-        // anchKey: "",
         lon: center[0],
         lat: center[1],
         geometry: new ol.geom.Polygon([lonLatInfo])
@@ -411,7 +410,6 @@ function writeContourLine(lonLatList) {
             'id' : 'choosed',
             'lon' : lon,
             'lat': lat,
-            // 'type': 0,
             'anchKey': "",
             'number' : i + 1,
             geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))

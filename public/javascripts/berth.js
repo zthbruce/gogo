@@ -917,19 +917,24 @@ $('.pier_select>input').keyup(function(){
 });
 
 // 点击状态会定位
-$(".berth_list").delegate("li>ul>li:nth-child(3)", "click",function(){
-    // var lon = parseFloat($(this).find($(".oneBerth_list")).attr("lon"));
-    // var lat = parseFloat($(this).find($(".oneBerth_list")).attr("lat"));
-    var lon = parseFloat($(this).children().attr("lon"));
-    var lat = parseFloat($(this).children().attr("lat"));
-    console.log(lon + "," + lat);
-    var position_feature = new ol.Feature({
-        geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
-    });
-    position_feature.setStyle(position_style);
-    position.getSource().clear();
-    // console.log(position_feature);
-    position.getSource().addFeatures([position_feature]);
+// $(".berth_list").delegate("li>ul>li:nth-child(3)", "click",function(){
+//     // var lon = parseFloat($(this).find($(".oneBerth_list")).attr("lon"));
+//     // var lat = parseFloat($(this).find($(".oneBerth_list")).attr("lat"));
+//     var lon = parseFloat($(this).children().attr("lon"));
+//     var lat = parseFloat($(this).children().attr("lat"));
+//     console.log(lon + "," + lat);
+//     var position_feature = new ol.Feature({
+//         geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
+//     });
+//     position_feature.setStyle(position_style);
+//     position.getSource().clear();
+//     // console.log(position_feature);
+//     position.getSource().addFeatures([position_feature]);
+// });
+
+$('.berth_list').delegate('li', 'click', function () {
+    $('.berth_list>li').removeAttr("highLight");
+    $(this).attr("highLight", true);
 });
 
 /**
@@ -946,6 +951,8 @@ function changeBerthSaveButton(saveStatus) {
         $('#berth_save').attr("disabled", "disabled")
     }
 }
+
+
 
 
 /**
