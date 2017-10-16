@@ -391,7 +391,7 @@ function writeContourLine(lonLatList) {
     if(anch.getSource().getFeatureById("current") !== null){
         anch.getSource().removeFeature(anch.getSource().getFeatureById("current"));
     }
-    // 添加新的feature
+    // 添加新的feature, 表示当前正在操作的feature
     var feature = new ol.Feature({
         type: 0,
         // anchKey: "",
@@ -416,7 +416,6 @@ function writeContourLine(lonLatList) {
             'number' : i + 1,
             geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
         });
-        // 表示已经选择，实际上那个
         anch_choosed.setStyle(choosed);
         current.getSource().addFeature(anch_choosed);
     }

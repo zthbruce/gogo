@@ -168,6 +168,9 @@ var port_name_ele = $("#port_name");
 var pier_name_ele = $("#pier_name");
 var company_name_ele = $("#company_name");
 function getPierInfo(clusterId, lon, lat){
+    var title = $('.newBerthAnch_title');
+    title.attr("lon", lon);
+    title.attr("lat", lat);
     saveStatus = false; //
     console.log(lon+ "," + lat);
     var closePortList = getClosePortList(lon, lat, AllPortBasicList, 10);
@@ -356,6 +359,78 @@ function getPierInfo(clusterId, lon, lat){
 // }
 
 /**
+ * 确认选择泊位的出现
+ * @param status
+ * @param staticAreaKey
+ * @param lon
+ * @param lat
+ */
+function getCheckPointer(status, staticAreaKey, lon, lat) {
+    var fearure = new ol.Feature({
+        status: status,
+        cluster_id: staticAreaKey,
+        geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
+    });
+    fearure.setStyle(point_status[status]);
+    current.getSource().addFeature(fearure);
+}
+
+/**
+ * 更新当前所属泊位
+ * @param ele
+ */
+function updateChooseBerth(ele) {
+    // 点击那一行高亮显示
+    changeBerthSaveButton(true); // 改变保存状态
+    // 第一个不允许修改状态
+    // if($(this).attr('seq') === "1"){
+    //     console.log("第一个不允许修改");
+    //     return;
+    // }
+    // 高亮显示
+    var li_ele = ele.parent().parent().parent();
+    $('.berth_list>li').removeAttr("highLight");
+    li_ele.attr("highLight", true);
+    // 确认显示
+    var ul_ele = ele.parent().next().children();
+    if (ele.attr('class') === "notBelong") {
+        // $(this).removeClass("notBelong");
+        // $(this).addClass("belong");
+        ele.attr("class", "belong");
+        ul_ele.attr("status", "0")
+    }else{
+        // $(this).removeClass("belong");
+        // $(this).addClass("notBelong");
+        ele.attr("class", "notBelong");
+        ul_ele.attr("status", "1")
+    }
+    // 改变对应码头的位置信息
+    var i = 0;
+    var lonSum = 0;
+    var latSum = 0;
+    $("[status='0']").each(function () {
+        // console.log(i);
+        i++;
+        lonSum += parseFloat($(this).attr("lon"));
+        latSum += parseFloat($(this).attr("lat"));
+    });
+    var lon_lat_ele = $("#LON_LAT");
+    if(i > 0){
+        var latCenter = latSum / i;
+        var lonCenter = lonSum / i;
+        var latLonInfo = transLonLatToNormal(latCenter, lonCenter);
+        var lon_lat_info = latLonInfo[0] + "," + latLonInfo[1];
+    }
+    else{
+        var latCenter = '';
+        var lonCenter = '';
+        var lon_lat_info = '';
+    }
+    lon_lat_ele.val(lon_lat_info);
+    lon_lat_ele.attr("numeric", latCenter + "," + lonCenter);
+}
+
+/**
  * 根据当前中心点，获取公里范围内的泊位列表
  * @param terminalKey 码头ID， 如果为空
  * @param centerLon
@@ -366,7 +441,13 @@ function getPierInfo(clusterId, lon, lat){
  */
 function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxDistance){
     // 首先会获取该码头下的stationAreaKey
-    console.log("here");
+    // console.log("here");
+    var title = $('.newBerthAnch_title');
+    // 如果经纬度为空，那么选取当前点的经纬度
+    if(centerLon === 0.0 && centerLat === 0.0){
+        centerLon = parseFloat(title.attr("lon"));
+        centerLat = parseFloat(title.attr("lat"));
+    }
     var belongDistanceList = {};
     $.ajax({
         url:'/berth/getBerthListFromPier',
@@ -417,11 +498,12 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxD
 
             // 获取最近的N个静止区域的统计信息列表
             var len = distanceList.length;
-            console.log("长度为:" + len);
+            // console.log("长度为:" + len);
             n = Math.min(len, n);
             // 初始化泊位列表
             $(".berth_list").empty();
             var num = 0;
+            current.getSource().clear(); // 清空当前图层
             for(var i = 0; i < n; i++){
                 var berthInfo = distanceList[i];
                 var staticAreaKey = berthInfo.cluster_id;
@@ -435,11 +517,13 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxD
                     // 将信息写入html, 并赋予一个状态,根据状态进行筛选
                     // 当前静止区域默认属于
                     num++;
-                    // 第一个默认属于
+                    // 第一个默认属于该码头
                     if (i === 0) {
                         belongStatus = "belong";
                         status = 0;
                     }
+                    // 图上显示确认图标
+                    getCheckPointer(status, staticAreaKey, ele.lon, ele.lat);
                     var str = '<li><ul class="oneBerth_info"><li>' + num + '</li><li><span class = ' + belongStatus + ' seq=' + num + '>' +
                         '</span></li> <li> <ul class="oneBerth_list" status=' + status + ' staticAreaKey = ' + staticAreaKey + ' lon = ' + ele.lon + ' lat=' + ele.lat + '><li>LOA: '
                         + ele.LOA_MAX + ' m</li><li>Beam: ' + ele.BEAM_MAX + ' m</li><li>Draft: ' + ele.DRAFT_MAX + ' m</li> <li>DWT: ' + ele.DWT_MAX
@@ -450,50 +534,48 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxD
             }
             // 点击是否属于按钮
             $(".oneBerth_info>li:nth-child(2)>span").click(function () {
-                changeBerthSaveButton(true); // 改变保存状态
-                // 第一个不允许修改状态
-                if($(this).attr('seq') === "1"){
-                    console.log("第一个不允许修改");
-                    return;
-                }
-                if ($(this).attr('class') === "notBelong") {
-                    // $(this).removeClass("notBelong");
-                    // $(this).addClass("belong");
-                    $(this).attr("class", "belong");
-                    $(this).parent().next().children().attr("status", "0")
-                }else{
-                    // $(this).removeClass("belong");
-                    // $(this).addClass("notBelong");
-                    $(this).attr("class", "notBelong");
-                    $(this).parent().next().children().attr("status", "1")
-                }
-                // 改变对应码头的位置信息
-                var i = 0;
-                var lonSum = 0;
-                var latSum = 0;
-                $("[status='0']").each(function () {
-                    console.log(i);
-                    i++;
-                    lonSum += parseFloat($(this).attr("lon"));
-                    latSum += parseFloat($(this).attr("lat"));
-                });
-                // if(i === 0){
-                //     var
+                updateChooseBerth($(this))
+                // changeBerthSaveButton(true); // 改变保存状态
+                // // 第一个不允许修改状态
+                // // if($(this).attr('seq') === "1"){
+                // //     console.log("第一个不允许修改");
+                // //     return;
+                // // }
+                // if ($(this).attr('class') === "notBelong") {
+                //     // $(this).removeClass("notBelong");
+                //     // $(this).addClass("belong");
+                //     $(this).attr("class", "belong");
+                //     $(this).parent().next().children().attr("status", "0")
+                // }else{
+                //     // $(this).removeClass("belong");
+                //     // $(this).addClass("notBelong");
+                //     $(this).attr("class", "notBelong");
+                //     $(this).parent().next().children().attr("status", "1")
                 // }
-                var lon_lat_ele = $("#LON_LAT");
-                if(i > 0){
-                    var latCenter = latSum / i;
-                    var lonCenter = lonSum / i;
-                    var latLonInfo = transLonLatToNormal(latCenter, lonCenter);
-                    var lon_lat_info = latLonInfo[0] + "," + latLonInfo[1];
-                }
-                else{
-                    var latCenter = '';
-                    var lonCenter = '';
-                    var lon_lat_info = '';
-                }
-                lon_lat_ele.val(lon_lat_info);
-                lon_lat_ele.attr("numeric", latCenter + "," + lonCenter);
+                // // 改变对应码头的位置信息
+                // var i = 0;
+                // var lonSum = 0;
+                // var latSum = 0;
+                // $("[status='0']").each(function () {
+                //     console.log(i);
+                //     i++;
+                //     lonSum += parseFloat($(this).attr("lon"));
+                //     latSum += parseFloat($(this).attr("lat"));
+                // });
+                // var lon_lat_ele = $("#LON_LAT");
+                // if(i > 0){
+                //     var latCenter = latSum / i;
+                //     var lonCenter = lonSum / i;
+                //     var latLonInfo = transLonLatToNormal(latCenter, lonCenter);
+                //     var lon_lat_info = latLonInfo[0] + "," + latLonInfo[1];
+                // }
+                // else{
+                //     var latCenter = '';
+                //     var lonCenter = '';
+                //     var lon_lat_info = '';
+                // }
+                // lon_lat_ele.val(lon_lat_info);
+                // lon_lat_ele.attr("numeric", latCenter + "," + lonCenter);
             });
             // 监听输入
             $('.oneBerth_list>li>input, .pier_BerthNum>input').keyup(function(){
@@ -545,16 +627,16 @@ function getBerthList(portID, terminalKey) {
  * @param berthLonLatList [[lon, lat], [lon, lat], ...]
  * @return
  */
-function changePierCenter(berthLonLatList) {
-    var lonSum = 0;
-    var latSum = 0;
-    var len = berthLonLatList.length;
-    for(var i = 0; i < len; i++){
-        lonSum += berthLonLatList[i][0];
-        latSum += berthLonLatList[i][1];
-    }
-    return [lonSum / len, latSum / len]
-}
+// function changePierCenter(berthLonLatList) {
+//     var lonSum = 0;
+//     var latSum = 0;
+//     var len = berthLonLatList.length;
+//     for(var i = 0; i < len; i++){
+//         lonSum += berthLonLatList[i][0];
+//         latSum += berthLonLatList[i][1];
+//     }
+//     return [lonSum / len, latSum / len]
+// }
 
 
 
@@ -636,6 +718,7 @@ $('.span_select>ul>li,.input_select>ul>li').click(function(){
 // 泊位管理界面关闭
 $('#berth_cancel').click(function () {
     $('#newBerth').fadeOut("normal");
+    current.getSource().clear();
     position.getSource().clear();
 });
 
@@ -654,7 +737,6 @@ $('#berth_port_list>li').on('click', function () {
 $('#berth_save').click(function () {
     console.log("保存当前信息");
     changeBerthSaveButton(false); // 改变按钮
-
     // 公司ID
     var companyNumber = $("#company_name").attr('companynumber');
     var companyName = $("#company_name").val();
@@ -685,13 +767,16 @@ $('#berth_save').click(function () {
     var portID = $("#port_name").attr("port_id");
     // 码头发生改变时保存码头信息
     console.log("保存码头信息");
+    var lat = '';
+    var lon = '';
     var Lat_Lon = $("#LON_LAT").val().split(",");
-    console.log($("#LON_LAT").val());
+    if(Lat_Lon.length > 1){
+        lat = Lat_Lon[0];
+        lon = Lat_Lon[1];
+    }
     var Lat_Lon_Numeric = $("#LON_LAT").attr("numeric").split(",");
     var lat_numeric = Lat_Lon_Numeric[0];
     var lon_numeric = Lat_Lon_Numeric[1];
-    var lat = Lat_Lon[0];
-    var lon = Lat_Lon[1];
     var reqPram = {
         TerminalKey: terminalKey,
         Name: $("#pier_name").val(),
@@ -708,7 +793,6 @@ $('#berth_save').click(function () {
         Location: $("#location").val(),
         Des: $("#des").val()
     };
-    console.log(reqPram);
     $.ajax({
         url: '/berth/saveTerminal',
         type: 'get',
@@ -722,15 +806,35 @@ $('#berth_save').click(function () {
     });
 
     // 保存泊位信息
-    console.log("保存泊位信息");
-    var berthList = getBerthList(portID, terminalKey);
+    // var berthList = getBerthList(portID, terminalKey);
     // 内存信息更新
+    var berthList = [];
+    var i = 0;
+    // $("[status='0']").each(function () {
+    //     i++;
+    //     var LOA = $(this).children().eq(4).children().val();
+    //     var BEAM = $(this).children().eq(5).children().val();
+    //     var DRAFT = $(this).children().eq(6).children().val();
+    //     var LoadRate = $(this).children().eq(7).children().val();
+    //     var staticAreaKey = $(this).attr("staticAreaKey");
+    //     berthList.push({TerminalKey:terminalKey, Seq:i, LOA: LOA, Moulded_Beam: BEAM, Draft: DRAFT,
+    //         LoadDischargeRate: LoadRate, StationaryAreaKey:staticAreaKey})
+    // });
+    // return berthList;
     $("[status='0']").each(function () {
         var staticAreaKey = $(this).attr("staticAreaKey");
         console.log(staticAreaKey);
+        i++;
+        var LOA = $(this).children().eq(4).children().val();
+        var BEAM = $(this).children().eq(5).children().val();
+        var DRAFT = $(this).children().eq(6).children().val();
+        var LoadRate = $(this).children().eq(7).children().val();
+        // var staticAreaKey = $(this).attr("staticAreaKey");
+        berthList.push({TerminalKey:terminalKey, Seq:i, LOA: LOA, Moulded_Beam: BEAM, Draft: DRAFT,
+            LoadDischargeRate: LoadRate, StationaryAreaKey:staticAreaKey});
         var feature = icon.getSource().getFeatureById(staticAreaKey);
         allPoints[staticAreaKey]["Checked"] = 1; // 更新状态
-        allPoints[staticAreaKey]['TerminalKey'] = terminalKey;
+        allPoints[staticAreaKey]['TerminalKey'] = terminalKey; // 更新码头值
         feature.setStyle(berth_yes);
     });
     $("[status='1']").each(function () {
@@ -739,24 +843,25 @@ $('#berth_save').click(function () {
         var feature = icon.getSource().getFeatureById(staticAreaKey);
         allPoints[staticAreaKey]["Checked"] = 0;
         allPoints[staticAreaKey]['TerminalKey'] = '';
+        feature.setStyle(berth_style);
     });
-    // console.log(terminalKey);
-    // console.log(berthList);
+    console.log("保存泊位信息");
     $.ajax({
         url: '/berth/saveBerthList',
         type: 'get',
-        data: {berthList: berthList},
+        data: {berthList: berthList, TerminalKey: terminalKey},
         success: function (data) {
             console.log(data[1]);
-            $('.alert').html('保存信息成功').addClass('alert-success').show().delay(1000).fadeOut();
-            $('#newBerth').fadeOut("normal");
+            // $('.alert').html('保存信息成功').addClass('alert-success').show().delay(1000).fadeOut();
         },
         error: function (err) {
             console.log(err);
         }
     });
-    // }
-    position.getSource().clear(); // 将定位图标删除
+    // 弹出框消失
+    $('#newBerth').fadeOut("normal");
+    current.getSource().clear();
+    position.getSource().clear();
 });
 
 // 统计按钮

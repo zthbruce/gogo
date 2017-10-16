@@ -311,29 +311,48 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                 // }
             // }
             // 原始模式
-            else{
-                changeBerthSaveButton(false); // 初始化泊位保存状态
-                // 初始化锚地保存状态
-                // 锚地管理弹出框, 不管是原生锚地区域还是锚地聚类区域, type都设为0, 表示锚地
-                // console.log(type);
-                if (type === 0) {
-                    // 锚地弹出框
-                    $("#newAnch").fadeIn("normal");
-                    anchStatus = true; // 表示进入锚地状态
-                    var anchKey = current_feature.get('anchKey') === undefined ? "" : current_feature.get('anchKey');
-                    console.log(anchKey);
-                    changeAnchSaveButton(false);
-                    old_feature =  current_feature;
-                    current_feature.setId("current"); // 将当前的设为current
-                    getAnchInfo(anchKey, lon, lat); // 获取信息
+            else {
+                var status = current_feature.get("status");
+                if (status === undefined) {
+                    changeBerthSaveButton(false); // 初始化泊位保存状态
+                    // 初始化锚地保存状态
+                    // 锚地管理弹出框, 不管是原生锚地区域还是锚地聚类区域, type都设为0, 表示锚地
+                    if (type === 0) {
+                        // 锚地弹出框
+                        $("#newAnch").fadeIn("normal");
+                        anchStatus = true; // 表示进入锚地状态
+                        var anchKey = current_feature.get('anchKey') === undefined ? "" : current_feature.get('anchKey');
+                        console.log(anchKey);
+                        changeAnchSaveButton(false);
+                        old_feature = current_feature;
+                        current_feature.setId("current"); // 将当前的设为current
+                        getAnchInfo(anchKey, lon, lat); // 获取信息
+                    }
+                    // 泊位管理弹出框
+                    if (type === 1) {
+                        var clusterId = current_feature.get('cluster_id');
+                        // 弹出泊位的弹出框
+                        $('#newBerth').fadeIn("normal");
+                        // 请求码头整体信息
+                        getPierInfo(clusterId, lon, lat);
+                    }
                 }
-                // 泊位管理弹出框
-                if (type === 1) {
-                    var clusterId = current_feature.get('cluster_id');
-                    // 弹出泊位的弹出框
-                    $('#newBerth').fadeIn("normal");
-                    // 请求码头整体信息
-                    getPierInfo(clusterId, lon, lat);
+                // 点击确认按钮
+                else{
+                    console.log("here");
+                    if(status===0) {
+                        status = 1;
+                    }else{
+                        status = 0;
+                    }
+                    // 改变状态
+                    current_feature.set('status', status);
+                    current_feature.setStyle(point_status[status]);
+                    // current_fearure.setStyle(point_status[status]);
+                    var choosed_ele = $('.oneBerth_info>li [staticAreaKey="' + staticAreaKey + '"]');
+                    // console.log(choosed_ele.attr("staticareakey"));
+                    // console.log(.attr('class'));
+                    updateChooseBerth(choosed_ele.parent().prev().children("span")); // 更新列表里面对应的信息
                 }
             }
         }

@@ -79,23 +79,6 @@
         <li id="1">Crude<i></i></li>
         <li id="2">Container<i></i></li>
     </ul>
-    <!--<ul class="BulkCargo FleetName_List Fleet_List_ul">-->
-        <!--&lt;!&ndash;<li>VLOC(<i>120</i>)</li>&ndash;&gt;-->
-        <!--&lt;!&ndash;<li>Cape(<i>300</i>)</li>&ndash;&gt;-->
-        <!--&lt;!&ndash;<li>Mini Cape(<i>500</i>)</li>&ndash;&gt;-->
-        <!--&lt;!&ndash;<li>Panamax(<i>1500</i>)</li>&ndash;&gt;-->
-        <!--&lt;!&ndash;<li>Supramax(<i>1800</i>)</li>&ndash;&gt;-->
-        <!--&lt;!&ndash;<li>Handymax(<i>2000</i>)</li>&ndash;&gt;-->
-        <!--&lt;!&ndash;<li>Handysize</li>&ndash;&gt;-->
-    <!--</ul>-->
-    <!--<ul class="Crude FleetName_List Fleet_List_ul">-->
-        <!--&lt;!&ndash;<li>VLCC(<i>680</i>)</li>&ndash;&gt;-->
-        <!--&lt;!&ndash;<li>Aframax(<i>800</i>)</li>&ndash;&gt;-->
-        <!--&lt;!&ndash;<li>MR Tanker(<i>100</i>)</li>&ndash;&gt;-->
-        <!--&lt;!&ndash;<li>成品油(<i>1900</i>)</li>&ndash;&gt;-->
-        <!--&lt;!&ndash;<li>Q-Max(<i>30</i>)</li>&ndash;&gt;-->
-        <!--&lt;!&ndash;<li>LPG(<i>60</i>)</li>&ndash;&gt;-->
-    <!--</ul>-->
     <ul class="FleetName_List Fleet_List_ul"></ul>
 
     <!--航线分类-->
@@ -109,26 +92,7 @@
         <li type ="6">BSI<i></i></li>
         <li type ="7">BHSI<i></i></li>
     </ul>
-    <ul class="oneRoute_List route_List_ul">
-        <li>Route C2</li>
-        <li>Route C3</li>
-        <li>Route C4</li>
-        <li>Route C5</li>
-        <li>Route C7</li>
-        <li>Route C8 03</li>
-        <li>Route C9 03</li>
-        <li>Route C10 03</li>
-        <li>Route C11 03</li>
-        <li>Route C2</li>
-        <li>Route C3</li>
-        <li>Route C4</li>
-        <li>Route C5</li>
-        <li>Route C7</li>
-        <li>Route C8 03</li>
-        <li>Route C9 03</li>
-        <li>BCTI Route 14</li>
-        <li>BITR-Asia Route 12</li>
-    </ul>
+    <ul class="oneRoute_List route_List_ul"></ul>
 
 </div>
 
@@ -379,7 +343,6 @@
     </div>
     <div class="ShipSearch_ShowBtn"></div>
 </div>
-<!--<div class="ShipSearch_ShowBtn"></div>-->
 <!--船舶搜索结果-->
 <div id="searchShipList">
     <!--<div class="fleet_title">-->
@@ -441,15 +404,6 @@
                     <li><span>sadasdqw</span><i></i></li>
                 </ul>
             </span>
-            <!--<div class="AllStartEndPort_List">-->
-                <!--<input class="StartEndPort_input" type="text" placeholder="请选择港口或输入港口">-->
-                <!--<ul class = "startPort">-->
-                    <!--<li>asdasd</li>-->
-                    <!--<li>basdasd</li>-->
-                    <!--<li>casdasd</li>-->
-                    <!--<li>ddasdasd</li>-->
-                <!--</ul>-->
-            <!--</div>-->
         </div>
         <div class="routeStartEndPort routeEndPort_Select">
             <span>目的港：</span>
@@ -459,15 +413,6 @@
                     <li><span>sadasdqw</span><i></i></li>
                 </ul>
             </span>
-            <!--<div class="AllStartEndPort_List">-->
-                <!--<input class="StartEndPort_input" type="text" placeholder="请选择港口或输入港口">-->
-                <!--<ul class="endPort">-->
-                    <!--<li>asdasd</li>-->
-                    <!--<li>basdasd</li>-->
-                    <!--<li>casdasd</li>-->
-                    <!--<li>ddasdasd</li>-->
-                <!--</ul>-->
-            <!--</div>-->
         </div>
     </div>
     <div class="dividing_line"></div>
@@ -1573,13 +1518,42 @@
         })
     });
 
-    // 已存在的锚地图标
-    var exist_anch_style = new ol.style.Style({
-        image: new ol.style.Icon({
-            scale: 0.8,
-            src: 'images/anchor.png'
+    // 待选泊位/锚地图标
+    var point_status = {
+        0: new ol.style.Style({
+            image: new ol.style.Icon({
+                src: 'images/pointerCheck.png',
+                anchor: [0.5, 0.8]
+            })
+        }),
+        1: new ol.style.Style({
+            image: new ol.style.Icon({
+                src: 'images/pointerAdd.png',
+                anchor: [0.5, 0.8]
+            })
         })
-    });
+    };
+//    var pointer_add =  new ol.style.Style({
+//        image: new ol.style.Icon({
+//            src: 'images/pointerAdd.png'
+//        })
+//    });
+//    // 已添加泊位/锚地图标
+//    var pointer_check =  new ol.style.Style({
+//        image: new ol.style.Icon({
+//            src: 'images/pointerCheck.png'
+//        })
+//    });
+
+    // 已存在的锚地图标
+//    var exist_anch_style = new ol.style.Style({
+//        image: new ol.style.Icon({
+//            scale: 0.8,
+//            src: 'images/anchor.png'
+//        })
+//    });
+
+
 
 
 
@@ -1672,8 +1646,6 @@
 
     //获取初始地图
     setMapShow();
-
-
 
     // 利用Drag方法，使得地图上的标签可以拖动
 //    var dragDrop = new app.Drag();

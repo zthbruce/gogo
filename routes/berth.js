@@ -234,53 +234,109 @@ router.get('/saveBerth', function(req, res, next) {
 router.get('/saveBerthList', function(req, res, next) {
     // var terminalKey = req.query.terminalKey;
     var berthList = req.query.berthList;
-    var terminalKey = berthList[0].TerminalKey;
-    var sql = "DELETE FROM T2103_TerminalDetails WHERE TerminalKey = " + terminalKey;
-    mysql.query(sql, function (err, results) {
+    var terminalKey = req.query.TerminalKey;
+    // var terminalKey = berthList[0].TerminalKey;
+    // 清空泊位信息
+    var sql1 = "UPDATE T2105_ParkArea SET Checked = '0' WHERE cluster_id IN (SELECT StationaryAreaKey FROM T2103_TerminalDetails WHERE TerminalKey='" + terminalKey + "')";
+        mysql.query(sql1, function (err, results) {
         if (err) {
             console.log(utils.eid1);
             res.jsonp(['404', utils.eid1]);
         } else {
-            console.log("成功清空当前码头");
-            var sqls = 'INSERT INTO T2103_TerminalDetails (TerminalKey, Seq, LOA, Moulded_Beam, Draft, LoadDischargeRate, StationaryAreaKey) value ';
-            for(var i = 0; i< berthList.length; i++) {
-                if(i > 0){
-                    sqls += ",";
-                }
-                var ele = berthList[i];
-                sqls += util.format('("%s", "%s", "%s", "%s", "%s", "%s", "%s")', ele.TerminalKey, ele.Seq, ele.LOA,
-                    ele.Moulded_Beam, ele.Draft, ele.LoadDischargeRate, ele.StationaryAreaKey);
-            }
-            mysql.query(sqls, function (err, results) {
-                if (err) {
-                    console.log(utils.eid1);
-                    res.jsonp(['404', utils.eid1]);
-                } else {
-                    console.log("成功连接数据库");
-                    res.jsonp(['200', "保存泊位信息成功"]);
-                }
-            });
-        }
-    });
-    var sqls  = "UPDATE `T2105_ParkArea` SET Checked = 1 WHERE cluster_id IN (";
-    for(var i = 0; i< berthList.length; i++) {
-        if(i > 0){
-            sqls += ",";
-        }
-        var ele = berthList[i];
-        sqls += util.format('"%s"', ele.StationaryAreaKey);
-    }
-    sqls += ")";
-    mysql.query(sqls, function (err, results) {
-        if (err) {
-            console.log(utils.eid1);
-            res.jsonp(['404', utils.eid1]);
-        } else {
-            console.log("成功连接数据库");
-            res.jsonp(['200', "保存泊位信息成功"]);
+            console.log("成功初始化确认信息");
+            // 初始化泊位确认信息
+            var sql2 = "DELETE FROM T2103_TerminalDetails WHERE TerminalKey = '" + terminalKey + "'";
+            mysql.query(sql2, function (err, results){
+                    if (err) {
+                        console.log(utils.eid1);
+                        res.jsonp(['404', utils.eid1]);
+                    } else {
+                        console.log("成功清空当前码头");
+                        if (berthList.length > 0) {
+                            // 更新泊位信息
+                            var sql3 = 'INSERT INTO T2103_TerminalDetails (TerminalKey, Seq, LOA, Moulded_Beam, Draft, LoadDischargeRate, StationaryAreaKey) value ';
+                            for (var i = 0; i < berthList.length; i++) {
+                                if (i > 0) {
+                                    sql3 += ",";
+                                }
+                                var ele = berthList[i];
+                                sql3 += util.format('("%s", "%s", "%s", "%s", "%s", "%s", "%s")', ele.TerminalKey, ele.Seq, ele.LOA,
+                                    ele.Moulded_Beam, ele.Draft, ele.LoadDischargeRate, ele.StationaryAreaKey);
+                            }
+                            mysql.query(sql3, function (err, results) {
+                                if (err) {
+                                    console.log(utils.eid1);
+                                    res.jsonp(['404', utils.eid1]);
+                                } else {
+                                    console.log("泊位信息更新");
+                                    var sql4 = "UPDATE `T2105_ParkArea` SET Checked = 1 WHERE cluster_id IN (";
+                                    for (var i = 0; i < berthList.length; i++) {
+                                        if (i > 0) {
+                                            sql4 += ",";
+                                        }
+                                        var ele = berthList[i];
+                                        sql4 += util.format('"%s"', ele.StationaryAreaKey);
+                                    }
+                                    sql4 += ")";
+                                    mysql.query(sql4, function (err, results) {
+                                        if (err) {
+                                            console.log(utils.eid1);
+                                            res.jsonp(['404', utils.eid1]);
+                                        } else {
+                                            console.log("成功更新确认信息");
+                                            res.jsonp(['200', "保存泊位信息成功"]);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                        else {
+                            res.jsonp(['200', "保存泊位信息成功"]);
+                        }
+                    }
+            })
         }
     });
 });
+
+// router.get("/updateCheckInfo", function (req, res, next) {
+//     var berthList = req.query.berthList;
+//     var terminalKey = req.query.TerminalKey;
+//     // 更新确认值
+//     var sql2 = "UPDATE T2105_ParkArea SET Checked = '0' WHERE cluster_id IN (SELECT StationaryAreaKey FROM T2103_TerminalDetails WHERE TerminalKey='" + terminalKey + "')";
+//     mysql.query(sql2, function (err, results) {
+//         if (err) {
+//             console.log(utils.eid1);
+//             res.jsonp(['404', utils.eid1]);
+//         } else {
+//             if (berthList.length > 0) {
+//                 // 更新check值
+//                 var sqls = "UPDATE `T2105_ParkArea` SET Checked = 1 WHERE cluster_id IN (";
+//                 for (var i = 0; i < berthList.length; i++) {
+//                     if (i > 0) {
+//                         sqls += ",";
+//                     }
+//                     var ele = berthList[i];
+//                     sqls += util.format('"%s"', ele.StationaryAreaKey);
+//                 }
+//                 sqls += ")";
+//                 mysql.query(sqls, function (err, results) {
+//                     if (err) {
+//                         console.log(utils.eid1);
+//                         res.jsonp(['404', utils.eid1]);
+//                     } else {
+//                         console.log("成功连接数据库");
+//                         res.jsonp(['200', "更新确认信息成功"]);
+//                     }
+//                 });
+//             }
+//             else{
+//                 res.jsonp(['200', "更新确认信息成功"]);
+//             }
+//         }
+//     })
+//
+// });
 
 /**
  * 删除单个泊位信息
