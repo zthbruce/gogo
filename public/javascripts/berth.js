@@ -14,9 +14,15 @@ function getPierDetail(terminalKey) {
         data: {TerminalKey: terminalKey},
         success: function (data) {
             console.log(data);
+            // 初始化
+            var cargo_ele = $("#cargo_type_key");
+            cargo_ele.val('');
+            var cargo_num_ele = cargo_ele.next();
+            cargo_num_ele.text('');
             if (data[0] === "200") {
                 var jsonData = data[1];
-                var pierInfo = jsonData[0]; // 获取当前码头信息
+                var pierInfo = jsonData["PierInfo"][0]; // 获取当前码头信息
+                var cargoInfoList = jsonData["CargoType"];
                 // $(".pierInfo_list").attr("terminalKey", terminalKey);
                 port_name_ele.attr("port_id", pierInfo.PortID);
                 port_name_ele.text(pierInfo.PortName);
@@ -25,9 +31,31 @@ function getPierDetail(terminalKey) {
                 company_name_ele.attr("companyNumber", pierInfo.BelongtoCompany);
                 company_name_ele.val(pierInfo.CompanyName); // 公司名字
                 $("#berth_num").val(pierInfo.BerthQuantity); // 泊位数量
-                $("#tide").val(pierInfo.Tide); // 潮汐
-                $("#import_export_type").text(pierInfo.ImportExportType);
-                $("#cargo_type_key").text(pierInfo.CargoTypeKey);
+                // $("#tide").val(pierInfo.Tide); // 潮汐
+                $("#import_export_type").text(pierInfo.ImportExportType); // 进出口
+                var purpose_ele =  $("#use_type_key");
+                purpose_ele.text(pierInfo.Purpose); // 用途
+                purpose_ele.attr("value", pierInfo.PurposeID); // 赋值
+                // 获取货物信息
+                var cargoNum = cargoInfoList.length;
+                if(cargoNum >= 1){
+                    // 如果有数目就更新
+                    var cargoType = '';
+                    for(var i=0; i < cargoNum; i++){
+                        if(i > 0){
+                            cargoType += ", "
+                        }
+                        cargoType += cargoInfoList[i].Name;
+                    }
+                    cargo_ele.val(cargoType);
+                    cargo_num_ele.text("(" + cargoNum + ")");
+                }
+                // 下拉列表更新
+                getCargoTypeList(terminalKey);
+                // getCargoInfo(TerminalKey)
+                // var cargo_ele = $("#cargo_type_key");
+                // cargo_ele.text(pierInfo.CargoType); // 货物类型
+                // cargo_ele.attr(); // 货物类型
                 // 经纬度的显示
                 $("#LON_LAT").val(pierInfo.Latitude + ", " + pierInfo.Longitude);
                 $("#LON_LAT").attr("numeric", pierInfo.LatitudeNumeric + "," + pierInfo.LongitudeNumeric);
@@ -201,7 +229,7 @@ function getPierInfo(clusterId, lon, lat){
                 var pierInfo = jsonData[0]; // 获取当前码头信息
                 // console.log(pierInfo);
                 terminalKey = pierInfo.TerminalKey;
-                getPierDetail(terminalKey);
+                getPierDetail(terminalKey)
                 // $.ajax({
                 //     url: '/berth/getPierInfo',
                 //     type: 'get',
@@ -251,13 +279,14 @@ function getPierInfo(clusterId, lon, lat){
                 $("#des").val("");// 说明
                 // $(".pier_info>input").val(""); //初始化输入
                 $("#import_export_type").text("进口");
-                $("#cargo_type_key").text("Iron Ore");
+                // $("#cargo_type_key").text("Iron Ore");
                 // 经纬度显示当前泊位的中心点
                 var latLonInfo = transLonLatToNormal(lat, lon);
                 $("#LON_LAT").val(latLonInfo[0] + ", " + latLonInfo[1]);
                 $("#LON_LAT").attr("numeric", lat + "," + lon);
                 // 获得当前点附近的疑似泊位
                 getCloseBerthList(terminalKey, lon, lat, allPoints, 10, 5)
+                getCargoTypeList(terminalKey); // 获取对应的货物种类
             }
             // console.log(terminalKey);
             // 增加码头key值信息
@@ -623,6 +652,49 @@ function getBerthList(portID, terminalKey) {
 }
 
 /**
+ * 获取货物类型列表
+ */
+// var cargoTypeList = {};
+function getCargoTypeList(terminalKey) {
+    var cargoType_ul = $(".pier_CargoType>ul");
+    $.ajax({
+        url:"/berth/getCargoType",
+        type:'get',
+        success: function(data){
+            var cargoInfo = data[1];
+            // var cargoList2Terminal = [];
+            $.ajax({
+                url: "/berth/getCargo2Terminal",
+                type: 'get',
+                data:{TerminalKey: terminalKey},
+                success: function (data) {
+                    cargoType_ul.empty(); // 初始化
+                    var cargoList2Terminal = data[1];
+                    var str = '';
+                    console.log(cargoList2Terminal);
+                    for(var i = 0; i < cargoInfo.length; i++){
+                        var cargoType = cargoInfo[i];
+                        console.log(cargoType.ID);
+                        if(cargoList2Terminal.indexOf(cargoType.ID) !== -1){
+                            str += '<li><label for=' + cargoType.ID +'><input type="checkbox" checked="checked" id=' + cargoType.ID + '>' +
+                                cargoType.Name + '</label></li>'
+                        }
+                        else{
+                            str += '<li><label for=' + cargoType.ID +'><input type="checkbox"  id=' + cargoType.ID + '>' +
+                                cargoType.Name + '</label></li>'
+                        }
+                    }
+                    cargoType_ul.append(str);
+                }
+            })
+        }
+    })
+}
+// getCargoTypeList();
+
+
+
+/**
  * 根据所选的泊位改变码头位置信息
  * @param berthLonLatList [[lon, lat], [lon, lat], ...]
  * @return
@@ -697,11 +769,11 @@ $(window).mousemove(function(event){
 });
 
 // 输入下拉框
-$('.span_select>span:nth-child(2)').click(function(){
+$('.span_select>span:nth-child(2),.pier_CargoType>span:nth-child(2)').click(function(){
     $(this).next('ul').slideDown(200);
 });
 
-$('.span_select,.input_select').mouseleave(function(){
+$('.span_select,.input_select,.pier_CargoType').mouseleave(function(){
     $(this).children('ul').slideUp(200);
 });
 
@@ -714,6 +786,33 @@ $('.span_select>ul>li,.input_select>ul>li').click(function(){
     changeBerthSaveButton(true);
 });
 
+// 用途下拉
+$(".pier_UseType>ul>li").click(function() {
+    var val = $(this).text();
+    var purpose_span = $(this).parent().prev('span');
+    purpose_span.text(val);
+    purpose_span.attr("value", $(this).attr('value'));
+    $(this).parent().slideUp(200);
+    changeBerthSaveButton(true);
+});
+
+//货物多选按钮点击
+$('.pier_CargoType>ul').delegate("li", "click", function(){
+    var CargoTextArr = [];
+    var CargoTextStr = '';
+    var CargoTextLength = $(this).parent().find('input:checked').length;
+    for(var i=0;i<CargoTextLength;i++){
+        if(i>0){CargoTextStr+=", ";}
+        var CargoText = $(this).parent().find('input:checked').eq(i).parent().text();
+        CargoTextArr.push(CargoText);
+        CargoTextStr += CargoText;
+    }
+    // console.log(CargoTextArr);
+    // console.log(CargoTextStr);
+    $('#cargo_type_key').val(CargoTextStr);
+    $('#cargo_type_key').next('span').text('('+CargoTextLength+')');
+    changeBerthSaveButton(true);
+});
 
 // 泊位管理界面关闭
 $('#berth_cancel').click(function () {
@@ -785,7 +884,8 @@ $('#berth_save').click(function () {
         BelongtoCompany: companyNumber,
         BerthQuantity: $("#berth_num").val(),
         ImportExportType: $("#import_export_type").text(),
-        CargoTypeKey: $("#cargo_type_key").text(),
+        Purpose: $("#use_type_key").attr("value"),
+        // CargoTypeKey: $("#cargo_type_key").text(),
         LatitudeNumeric: lat_numeric,
         LongitudeNumeric: lon_numeric,
         Latitude: lat,
@@ -804,6 +904,27 @@ $('#berth_save').click(function () {
             console.log(err);
         }
     });
+    // 保存货物信息
+    var choose_ele_list = $('.pier_CargoType>ul').find("input:checked");
+    var cargoList = [];
+    console.log(choose_ele_list.length);
+    for(var j = 0; j < choose_ele_list.length; j++){
+        console.log(choose_ele_list.eq(j).attr("id"));
+        cargoList.push(choose_ele_list.eq(j).attr("id"));
+    }
+    console.log(cargoList);
+    $.ajax({
+        url: '/berth/saveCargoInfo',
+        type: 'get',
+        data: {TerminalKey: terminalKey, CargoList: cargoList},
+        success: function (data) {
+            console.log(data[1])
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
+
 
     // 保存泊位信息
     // var berthList = getBerthList(portID, terminalKey);

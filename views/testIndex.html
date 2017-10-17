@@ -1244,10 +1244,24 @@
                 <li>出口</li>
             </ul>
         </div>
-        <div class="pier_info pier_CargoType span_select">
-            <span>货物：</span><span id="cargo_type_key">Lron Ore</span>
+        <div class="pier_info pier_UseType span_select">
+            <!--<span>用途：</span><span value="01">装货</span>-->
+            <span>用途：</span><span id="use_type_key" value="01">装货</span>
             <ul>
-                <li>Lron Ore</li>
+                <li value="01">装货</li>
+                <li value="02">卸货</li>
+                <li value="03">加油</li>
+                <li value="04">补给</li>
+                <li value="05">修船</li>
+                <li value="06">不明</li>
+            </ul>
+        </div>
+        <div class="pier_info pier_CargoType">
+            <span>货物：</span><span><input id="cargo_type_key" value="" disabled/><span></span></span>
+            <ul>
+                <!--<li><label for="01"><input type="checkbox" id="01">铁矿石</label></li>-->
+                <!--<li><label for="02"><input type="checkbox" id="02">原油</label></li>-->
+                <!--<li><label for="03"><input type="checkbox" id="03">煤炭</label></li>-->
             </ul>
         </div>
         <div class="pier_info pier_LongLat">

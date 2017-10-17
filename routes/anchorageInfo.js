@@ -26,26 +26,30 @@ require('util');
 // var name = "as";
 // console.log(util.format("SELECT * FROM `T0181_ShipType` SELECT * FROM `T0181_ShipType` WHERE NAME LIKE '%s%' OR CNName LIKE '%s%'", name, name));
 
-function format(num) {
-    var prefix = '';
-    if(num>=0 && num <=9)
-        prefix = '0';
-    return prefix + num
+// function format(num) {
+//     var prefix = '';
+//     if(num>=0 && num <=9)
+//         prefix = '0';
+//     return prefix + num
+//
+// }
+// function getNowFormatDate() {
+//     var date = new Date();
+//     var seperator1 = "-";
+//     var seperator2 = ":";
+//     var strMonth = format((date.getMonth() + 1));
+//     // month =  month.length === 1 ? '0' + month: month ;
+//     console.log(date.getDate());
+//     var strDate = format(date.getDate());
+//     var strHours = format(date.getHours());
+//     var strMinutes = format(date.getMinutes());
+//     var strSecond = format(date.getMinutes());
+//     return date.getFullYear() + seperator1 + strMonth + seperator1 + strDate
+//         + " " + strHours + seperator2 + strMinutes + seperator2 + strSecond;
+// }
+//
+// console.log(getNowFormatDate())
 
-}
-function getNowFormatDate() {
-    var date = new Date();
-    var seperator1 = "-";
-    var seperator2 = ":";
-    var strMonth = format((date.getMonth() + 1));
-    // month =  month.length === 1 ? '0' + month: month ;
-    console.log(date.getDate());
-    var strDate = format(date.getDate());
-    var strHours = format(date.getHours());
-    var strMinutes = format(date.getMinutes());
-    var strSecond = format(date.getMinutes());
-    return date.getFullYear() + seperator1 + strMonth + seperator1 + strDate
-        + " " + strHours + seperator2 + strMinutes + seperator2 + strSecond;
-}
-
-console.log(getNowFormatDate())
+var m =[];
+m.push(3);
+console.log(m);

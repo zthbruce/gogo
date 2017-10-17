@@ -166,17 +166,32 @@ router.get('/getTerminal', function(req, res, next){
  */
 router.get('/getPierInfo', function(req, res, next){
     var terminalKey = req.query.TerminalKey;
-    var sqls = util.format('SELECT  t1.*, t2.Name AS PortName, t3.Name AS CompanyName FROM T2102_Terminal t1 ' +
-        'LEFT JOIN T2101_Port t2 ON t1.PortID = t2.PortID LEFT JOIN T2107_Company t3 ON t1.BelongtoCompany = t3.CompanyNumber ' +
+    var result = {};
+    var sqls = util.format('SELECT  t1.*, t2.Name AS PortName, t3.Name AS CompanyName, t1.Purpose AS PurposeID, t4.Purpose ' +
+        ' FROM T2102_Terminal t1 LEFT JOIN T2101_Port t2 ON t1.PortID = t2.PortID ' +
+        'LEFT JOIN T2107_Company t3 ON t1.BelongtoCompany = t3.CompanyNumber LEFT JOIN T2111_Purpose t4 ON t1.Purpose = t4.ID ' +
+        // 'LEFT JOIN T2110_CargoType t5 ON t1.CargoTypeKey = t5.ID' +
         'WHERE TerminalKey = "%s"', terminalKey);
-    mysql.query(sqls, function (err, results) {
+    mysql.query(sqls, function (err, result1) {
         if(err){
             console.log(utils.eid1);
             res.jsonp(['404', utils.eid1]);
         }else {
             console.log("成功连接数据库");
-            if(results.length>0){
-                res.jsonp(['200', results]);
+            if(result1.length>0){
+                var sql2 =  util.format('SELECT CargoTypeKey, Name, ENName FROM T2109_TerminalCargo t1 ' +
+                    'LEFT JOIN T2110_CargoType t2 ON t1.CargoTypeKey = t2.ID ' +
+                    'WHERE TerminalKey = "%s"', terminalKey);
+                mysql.query(sql2, function (err, result2) {
+                    if (err) {
+                        console.log(utils.eid1);
+                        res.jsonp(['404', utils.eid1]);
+                    } else {
+                        result["PierInfo"]= result1;
+                        result["CargoType"] = result2;
+                        res.jsonp(['200', result]);
+                    }
+                })
             }else{
                 res.jsonp(['304', "return nothing"]);
             }
@@ -191,12 +206,12 @@ router.get('/getPierInfo', function(req, res, next){
  * 保存码头信息
  */
 router.get('/saveTerminal', function(req, res, next) {
-    var sqls = util.format('REPLACE INTO T2102_Terminal (TerminalKey, Name, PortID, BerthQuantity, Tide, ImportExportType,' +
-        'BelongtoCompany, Des, Location, LatitudeNumeric, LongitudeNumeric, Latitude, Longitude, CargoTypeKey) ' +
-        'value ("%s","%s","%s","%s", "%s","%s","%s","%s","%s","%s","%s","%s","%s", "%s")', req.query.TerminalKey, req.query.Name, req.query.PortID,
-        req.query.BerthQuantity, req.query.Tide, req.query.ImportExportType, req.query.BelongtoCompany, req.query.Des,
+    var sqls = util.format('REPLACE INTO T2102_Terminal (TerminalKey, Name, PortID, BerthQuantity, ImportExportType,' +
+        'BelongtoCompany, Des, Location, LatitudeNumeric, LongitudeNumeric, Latitude, Longitude, Purpose) ' +
+        'value ("%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s","%s", "%s")', req.query.TerminalKey, req.query.Name, req.query.PortID,
+        req.query.BerthQuantity, req.query.ImportExportType, req.query.BelongtoCompany, req.query.Des,
         req.query.Location, req.query.LatitudeNumeric, req.query.LongitudeNumeric, req.query.Latitude, req.query.Longitude,
-        req.query.CargoTypeKey);
+        req.query.Purpose);
     mysql.query(sqls, function (err, results) {
         if (err) {
             console.log(utils.eid1);
@@ -204,6 +219,41 @@ router.get('/saveTerminal', function(req, res, next) {
         } else {
             console.log("成功连接数据库");
             res.jsonp(['200', "保存码头信息成功"]);
+        }
+    });
+});
+
+/**
+ * 保存货物信息
+ */
+router.get('/saveCargoInfo', function(req, res, next) {
+    var terminalKey =  req.query.TerminalKey;
+    var cargoList = req.query.CargoList;
+    // 初始化清空
+    var sql1 = util.format('DELETE FROM T2109_TerminalCargo WHERE TerminalKey = "%s"', terminalKey);
+    mysql.query(sql1, function (err, results) {
+        if (err) {
+            console.log(utils.eid1);
+            res.jsonp(['404', "清空码头货物出错"]);
+        } else {
+            console.log("成功连接数据库");
+            var sql2 = "INSERT INTO T2109_TerminalCargo VALUES ";
+            for(var i = 0; i< cargoList.length; i++){
+                if(i > 0){
+                    sql2 += ","
+                }
+                sql2 += "('" + terminalKey + "','" + cargoList[i] + "')";
+            }
+            console.log(sql2);
+            mysql.query(sql2, function (err, results) {
+                if (err) {
+                    console.log("保存货物信息出错");
+                    res.jsonp(['404', "保存货物信息出错"]);
+                }
+                else {
+                    res.jsonp(['200', "保存货物信息成功"]);
+                }
+            })
         }
     });
 });
@@ -430,6 +480,42 @@ router.get('/savePierCompany', function(req, res, next) {
     });
 });
 
+/**
+ * 获取货物类型列表
+ */
+router.get('/getCargoType', function(req, res, next){
+    var sql = "SELECT ID, Name, ENName FROM T2110_CargoType";
+    mysql.query(sql, function (err, results) {
+        if(err){
+            console.log(utils.eid1);
+            res.jsonp(['404', utils.eid1]);
+        }else {
+            res.jsonp(['200', results]);
+        }
+    });
+});
+
+/**
+ * 获取改码头下的货物
+ */
+router.get('/getCargo2Terminal', function(req, res, next){
+    var terminalKey = req.query.TerminalKey;
+    var sql = util.format('SELECT CargoTypeKey FROM T2109_TerminalCargo WHERE TerminalKey = "%s"', terminalKey);
+    mysql.query(sql, function (err, results) {
+        if(err){
+            console.log(utils.eid1);
+            res.jsonp(['404', utils.eid1]);
+        }else {
+            var result = [];
+            console.log(results.length);
+            for(var i = 0; i < results.length; i++){
+                result.push(results[i].CargoTypeKey)
+            }
+            console.log(result);
+            res.jsonp(['200', result]);
+        }
+    });
+});
 // 作为中间路由传递
 module.exports = router;
 
