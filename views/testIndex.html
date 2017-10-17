@@ -1713,7 +1713,7 @@
         zoom = blmol.operation.getZoom(map);
         console.log(zoom);
         // 获取所有静止区域
-        iconLayer(zoom, extent);
+        iconLayer(zoom);
         // 临界条件
         if(!anchStatus && ((zoom >= 10 && oldLevel < 10) || (zoom < 10  && oldLevel >= 10))){
             // 刷新锚地数据, 显示锚地名

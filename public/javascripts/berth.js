@@ -400,6 +400,7 @@ function getCheckPointer(status, staticAreaKey, lon, lat) {
         cluster_id: staticAreaKey,
         geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
     });
+    fearure.setId(staticAreaKey);
     fearure.setStyle(point_status[status]);
     current.getSource().addFeature(fearure);
 }
@@ -407,8 +408,19 @@ function getCheckPointer(status, staticAreaKey, lon, lat) {
 /**
  * 更新当前所属泊位
  * @param ele
+ * @param current_feature
  */
-function updateChooseBerth(ele) {
+function updateChooseBerth(ele, current_feature) {
+    var status = current_feature.get("status");
+    // 改变选择图标
+    if(status===0) {
+        status = 1;
+    }else{
+        status = 0;
+    }
+    // 改变状态
+    current_feature.set('status', status);
+    current_feature.setStyle(point_status[status]);
     // 点击那一行高亮显示
     changeBerthSaveButton(true); // 改变保存状态
     // 第一个不允许修改状态
@@ -420,7 +432,7 @@ function updateChooseBerth(ele) {
     var li_ele = ele.parent().parent().parent();
     $('.berth_list>li').removeAttr("highLight");
     li_ele.attr("highLight", true);
-    // 确认显示
+    // 确认显示， 改变列表选择状态
     var ul_ele = ele.parent().next().children();
     if (ele.attr('class') === "notBelong") {
         // $(this).removeClass("notBelong");
@@ -563,7 +575,8 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxD
             }
             // 点击是否属于按钮
             $(".oneBerth_info>li:nth-child(2)>span").click(function () {
-                updateChooseBerth($(this))
+                var current_feature = current.getSource().getFeatureById(staticAreaKey);
+                updateChooseBerth($(this), current_feature);
                 // changeBerthSaveButton(true); // 改变保存状态
                 // // 第一个不允许修改状态
                 // // if($(this).attr('seq') === "1"){

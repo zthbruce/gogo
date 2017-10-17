@@ -169,6 +169,7 @@ function changeBerthSaveButton(saveStatus) {
 var routeStatus = false;
 var old_feature;
 var port_ul;
+var status;
 mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feature, evt) {
     if (feature.length !== 0) {
         var current_feature =  feature[0];
@@ -312,8 +313,11 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
             // }
             // 原始模式
             else {
-                var status = current_feature.get("status");
-                if (status === undefined) {
+                // var status = current_feature.get("status");
+                var name = current_feature.get('name');
+                console.log(name);
+                if (name === 'parkArea') {
+                    console.log("here");
                     changeBerthSaveButton(false); // 初始化泊位保存状态
                     // 初始化锚地保存状态
                     // 锚地管理弹出框, 不管是原生锚地区域还是锚地聚类区域, type都设为0, 表示锚地
@@ -340,19 +344,18 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                 // 点击确认按钮
                 else{
                     console.log("here");
-                    if(status===0) {
-                        status = 1;
-                    }else{
-                        status = 0;
-                    }
+                    // console.log("here");
+                    // if(status===0) {
+                    //     status = 1;
+                    // }else{
+                    //     status = 0;
+                    // }
                     // 改变状态
-                    current_feature.set('status', status);
-                    current_feature.setStyle(point_status[status]);
+                    // current_feature.set('status', status);
+                    // current_feature.setStyle(point_status[status]);
                     // current_fearure.setStyle(point_status[status]);
                     var choosed_ele = $('.oneBerth_info>li [staticAreaKey="' + staticAreaKey + '"]');
-                    // console.log(choosed_ele.attr("staticareakey"));
-                    // console.log(.attr('class'));
-                    updateChooseBerth(choosed_ele.parent().prev().children("span")); // 更新列表里面对应的信息
+                    updateChooseBerth(choosed_ele.parent().prev().children("span"), current_feature); // 更新列表里面对应的信息
                 }
             }
         }
