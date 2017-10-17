@@ -422,19 +422,20 @@
             <li>吨位: <input type="text"></li>
             <li>吃水: <input type="text"></li>
             <li>最大船龄: <input type="text"></li>
+            <li>权重: <input type="text"></li>
             <!--<li>LOA: <input type="text"></li>-->
             <!--<li>BM: <input type="text"></li>-->
             <!--<li>DM: <input type="text"></li>-->
             <li>装港: </li>
             <li>等待时长: <input type="text"></li>
             <li>TPH: <input type="text"></li>
-            <li>DTPH: <input type="text"></li>
+            <li>DTPH: <input type="text" disabled></li>
             <!--<li>SHInc: <input type="checkbox" checked=true></li>-->
             <li>SHInc: <input type="checkbox" class="SHInc"></li>
             <li>卸港: </li>
             <li>等待时长: <input type="text"></li>
             <li>TPH: <input type="text"></li>
-            <li>DTPH: <input type="text"></li>
+            <li>DTPH: <input type="text" disabled></li>
             <li>SHInc: <input type="checkbox" class="SHInc"></li>
         </ul>
     </div>
@@ -467,19 +468,30 @@
     <!--航线信息设置-->
     <div class="LeaseRouteInfo_Install">
         <ul class="LeaseRouteInfo_List">
-            <li><span>交船范围: </span> <input type="text" disabled value="Amsterdam-Rotterdam-Antwerp"></li>
-            <li><span>还船范围: </span> <input type="text" disabled></li>
-            <li><span>货物: </span> <input type="text" value="谷物、矿石、煤炭或者类似产品" disabled></li>
+            <li><span>交船范围: </span> <input type="text" disabled value="Amsterdam-Rotterdam-Antwerp"><i></i></li>
+            <li><span>还船范围: </span> <input type="text" disabled><i></i></li>
+            <!--<li><span>货物: </span> <input type="text" value="谷物、矿石、煤炭或者类似产品" disabled></li>-->
+            <li>
+                <span>货物：</span><span><input type="text" value="" disabled/><span>(0)</span></span>
+                <ul>
+                    <li><label><input type="checkbox"> Lron Ore</label></li>
+                    <li><label><input type="checkbox"> Lron Ore1</label></li>
+                </ul>
+            </li>
             <li><span>权重: </span> <input type="text" value="00.00"> %</li>
+            <li><span>佣金: </span> <input type="text" value="00.00"> %</li>
             <li><span>租期: </span> <input type="text" value="30-40"></li>
             <li><span>最大船龄: </span> <input type="text" value="00"></li>
-            <li><span>佣金: </span> <input type="text" value="00.00"> %</li>
             <li><span>DWT: </span> <input type="text" value="172000"></li>
+            <li><span>容积: </span> <input type="text" value="00.00"></li>
             <li><span>LOA: </span> <input type="text" value="0000.00"></li>
             <li><span>BEAM: </span> <input type="text" value="000.00"></li>
             <li><span>吃水: </span> <input type="text" value="00.00"></li>
-            <li><span>空载航速: </span> <input type="text" value="00.00"></li>
+            <li><span>海上不耗柴油 </span> <input type="checkbox"></li>
+            <li><span>空驶航速: </span> <input type="text" value="00.00"></li>
+            <li><span>空驶油耗: </span> <input type="text" value="00.00"></li>
             <li><span>满载航速: </span> <input type="text" value="00.00"></li>
+            <li><span>满载油耗: </span> <input type="text" value="00.00"></li>
         </ul>
     </div>
     <div class="dividing_line"></div>

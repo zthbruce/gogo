@@ -631,3 +631,32 @@ $('.routeInstall_SaveBtn').click(function () {
     current.getSource().clear(); // 清空临时层
 });
 
+
+/**
+ * 期租航线货物选择
+ */
+// 输入下拉框
+$('.LeaseRouteInfo_List>li:nth-child(3)>span:nth-child(2)').click(function(){
+    $(this).next('ul').slideDown(200);
+});
+
+$('.LeaseRouteInfo_List>li:nth-child(3)').mouseleave(function(){
+    $(this).children('ul').slideUp(200);
+});
+//货物多选按钮
+$('.LeaseRouteInfo_List>li:nth-child(3)>ul>li').click(function(){
+    var CargoTextArr = [];
+    var CargoTextStr = '';
+    var CargoTextLength = $(this).parent().find('input:checked').length;
+    for(var i=0;i<CargoTextLength;i++){
+        if(i>0){CargoTextStr+='、';}
+        var CargoText = $(this).parent().find('input:checked').eq(i).parent().text();
+        CargoTextArr.push(CargoText);
+        CargoTextStr += CargoText;
+    }
+    // console.log(CargoTextArr);
+    // console.log(CargoTextStr);
+    $(this).parent().prev().children('input').val(CargoTextStr);
+    $(this).parent().prev().children('span').text('('+CargoTextLength+')');
+    // changeBerthSaveButton(true);
+});
