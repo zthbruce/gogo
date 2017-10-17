@@ -77,15 +77,18 @@ function getPierDetail(terminalKey) {
  * @param pierStr
  */
 function addPierSelectPierName(pierStr){
+    // 清空列表
     $.ajax({
         url:'/berth/addPierSelectPierName',
         type:'get',
         data:{PierStr: pierStr},
         success: function(data){
             console.log(data);
+            $("#pier_name_list").empty();
             if(data[0] === "200"){
                 var jsonData = data[1];
                 for(var i=0;i<jsonData.length;i++){
+                    console.log(i);
                     var pierName = jsonData[i].Name;
                     var terminalKey =  jsonData[i].TerminalKey;
                     // 显示码头列表
@@ -122,7 +125,9 @@ function addPierSelectCompanyName(companyStr){
         type:'get',
         data:{companyStr: companyStr},
         success: function(data){
-            console.log(data);
+            // console.log(data);
+            // 清空列表
+            $("#company_name_list").empty();
             if(data[0] === "200"){
                 var jsonData = data[1];
                 for(var i=0;i<jsonData.length;i++){
@@ -285,7 +290,7 @@ function getPierInfo(clusterId, lon, lat){
                 $("#LON_LAT").val(latLonInfo[0] + ", " + latLonInfo[1]);
                 $("#LON_LAT").attr("numeric", lat + "," + lon);
                 // 获得当前点附近的疑似泊位
-                getCloseBerthList(terminalKey, lon, lat, allPoints, 10, 5)
+                getCloseBerthList(terminalKey, lon, lat, allPoints, 10, 5);
                 getCargoTypeList(terminalKey); // 获取对应的货物种类
             }
             // console.log(terminalKey);
@@ -559,10 +564,10 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxD
                     // 当前静止区域默认属于
                     num++;
                     // 第一个默认属于该码头
-                    if (i === 0) {
-                        belongStatus = "belong";
-                        status = 0;
-                    }
+                    // if (i === 0) {
+                    //     belongStatus = "belong";
+                    //     status = 0;
+                    // }
                     // 图上显示确认图标
                     getCheckPointer(status, staticAreaKey, ele.lon, ele.lat);
                     var str = '<li><ul class="oneBerth_info"><li>' + num + '</li><li><span class = ' + belongStatus + ' seq=' + num + '>' +
@@ -575,6 +580,8 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxD
             }
             // 点击是否属于按钮
             $(".oneBerth_info>li:nth-child(2)>span").click(function () {
+                var staticAreaKey = $(this).parent().next().children().attr("staticareakey");
+                // console.log(staticAreaKey);
                 var current_feature = current.getSource().getFeatureById(staticAreaKey);
                 updateChooseBerth($(this), current_feature);
                 // changeBerthSaveButton(true); // 改变保存状态
@@ -1025,9 +1032,6 @@ $('.pierInfo_list>.pier_info').bind('input propertychange',function() {
 $('.company_select>input').keyup(function(){
     console.log("输入公司信息");
     var nowVal = $(this).val();
-    // 清空列表
-
-    $("#company_name_list").empty();
     // 做一下规范化,将" '等符号正则化
     nowVal = nowVal.replace(/[\'\"]/g,"");
     $('#company_name').attr("companyNumber", '');
@@ -1040,8 +1044,6 @@ $('.company_select>input').keyup(function(){
 $('.pier_select>input').keyup(function(){
     console.log("输入码头名称");
     var nowVal = $(this).val();
-    // 清空列表
-    $("#pier_name_list").empty();
     // 做一下规范化,将" '等符号正则化
     nowVal = nowVal.replace(/[\'\"]/g,"");
     // $('#pier_name').attr("terminalKey", '');

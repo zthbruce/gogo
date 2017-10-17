@@ -43,11 +43,10 @@ function getAllPoints() {
 }
 
 /**
+ * 显示停泊区域的图标
  * @param level
- * @param area
  */
-
-function iconLayer(level){
+function iconLayer(level, area){
     // var count = allPoints.length;
     var ele;
     var park_feature;
@@ -78,7 +77,8 @@ function iconLayer(level){
                 geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
             });
             park_feature.setId(key);
-            if(ele['Checked'] == 0){
+            // console.log(ele['Checked']);
+            if(ele['Checked'] === 0){
                 park_feature.setStyle(park_style[type]);
             }
             else{
@@ -86,9 +86,11 @@ function iconLayer(level){
             }
             features.push(park_feature);
             areaNum++;
+        // 需要的点集加载
+        if(lon >= area[0] && lon <= area[2] && lat >= area[1] && lat <= area[3]) {
             _cluster_id_list.push(key);
             // _cluster_id = key;
-        // }
+        }
     }
     // console.log(areaNum);
     icon.getSource().clear();
@@ -262,8 +264,8 @@ function updateParkAreaType(cluster_id, type) {
                 info["type"] = type;
                 allPoints[cluster_id] = info;
                 if(zoom >= 7){
-                    // var extent = blmol.operation.getCurrentExtent(map);
-                    iconLayer(zoom);
+                    var extent = blmol.operation.getCurrentExtent(map);
+                    iconLayer(zoom, extent);
                 }
             }
             else{

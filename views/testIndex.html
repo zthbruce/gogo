@@ -293,7 +293,7 @@
         <ul>
             <li><span>船队: </span><input type="text" id="shipInfo_FleetName" readonly>
                 <ul class="shipInfo_FleetList">
-                    <li FleetNumber=></li>
+                    <li FleetNumber=""></li>
                     <li FleetNumber="F1">Capesize</li>
                     <li FleetNumber="F2">VLOC</li>
                     <li FleetNumber="F3">Panamax</li>
@@ -1713,7 +1713,7 @@
         zoom = blmol.operation.getZoom(map);
         console.log(zoom);
         // 获取所有静止区域
-        iconLayer(zoom);
+        iconLayer(zoom, extent);
         // 临界条件
         if(!anchStatus && ((zoom >= 10 && oldLevel < 10) || (zoom < 10  && oldLevel >= 10))){
             // 刷新锚地数据, 显示锚地名
