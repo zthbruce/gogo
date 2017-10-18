@@ -14,15 +14,15 @@ function getPierDetail(terminalKey) {
         data: {TerminalKey: terminalKey},
         success: function (data) {
             console.log(data);
-            // 初始化
-            var cargo_ele = $("#cargo_type_key");
-            cargo_ele.val('');
-            var cargo_num_ele = cargo_ele.next();
-            cargo_num_ele.text('');
+            // // 初始化
+            // var cargo_ele = $("#cargo_type_key");
+            // cargo_ele.val('');
+            // var cargo_num_ele = cargo_ele.next();
+            // cargo_num_ele.text('');
             if (data[0] === "200") {
                 var jsonData = data[1];
-                var pierInfo = jsonData["PierInfo"][0]; // 获取当前码头信息
-                var cargoInfoList = jsonData["CargoType"];
+                var pierInfo = jsonData[0]; // 获取当前码头信息
+                // var cargoInfoList = jsonData["CargoType"];
                 // $(".pierInfo_list").attr("terminalKey", terminalKey);
                 port_name_ele.attr("port_id", pierInfo.PortID);
                 port_name_ele.text(pierInfo.PortName);
@@ -36,20 +36,20 @@ function getPierDetail(terminalKey) {
                 var purpose_ele =  $("#use_type_key");
                 purpose_ele.text(pierInfo.Purpose); // 用途
                 purpose_ele.attr("value", pierInfo.PurposeID); // 赋值
-                // 获取货物信息
-                var cargoNum = cargoInfoList.length;
-                if(cargoNum >= 1){
-                    // 如果有数目就更新
-                    var cargoType = '';
-                    for(var i=0; i < cargoNum; i++){
-                        if(i > 0){
-                            cargoType += ", "
-                        }
-                        cargoType += cargoInfoList[i].Name;
-                    }
-                    cargo_ele.val(cargoType);
-                    cargo_num_ele.text("(" + cargoNum + ")");
-                }
+                // // 获取货物信息
+                // var cargoNum = cargoInfoList.length;
+                // if(cargoNum >= 1){
+                //     // 如果有数目就更新
+                //     var cargoType = '';
+                //     for(var i=0; i < cargoNum; i++){
+                //         if(i > 0){
+                //             cargoType += ", "
+                //         }
+                //         cargoType += cargoInfoList[i].Name;
+                //     }
+                //     cargo_ele.val(cargoType);
+                //     cargo_num_ele.text("(" + cargoNum + ")");
+                // }
                 // 下拉列表更新
                 getCargoTypeList(terminalKey);
                 // getCargoInfo(TerminalKey)
@@ -677,6 +677,11 @@ function getBerthList(portID, terminalKey) {
 // var cargoTypeList = {};
 function getCargoTypeList(terminalKey) {
     var cargoType_ul = $(".pier_CargoType>ul");
+    // 初始化
+    var cargo_ele = $("#cargo_type_key");
+    cargo_ele.val('');
+    var cargo_num_ele = cargo_ele.next();
+    cargo_num_ele.text('');
     $.ajax({
         url:"/berth/getCargoType",
         type:'get',
@@ -688,8 +693,27 @@ function getCargoTypeList(terminalKey) {
                 type: 'get',
                 data:{TerminalKey: terminalKey},
                 success: function (data) {
+                    // 获取货物信息
+                    // 内容显示
+                    var cargoList2Terminal = [];
+                    if(data[0] === '200') {
+                        var cargoInfoList = data[1];
+                        var cargoNum = cargoInfoList.length;
+                        var cargoType = '';
+                        for (var i = 0; i < cargoNum; i++) {
+                            var cargo = cargoInfoList[i];
+                            if (i > 0) {
+                                cargoType += ", "
+                            }
+                            cargoList2Terminal.push(cargo.CargoTypeKey);
+                            // console.log(cargo.Name);
+                            cargoType += cargo.Name;
+                        }
+                        cargo_ele.val(cargoType);
+                        cargo_num_ele.text("(" + cargoNum + ")");
+                    }
+                    // 列表显示
                     cargoType_ul.empty(); // 初始化
-                    var cargoList2Terminal = data[1];
                     var str = '';
                     console.log(cargoList2Terminal);
                     for(var i = 0; i < cargoInfo.length; i++){
@@ -827,10 +851,9 @@ $('.pier_CargoType>ul').delegate("li", "click", function(){
         CargoTextArr.push(CargoText);
         CargoTextStr += CargoText;
     }
-    // console.log(CargoTextArr);
-    // console.log(CargoTextStr);
-    $('#cargo_type_key').val(CargoTextStr);
-    $('#cargo_type_key').next('span').text('('+CargoTextLength+')');
+    var cargo_type_key_ele = $('#cargo_type_key');
+    cargo_type_key_ele.val(CargoTextStr);
+    cargo_type_key_ele.next('span').text('('+CargoTextLength+')');
     changeBerthSaveButton(true);
 });
 
@@ -929,10 +952,10 @@ $('#berth_save').click(function () {
     var cargoList = [];
     console.log(choose_ele_list.length);
     for(var j = 0; j < choose_ele_list.length; j++){
-        console.log(choose_ele_list.eq(j).attr("id"));
+        // console.log(choose_ele_list.eq(j).attr("id"));
         cargoList.push(choose_ele_list.eq(j).attr("id"));
     }
-    console.log(cargoList);
+    // console.log(cargoList);
     $.ajax({
         url: '/berth/saveCargoInfo',
         type: 'get',

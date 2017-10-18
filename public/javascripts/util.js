@@ -175,7 +175,6 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
         var current_feature =  feature[0];
         if (current_feature.get('port_id') !== undefined) {
             if(routeStatus){
-                console.log("here");
                 // 如果是已选的话，点击标为未选
                 var portID = current_feature.get('port_id');
                 if(port_type === 0){

@@ -468,19 +468,40 @@
     <!--航线信息设置-->
     <div class="LeaseRouteInfo_Install">
         <ul class="LeaseRouteInfo_List">
-            <li><span>交船范围: </span> <input type="text" disabled value="Amsterdam-Rotterdam-Antwerp"><i></i></li>
-            <li><span>还船范围: </span> <input type="text" disabled><i></i></li>
+            <li class="routePort_Start"><span>交船范围: </span> <input type="text" disabled class="delivery" value="Cape Comorin / Haldia range including Sri Lanka"><i></i></li>
+            <li class="routePort_End"><span>还船范围: </span> <input type="text" disabled class="redelivery" value="Recalada – Rio de Janeiro"><i></i></li>
             <!--<li><span>货物: </span> <input type="text" value="谷物、矿石、煤炭或者类似产品" disabled></li>-->
-            <li>
+            <li class="routePayStillPort routePayPort_Select">
+                <span>交船港：</span>
+                <span>
+                <ul class="PayStillPort_List">
+                    <li><span>sadasdqw</span><i></i></li>
+                    <li><span>sadasdqw</span><i></i></li>
+                </ul>
+            </span>
+            </li>
+            <li class="routePayStillPort routeStillPort_Select">
+                <span>还船港：</span>
+                <span>
+                    <ul class="PayStillPort_List">
+                        <li><span>sadasdqw</span><i class="close"></i></li>
+                        <li><span>sadasdqw</span><i></i></li>
+                        <li><span>sadasdqw</span><i></i></li>
+                        <li><span>sadasdqw</span><i></i></li>
+                        <li><span>sadasdqw</span><i></i></li>
+                    </ul>
+                </span>
+            </li>
+            <li class="route_CargoType">
                 <span>货物：</span><span><input type="text" value="" disabled/><span>(0)</span></span>
                 <ul>
-                    <li><label><input type="checkbox"> Lron Ore</label></li>
-                    <li><label><input type="checkbox"> Lron Ore1</label></li>
+                    <!--<li><label><input type="checkbox"> Lron Ore</label></li>-->
+                    <!--<li><label><input type="checkbox"> Lron Ore1</label></li>-->
                 </ul>
             </li>
             <li><span>权重: </span> <input type="text" value="00.00"> %</li>
             <li><span>佣金: </span> <input type="text" value="00.00"> %</li>
-            <li><span>租期: </span> <input type="text" value="30-40"></li>
+            <li><span>租期: </span> <input type="text" value="30"> - <input type="text" value="40"></li>
             <li><span>最大船龄: </span> <input type="text" value="00"></li>
             <li><span>DWT: </span> <input type="text" value="172000"></li>
             <li><span>容积: </span> <input type="text" value="00.00"></li>
@@ -1270,7 +1291,7 @@
         </div>
         <div class="pier_info pier_CargoType">
             <span>货物：</span><span><input id="cargo_type_key" value="" disabled/><span></span></span>
-            <ul>-
+            <ul>
                 <!--<li><label for="01"><input type="checkbox" id="01">铁矿石</label></li>-->
                 <!--<li><label for="02"><input type="checkbox" id="02">原油</label></li>-->
                 <!--<li><label for="03"><input type="checkbox" id="03">煤炭</label></li>-->

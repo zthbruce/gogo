@@ -39,7 +39,7 @@ input:focus{border:1px solid transparent;box-shadow:0px 0px 2px 2px #2EB1EA;}
 .pier_impExpType>span:nth-child(2){width:40px;}
 .pier_UseType>span:nth-child(2){width:40px;}
 .pier_CargoType>span:nth-child(2){width:120px;}
-.pier_CargoType>ul>li label{cursor:pointer;}
+.pier_CargoType>ul>li label{display:inline-block;height:20px;cursor:pointer;width:100%;}
 
 .pier_CargoType>ul>li input{position:relative;top:3px;}
 .pier_LongLat>input{width:170px;margin-right: 40px;}

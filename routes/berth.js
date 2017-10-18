@@ -166,38 +166,74 @@ router.get('/getTerminal', function(req, res, next){
  */
 router.get('/getPierInfo', function(req, res, next){
     var terminalKey = req.query.TerminalKey;
-    var result = {};
+    // var result = {};
     var sqls = util.format('SELECT  t1.*, t2.Name AS PortName, t3.Name AS CompanyName, t1.Purpose AS PurposeID, t4.Purpose ' +
         ' FROM T2102_Terminal t1 LEFT JOIN T2101_Port t2 ON t1.PortID = t2.PortID ' +
         'LEFT JOIN T2107_Company t3 ON t1.BelongtoCompany = t3.CompanyNumber LEFT JOIN T2111_Purpose t4 ON t1.Purpose = t4.ID ' +
         // 'LEFT JOIN T2110_CargoType t5 ON t1.CargoTypeKey = t5.ID' +
         'WHERE TerminalKey = "%s"', terminalKey);
-    mysql.query(sqls, function (err, result1) {
+    mysql.query(sqls, function (err, result) {
         if(err){
             console.log(utils.eid1);
             res.jsonp(['404', utils.eid1]);
         }else {
             console.log("成功连接数据库");
-            if(result1.length>0){
-                var sql2 =  util.format('SELECT CargoTypeKey, Name, ENName FROM T2109_TerminalCargo t1 ' +
-                    'LEFT JOIN T2110_CargoType t2 ON t1.CargoTypeKey = t2.ID ' +
-                    'WHERE TerminalKey = "%s"', terminalKey);
-                mysql.query(sql2, function (err, result2) {
-                    if (err) {
-                        console.log(utils.eid1);
-                        res.jsonp(['404', utils.eid1]);
-                    } else {
-                        result["PierInfo"]= result1;
-                        result["CargoType"] = result2;
-                        res.jsonp(['200', result]);
-                    }
-                })
+            if(result.length > 0){
+                res.jsonp(['200', result]);
+                // var sql2 =  util.format('SELECT CargoTypeKey, Name, ENName FROM T2109_TerminalCargo t1 ' +
+                //     'LEFT JOIN T2110_CargoType t2 ON t1.CargoTypeKey = t2.ID ' +
+                //     'WHERE TerminalKey = "%s"', terminalKey);
+                // mysql.query(sql2, function (err, result2) {
+                //     if (err) {
+                //         console.log(utils.eid1);
+                //         res.jsonp(['404', utils.eid1]);
+                //     } else {
+                //         result["PierInfo"]= result1;
+                //         result["CargoType"] = result2;
+                //         res.jsonp(['200', result]);
+                //     }
+                // })
             }else{
                 res.jsonp(['304', "return nothing"]);
             }
         }
     });
 });
+
+// router.get('/getPierInfo', function(req, res, next){
+//     var terminalKey = req.query.TerminalKey;
+//     var result = {};
+//     var sqls = util.format('SELECT  t1.*, t2.Name AS PortName, t3.Name AS CompanyName, t1.Purpose AS PurposeID, t4.Purpose ' +
+//         ' FROM T2102_Terminal t1 LEFT JOIN T2101_Port t2 ON t1.PortID = t2.PortID ' +
+//         'LEFT JOIN T2107_Company t3 ON t1.BelongtoCompany = t3.CompanyNumber LEFT JOIN T2111_Purpose t4 ON t1.Purpose = t4.ID ' +
+//         // 'LEFT JOIN T2110_CargoType t5 ON t1.CargoTypeKey = t5.ID' +
+//         'WHERE TerminalKey = "%s"', terminalKey);
+//     mysql.query(sqls, function (err, result1) {
+//         if(err){
+//             console.log(utils.eid1);
+//             res.jsonp(['404', utils.eid1]);
+//         }else {
+//             console.log("成功连接数据库");
+//             if(result1.length>0){
+//                 var sql2 =  util.format('SELECT CargoTypeKey, Name, ENName FROM T2109_TerminalCargo t1 ' +
+//                     'LEFT JOIN T2110_CargoType t2 ON t1.CargoTypeKey = t2.ID ' +
+//                     'WHERE TerminalKey = "%s"', terminalKey);
+//                 mysql.query(sql2, function (err, result2) {
+//                     if (err) {
+//                         console.log(utils.eid1);
+//                         res.jsonp(['404', utils.eid1]);
+//                     } else {
+//                         result["PierInfo"]= result1;
+//                         result["CargoType"] = result2;
+//                         res.jsonp(['200', result]);
+//                     }
+//                 })
+//             }else{
+//                 res.jsonp(['304', "return nothing"]);
+//             }
+//         }
+//     });
+// });
 
 
 
@@ -500,19 +536,16 @@ router.get('/getCargoType', function(req, res, next){
  */
 router.get('/getCargo2Terminal', function(req, res, next){
     var terminalKey = req.query.TerminalKey;
-    var sql = util.format('SELECT CargoTypeKey FROM T2109_TerminalCargo WHERE TerminalKey = "%s"', terminalKey);
+    var sql = util.format('SELECT CargoTypeKey, Name, ENName FROM T2109_TerminalCargo t1 ' +
+                    'LEFT JOIN T2110_CargoType t2 ON t1.CargoTypeKey = t2.ID ' +
+                    'WHERE TerminalKey = "%s"', terminalKey);
+    // var sql = util.format('SELECT CargoTypeKey FROM T2109_TerminalCargo WHERE TerminalKey = "%s"', terminalKey);
     mysql.query(sql, function (err, results) {
         if(err){
             console.log(utils.eid1);
             res.jsonp(['404', utils.eid1]);
         }else {
-            var result = [];
-            console.log(results.length);
-            for(var i = 0; i < results.length; i++){
-                result.push(results[i].CargoTypeKey)
-            }
-            console.log(result);
-            res.jsonp(['200', result]);
+            res.jsonp(['200', results]);
         }
     });
 });
