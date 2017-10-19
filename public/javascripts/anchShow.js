@@ -65,12 +65,13 @@ function anchLayer(zoom){
     // var features = [];
     var style = {
         stroke: new ol.style.Stroke({
-            color: 'blue',
-            lineDash: [1, 2, 3, 4, 5, 6],
+            color: 'white',
+            lineDash: [1, 2, 3, 4, 5, 6, 7],
             width: 3
         }),
         fill: new ol.style.Fill({
-            color: 'rgba(0, 0, 255, 0.1)'
+            color: 'rgba(0, 0, 0, 0.4)'
+            // color: 'rgba(255, 255, 255, 0.2)'
         })
     };
     for (var i = 0; i < anchInfoList.length; i++) {
@@ -83,10 +84,11 @@ function anchLayer(zoom){
         if(zoom>=10){
             style.text=new ol.style.Text({
                 // font: '10px sans-serif' 默认这个字体，可以修改成其他的，格式和css的字体设置一样
-                font: "15px",
+                // font: "10px",
+                font:'normal 14px 微软雅黑',
                 text: name !== "" ? name : "未命名锚地",
                 fill: new ol.style.Fill({
-                    color: 'black'
+                    color: 'white'
                 }),
                 textAlign: "center"
             })

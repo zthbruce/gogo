@@ -272,24 +272,28 @@ router.get('/saveCargoInfo', function(req, res, next) {
             console.log(utils.eid1);
             res.jsonp(['404', "清空码头货物出错"]);
         } else {
-            console.log("成功连接数据库");
-            var sql2 = "INSERT INTO T2109_TerminalCargo VALUES ";
-            for(var i = 0; i< cargoList.length; i++){
-                if(i > 0){
-                    sql2 += ","
+            if (cargoList !== undefined) {
+                var sql2 = "INSERT INTO T2109_TerminalCargo VALUES ";
+                for (var i = 0; i < cargoList.length; i++) {
+                    if (i > 0) {
+                        sql2 += ","
+                    }
+                    sql2 += "('" + terminalKey + "','" + cargoList[i] + "')";
                 }
-                sql2 += "('" + terminalKey + "','" + cargoList[i] + "')";
+                console.log(sql2);
+                mysql.query(sql2, function (err, results) {
+                    if (err) {
+                        console.log("保存货物信息出错");
+                        res.jsonp(['404', "保存货物信息出错"]);
+                    }
+                    else {
+                        res.jsonp(['200', "保存货物信息成功"]);
+                    }
+                })
             }
-            console.log(sql2);
-            mysql.query(sql2, function (err, results) {
-                if (err) {
-                    console.log("保存货物信息出错");
-                    res.jsonp(['404', "保存货物信息出错"]);
-                }
-                else {
-                    res.jsonp(['200', "保存货物信息成功"]);
-                }
-            })
+            else{
+                res.jsonp(['200', "保存货物信息成功"]);
+            }
         }
     });
 });
@@ -355,15 +359,16 @@ router.get('/saveBerthList', function(req, res, next) {
                                     res.jsonp(['404', utils.eid1]);
                                 } else {
                                     console.log("泊位信息更新");
-                                    var sql4 = "UPDATE `T2105_ParkArea` SET Checked = 1 WHERE cluster_id IN (";
-                                    for (var i = 0; i < berthList.length; i++) {
-                                        if (i > 0) {
-                                            sql4 += ",";
-                                        }
-                                        var ele = berthList[i];
-                                        sql4 += util.format('"%s"', ele.StationaryAreaKey);
-                                    }
-                                    sql4 += ")";
+                                    var sql4 = "UPDATE T2105_ParkArea SET Checked = '1' WHERE cluster_id IN (SELECT StationaryAreaKey FROM T2103_TerminalDetails WHERE TerminalKey='" + terminalKey + "')";
+                                    // var sql4 = "UPDATE `T2105_ParkArea` SET Checked = 1 WHERE cluster_id IN (";
+                                    // for (var i = 0; i < berthList.length; i++) {
+                                    //     if (i > 0) {
+                                    //         sql4 += ",";
+                                    //     }
+                                    //     var ele = berthList[i];
+                                    //     sql4 += util.format('"%s"', ele.StationaryAreaKey);
+                                    // }
+                                    // sql4 += ")";
                                     mysql.query(sql4, function (err, results) {
                                         if (err) {
                                             console.log(utils.eid1);

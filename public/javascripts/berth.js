@@ -955,7 +955,7 @@ $('#berth_save').click(function () {
         // console.log(choose_ele_list.eq(j).attr("id"));
         cargoList.push(choose_ele_list.eq(j).attr("id"));
     }
-    // console.log(cargoList);
+    console.log(cargoList);
     $.ajax({
         url: '/berth/saveCargoInfo',
         type: 'get',

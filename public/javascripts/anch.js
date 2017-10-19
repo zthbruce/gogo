@@ -620,16 +620,27 @@ $('#anch_save').click(function(){
         }
     });
 
-
+    // var style = {
+    //     stroke: new ol.style.Stroke({
+    //         color: 'white',
+    //         lineDash: [1, 2, 3, 4, 5, 6, 7],
+    //         width: 3
+    //     }),
+    //     fill: new ol.style.Fill({
+    //         color: 'rgba(0, 0, 0, 0.4)'
+    //         // color: 'rgba(255, 255, 255, 0.2)'
+    //     })
+    // };
     // 锚地样式
     var anch_style =  new ol.style.Style({
         stroke: new ol.style.Stroke({
-            color: 'blue',
-            lineDash: [1, 2, 3, 4, 5, 6],
+            color: 'white',
+            lineDash: [1, 2, 3, 4, 5, 6, 7],
             width: 3
         }),
         fill: new ol.style.Fill({
-            color: 'rgba(0, 0, 255, 0.1)'
+            color: 'rgba(0, 0, 0, 0.4)'
+            // color: 'rgba(255, 255, 255, 0.2)'
         }),
         text : new ol.style.Text({
             // font: '10px sans-serif' 默认这个字体，可以修改成其他的，格式和css的字体设置一样
