@@ -470,7 +470,6 @@ router.get('/DeleteBerthList', function(req, res, next) {
 router.get('/reqShipStaticData', function(req, res, next){
     var data=req.query;
     var reqParam=JSON.parse(data.param);
-    console.log(reqParam.shipType);
     // var sql = util.format("SELECT Date,LOA,MouldedBeam,DesignedDraft,DWT,DWTpth FROM T2106_Area_Statistic " +
     //     "WHERE Level3EN = '%s' AND StaticAreaKey IN (SELECT StationaryAreaKey FROM " +
     //     "T2103_TerminalDetails WHERE TerminalKey = ( SELECT TerminalKey FROM T2103_TerminalDetails " +

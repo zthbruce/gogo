@@ -286,7 +286,7 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                         var normalLonLatStr = transLonLatToNormal(lon, lat);
                         console.log(clusterId);
                         var chooseStr = '<li clusterId= "' + clusterId +  '" lon=' + lon + ' lat=' + lat + '><span>' + number + '</span><span class = "anch_belong"></span><span>' + normalLonLatStr + '</span></li>';
-                        console.log(chooseStr);
+                        // console.log(chooseStr);
                         // 添加到最后一行
                         $(".selected_LonLat").append(chooseStr);
                         // 更新轮廓点

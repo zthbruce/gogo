@@ -103,8 +103,8 @@ router.get('/deleteStaticArea', function(req, res, next){
 router.get('/saveAnchInfo', function(req, res, next){
     var anchInfo = req.query.anchInfo;
     var sqls = util.format("REPLACE INTO `T2104_Anchorage` (AnchorageKey, Name, Purpose, Des, CenterLon, CenterLat, Location," +
-        " DestinationPort, `Range`) VALUE ('%s', '%s', '%s','%s', '%s', '%s', '%s','%s', '%s')", anchInfo.AnchorageKey, anchInfo.Name,
-        anchInfo.Purpose, anchInfo.Des, anchInfo.CenterLon, anchInfo.CenterLat, anchInfo.Location, anchInfo.DestinationPort, anchInfo.Range);
+        " DestinationPort) VALUE ('%s', '%s', '%s','%s', '%s', '%s', '%s','%s')", anchInfo.AnchorageKey, anchInfo.Name,
+        anchInfo.Purpose, anchInfo.Des, anchInfo.CenterLon, anchInfo.CenterLat, anchInfo.Location, anchInfo.DestinationPort);
     mysql.query(sqls, function (err, results) {
         if(err){
             console.log(utils.eid1);
@@ -116,6 +116,42 @@ router.get('/saveAnchInfo', function(req, res, next){
         }
     });
 });
+
+/**
+ * 保存锚地详细信息
+ */
+router.get('/saveAnchDetailInfo', function(req, res, next){
+    var anchKey = req.query.AnchorageKey;
+    var parkAreaList = req.query.ParkAreaList;
+    var sql1 = util.format('DELETE FROM T2112_AnchorageDetails WHERE AnchorageKey = "%s"', anchKey);
+    mysql.query(sql1, function (err, results) {
+        if(err){
+            // console.log(utils.eid1);
+            res.jsonp(['404', "初始化锚地详细信息失败"]);
+        }else {
+            console.log("初始化锚地详细信息成功");
+            var sql2 = "INSERT INTO T2112_AnchorageDetails VALUES ";
+            console.log("here");
+            for(var i = 0; i< parkAreaList.length; i++){
+                if(i > 0){
+                    sql2 += ","
+                }
+                sql2 += "('" + anchKey + "','" + parkAreaList[i] + "')";
+            }
+            console.log(sql2);
+            mysql.query(sql2, function (err, results) {
+                if (err) {
+                    console.log("保存锚地详细信息出错");
+                    res.jsonp(['404', "保存锚地详细信息出错"]);
+                }
+                else {
+                    res.jsonp(['200', "保存锚地详细信息成功"]);
+                }
+            })
+        }
+    });
+});
+
 
 /**
  * 获取锚地显示信息

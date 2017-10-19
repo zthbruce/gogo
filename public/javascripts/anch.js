@@ -3,7 +3,7 @@
  */
 
 var center = [0, 0];
-var range = 0;
+// var range = 0;
 var locationList = [];
 
 // var chooseLonLatList = [];
@@ -67,21 +67,37 @@ function clockCompare(x, y) {
 function inside(point, vs) {
     // ray-casting algorithm based on
     // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
-
     var x = point[0], y = point[1];
-
     var inside = false;
     for (var i = 0, j = vs.length - 1; i < vs.length; j = i++) {
         var xi = vs[i][0], yi = vs[i][1];
         var xj = vs[j][0], yj = vs[j][1];
-
+        if(x === xi && y === yi){
+            inside = true;
+            break;
+        }
         var intersect = ((yi > y) !== (yj > y))
             && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
         if (intersect) inside = !inside;
     }
-
     return inside;
 }
+// function inside(point, vs) {
+//     // ray-casting algorithm based on
+//     // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
+//     var x = point[0], y = point[1];
+//
+//     var inside = false;
+//     for (var i = 0, j = vs.length - 1; i < vs.length; j = i++) {
+//         var xi = vs[i][0], yi = vs[i][1];
+//         var xj = vs[j][0], yj = vs[j][1];
+//
+//         var intersect = ((yi > y) !== (yj > y))
+//             && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+//         if (intersect) inside = !inside;
+//     }
+//     return inside;
+// }
 
 /**
  * 根据输入的部分锚地名来匹配已经存在的锚地名
@@ -162,10 +178,9 @@ function getAnchInfo(anchKey, lon, lat) {
                     // chooseLonLatList = [];
                     console.log(centerLon);
                     console.log(centerLat);
-                    var closeAnchList = getCloseAnchList(centerLon, centerLat, allPoints, 20);
+                    // var closeAnchList = getCloseAnchList(centerLon, centerLat, allPoints, 20);
                     $(".selected_LonLat").empty();
-                    // $(".unselected_LonLat").empty();
-                    console.log("锚地长度:" + closeAnchList.length);
+                    // console.log("锚地长度:" + closeAnchList.length);
                     // 未选择列表
                     // for (var i = 0; i < closeAnchList.length; i++) {
                     //     var ele = closeAnchList[i];
@@ -245,7 +260,7 @@ function getAnchInfo(anchKey, lon, lat) {
                 // anch.getSource().clear(); // 将锚地层清空
                 current.getSource().clear(); // 清空当前图层
                 // 更新轮廓
-                updateLocationList();
+                // updateLocationList();
                 // 根据当前所选点，画出轮廓线
                 writeContourLine(locationList);
                 // for(var i = 0; i < locationList.length - 1; i++) {
@@ -301,11 +316,9 @@ function getCloseAnchList(centerLon, centerLat, allPoints, n){
         }
     }
     n = Math.min(n, distanceList.length);
-
     distanceList.sort(function (x, y) {
         return x.distance - y.distance
     });
-
     // 取前n个锚地
     return distanceList.slice(0, n)
 }
@@ -354,17 +367,17 @@ function updateLocationList(){
 
     center = [lonSum / num, latSum / num];
     console.log("中心点为: " + center);
-    // 计算range
-    range = 0;
-    for(var i = 0; i< locationList.length; i++){
-        var lon_lat = locationList[i];
-        var distance = getGreatCircleDistance(center[0], center[1], lon_lat[0], lon_lat[1]);
-        if(distance > range){
-            range = distance;
-        }
-    }
-    range = range.toFixed(4);
-    console.log("范围为: " + range);
+    // // 计算range
+    // range = 0;
+    // for(var i = 0; i< locationList.length; i++){
+    //     var lon_lat = locationList[i];
+    //     var distance = getGreatCircleDistance(center[0], center[1], lon_lat[0], lon_lat[1]);
+    //     if(distance > range){
+    //         range = distance;
+    //     }
+    // }
+    // range = range.toFixed(4);
+    // console.log("范围为: " + range);
     // 顺时针排序
     locationList.sort(clockCompare);
     // 刷新已选锚地列表
@@ -511,24 +524,6 @@ $('#anch_save').click(function(){
     }
     console.log(portListStr);
 
-    // var addClusterIdList = $(".selected_LonLat").children(".anch_belong").attr("clusterID");
-    // console.log(addClusterIdList);
-        // /deleteStaticArea
-
-    // 删除已选的静止区域
-    // var addClusterIDList = [];
-    // // var locationList = [];
-    // for(var j = 0; j < $(".selected_LonLat>li").length; j++ ){
-    //     var ele = $(".selected_LonLat>li").eq(j);
-    //     var clusterID = ele.attr("clusterID");
-    //     console.log(clusterID);
-    //     if(clusterID !== "") {
-    //         addClusterIDList.push(clusterID);
-    //         // 删除相应的图标
-    //         delete allPoints[clusterID];
-    //     }
-    // }
-
     // 删除包含的未选静止区域
     // for(var k = 0; k <  $(".unselected_LonLat>li").length; k++){
     //     var ele = $(".unselected_LonLat>li").eq(k);
@@ -570,7 +565,7 @@ $('#anch_save').click(function(){
     var center_lat = center[1].toFixed(4);
     var anchInfo = {AnchorageKey: anchKey, Name: anchName, Purpose: purpose,
         Des: des, CenterLon: center_lon, CenterLat: center_lat,
-        Location: location, DestinationPort: portListStr, Range: range}; // 向后台请求保存
+        Location: location, DestinationPort: portListStr}; // 向后台请求保存
     console.log(anchInfo);
 
     // // 删除对应的静止区域
@@ -585,6 +580,7 @@ $('#anch_save').click(function(){
     //         console.log(err);
     //     }
     // });
+    // 保存锚地基本信息
     $.ajax({
         url: '/anch/saveAnchInfo',
         type: 'get',
@@ -597,6 +593,34 @@ $('#anch_save').click(function(){
             console.log(err);
         }
     });
+    // 保存锚地详细信息
+    var parkAreaList = [];
+    for(var key in allPoints) {
+        var ele = allPoints[key];
+        var type = ele['type']; // 属于哪一类， 目前有0：锚地， 1：泊位， 2：未知区域
+        if(type === 0){
+            var lon = ele['lon'];
+            var lat = ele['lat'];
+            if(inside([lon, lat], locationList)){
+                parkAreaList.push(key);
+                delete allPoints[key];
+            }
+        }
+    }
+    $.ajax({
+        url: '/anch/saveAnchDetailInfo',
+        type: 'get',
+        data: {AnchorageKey: anchKey, ParkAreaList: parkAreaList},
+        success: function (data) {
+            console.log(data[1]);
+            // getAllAnch(); // 刷新锚地信息
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
+
+
     // 锚地样式
     var anch_style =  new ol.style.Style({
         stroke: new ol.style.Stroke({
