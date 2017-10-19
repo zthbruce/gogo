@@ -178,13 +178,31 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                 // 如果是已选的话，点击标为未选
                 var portID = current_feature.get('port_id');
                 if(port_type === 0){
-                     port_ul = $(".routeStartPort_Select .StartEndPort_List");
+                    if(routeId[0] === "T"){
+                        port_ul = $("#routeInfo .routeStartPort_Select .StartEndPort_List");
+                    }
+                    else{
+                        port_ul = $("#LeaseRouteInfo .routeStartPort_Select .StartEndPort_List");
+                    }
                 }
                 else{
-                     port_ul = $(".routeEndPort_Select .StartEndPort_List");
+                    if(routeId[0] === "T") {
+                        port_ul = $("#routeInfo .routeEndPort_Select .StartEndPort_List");
+                    }
+                    else{
+                        port_ul = $("#LeaseRouteInfo .routeEndPort_Select .StartEndPort_List");
+                    }
                 }
                 if(current_feature.get("type") === "choosed"){
-                    removePort(portID, current_feature);
+                    // var portList = port_ul.children("li");
+                    var current_li = port_ul.find("[portid=" + portID +"]");
+                    // for(var j=0; j< portList.length; j++) {
+                    //     var li = portList.eq(j);
+                    //     if(li.attr('portID') === portID){
+                    //         current_li = li;
+                    //     }
+                    // }
+                    removePort(current_li, current_feature);
                 }
                 // 如果是未选的话，点击标为选择
                 else if(current_feature.get("type") === "toChoose"){
@@ -214,6 +232,7 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
             var lon = current_feature.get('lon');
             var lat = current_feature.get('lat');
             var staticAreaKey = current_feature.get("cluster_id");
+            console.log("静止区域ID: " + staticAreaKey);
             // 锚地状态
             if(anchStatus){
                 var id = current_feature.get("id");

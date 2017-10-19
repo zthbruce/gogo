@@ -148,6 +148,7 @@ function getAnchInfo(anchKey, lon, lat) {
             data: {anchKey: anchKey},
             success: function (data) {
                 // 锚地表里有相应的数据
+                var belongPortList = [];
                 if (data[0] === "200") {
                     var anchInfo = data[1][0];
                     // anchKey = anchInfo.AnchorageKey;
@@ -189,6 +190,7 @@ function getAnchInfo(anchKey, lon, lat) {
                         var destinationPortList = anchInfo.DestinationPort.split(";");
                         for (var k = 0; k < destinationPortList.length; k++) {
                             var destinationportID = destinationPortList[k];
+                            belongPortList.push(destinationportID);
                             var port = AllPortBasicList[destinationportID];
                             // 根据全部港口对象获得相应的内容
                             var portStr = '<li portID=' + destinationportID + '><span>' + port.ENName + '</span><i></i></li>';
@@ -234,9 +236,10 @@ function getAnchInfo(anchKey, lon, lat) {
                 $("#port_list_to_choose").empty();
                 for(var i = 0; i < closePortList.length; i++){
                     var port = closePortList[i];
-                    $("#port_list_to_choose").append('<li portID="'+ port.PortID+'">'+port.ENName+'</li>');
+                    if(belongPortList.indexOf(port.PortID) === -1) {
+                        $("#port_list_to_choose").append('<li portID="' + port.PortID + '">' + port.ENName + '</li>');
+                    }
                 }
-
                 // 将曲线的点(勾)画出来
                 console.log("画出点");
                 // anch.getSource().clear(); // 将锚地层清空
@@ -656,13 +659,19 @@ $('#port_list_to_choose').delegate('li', 'click', function () {
 // 已选港口列表关闭按钮
 $(".IntentPort_list").delegate('.close', 'click', function () {
     var ele = $(this).parent(); // li元素
+    // 添加至下面
     $('#port_list_to_choose').append('<li portID=' + ele.attr("portID") +'>' + $(this).prev().text() +'</li>');
     ele.remove();
 });
 
 // 点击添加按钮
 $(".anch_IntentPort").delegate('.add_port', 'click' , function(){
-    $('.AllIntentPort_List').slideDown(200);
+    $('.AllIntentPort_List').slideToggle(200);
+});
+
+// 离开对应区域
+$('.AllIntentPort_List').mouseleave(function () {
+    $('.AllIntentPort_List').slideUp(200);
 });
 
 

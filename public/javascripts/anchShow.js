@@ -95,6 +95,7 @@ function anchLayer(zoom){
         // 获取特性
         // console.log(anch_info.lonLatList.length);
         var feature = new ol.Feature({
+            name: 'parkArea',
             type: 0,
             anchKey: anchorageKey,
             lon: lon,

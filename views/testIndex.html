@@ -465,33 +465,65 @@
         <!--<div class="title_offbtn"></div>-->
     </div>
     <div class="dividing_line"></div>
+    <!--交还船范围设置-->
+    <div class="routeStartEnd">
+        <div class="routePort_Select">
+            <div class="routePort_Start">
+                交船范围:<span class="routePoint_infoShow"></span>
+                <i></i>
+            </div>
+            <div class="routePort_End">
+                还船范围:<span class="routePoint_infoShow"></span>
+                <i></i>
+            </div>
+        </div>
+        <div class="routeStartEndPort routeStartPort_Select">
+            <span>交船港：</span>
+            <span>
+                <ul class="StartEndPort_List">
+                    <!--<li><span>sadasdqw</span><i></i></li>-->
+                    <!--<li><span>sadasdqw</span><i></i></li>-->
+                </ul>
+            </span>
+        </div>
+        <div class="routeStartEndPort routeEndPort_Select">
+            <span>还船港：</span>
+            <span>
+                <ul class="StartEndPort_List">
+                    <!--<li><span>sadasdqw</span><i class="close"></i></li>-->
+                    <!--<li><span>sadasdqw</span><i></i></li>-->
+                </ul>
+            </span>
+        </div>
+    </div>
+    <div class="dividing_line"></div>
     <!--航线信息设置-->
     <div class="LeaseRouteInfo_Install">
         <ul class="LeaseRouteInfo_List">
-            <li class="routePort_Start"><span>交船范围: </span> <input type="text" disabled class="delivery" value="Cape Comorin / Haldia range including Sri Lanka"><i></i></li>
-            <li class="routePort_End"><span>还船范围: </span> <input type="text" disabled class="redelivery" value="Recalada – Rio de Janeiro"><i></i></li>
-            <!--<li><span>货物: </span> <input type="text" value="谷物、矿石、煤炭或者类似产品" disabled></li>-->
-            <li class="routePayStillPort routePayPort_Select">
-                <span>交船港：</span>
-                <span>
-                <ul class="PayStillPort_List">
-                    <li><span>sadasdqw</span><i></i></li>
-                    <li><span>sadasdqw</span><i></i></li>
-                </ul>
-            </span>
-            </li>
-            <li class="routePayStillPort routeStillPort_Select">
-                <span>还船港：</span>
-                <span>
-                    <ul class="PayStillPort_List">
-                        <li><span>sadasdqw</span><i class="close"></i></li>
-                        <li><span>sadasdqw</span><i></i></li>
-                        <li><span>sadasdqw</span><i></i></li>
-                        <li><span>sadasdqw</span><i></i></li>
-                        <li><span>sadasdqw</span><i></i></li>
-                    </ul>
-                </span>
-            </li>
+            <!--<li class="routePort_Start"><span>交船范围: </span> <input type="text" disabled class="delivery" value="Cape Comorin / Haldia range including Sri Lanka"><i></i></li>-->
+            <!--<li class="routePort_End"><span>还船范围: </span> <input type="text" disabled class="redelivery" value="Recalada – Rio de Janeiro"><i></i></li>-->
+            <!--&lt;!&ndash;<li><span>货物: </span> <input type="text" value="谷物、矿石、煤炭或者类似产品" disabled></li>&ndash;&gt;-->
+            <!--<li class="routePayStillPort routePayPort_Select">-->
+                <!--<span>交船港：</span>-->
+                <!--<span>-->
+                <!--<ul class="PayStillPort_List">-->
+                    <!--<li><span>sadasdqw</span><i></i></li>-->
+                    <!--<li><span>sadasdqw</span><i></i></li>-->
+                <!--</ul>-->
+            <!--</span>-->
+            <!--</li>-->
+            <!--<li class="routePayStillPort routeStillPort_Select">-->
+                <!--<span>还船港：</span>-->
+                <!--<span>-->
+                    <!--<ul class="PayStillPort_List">-->
+                        <!--<li><span>sadasdqw</span><i class="close"></i></li>-->
+                        <!--<li><span>sadasdqw</span><i></i></li>-->
+                        <!--<li><span>sadasdqw</span><i></i></li>-->
+                        <!--<li><span>sadasdqw</span><i></i></li>-->
+                        <!--<li><span>sadasdqw</span><i></i></li>-->
+                    <!--</ul>-->
+                <!--</span>-->
+            <!--</li>-->
             <li class="route_CargoType">
                 <span>货物：</span><span><input type="text" value="" disabled/><span>(0)</span></span>
                 <ul>
@@ -1693,21 +1725,6 @@
 
     //获取初始地图
     setMapShow();
-
-    // 利用Drag方法，使得地图上的标签可以拖动
-//    var dragDrop = new app.Drag();
-//    map.addInteraction(dragDrop);
-
-    // 添加选择功能
-//    var select = new ol.interaction.Select();
-//    map.addInteraction(select);
-//
-//    //添加修改功能
-//    var selected = select.getFeatures();
-//    var modify = new ol.interaction.Modify(
-////        features: selected
-//    );
-//    map.addInteraction(modify);
 
     $('map').css('height',document.body.clientHeight + 'px');
     //实时监测浏览器窗口高度
