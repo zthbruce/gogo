@@ -358,7 +358,7 @@ function updateLocationList(){
     range = 0;
     for(var i = 0; i< locationList.length; i++){
         var lon_lat = locationList[i];
-        var distance = getDistance(center[0], center[1], lon_lat[0], lon_lat[1]);
+        var distance = getGreatCircleDistance(center[0], center[1], lon_lat[0], lon_lat[1]);
         if(distance > range){
             range = distance;
         }
