@@ -71,7 +71,13 @@ function parkAreaLayer(){
             geometry: new ol.geom.Point(ol.proj.fromLonLat([lat_lon[1], lat_lon[0]]))
         });
         park_feature.setId(key);
-        // console.log(ele['Checked']);
+        // if(type === 0){
+        //     // 锚地
+        //     park_feature.set('anch', true)
+        // }
+        // else{
+        //     park_feature.set('berth', true)
+        // }
         if(ele['Checked'] === 0){
             park_feature.setStyle(park_style[type]);
         }

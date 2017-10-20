@@ -5,7 +5,7 @@
 var center = [0, 0];
 // var range = 0;
 var locationList = [];
-var lastParkAreaList = [];
+var parkAreaList = [];
 
 // var chooseLonLatList = [];
 /**
@@ -224,7 +224,7 @@ function getAnchInfo(anchKey, lon, lat) {
                     // 锚地信息初始化
                     $(".anchInfo_list>.pier_info>input").val(""); //初始化输入
                     // 未选择列表中
-                    var closeAnchList = getCloseAnchList(centerLon, centerLat, allPoints, 20);
+                    // var closeAnchList = getCloseAnchList(centerLon, centerLat, allPoints, 20);
                     // 将当前点排除掉
                     $(".selected_LonLat").empty();
                     $(".unselected_LonLat").empty();
@@ -292,11 +292,12 @@ function getAnchInfo(anchKey, lon, lat) {
         data: {AnchorageKey: anchKey},
         success: function (data) {
             if(data[0] === '200'){
-                lastParkAreaList = data[1];
+                parkAreaList = data[1];
+                // 更新确认点
+                getAnchCheckPointer();
             }
         }
     });
-    console.log(lastParkAreaList);
 }
 
 /**
@@ -305,9 +306,10 @@ function getAnchInfo(anchKey, lon, lat) {
  * @param centerLon  中心点经度
  * @param centerLat 中心点纬度
  * @param allPoints 目前所有的静止区域
+ * @param r 半径
  * @param n 获取的上限
  */
-function getCloseAnchList(centerLon, centerLat, allPoints, n){
+function getCloseAnchList(centerLon, centerLat, allPoints, r, n){
     var distanceList = [];
     // var num = 0;
     // 遍历所有静止区域中心点
@@ -318,7 +320,7 @@ function getCloseAnchList(centerLon, centerLat, allPoints, n){
             var lon = ele['lon'];
             var lat = ele['lat'];
             var distance = getGreatCircleDistance(centerLon, centerLat, lon, lat);
-            if(distance <= 80.0){
+            if(distance <= r){
                 distanceList.push({clusterId: key, lon: lon, lat: lat, distance: distance})
             }
         }
@@ -403,8 +405,57 @@ function updateLocationList(){
     locationList.push(firstPoint);
 }
 
+// 显示选择标记
+// 显示确认边界点
+function getAnchCheckPointer() {
+    current.getSource().clear(); // 初始化图层
+    // 已确认显示
+    for (var i = 0; i < locationList.length - 1; i++) {
+        var ele = locationList[i];
+        var lon = ele[0];
+        var lat = ele[1];
+        // 火星转换
+        var lat_lon = WGS84transformer(lat, lon);
+        var anch_choosed = new ol.Feature({
+            'pointer': 'anch',
+            'id': 'choosed',
+            'lon': lon,
+            'lat': lat,
+            'anchKey': "",
+            'number': i + 1,
+            geometry: new ol.geom.Point(ol.proj.fromLonLat([lat_lon[1], lat_lon[0]]))
+        });
+        anch_choosed.setStyle(point_status[0]); // 已确认图标
+        current.getSource().addFeature(anch_choosed);
+    }
+    // 待确认显示
+    var closeAnchList = getCloseAnchList(center[0], center[1], allPoints, 100, 80);
+    for(var j = 0; j < closeAnchList.length; j++){
+        var anchInfo = closeAnchList[j];
+        var key = anchInfo['clusterId'];
+        var lat = anchInfo['lat'];
+        var lon = anchInfo['lon'];
+        // 如果不在范围内
+        if(!inside([lon, lat], locationList)){
+            // 火星转换
+            var lat_lon = WGS84transformer(lat, lon);
+            var anch_tochoose = new ol.Feature({
+                'pointer': 'anch',
+                'id': 'tochoose',
+                'lon': lon,
+                'lat': lat,
+                'anchKey': "",
+                'number': "",
+                geometry: new ol.geom.Point(ol.proj.fromLonLat([lat_lon[1], lat_lon[0]]))
+            });
+            anch_tochoose.setStyle(point_status[1]); // 未确认图标
+            current.getSource().addFeature(anch_tochoose);
+        }
+    }
+}
+
+
 // 画出锚地的轮廓线
-// 再画上边界点
 function writeContourLine(lonLatList) {
     var lonLatInfo = [];
     for(var i = 0; i < lonLatList.length; i++){
@@ -425,25 +476,25 @@ function writeContourLine(lonLatList) {
     });
     feature.setId('current');
     anch.getSource().addFeature(feature);
-    // 显示边界点
-    current.getSource().clear(); // 清空图层
-    for(var i = 0; i < locationList.length - 1; i++) {
-        var ele = locationList[i];
-        var lon = ele[0];
-        var lat = ele[1];
-        // 火星转换
-        var lat_lon = WGS84transformer(lat, lon);
-        var anch_choosed = new ol.Feature({
-            'id' : 'choosed',
-            'lon' : lon,
-            'lat': lat,
-            'anchKey': "",
-            'number' : i + 1,
-            geometry: new ol.geom.Point(ol.proj.fromLonLat([lat_lon[1], lat_lon[0]]))
-        });
-        anch_choosed.setStyle(choosed);
-        current.getSource().addFeature(anch_choosed);
-    }
+    // // 显示确认边界点
+    // current.getSource().clear(); // 清空图层
+    // for(var i = 0; i < locationList.length - 1; i++) {
+    //     var ele = locationList[i];
+    //     var lon = ele[0];
+    //     var lat = ele[1];
+    //     // 火星转换
+    //     var lat_lon = WGS84transformer(lat, lon);
+    //     var anch_choosed = new ol.Feature({
+    //         'id': 'choosed',
+    //         'lon': lon,
+    //         'lat': lat,
+    //         'anchKey': "",
+    //         'number': i + 1,
+    //         geometry: new ol.geom.Point(ol.proj.fromLonLat([lat_lon[1], lat_lon[0]]))
+    //     });
+    //     anch_choosed.setStyle(point_status[0]);
+    //     current.getSource().addFeature(anch_choosed);
+    // }
 }
 
 
@@ -650,7 +701,7 @@ $('#anch_save').click(function(){
                 // allPoints[staticAreaKey]['TerminalKey'] = terminalKey; // 更新码头值
                 // delete allPoints[key];
             }
-            else if(lastParkAreaList.indexOf(key) !== -1){
+            else if(parkAreaList.indexOf(key) !== -1){
                 // 表示属于原来的ParkAreaList
                 allPoints[key]["Checked"] = 0; // 更新状态
                 var unchoosed_feature = icon.getSource().getFeatureById(key);
@@ -660,7 +711,7 @@ $('#anch_save').click(function(){
             }
         }
     }
-    // lastParkAreaList = parkAreaList;
+    // parkAreaList = parkAreaList;
     $.ajax({
         url: '/anch/saveAnchDetailInfo',
         type: 'get',

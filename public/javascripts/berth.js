@@ -399,12 +399,15 @@ function getPierInfo(clusterId, lon, lat){
  * @param lon
  * @param lat
  */
-function getCheckPointer(status, staticAreaKey, lon, lat) {
+var visible_berth_list = [];
+function getBerthCheckPointer(status, staticAreaKey, lon, lat) {
     var icon_feature = icon.getSource().getFeatureById(staticAreaKey);
     icon_feature.setStyle(invisible_style); // 隐藏对应图标
-    icon_feature.set("visible", false);
+    visible_berth_list.push(staticAreaKey); // 更新隐藏列表
+    // icon_feature.set("visible", false);
     var lat_lon = WGS84transformer(lat, lon);
     var fearure = new ol.Feature({
+        pointer: 'berth',
         status: status,
         cluster_id: staticAreaKey,
         geometry: new ol.geom.Point(ol.proj.fromLonLat([lat_lon[1], lat_lon[0]]))
@@ -554,6 +557,7 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxD
             $(".berth_list").empty();
             var num = 0;
             current.getSource().clear(); // 清空当前图层
+            visible_berth_list = []; // 隐藏图标
             for(var i = 0; i < n; i++){
                 var berthInfo = distanceList[i];
                 var staticAreaKey = berthInfo.cluster_id;
@@ -572,7 +576,8 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxD
                     //     status = 0;
                     // }
                     // 图上显示确认图标
-                    getCheckPointer(status, staticAreaKey, ele.lon, ele.lat);
+                    getBerthCheckPointer(status, staticAreaKey, ele.lon, ele.lat);
+                    // getCheckPointer(status, staticAreaKey, ele.lon, ele.lat);
                     // 显示列表
                     var str = '<li><ul class="oneBerth_info"><li>' + num + '</li><li><span class = ' + belongStatus + ' seq=' + num + '>' +
                         '</span></li> <li> <ul class="oneBerth_list" status=' + status + ' staticAreaKey = ' + staticAreaKey + ' lon = ' + ele.lon + ' lat=' + ele.lat + '><li>LOA: '
@@ -863,17 +868,15 @@ $('.pier_CargoType>ul').delegate("li", "click", function(){
 
 // 泊位管理界面关闭
 $('#berth_cancel').click(function () {
-    var features = icon.getSource().getFeatures();
-    for(var i =0; i< features.length; i++){
-        var feature = features[i];
-        if(!feature.get('visible')){
-            console.log("隐藏");
-            if(feature.get('Checked') === 0){
-                feature.setStyle(park_style[1]);
-            }
-            else{
-                feature.setStyle(berth_yes);
-            }
+    // var features = icon.getSource().getFeatures();
+    for(var i =0; i< visible_berth_list.length; i++){
+        var cluster_id  = visible_berth_list[i];
+        var feature = icon.getSource().getFeatureById(cluster_id);
+        if(feature.get('Checked') === 0){
+            feature.setStyle(park_style[1]);
+        }
+        else{
+            feature.setStyle(berth_yes);
         }
     }
     $('#newBerth').fadeOut("normal");

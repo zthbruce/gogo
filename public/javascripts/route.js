@@ -65,11 +65,12 @@ function showRelatePort(centerLon, centerLat, r) {
                 continue;
             }
             var port_to_choose = new ol.Feature({
+                'pointer': 'port',
                 type: "toChoose",
                 port_id: portID,
                 geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
             });
-            port_to_choose.setStyle(port_nor);
+            port_to_choose.setStyle(point_status[1]);
             current.getSource().addFeature(port_to_choose)
         }
     }
@@ -147,7 +148,8 @@ function updateBerth2Port(portList){
         }
         var port_choosed = new ol.Feature(feature);
         // 设置相应的图标
-        port_choosed.setStyle(port_yes);
+        port_choosed.setStyle(point_status[0]);
+        // port_choosed.setStyle(port_yes);
         current.getSource().addFeature(port_choosed)
     }
     // 显示目前已经选择的泊位
@@ -163,7 +165,7 @@ function removePort(current_li, current_feature) {
     console.log("取消");
     // 将港口取消高亮
     current_feature.set("type", "toChoose");
-    current_feature.setStyle(port_nor);
+    current_feature.setStyle(point_status[1]);
     // 泊位取消高亮
     var portID = current_li.attr("portID");
     var features = current.getSource().getFeatures();
