@@ -400,10 +400,11 @@ function getPierInfo(clusterId, lon, lat){
  * @param lat
  */
 function getCheckPointer(status, staticAreaKey, lon, lat) {
+    var lat_lon = WGS84transformer(lat, lon);
     var fearure = new ol.Feature({
         status: status,
         cluster_id: staticAreaKey,
-        geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
+        geometry: new ol.geom.Point(ol.proj.fromLonLat([lat_lon[1], lat_lon[0]]))
     });
     fearure.setId(staticAreaKey);
     fearure.setStyle(point_status[status]);

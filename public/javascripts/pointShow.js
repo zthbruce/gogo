@@ -54,8 +54,11 @@ function pointLayer(level, area) {
     var _cluster_id_list = [];
     for(var key in allPoints) {
         var ele = allPoints[key];
-        var lon = ele['lon'];
-        var lat = ele['lat'];
+        // var lon = ele['lon'];
+        // var lat = ele['lat'];
+        var lat_lon = WGS84transformer(ele['lat'], ele['lon']);
+        var lat = lat_lon[0];
+        var lon = lat_lon[1];
         // 范围内部的点击加载
         if (lon >= area[0] && lon <= area[2] && lat >= area[1] && lat <= area[3]) {
             _cluster_id_list.push(key);
@@ -83,7 +86,6 @@ function pointLayer(level, area) {
                     var ele;
                     var feature;
                     var sendData = res[1];
-                    // console.log(sendData);
                     var jsonData = JSON.parse(sendData);
                     var lon_lat_info = jsonData['lat_lon_info'];
                     var count = lon_lat_info.length;
@@ -91,9 +93,10 @@ function pointLayer(level, area) {
                     console.log(count);
                     while(count--) {
                         ele = lon_lat_info[count];
+                        var lat_lon = WGS84transformer(parseFloat(ele[1]), parseFloat(ele[0]));
                         feature = new ol.Feature({
                             // id: jsonData['cluster_id'],
-                            geometry: new ol.geom.Point(ol.proj.fromLonLat([parseFloat(ele[0]), parseFloat(ele[1])]))
+                            geometry: new ol.geom.Point(ol.proj.fromLonLat([lat_lon[1], lat_lon[0]]))
                         });
                         feature.setStyle(point_style);
                         features[count] = feature;

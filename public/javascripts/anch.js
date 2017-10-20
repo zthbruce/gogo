@@ -409,7 +409,8 @@ function writeContourLine(lonLatList) {
     var lonLatInfo = [];
     for(var i = 0; i < lonLatList.length; i++){
         var ele = lonLatList[i];
-        lonLatInfo.push(ol.proj.fromLonLat([ele[0], ele[1]]));
+        var lat_lon = WGS84transformer(ele[1], ele[0]);
+        lonLatInfo.push(ol.proj.fromLonLat([lat_lon[1], lat_lon[0]]));
     }
     // 将当前的锚地删除
     if(anch.getSource().getFeatureById("current") !== null){
@@ -430,13 +431,15 @@ function writeContourLine(lonLatList) {
         var ele = locationList[i];
         var lon = ele[0];
         var lat = ele[1];
+        // 火星转换
+        var lat_lon = WGS84transformer(lat, lon);
         var anch_choosed = new ol.Feature({
             'id' : 'choosed',
             'lon' : lon,
             'lat': lat,
             'anchKey': "",
             'number' : i + 1,
-            geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
+            geometry: new ol.geom.Point(ol.proj.fromLonLat([lat_lon[1], lat_lon[0]]))
         });
         anch_choosed.setStyle(choosed);
         current.getSource().addFeature(anch_choosed);

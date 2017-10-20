@@ -21,15 +21,15 @@ function getAllAnch() {
                     // 中心点坐标
                     var lon = ele.CenterLon;
                     var lat = ele.CenterLat;
-                    // console.log(name);
                     if(location !== "") {
                         var lonLatInfo = location.split(";");
                         var lonLatList = [];
                         for (var j = 0; j < lonLatInfo.length; j++) {
                             var lon_lat = lonLatInfo[j].split("#");
+                            var lat_lon = WGS84transformer(parseFloat(lon_lat[1]), parseFloat(lon_lat[0]));
                             // 正常情况
                             if(lon_lat.length === 2) {
-                                lonLatList.push(ol.proj.fromLonLat([parseFloat(lon_lat[0]), parseFloat(lon_lat[1])]))
+                                lonLatList.push(ol.proj.fromLonLat([lat_lon[1], lat_lon[0]]))
                             }
                         }
                         anchInfoList.push({
@@ -60,7 +60,6 @@ function getAllAnch() {
  */
 function anchLayer(zoom){
     console.log("加载锚地详细区域");
-    // console.log(anchInfoList);
     anch.getSource().clear();
     // var features = [];
     var style = {
@@ -105,10 +104,8 @@ function anchLayer(zoom){
             geometry: new ol.geom.Polygon([anch_info.lonLatList])
         });
         feature.setStyle(anch_style);
-        // features.push(feature);
         anch.getSource().addFeature(feature);
     }
-    // anch.getSource().addFeatures(features);
 }
 // function anchLayer(level){
 //     if (level >= 10) {
