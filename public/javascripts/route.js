@@ -333,6 +333,7 @@ $(".route_Info_btn").click(function () {
     $('.routeType_list').fadeToggle(300);
     $('.oneRoute_List').fadeOut(300);
     $('#routeInfo').fadeOut(600);
+    $('#LeaseRouteInfo').fadeOut(600);
     //隐藏船队列表和航次相关弹出框
     $('.Fleet_List_ul').fadeOut(300);
     $('#fleet').fadeOut(600);

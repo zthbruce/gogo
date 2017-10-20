@@ -234,6 +234,7 @@ $(".route_Voyage_btn").click(function () {
     $("#fleet").fadeOut(300);
     $("#shipDetails").fadeOut(300);
     $("#routeInfo").fadeOut(300);
+    $("#LeaseRouteInfo").fadeOut(300);
 });
 
 /**

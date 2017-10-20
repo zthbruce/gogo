@@ -500,6 +500,7 @@ $('.route_Fleet_btn').click(function(){
     //隐藏航线列表和航次列表、航次详情弹出框
     $('.route_List_ul').fadeOut(300);
     $('#routeInfo').fadeOut(600);
+    $('#LeaseRouteInfo').fadeOut(600);
     $('#voyageList').fadeOut(600);
     $('#voyageDetails').fadeOut(600);
     $('#voyage_StandardRoute').fadeOut(600);
