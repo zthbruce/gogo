@@ -1466,7 +1466,15 @@
     var berth_style = new ol.style.Style({
         image: new ol.style.Icon({
             scale: 0.5,
-            src: 'icon/berth.png'
+            src: 'icon/berth.png',
+            opacity : 1
+        })
+    });
+    // 隐形图标
+    var invisible_style = new ol.style.Style({
+        image: new ol.style.Icon({
+            src: 'icon/berth.png',
+            opacity : 0
         })
     });
 
@@ -1495,6 +1503,7 @@
         // 定位图标
         2: unknown_style
     };
+
 
     // 起始点
     var start_style = new ol.style.Style({
@@ -1585,14 +1594,16 @@
     // 已添加港口
     var port_yes =  new ol.style.Style({
         image: new ol.style.Icon({
-            src: 'images/port_yes.png'
+            src: 'images/pointCheck.png',
+            anchor: [0.5, 0.8]
         })
     });
 
     // 待选港口
     var port_nor =  new ol.style.Style({
         image: new ol.style.Icon({
-            src: 'images/port_nor.png'
+            src: 'images/pointAdd.png',
+            anchor: [0.5, 0.8]
         })
     });
 
@@ -1600,13 +1611,13 @@
     var point_status = {
         0: new ol.style.Style({
             image: new ol.style.Icon({
-                src: 'images/pointerCheck.png',
+                src: 'images/pointCheck.png',
                 anchor: [0.5, 0.8]
             })
         }),
         1: new ol.style.Style({
             image: new ol.style.Icon({
-                src: 'images/pointerAdd.png',
+                src: 'images/pointAdd.png',
                 anchor: [0.5, 0.8]
             })
         })

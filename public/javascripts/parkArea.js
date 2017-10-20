@@ -67,6 +67,7 @@ function parkAreaLayer(){
             'portID': ele["PortID"],
             'type': type,
             'cluster_id' : key,
+            'Checked': ele['Checked'],
             geometry: new ol.geom.Point(ol.proj.fromLonLat([lat_lon[1], lat_lon[0]]))
         });
         park_feature.setId(key);

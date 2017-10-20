@@ -400,6 +400,9 @@ function getPierInfo(clusterId, lon, lat){
  * @param lat
  */
 function getCheckPointer(status, staticAreaKey, lon, lat) {
+    var icon_feature = icon.getSource().getFeatureById(staticAreaKey);
+    icon_feature.setStyle(invisible_style); // 隐藏对应图标
+    icon_feature.set("visible", false);
     var lat_lon = WGS84transformer(lat, lon);
     var fearure = new ol.Feature({
         status: status,
@@ -558,7 +561,6 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxD
                 var belongStatus = status === 0 ? "belong" : "notBelong";
                 var ele = allPoints[staticAreaKey];
                 var belongTerminalKey = ele.TerminalKey === 'null'? '': ele.TerminalKey;
-                // console.log(terminalKey + "," + belongTerminalKey);
                 // 如果还没有归属的或者是当前码头的情况
                 if(ele.Checked === 0 || terminalKey === belongTerminalKey) {
                     // 将信息写入html, 并赋予一个状态,根据状态进行筛选
@@ -571,6 +573,7 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxD
                     // }
                     // 图上显示确认图标
                     getCheckPointer(status, staticAreaKey, ele.lon, ele.lat);
+                    // 显示列表
                     var str = '<li><ul class="oneBerth_info"><li>' + num + '</li><li><span class = ' + belongStatus + ' seq=' + num + '>' +
                         '</span></li> <li> <ul class="oneBerth_list" status=' + status + ' staticAreaKey = ' + staticAreaKey + ' lon = ' + ele.lon + ' lat=' + ele.lat + '><li>LOA: '
                         + ele.LOA_MAX + ' m</li><li>Beam: ' + ele.BEAM_MAX + ' m</li><li>Draft: ' + ele.DRAFT_MAX + ' m</li> <li>DWT: ' + ele.DWT_MAX
@@ -860,6 +863,19 @@ $('.pier_CargoType>ul').delegate("li", "click", function(){
 
 // 泊位管理界面关闭
 $('#berth_cancel').click(function () {
+    var features = icon.getSource().getFeatures();
+    for(var i =0; i< features.length; i++){
+        var feature = features[i];
+        if(!feature.get('visible')){
+            console.log("隐藏");
+            if(feature.get('Checked') === 0){
+                feature.setStyle(park_style[1]);
+            }
+            else{
+                feature.setStyle(berth_yes);
+            }
+        }
+    }
     $('#newBerth').fadeOut("normal");
     current.getSource().clear();
     position.getSource().clear();
@@ -988,7 +1004,6 @@ $('#berth_save').click(function () {
     // return berthList;
     $("[status='0']").each(function () {
         var staticAreaKey = $(this).attr("staticAreaKey");
-        console.log(staticAreaKey);
         i++;
         var LOA = $(this).children().eq(4).children().val();
         var BEAM = $(this).children().eq(5).children().val();
