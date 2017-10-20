@@ -5,6 +5,7 @@
 var center = [0, 0];
 // var range = 0;
 var locationList = [];
+var lastParkAreaList = [];
 
 // var chooseLonLatList = [];
 /**
@@ -260,8 +261,6 @@ function getAnchInfo(anchKey, lon, lat) {
                 // anch.getSource().clear(); // 将锚地层清空
                 current.getSource().clear(); // 清空当前图层
                 // 更新轮廓
-                // updateLocationList();
-                // 根据当前所选点，画出轮廓线
                 writeContourLine(locationList);
                 // for(var i = 0; i < locationList.length - 1; i++) {
                 //     var ele = locationList[i];
@@ -287,8 +286,17 @@ function getAnchInfo(anchKey, lon, lat) {
                 console.log(err);
             }
         });
-    // }
-
+    $.ajax({
+        url:"/anch/getParkAreaList",
+        type: 'get',
+        data: {AnchorageKey: anchKey},
+        success: function (data) {
+            if(data[0] === '200'){
+                lastParkAreaList = data[1];
+            }
+        }
+    });
+    console.log(lastParkAreaList);
 }
 
 /**
@@ -478,6 +486,30 @@ $('.anchInfo_list>.pier_info').bind('input propertychange',function() {
 // 保存按钮事件
 $('#anch_save').click(function(){
     console.log("保存当前信息");
+    // 锚地样式
+    var anch_style =  new ol.style.Style({
+        stroke: new ol.style.Stroke({
+            color: 'white',
+            lineDash: [1, 2, 3, 4, 5, 6, 7],
+            width: 3
+        }),
+        fill: new ol.style.Fill({
+            color: 'rgba(0, 0, 0, 0.4)'
+            // color: 'rgba(255, 255, 255, 0.2)'
+        }),
+        text : new ol.style.Text({
+            // font: '10px sans-serif' 默认这个字体，可以修改成其他的，格式和css的字体设置一样
+            text: anchName !== "" ? anchName : "未命名锚地",
+            fill: new ol.style.Fill({
+                color: 'black'
+            }),
+            textAlign:"center"
+        })
+    });
+    anch.getSource().getFeatureById("current").setStyle(anch_style);
+    anch.getSource().getFeatureById("current").set("anchKey", anchKey);
+    anchStatus = false; // 将锚地状态还原
+    current.getSource().clear(); // 当前图层
     changeAnchSaveButton(false); // 改变按钮状态
     $('#newAnch').fadeOut("normal");
     // 开始计算
@@ -601,62 +633,46 @@ $('#anch_save').click(function(){
         if(type === 0){
             var lon = ele['lon'];
             var lat = ele['lat'];
+            //  如果在内部
             if(inside([lon, lat], locationList)){
+                // 如果在内部
                 parkAreaList.push(key);
-                delete allPoints[key];
+                allPoints[key]["Checked"] = 1; // 更新状态
+                var feature = icon.getSource().getFeatureById(key);
+                if(feature !== undefined){
+                    feature.setStyle(berth_yes); // 确认状态
+                }
+                // var feature = icon.getSource().getFeatureById(key);
+                // icon.getSource().removeFeature(feature); // 删去内部的锚地信息
+                // allPoints[staticAreaKey]['TerminalKey'] = terminalKey; // 更新码头值
+                // delete allPoints[key];
+            }
+            else if(lastParkAreaList.indexOf(key) !== -1){
+                // 表示属于原来的ParkAreaList
+                allPoints[key]["Checked"] = 0; // 更新状态
+                var unchoosed_feature = icon.getSource().getFeatureById(key);
+                if(unchoosed_feature !== undefined){
+                    unchoosed_feature.setStyle(park_style[0]); // 未确认状态
+                }
             }
         }
     }
+    // lastParkAreaList = parkAreaList;
     $.ajax({
         url: '/anch/saveAnchDetailInfo',
         type: 'get',
         data: {AnchorageKey: anchKey, ParkAreaList: parkAreaList},
         success: function (data) {
             console.log(data[1]);
-            // getAllAnch(); // 刷新锚地信息
+            // 刷新静止区域
+            // getAllPoints();
         },
         error: function (err) {
             console.log(err);
         }
     });
-
-    // var style = {
-    //     stroke: new ol.style.Stroke({
-    //         color: 'white',
-    //         lineDash: [1, 2, 3, 4, 5, 6, 7],
-    //         width: 3
-    //     }),
-    //     fill: new ol.style.Fill({
-    //         color: 'rgba(0, 0, 0, 0.4)'
-    //         // color: 'rgba(255, 255, 255, 0.2)'
-    //     })
-    // };
-    // 锚地样式
-    var anch_style =  new ol.style.Style({
-        stroke: new ol.style.Stroke({
-            color: 'white',
-            lineDash: [1, 2, 3, 4, 5, 6, 7],
-            width: 3
-        }),
-        fill: new ol.style.Fill({
-            color: 'rgba(0, 0, 0, 0.4)'
-            // color: 'rgba(255, 255, 255, 0.2)'
-        }),
-        text : new ol.style.Text({
-            // font: '10px sans-serif' 默认这个字体，可以修改成其他的，格式和css的字体设置一样
-            text: anchName !== "" ? anchName : "未命名锚地",
-            fill: new ol.style.Fill({
-                color: 'black'
-            }),
-            textAlign:"center"
-        })
-    });
     // console.log("保存该锚地");
     // 将操作状态转换为显示状态
-    anch.getSource().getFeatureById("current").setStyle(anch_style);
-    anch.getSource().getFeatureById("current").set("anchKey", anchKey);
-    anchStatus = false; // 将锚地状态还原
-    current.getSource().clear(); // 当前图层
 });
 
 // 取消按钮点击之后

@@ -19,7 +19,6 @@ var allPoints = {};
 function getAllPoints() {
     $.ajax({
         async: false,
-        // url: OL_Action_Root + "/icon/getInfo",
         url: "/icon/getInfo",
         dataType: 'json',
         cache: false,
@@ -34,6 +33,9 @@ function getAllPoints() {
                 var sendData = res[1];
                 // console.log(sendData);
                 allPoints = JSON.parse(sendData);
+                // var zoom = blmol.operation.getZoom(map);
+                // var extent = blmol.operation.getCurrentExtent(map);
+                parkAreaLayer(); // 首先刷新一次
             }
         },
         error: function (data, status, e) {
@@ -43,77 +45,42 @@ function getAllPoints() {
 }
 
 /**
- * 显示停泊区域的图标
- * @param level
+ * 显示停泊区域图标
  */
-function iconLayer(level, area){
-    // var count = allPoints.length;
+function parkAreaLayer(){
     var ele;
     var park_feature;
-    // var pie_feature;
     var lon;
     var lat;
     var features = [];
-    var areaNum = 0;
-    // var _cluster_id;
-    // var type = 0;
-    var _cluster_id_list = [];
     for(var key in allPoints){
         ele = allPoints[key];
         lon = ele['lon'];
         lat = ele['lat'];
+        var lat_lon = WGS84transformer(lat, lon);
         var type = ele['type']; // 属于哪一类， 目前有0：锚地， 1：泊位， 2：未知区域
-        // if(lon >= area[0] && lon <= area[2] && lat >= area[1] && lat <= area[3] && ele['level'] <= level) {
-        // if(lon >= area[0] && lon <= area[2] && lat >= area[1] && lat <= area[3]) {
-            // 保留目前这个点的cluster_id
-            park_feature = new ol.Feature({
-                'lon' : lon,
-                'lat': lat,
-                'name': 'parkArea',
-                // 'CargoTypeKey': ele["CargoTypeKey"], //装载类型
-                'portID': ele["PortID"],
-                'type': type,
-                'cluster_id' : key,
-                geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
-            });
-            park_feature.setId(key);
-            // console.log(ele['Checked']);
-            if(ele['Checked'] === 0){
-                park_feature.setStyle(park_style[type]);
-            }
-            else{
-                park_feature.setStyle(berth_yes);
-            }
-            features.push(park_feature);
-            areaNum++;
-        // 需要的点集加载
-        if(lon >= area[0] && lon <= area[2] && lat >= area[1] && lat <= area[3]) {
-            _cluster_id_list.push(key);
-            // _cluster_id = key;
+        park_feature = new ol.Feature({
+            'lon' : lon,
+            'lat': lat,
+            'name': 'parkArea',
+            // 'CargoTypeKey': ele["CargoTypeKey"], //装载类型
+            'portID': ele["PortID"],
+            'type': type,
+            'cluster_id' : key,
+            geometry: new ol.geom.Point(ol.proj.fromLonLat([lat_lon[1], lat_lon[0]]))
+        });
+        park_feature.setId(key);
+        // console.log(ele['Checked']);
+        if(ele['Checked'] === 0){
+            park_feature.setStyle(park_style[type]);
         }
+        else{
+            park_feature.setStyle(berth_yes);
+        }
+        features.push(park_feature);
     }
-    // console.log(areaNum);
     icon.getSource().clear();
     icon.getSource().addFeatures(features);
-    // if(areaNum === 1 && level >= 14 && cluster_id !== _cluster_id){
-    if(level >= 17 && cluster_id_list.toString() !== _cluster_id_list.toString()){
-        // cluster_id = _cluster_id;
-        // console.log("只有一个区域");
-        // console.log(cluster_id);
-        console.log("显示点集");
-        cluster_id_list = _cluster_id_list;
-        point.getSource().clear();
-        // 点图
-        pointLayer(cluster_id_list);
-        // 轮廓线图
-        // contourLayer(cluster_id);
-    }
-    else {
-        if(level < 17){
-            cluster_id_list = [];
-            point.getSource().clear()
-        }
-    }
 }
 
 // function iconLayer(level, area){
@@ -184,60 +151,6 @@ function iconLayer(level, area){
 //     }
 // }
 
-// function iconLayer(level, area){
-//     // var count = allPoints.length;
-//     var ele;
-//     var park_feature;
-//     // var pie_feature;
-//     var lon;
-//     var lat;
-//     var features = [];
-//     var areaNum = 0;
-//     var _cluster_id;
-//     var type = 0;
-//     for(var i =0; i< allPoints.length; i++){
-//         ele = allPoints[i];
-//         var key = ele['cluster_id'];
-//         lon = ele['lon'];
-//         lat = ele['lat'];
-//         type = ele['type']; // 属于哪一类， 目前有0：锚地， 1：泊位， 2：未知区域
-//         if(lon >= area[0] && lon <= area[2] && lat >= area[1] && lat <= area[3] && parseInt(ele['level']) <= level) {
-//             // 保留目前这个点的cluster_id
-//             park_feature = new ol.Feature({
-//                 'name': "park_icon",
-//                 'type': type,
-//                 'cluster_id' : key,
-//                 geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
-//             });
-//             park_feature.setStyle(park_style[type]);
-//             features.push(park_feature);
-//             areaNum++;
-//             _cluster_id = key;
-//         }
-//     }
-//     console.log(_cluster_id);
-//     console.log(areaNum);
-//     icon.getSource().clear();
-//     icon.getSource().addFeatures(features);
-//     if(areaNum === 1 && level >= 10 && cluster_id !== _cluster_id){
-//         cluster_id = _cluster_id;
-//         console.log("只有一个区域");
-//         console.log(cluster_id);
-//         point.getSource().clear();
-//         // 点图
-//         pointLayer(cluster_id);
-//         // 轮廓线图
-//         contourLayer(cluster_id);
-//     }
-//     else {
-//
-//         if(level < 10){
-//             //清除图层，并将cluster_id归位
-//             cluster_id = '';
-//             point.getSource().clear()
-//         }
-//     }
-// }
 
 /**
  * 更新停泊区域的类型
@@ -264,8 +177,8 @@ function updateParkAreaType(cluster_id, type) {
                 info["type"] = type;
                 allPoints[cluster_id] = info;
                 if(zoom >= 7){
-                    var extent = blmol.operation.getCurrentExtent(map);
-                    iconLayer(zoom, extent);
+                    // var extent = blmol.operation.getCurrentExtent(map);
+                    parkAreaLayer();
                 }
             }
             else{
@@ -277,6 +190,8 @@ function updateParkAreaType(cluster_id, type) {
         }
     })
 }
+
+
 
 
 

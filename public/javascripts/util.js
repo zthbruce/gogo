@@ -259,18 +259,25 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                     ele.remove();
                     updateLocationList();
                     // 根据当前点画出轮廓线
+                    // current.getSource().removeFeature(current_feature); // 将本标签删除
                     writeContourLine(locationList);
+                    // 将下一层进行还原
+                    // if(feature[1] !== undefined){
+                    //     var icon_feature = feature[1];
+                    //     console.log(icon_feature);
+                    //     icon_feature.setStyle(park_style[0])
+                    // }
                     // 将删除的点重新拿出来, 显示在地图上, 以备选择, 目前没有保留clusterID这个字段
-                    var feature = new ol.Feature({
-                        'lon' : lon,
-                        'lat': lat,
-                        'name': "park_icon",
-                        'type': 0,
-                        'cluster_id' : clusterId,
-                        geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
-                    });
-                    feature.setStyle(park_style[0]); // 还原成锚地图标
-                    anch.getSource().addFeature(feature);
+                    // var feature = new ol.Feature({
+                    //     'lon' : lon,
+                    //     'lat': lat,
+                    //     'name': "park_icon",
+                    //     'type': 0,
+                    //     'cluster_id' : clusterId,
+                    //     geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
+                    // });
+                    // feature.setStyle(park_style[0]); // 还原成锚地图标
+                    // icon.getSource().addFeature(feature);
                     changeAnchSaveButton(true);
                 }
                 else{

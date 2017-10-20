@@ -194,5 +194,31 @@ router.get('/getAnchShowInfo', function(req, res, next){
     });
 });
 
+/**
+ * 获取停泊区域
+ */
+router.get('/getParkAreaList', function (req, res, next) {
+    var anchKey = req.query.AnchorageKey;
+    var sql = util.format("SELECT StationaryAreaKey FROM T2112_AnchorageDetails WHERE AnchorageKey = '%s'", anchKey);
+    mysql.query(sql, function (err, results) {
+        if(err){
+            console.log(utils.eid1);
+            res.jsonp(['404', utils.eid1]);
+        }
+        else{
+            var parkAreaList = [];
+            if(results.length > 0){
+                for(var i = 0; i < results.length; i++){
+                    parkAreaList.push(results[i].StationaryAreaKey)
+                }
+                res.jsonp(['200', parkAreaList])
+            }
+            else{
+                res.jsonp(['304', "return nothing"]);
+            }
+        }
+    })
+});
+
 
 module.exports = router;

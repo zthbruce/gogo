@@ -1432,8 +1432,7 @@
 <!--&lt;!&ndash;加载显示&ndash;&gt;-->
 <!--<div class="loader"></div>-->
 </body>
-
-<!--<script type="text/javascript" src="/javascripts/require.js"></script>-->
+<script type="text/javascript" src="/javascripts/WGS84transformer.js"></script>
 <script type="text/javascript" src="/javascripts/testCommon.js"></script>
 <script type="text/javascript" src="/javascripts/parkArea.js"></script>
 <script type="text/javascript" src="/javascripts/portShow.js"></script>
@@ -1715,7 +1714,7 @@
     // 初始区域
 //    var initArea  = blmol.operation.getCurrentExtent(map);
 
-    // 得到港口的所有点
+    // 得到港口的所有的泊位，锚地中心点
     getAllPoints();
 
     // 获取所有锚地区域
@@ -1751,7 +1750,7 @@
         zoom = blmol.operation.getZoom(map);
         console.log(zoom);
         // 获取所有静止区域
-        iconLayer(zoom, extent);
+        pointLayer(zoom, extent);
         // 临界条件
         if(!anchStatus && ((zoom >= 10 && oldLevel < 10) || (zoom < 10  && oldLevel >= 10))){
             // 刷新锚地数据, 显示锚地名
