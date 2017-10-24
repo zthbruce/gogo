@@ -613,7 +613,7 @@ var curIndex;
 var imageNum;
 var saveStatus;
 // 点击i图标获取船舶的详细信息
-$('#fleet').delegate('.shipDetailInfo', 'click', function () {
+$('#fleet').delegate('.shipDetailInfo', 'click', function (event) {
     changeSaveStatus(false); // 保存状态初始化
     clearInterval(autoShow); // 初始化
     curIndex = 0;
@@ -1239,7 +1239,7 @@ $('.fleetList_List, .search_ship_List').scroll(function(){
 /**
  * 点击确认按钮，弹出备注框
  */
-$('.fleetList_List').delegate(".toCheck", "click", function () {
+$('.fleetList_List').delegate(".toCheck", "click", function (event) {
     // 保存当前滑窗高度
     var scrollTop = $('.fleetList_List').scrollTop();
     lastScrollTop = scrollTop;

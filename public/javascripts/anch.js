@@ -74,8 +74,9 @@ function inside(point, vs) {
         var xi = vs[i][0], yi = vs[i][1];
         var xj = vs[j][0], yj = vs[j][1];
         if(x === xi && y === yi){
-            inside = true;
-            break;
+            return true
+            // inside = true;
+            // break;
         }
         var intersect = ((yi > y) !== (yj > y))
             && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);

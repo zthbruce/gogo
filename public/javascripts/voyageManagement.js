@@ -279,16 +279,16 @@ $(".voyage_toCheck, .voyage_checked").click(function () {
 /**
  *
  */
-$(".voyageList_content").delegate("li", "click", function () {
+$(".voyageList_content").delegate("li", "click", function (event) {
     console.log("航次详情");
     fleetDivZIndex++;
     console.log(fleetDivZIndex);
     var voyageDetails = $('#voyageDetails');
     voyageDetails.css('zIndex',fleetDivZIndex);
-    event.stopPropagation();
     // 设置宽度
     $('.shipVoyageList_List').css("width", 80 * 14);
     voyageDetails.fadeIn(300);
+    event.stopPropagation();
 });
 
 
@@ -346,7 +346,7 @@ $(".oneVoyageInfo>ul").delegate(".toCheck", "click", function () {
 /**
  * 点击标准航线按钮
  */
-$(".voyageBtn_StandardRoute").click(function () {
+$(".voyageBtn_StandardRoute").click(function (event) {
     if (standardRouteStatus) {
         console.log("标准航线");
         fleetDivZIndex++;
@@ -361,7 +361,7 @@ $(".voyageBtn_StandardRoute").click(function () {
 /**
  * 点击标准货物按钮
  */
-$(".voyageBtn_StandardGoods").click(function(){
+$(".voyageBtn_StandardGoods").click(function(event){
     if(standardGoodsStatus){
         console.log("标准货物");
         // 等待数据填充

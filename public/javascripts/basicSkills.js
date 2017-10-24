@@ -176,7 +176,7 @@ $('.draw_polygon').click(function(){
 });
 
 
-$('.draw_polygon li').click(function(){
+$('.draw_polygon li').click(function(event){
     if(rangingDisplay){
         blmol.bind.removeOnClickListener(rangingMouseMove);
         blmol.bind.removeOnClickListener(rangingMouseClick);
