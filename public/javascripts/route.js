@@ -899,12 +899,31 @@ $('.LeaseRouteInstall_SaveBtn').click(function () {
     // 交船港口
     var deliveryPort = '';
     var delivery_li = $("#LeaseRouteInfo .routeStartPort_Select>span>.StartEndPort_List>li");
+    var delivery_lon_sum = 0;
+    var delivery_lat_sum = 0;
+    var delivery_num = 0;
+    var redelivery_lon_sum = 0;
+    var redelivery_lat_sum = 0;
+    var redelivery_num = 0;
     for(var i = 0; i< delivery_li.length;i++){
         if(i > 0){
             deliveryPort += "#";
         }
         var portID =  delivery_li.eq(i).attr("portID");
+        var port = AllPortBasicList[portID];
+        var lon = parseFloat(port.LongitudeNumeric);
+        var lat = parseFloat(port.LatitudeNumeric);
+        if(isNaN(lon) || isNaN(lat)){
+            continue;
+        }
+        delivery_num += 1;
+        delivery_lon_sum += lon;
+        delivery_lat_sum += lat;
         deliveryPort += portID;
+    }
+    if(delivery_num > 0){
+        deliveryLon = delivery_lon_sum / delivery_num;
+        deliveryLat = delivery_lat_sum / delivery_num;
     }
     // 还船港口
     var redeliveryPort = '';
@@ -914,7 +933,21 @@ $('.LeaseRouteInstall_SaveBtn').click(function () {
             redeliveryPort += "#";
         }
         var portID =  redelivery_li.eq(i).attr("portID");
+        var port = AllPortBasicList[portID];
+        var lon = parseFloat(port.LongitudeNumeric);
+        var lat = parseFloat(port.LatitudeNumeric);
+        if(isNaN(lon) || isNaN(lat)){
+            continue;
+        }
+        redelivery_num += 1;
+        redelivery_lon_sum += lon;
+        redelivery_lat_sum += lat;
         redeliveryPort += portID;
+        redeliveryPort += portID;
+    }
+    if(redelivery_num > 0) {
+        redeliveryLon = redelivery_lon_sum / redelivery_num;
+        redeliveryLat = redelivery_lat_sum / redelivery_num;
     }
     var info_li = $(".LeaseRouteInfo_List>li");
     var weight = info_li.eq(1).children('input').val();
