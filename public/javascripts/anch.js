@@ -821,8 +821,9 @@ $('#port_list_to_choose').delegate('li', 'click', function () {
 // 已选港口列表关闭按钮
 $(".IntentPort_list").delegate('.close', 'click', function () {
     var ele = $(this).parent(); // li元素
-    // 添加至下面
-    $('#port_list_to_choose').append('<li portID=' + ele.attr("portID") +'>' + $(this).prev().text() +'</li>');
+    // 添加至下面列表中
+    $('#port_list_to_choose').prepend('<li portID=' + ele.attr("portID") +'>' + $(this).prev().text() +'</li>');
+    // $('#port_list_to_choose').append('<li portID=' + ele.attr("portID") +'>' + $(this).prev().text() +'</li>');
     ele.remove();
 });
 
