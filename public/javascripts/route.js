@@ -369,14 +369,14 @@ $('.routeType_list>li').mouseenter(function(){
     route_ul.css('display','block');
 });
 
-// var standardDeparturePortID;
-// var standardArrivalPortID;
+
 var standardPortID;
 var allPortList;
 var port_type;
 var allDeparturePortList;
 var allArrivalPortList;
 var routeId; //放在内存中
+// var routerCenter = [0, 0];
 
 /**
  * 鼠标点击某一条具体的航线
@@ -686,20 +686,20 @@ $(".LeaseRouteInstall_CancelBtn").click(function(){
 /**
  * 出发港增加港口
  */
-$(".add_StartPort").click(function () {
-    var startPort = $('.routePort_Start>.routePoint_infoShow');
-    var lon = startPort.attr("lon");
-    var lat = startPort.attr("lat");
-    var closePortList = getClosePortList(lon, lat, AllPortBasicList, 20);
-    // console.log(closePortList);
-    /* 港口列表模块 */
-    var startPort_ul = $(".startPort");
-    startPort_ul.empty();
-    for(var i = 0; i < closePortList.length; i++){
-        var port = closePortList[i];
-        startPort_ul.append('<li portID="'+ port.PortID+'">'+port.ENName+'</li>');
-    }
-});
+// $(".add_StartPort").click(function () {
+//     var startPort = $('.routePort_Start>.routePoint_infoShow');
+//     var lon = startPort.attr("lon");
+//     var lat = startPort.attr("lat");
+//     var closePortList = getClosePortList(lon, lat, AllPortBasicList, 20);
+//     // console.log(closePortList);
+//     /* 港口列表模块 */
+//     var startPort_ul = $(".startPort");
+//     startPort_ul.empty();
+//     for(var i = 0; i < closePortList.length; i++){
+//         var port = closePortList[i];
+//         startPort_ul.append('<li portID="'+ port.PortID+'">'+port.ENName+'</li>');
+//     }
+// });
 
 /**
  * 目的港增加港口
@@ -786,13 +786,12 @@ $('.routePort_Select i').click(function () {
     var type = routeId[0];
     // 显示相关的港口, 以供选择
     // var type = // 确定是程租还是期租
-    var r = 50; // 默认是50km
+    var r = 50; // 默认程租是50km
     if(type === 'L'){
-        // 期租距离比较大
+        // 期租范围比较大
         r = 1000
     }
-    console.log(r);
-    // var r = 1000;
+    // 显示有关的港口
     showRelatePort(lon, lat, r);
     // 增加港口列表
     if(port_class ==="routePort_Start"){
@@ -815,9 +814,6 @@ $('.routePort_Select i').click(function () {
  * 程租点击保存
  */
 $('.routeInstall_SaveBtn').click(function () {
-    // var title = $('#routeInfo>.fleet_title>span');
-    // var routeId = title.attr("routeId");
-    // var routeId = title.attr("routeId");
     var departurePort = "";
     var departure_li = $("#routeInfo .routeStartPort_Select .StartEndPort_List>li");
     for(var i = 0; i< departure_li.length;i++){
@@ -843,7 +839,6 @@ $('.routeInstall_SaveBtn').click(function () {
     var max_age = info_li.eq(2).children('input').val();
     var weight = info_li.eq(3).children('input').val();
     weight = weight === ''?'null' : weight;
-    console.log(weight);
     var loadingWaitTime = info_li.eq(5).children('input').val();
     var load_TPH = info_li.eq(6).children('input').val();
     var load_DTPH = info_li.eq(7).children('input').val();

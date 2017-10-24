@@ -58,9 +58,10 @@ router.get('/anchNameSearch', function(req, res, next){
 /**
  * 根据港口列表
  */
-router.get('/anchNameSearch', function(req, res, next){
-    var anchNameStr = req.query.anchNameStr;
-    var sqls = util.format("SELECT AnchorageKey, Name, Purpose, Des, centerLon, centerLat FROM T2104_Anchorage WHERE binary Name LIKE '" + anchNameStr  + "%'  LIMIT 20" );
+router.get('/portNameSearch', function(req, res, next){
+    var portNameStr = req.query.PortNameStr;
+    var sqls = util.format("SELECT PortID, Name AS ENName, CNName FROM T2101_Port WHERE Name LIKE '%" + portNameStr + "%' " +
+        "OR CNName LIKE '%" + portNameStr + "%'" );
     mysql.query(sqls, function (err, results) {
         if(err){
             console.log(utils.eid1);

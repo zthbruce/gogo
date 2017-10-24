@@ -100,7 +100,8 @@ function addPierSelectPierName(pierStr){
                     console.log($(this).text());
                     console.log($(this).attr("terminalKey"));
                     // $('#company_name').val($(this).text());
-                    $('#pier_name').attr("terminalKey", $(this).attr("terminalKey"));
+                    var terminalKey = $(this).attr("terminalKey");
+                    $('#pier_name').attr("terminalKey", terminalKey);
                     $('#pier_name').val($(this).text());
                     // 刷新附近泊位信息
                     getPierDetail(terminalKey);
@@ -399,11 +400,11 @@ function getPierInfo(clusterId, lon, lat){
  * @param lon
  * @param lat
  */
-var visible_berth_list = [];
+// var visible_berth_list = [];
 function getBerthCheckPointer(status, staticAreaKey, lon, lat) {
     var icon_feature = icon.getSource().getFeatureById(staticAreaKey);
-    icon_feature.setStyle(invisible_style); // 隐藏对应图标
-    visible_berth_list.push(staticAreaKey); // 更新隐藏列表
+    // icon_feature.setStyle(invisible_style); // 隐藏对应图标
+    // visible_berth_list.push(staticAreaKey); // 更新隐藏列表
     // icon_feature.set("visible", false);
     var lat_lon = WGS84transformer(lat, lon);
     var fearure = new ol.Feature({
@@ -557,7 +558,7 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxD
             $(".berth_list").empty();
             var num = 0;
             current.getSource().clear(); // 清空当前图层
-            visible_berth_list = []; // 隐藏图标
+            // visible_berth_list = []; // 隐藏图标
             for(var i = 0; i < n; i++){
                 var berthInfo = distanceList[i];
                 var staticAreaKey = berthInfo.cluster_id;
@@ -869,16 +870,16 @@ $('.pier_CargoType>ul').delegate("li", "click", function(){
 // 泊位管理界面关闭
 $('#berth_cancel').click(function () {
     // var features = icon.getSource().getFeatures();
-    for(var i =0; i< visible_berth_list.length; i++){
-        var cluster_id  = visible_berth_list[i];
-        var feature = icon.getSource().getFeatureById(cluster_id);
-        if(feature.get('Checked') === 0){
-            feature.setStyle(park_style[1]);
-        }
-        else{
-            feature.setStyle(berth_yes);
-        }
-    }
+    // for(var i =0; i< visible_berth_list.length; i++){
+    //     var cluster_id  = visible_berth_list[i];
+    //     var feature = icon.getSource().getFeatureById(cluster_id);
+    //     if(feature.get('Checked') === 0){
+    //         feature.setStyle(park_style[1]);
+    //     }
+    //     else{
+    //         feature.setStyle(berth_yes);
+    //     }
+    // }
     $('#newBerth').fadeOut("normal");
     current.getSource().clear();
     position.getSource().clear();

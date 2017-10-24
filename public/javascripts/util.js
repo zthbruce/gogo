@@ -177,6 +177,7 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
     if (feature.length !== 0) {
         var current_feature =  feature[0];
         var type = current_feature.get('type');
+        console.log(current_feature.get('cluster_id'));
         // 实体类图标
         if (current_feature.get('pointer') === undefined){
             console.log("实体类图标");

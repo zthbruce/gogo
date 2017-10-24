@@ -147,6 +147,48 @@ function addAnchName(anchNameStr){
 }
 
 /**
+ * 根据输入港口名获取港口列表
+ * @param portNameStr
+ */
+function addPortName(portNameStr) {
+    if(portNameStr !== '') {
+        $.ajax({
+            url: '/anch/portNameSearch',
+            type: 'get',
+            data: {PortNameStr: portNameStr},
+            success: function (data) {
+                $("#port_list_to_choose").empty();
+                if (data[0] === '200') {
+                    var closePortList = data[1];
+                    /* 港口列表模块 */
+                    for (var i = 0; i < closePortList.length; i++) {
+                        var port = closePortList[i];
+                        if (belongPortList.indexOf(port.PortID) === -1) {
+                            $("#port_list_to_choose").append('<li portID="' + port.PortID + '">' + port.ENName + '</li>');
+                        }
+                    }
+                }
+            }
+        })
+    }
+    else{
+        var centerLon = center[0];
+        var centerLat = center[1];
+        console.log(centerLon + "," + centerLat);
+        var closePortList = getClosePortList(centerLon, centerLat, AllPortBasicList, 20);
+        /* 港口列表模块 */
+        $("#port_list_to_choose").empty();
+        for(var i = 0; i < closePortList.length; i++){
+            var port = closePortList[i];
+            if(belongPortList.indexOf(port.PortID) === -1) {
+                $("#port_list_to_choose").append('<li portID="' + port.PortID + '">' + port.ENName + '</li>');
+            }
+        }
+    }
+}
+
+var belongPortList = []; // 已存在港口
+/**
  * 获取锚地信息
  * @param anchKey
  * @param lon
@@ -156,8 +198,11 @@ function getAnchInfo(anchKey, lon, lat) {
     var centerLon = lon;
     var centerLat = lat;
     locationList = [];
+    parkAreaList = [];
     // 将锚地的key值赋上
     $(".anchInfo_list").attr("anchKey", anchKey);
+    var selected_lon_lat_ele = $(".selected_LonLat");
+    selected_lon_lat_ele.empty();
     $(".IntentPort_list>li:not(.add_port)").remove(); // 目的港口列表初始化
         $.ajax({
             url: '/anch/getAnchInfo',
@@ -165,7 +210,6 @@ function getAnchInfo(anchKey, lon, lat) {
             data: {anchKey: anchKey},
             success: function (data) {
                 // 锚地表里有相应的数据
-                var belongPortList = [];
                 if (data[0] === "200") {
                     var anchInfo = data[1][0];
                     // anchKey = anchInfo.AnchorageKey;
@@ -180,7 +224,7 @@ function getAnchInfo(anchKey, lon, lat) {
                     console.log(centerLon);
                     console.log(centerLat);
                     // var closeAnchList = getCloseAnchList(centerLon, centerLat, allPoints, 20);
-                    $(".selected_LonLat").empty();
+                    // selected_lon_lat_ele.empty();
                     // console.log("锚地长度:" + closeAnchList.length);
                     // 未选择列表
                     // for (var i = 0; i < closeAnchList.length; i++) {
@@ -195,7 +239,7 @@ function getAnchInfo(anchKey, lon, lat) {
                         var lonLatInfo = lonLatList[j].split("#");
                         var normalLonLat = transLonLatToNormal(lonLatInfo[0], lonLatInfo[1]);
                         var chooseLonLatStr = '<li clusterId="" lon=' + lonLatInfo[0] + ' lat=' + lonLatInfo[1] + '><span>' + (j + 1) + '</span><span class = "always_belong"></span><span>' + normalLonLat[0] + ", " + normalLonLat[1] + '</span></li>';
-                        $(".selected_LonLat").append(chooseLonLatStr);
+                        selected_lon_lat_ele.append(chooseLonLatStr);
                         locationList.push([parseFloat(lonLatInfo[0]), parseFloat(lonLatInfo[1])]);
                     }
                     locationList.push(locationList[0]); // 将第一个点做为结尾
@@ -203,7 +247,7 @@ function getAnchInfo(anchKey, lon, lat) {
                     //显示当前的锚地的目的港口
                     console.log(anchInfo.DestinationPort);
                     if(anchInfo.DestinationPort !== '' && anchInfo.DestinationPort !== "undefined") {
-                        var destinationPortList = anchInfo.DestinationPort.split(";");
+                            var destinationPortList = anchInfo.DestinationPort.split(";");
                         for (var k = 0; k < destinationPortList.length; k++) {
                             var destinationportID = destinationPortList[k];
                             belongPortList.push(destinationportID);
@@ -225,24 +269,26 @@ function getAnchInfo(anchKey, lon, lat) {
                     $(".anchInfo_list>.pier_info>input").val(""); //初始化输入
                     // 未选择列表中
                     // var closeAnchList = getCloseAnchList(centerLon, centerLat, allPoints, 20);
-                    // 将当前点排除掉
-                    $(".selected_LonLat").empty();
-                    $(".unselected_LonLat").empty();
-                    console.log("锚地长度:" + closeAnchList.length);
-                    for(var i = 0; i< closeAnchList.length; i++){
-                        var ele = closeAnchList[i];
-                        if(i === 0){
-                            // 在选择列表中只有本锚地信息lon, lat
-                            var normalLonLat = transLonLatToNormal(centerLon, centerLat);
-                            // var chooseLonLatStr = '<li clusterId=' + ele.clusterId + ' lon=' + lon + ' lat=' + lat + '><span>1</span><span class = "anch_belong"></span><span>' +  normalLonLat[0] + ", " + normalLonLat[1] + '</span></li>';
-                            var chooseLonLatStr = '<li clusterId=' + ele.clusterId + ' lon=' + centerLon + ' lat=' + centerLat + '><span>1</span><span class = "always_belong"></span><span>' +  normalLonLat[0] + ", " + normalLonLat[1] + '</span></li>';
-                            $(".selected_LonLat").append(chooseLonLatStr);
-                        }else {
-                            normalLonLat = transLonLatToNormal(ele.lon, ele.lat);
-                            var unchoosedLonLatStr = '<li clusterId=' + ele.clusterId + ' lon=' + ele.lon + ' lat=' + ele.lat +'><span>' + i + '</span><span class = "anch_notBelong"></span><span>' + normalLonLat[0] + ", " + normalLonLat[1] + '</span></li>';
-                            $(".unselected_LonLat").append(unchoosedLonLatStr);
-                        }
-                    }
+                    var normalLonLat = transLonLatToNormal(lon, lat);
+                    var chooseLonLatStr = '<li clusterId="" lon=' + lon + ' lat=' + lat + '><span>' + 1 + '</span><span class = "always_belong"></span><span>' + normalLonLat[0] + ", " + normalLonLat[1] + '</span></li>';
+                    selected_lon_lat_ele.append(chooseLonLatStr);
+                    locationList.push([lon, lat], [lon, lat])
+                    // $(".unselected_LonLat").empty();
+                    // console.log("锚地长度:" + closeAnchList.length);
+                    // for(var i = 0; i< closeAnchList.length; i++){
+                    //     var ele = closeAnchList[i];
+                    //     if(i === 0){
+                    //         // 在选择列表中只有本锚地信息lon, lat
+                    //         var normalLonLat = transLonLatToNormal(centerLon, centerLat);
+                    //         // var chooseLonLatStr = '<li clusterId=' + ele.clusterId + ' lon=' + lon + ' lat=' + lat + '><span>1</span><span class = "anch_belong"></span><span>' +  normalLonLat[0] + ", " + normalLonLat[1] + '</span></li>';
+                    //         var chooseLonLatStr = '<li clusterId=' + ele.clusterId + ' lon=' + centerLon + ' lat=' + centerLat + '><span>1</span><span class = "always_belong"></span><span>' +  normalLonLat[0] + ", " + normalLonLat[1] + '</span></li>';
+                    //         $(".selected_LonLat").append(chooseLonLatStr);
+                    //     }else {
+                    //         normalLonLat = transLonLatToNormal(ele.lon, ele.lat);
+                    //         var unchoosedLonLatStr = '<li clusterId=' + ele.clusterId + ' lon=' + ele.lon + ' lat=' + ele.lat +'><span>' + i + '</span><span class = "anch_notBelong"></span><span>' + normalLonLat[0] + ", " + normalLonLat[1] + '</span></li>';
+                    //         $(".unselected_LonLat").append(unchoosedLonLatStr);
+                    //     }
+                    // }
                 }
                 // 获得里该中心点最近的20个港口
                 console.log(centerLon + "," + centerLat);
@@ -293,9 +339,9 @@ function getAnchInfo(anchKey, lon, lat) {
         success: function (data) {
             if(data[0] === '200'){
                 parkAreaList = data[1];
-                // 更新确认点
-                getAnchCheckPointer();
             }
+            // 更新确认点
+            getAnchCheckPointer();
         }
     });
 }
@@ -503,7 +549,7 @@ function writeContourLine(lonLatList) {
 
 // 搜索锚地名
 $('.anchName_select>input').keyup(function(){
-    console.log("输入信息");
+    console.log("输入锚地信息");
     var nowVal = $(this).val();
     // 清空列表
     $("#anchName_list").empty();
@@ -512,6 +558,17 @@ $('.anchName_select>input').keyup(function(){
     // 根据输入字符串请求数据
     addAnchName(nowVal);
     // 根据字符串向数据库请求
+});
+
+// 搜索港口名
+$('.IntentPort_input').keyup(function () {
+    console.log("输入港口信息");
+    var nowVal = $(this).val();
+    // 清空列表
+    $(".port_list_to_choose").empty();
+    // 做一下规范化,将" '等符号正则化
+    nowVal = nowVal.replace(/[\'\"]/g,"");
+    addPortName(nowVal);
 });
 
 
