@@ -62,7 +62,7 @@ function getPierDetail(terminalKey) {
                 $("#location").val(pierInfo.Location); //位置
                 $("#des").val(pierInfo.Des); // 说明
                 // 获得码头下最近的疑似泊位
-                getCloseBerthList(terminalKey, pierInfo.LongitudeNumeric, pierInfo.LatitudeNumeric, allPoints, 10, 5)
+                getCloseBerthList(terminalKey, pierInfo.LongitudeNumeric, pierInfo.LatitudeNumeric, allPoints, 20, 10)
             }
             // 如果不属于某个数据, 就显示默认信息
         },
@@ -291,7 +291,7 @@ function getPierInfo(clusterId, lon, lat){
                 $("#LON_LAT").val(latLonInfo[0] + ", " + latLonInfo[1]);
                 $("#LON_LAT").attr("numeric", lat + "," + lon);
                 // 获得当前点附近的疑似泊位
-                getCloseBerthList(terminalKey, lon, lat, allPoints, 10, 5);
+                getCloseBerthList(terminalKey, lon, lat, allPoints, 20, 10);
                 getCargoTypeList(terminalKey); // 获取对应的货物种类
             }
             // console.log(terminalKey);
@@ -402,7 +402,7 @@ function getPierInfo(clusterId, lon, lat){
  */
 // var visible_berth_list = [];
 function getBerthCheckPointer(status, staticAreaKey, lon, lat) {
-    var icon_feature = icon.getSource().getFeatureById(staticAreaKey);
+    // var icon_feature = icon.getSource().getFeatureById(staticAreaKey);
     // icon_feature.setStyle(invisible_style); // 隐藏对应图标
     // visible_berth_list.push(staticAreaKey); // 更新隐藏列表
     // icon_feature.set("visible", false);

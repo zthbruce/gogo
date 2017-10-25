@@ -264,7 +264,7 @@ function getAnchInfo(anchKey, lon, lat) {
                     // 中心点为本点
                     console.log(centerLon + "," + centerLat);
                     center = [centerLon, centerLat];
-                    locationList = [[centerLon, centerLat]];
+                    locationList = [center, center];
                     // chooseLonLatList = [[lon, lat]];
                     // 锚地信息初始化
                     $(".anchInfo_list>.pier_info>input").val(""); //初始化输入
@@ -273,7 +273,7 @@ function getAnchInfo(anchKey, lon, lat) {
                     var normalLonLat = transLonLatToNormal(lon, lat);
                     var chooseLonLatStr = '<li clusterId="" lon=' + lon + ' lat=' + lat + '><span>' + 1 + '</span><span class = "always_belong"></span><span>' + normalLonLat[0] + ", " + normalLonLat[1] + '</span></li>';
                     selected_lon_lat_ele.append(chooseLonLatStr);
-                    locationList.push([lon, lat], [lon, lat])
+                    // locationList.push([lon, lat], [lon, lat])
                     // $(".unselected_LonLat").empty();
                     // console.log("锚地长度:" + closeAnchList.length);
                     // for(var i = 0; i< closeAnchList.length; i++){
@@ -398,7 +398,7 @@ function updateLocationList(){
     var num = 0;
     var lonSum  = 0;
     var latSum  = 0;
-    $(".selected_LonLat >li").each(function () {
+    $(".selected_LonLat>li").each(function () {
         num++;
         var lon = parseFloat($(this).attr("lon"));
         var lat = parseFloat($(this).attr("lat"));
@@ -406,7 +406,7 @@ function updateLocationList(){
         latSum += lat;
         locationList.push([lon, lat])
     });
-
+    console.log(locationList);
     // 已选择列表数据更新
     // var lonLatList = anchInfo.Location.split(";");
     // // 将几个点的定位显示
@@ -574,8 +574,6 @@ $('.IntentPort_input').keyup(function () {
 });
 
 
-
-
 // 点击对应的锚地列表行， 在地图上突出显示
 // $(".unselected_LonLat:not(.anch_notBelong)").delegate("li", "click",function(){
 //     var lon = parseFloat($(this).attr("lon"));
@@ -740,7 +738,7 @@ $('#anch_save').click(function(){
         }
     });
     // 保存锚地详细信息
-    var parkAreaList = [];
+    var newParkAreaList = [];
     for(var key in allPoints) {
         var ele = allPoints[key];
         var type = ele['type']; // 属于哪一类， 目前有0：锚地， 1：泊位， 2：未知区域
@@ -750,9 +748,12 @@ $('#anch_save').click(function(){
             //  如果在内部
             if(inside([lon, lat], locationList)){
                 // 如果在内部
-                parkAreaList.push(key);
+                console.log(key);
+                newParkAreaList.push(key);
                 allPoints[key]["Checked"] = 1; // 更新状态
+                // console.log(allPoints[key]);
                 var feature = icon.getSource().getFeatureById(key);
+                // console.log(feature);
                 if(feature !== undefined){
                     feature.setStyle(berth_yes); // 确认状态
                 }
@@ -775,7 +776,7 @@ $('#anch_save').click(function(){
     $.ajax({
         url: '/anch/saveAnchDetailInfo',
         type: 'get',
-        data: {AnchorageKey: anchKey, ParkAreaList: parkAreaList},
+        data: {AnchorageKey: anchKey, ParkAreaList: newParkAreaList},
         success: function (data) {
             console.log(data[1]);
             // 刷新静止区域
@@ -785,8 +786,6 @@ $('#anch_save').click(function(){
             console.log(err);
         }
     });
-    // console.log("保存该锚地");
-    // 将操作状态转换为显示状态
 });
 
 // 取消按钮点击之后

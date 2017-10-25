@@ -199,10 +199,12 @@ mapImgClick = blmol.bind.addOnClickListener(map, function (map, coordinate, feat
                     $("#newAnch").fadeIn("normal");
                     anchStatus = true; // 表示进入锚地状态
                     var anchKey = current_feature.get('anchKey') === undefined ? "" : current_feature.get('anchKey');
-                    console.log(anchKey);
                     changeAnchSaveButton(false);
                     old_feature = current_feature;
-                    current_feature.setId("current"); // 将当前的设为current
+                    var name = current_feature.get('name');
+                    if(name !== "parkArea"){
+                        current_feature.setId("current"); // 将当前的大锚地设为current
+                    }
                     getAnchInfo(anchKey, lon, lat); // 获取信息
                 }
                 // 泊位管理弹出框
