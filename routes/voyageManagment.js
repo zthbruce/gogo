@@ -11,8 +11,8 @@ var utils = require('../util/Utils');
 var express = require('express');
 var router = express.Router();
 
-router.get("/getVoyageList", function (req, res, next) {
-    var fleetNumber = req.query.FleetNumber;
+router.post("/getVoyageList", function (req, res, next) {
+    var fleetNumber = req.body.FleetNumber;
     console.log(fleetNumber);
     var sql = util.format('SELECT t1.ID,t1.ShipNumber, Name, IMO, StartTime, StartPortID, StopTime, StopPortID,  t1.Checked FROM voyage_tmp t1 ' +
         'LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber LEFT JOIN T4101_Fleet t3 ON t2.ShipNumber = t3.ShipNumber ' +

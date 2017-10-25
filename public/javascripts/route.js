@@ -596,7 +596,6 @@ $('.oneRoute_List').delegate("li", 'click', function () {
                     // 交船港口显示
                     var delivery_port_ul = $("#LeaseRouteInfo .routeStartPort_Select>span>.StartEndPort_List");
                     delivery_port_ul.empty();
-                    console.log(deliveryPort);
                     if(deliveryPort !== null && deliveryPort !== ''){
                         var deliveryPortList = deliveryPort.split("#");
                         var port_li = '';
@@ -627,30 +626,30 @@ $('.oneRoute_List').delegate("li", 'click', function () {
                         redelivery_port_ul.append(port_li)
                     }
                     // 显示货物信息
-                    getRouteCargoList(routeId);
+                    // getRouteCargoList(routeId);
                     // 信息显示
                     var info_li = $(".LeaseRouteInfo_List>li");
-                    info_li.eq(1).children('input').val(weight);
-                    info_li.eq(2).children('input').val(commission);
-                    info_li.eq(3).children('input').eq(0).val(min_lease_term);
-                    info_li.eq(3).children('input').eq(1).val(max_lease_term);
-                    info_li.eq(4).children('input').val(max_age);
-                    info_li.eq(5).children('input').val(DWT);
-                    info_li.eq(6).children('input').val(volume);
-                    info_li.eq(7).children('input').val(LOA);
-                    info_li.eq(8).children('input').val(beam);
-                    info_li.eq(9).children('input').val(draft);
+                    info_li.eq(0).children('input').val(weight);
+                    info_li.eq(1).children('input').val(commission);
+                    info_li.eq(2).children('input').eq(0).val(min_lease_term);
+                    info_li.eq(2).children('input').eq(1).val(max_lease_term);
+                    info_li.eq(3).children('input').val(max_age);
+                    info_li.eq(4).children('input').val(DWT);
+                    info_li.eq(5).children('input').val(volume);
+                    info_li.eq(6).children('input').val(LOA);
+                    info_li.eq(7).children('input').val(beam);
+                    info_li.eq(8).children('input').val(draft);
                     // 海上耗油的设置
                     if(no_diesel_at_sea === "0"){
-                        info_li.eq(10).children('input').prop("checked", false);
+                        info_li.eq(9).children('input').prop("checked", false);
                     }
                     else{
-                        info_li.eq(10).children('input').prop("checked", true);
+                        info_li.eq(9).children('input').prop("checked", true);
                     }
-                    info_li.eq(11).children('input').val(emptyLoad_Speed);
-                    info_li.eq(12).children('input').val(emptyLoad_Fuel_Consumption);
-                    info_li.eq(13).children('input').val(fullLoad_Speed);
-                    info_li.eq(14).children('input').val(fullLoad_Fuel_Consumption);
+                    info_li.eq(10).children('input').val(emptyLoad_Speed);
+                    info_li.eq(11).children('input').val(emptyLoad_Fuel_Consumption);
+                    info_li.eq(12).children('input').val(fullLoad_Speed);
+                    info_li.eq(13).children('input').val(fullLoad_Fuel_Consumption);
                     // 中英文说明
                     $(".LeaseRouteDes>.routeDes_Chinese>textarea").val(CNDes);
                     $(".LeaseRouteDes>.routeDes_English>textarea").val(ENDes);
@@ -950,21 +949,21 @@ $('.LeaseRouteInstall_SaveBtn').click(function () {
         redeliveryLat = redelivery_lat_sum / redelivery_num;
     }
     var info_li = $(".LeaseRouteInfo_List>li");
-    var weight = info_li.eq(1).children('input').val();
-    var commission = info_li.eq(2).children('input').val();
-    var min_lease_term = info_li.eq(3).children('input').eq(0).val();
-    var max_lease_term = info_li.eq(3).children('input').eq(1).val();
-    var max_age = info_li.eq(4).children('input').val();
-    var DWT = info_li.eq(5).children('input').val();
-    var volume = info_li.eq(6).children('input').val();
-    var LOA = info_li.eq(7).children('input').val();
-    var beam = info_li.eq(8).children('input').val();
-    var draft = info_li.eq(9).children('input').val();
-    var no_diesel_at_sea = info_li.eq(10).children('input').prop("checked") === true? "1":"0";
-    var emptyLoad_Speed = info_li.eq(11).children('input').val();
-    var emptyLoad_Fuel_Consumption = info_li.eq(12).children('input').val();
-    var fullLoad_Speed = info_li.eq(13).children('input').val();
-    var fullLoad_Fuel_Consumption = info_li.eq(14).children('input').val();
+    var weight = info_li.eq(0).children('input').val();
+    var commission = info_li.eq(1).children('input').val();
+    var min_lease_term = info_li.eq(2).children('input').eq(0).val();
+    var max_lease_term = info_li.eq(2).children('input').eq(1).val();
+    var max_age = info_li.eq(3).children('input').val();
+    var DWT = info_li.eq(4).children('input').val();
+    var volume = info_li.eq(5).children('input').val();
+    var LOA = info_li.eq(6).children('input').val();
+    var beam = info_li.eq(7).children('input').val();
+    var draft = info_li.eq(8).children('input').val();
+    var no_diesel_at_sea = info_li.eq(9).children('input').prop("checked") === true? "1":"0";
+    var emptyLoad_Speed = info_li.eq(10).children('input').val();
+    var emptyLoad_Fuel_Consumption = info_li.eq(11).children('input').val();
+    var fullLoad_Speed = info_li.eq(12).children('input').val();
+    var fullLoad_Fuel_Consumption = info_li.eq(13).children('input').val();
     // 中英文说明
     var CNDes = $(".LeaseRouteDes>.routeDes_Chinese>textarea").val();
     var ENDes = $(".LeaseRouteDes>.routeDes_English>textarea").val();
@@ -987,27 +986,26 @@ $('.LeaseRouteInstall_SaveBtn').click(function () {
             console.log(err);
         }
     });
-
-    // 保存货物信息
-    var choose_ele_list = $('.route_CargoType>ul').find("input:checked");
-    var cargoList = [];
-    console.log(choose_ele_list.length);
-    for(var j = 0; j < choose_ele_list.length; j++){
-        // console.log(choose_ele_list.eq(j).attr("id"));
-        cargoList.push(choose_ele_list.eq(j).attr("id"));
-    }
-    // console.log(cargoList);
-    $.ajax({
-        url: '/route/saveCargoInfo',
-        type: 'get',
-        data: {RouteId: routeId, CargoList: cargoList},
-        success: function (data) {
-            console.log(data[1])
-        },
-        error: function (err) {
-            console.log(err);
-        }
-    });
+    // // 保存货物信息
+    // var choose_ele_list = $('.route_CargoType>ul').find("input:checked");
+    // var cargoList = [];
+    // console.log(choose_ele_list.length);
+    // for(var j = 0; j < choose_ele_list.length; j++){
+    //     // console.log(choose_ele_list.eq(j).attr("id"));
+    //     cargoList.push(choose_ele_list.eq(j).attr("id"));
+    // }
+    // // console.log(cargoList);
+    // $.ajax({
+    //     url: '/route/saveCargoInfo',
+    //     type: 'get',
+    //     data: {RouteId: routeId, CargoList: cargoList},
+    //     success: function (data) {
+    //         console.log(data[1])
+    //     },
+    //     error: function (err) {
+    //         console.log(err);
+    //     }
+    // });
     $('#LeaseRouteInfo').fadeOut(300); //界面消失
     routeStatus = false; // 退出航线模式
     current.getSource().clear(); // 清空临时层

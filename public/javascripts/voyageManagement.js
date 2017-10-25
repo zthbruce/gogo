@@ -14,7 +14,6 @@ var lastCheckedStatus = false;
 function updateByCheckSelect(){
     var toCheckStatus = $(".voyage_toCheck").prop("checked");
     var checkedStatus = $(".voyage_checked").prop("checked");
-    console.log(toCheckStatus + "," + checkedStatus);
     if(lastToCheckStatus !== toCheckStatus){
         if (!toCheckStatus) {
             $(".voyageList_content>.toCheck").hide()
@@ -43,14 +42,13 @@ function updateByCheckSelect(){
  * 更新航次列表
  */
 function updateVoyageList(fleetNumber){
-    // var fleetNUmber = $()
         $(".voyageList_content").empty(); // 初始化
         lastFleetNumber = fleetNumber;
         var voyageList = $("#voyageList_List");
         $.ajax({
             url: "/voyageManagement/getVoyageList",
             data: {FleetNumber: fleetNumber},
-            type: "get",
+            type: "POST",
             beforeSend: function () {
                 console.log("loading");
                 voyageList.css("background", 'url("/images/ajax-loader.gif") no-repeat center');
@@ -86,9 +84,11 @@ function updateVoyageList(fleetNumber){
                         }
                         // $(".voyageList_content").append(voyage_li);
                     }
-                    $(".voyageList_content").append(voyage_ul);
+                    var voyageList_ul = $(".voyageList_content");
+                    voyageList_ul.append(voyage_ul);
                     // updateByCheckSelect()
-                    $(".voyageList_content>.checked").hide() // 默认隐藏已经确认的
+                    voyageList_ul.children(".checked").hide(); // 默认隐藏已经确认的
+                    voyageList_ul.find('li:nth-child(n+51)').hide(); // 默认只显示50条
                 }
             },
             complete: function () {
@@ -221,6 +221,7 @@ $(window).mousemove(function(event){
  */
 $(".route_Voyage_btn").click(function () {
     console.log("航次管理");
+    // 默认
     var defaultFleetNumber = "F2";
     updateVoyageList(defaultFleetNumber);
     var voyageList = $("#voyageList");
@@ -247,7 +248,6 @@ $(".voyageList_select .selected_fleet").click(function () {
 /**
  * 点击列表中元素表示选择
  */
-
 $(".FleetList>li").click(function () {
     $(".FleetList").slideUp(200);
     var select = $(".voyageList_select .selected_fleet");
@@ -272,12 +272,11 @@ $(".fleet_select").mouseleave(function () {
  * 点击复选框会刷新列表
  */
 $(".voyage_toCheck, .voyage_checked").click(function () {
-    console.log("here");
     updateByCheckSelect()
 });
 
 /**
- *
+ * 点击航次列表的每一行进行设置
  */
 $(".voyageList_content").delegate("li", "click", function (event) {
     console.log("航次详情");
@@ -469,3 +468,21 @@ $(".StandardGoods_CancelBtn").click(function () {
     $("#voyage_StandardGoods").fadeOut(300)
 });
 
+
+// 滚动条事件加载
+$('.voyageList_content').scroll(function(){
+    //获取滚动距离
+    var scrollTop = $(this).scrollTop();
+    console.log(scrollTop);
+    //获取当前显示的长度
+    var show_number = $(this).children('li').not('[style="display: none;"]').size();
+    console.log(show_number);
+    var AllWidth = show_number * 20;
+    // var AllWidth = $(this).children('li').length * 20;
+    console.log(AllWidth);
+    //300是安全距离，保证滚动条不处于最下方时才开始执行更多，为400时未显示的剩余8行，不低于260
+    if(scrollTop>AllWidth-300 && show_number < $(this).children('li').size()){
+        console.log('显示更多');
+        $(this).children('li').slice(show_number, show_number + 50).show()
+    }
+});

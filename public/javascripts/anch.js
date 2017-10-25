@@ -421,35 +421,36 @@ function updateLocationList(){
     // }
     // position.getSource().clear();
     // position.getSource().addFeatures(positionFeatureList);
-
-    center = [lonSum / num, latSum / num];
-    console.log("中心点为: " + center);
-    // // 计算range
-    // range = 0;
-    // for(var i = 0; i< locationList.length; i++){
-    //     var lon_lat = locationList[i];
-    //     var distance = getGreatCircleDistance(center[0], center[1], lon_lat[0], lon_lat[1]);
-    //     if(distance > range){
-    //         range = distance;
-    //     }
-    // }
-    // range = range.toFixed(4);
-    // console.log("范围为: " + range);
-    // 顺时针排序
-    locationList.sort(clockCompare);
-    // 刷新已选锚地列表
-    var chooseLonLatStr = '';
-    var selected_lon_lat_list = $(".selected_LonLat");
-    for (var j = 0; j < locationList.length; j++) {
-        var lonLatInfo = locationList[j];
-        var normalLonLat = transLonLatToNormal(lonLatInfo[0], lonLatInfo[1]);
-        chooseLonLatStr += '<li clusterId="" lon=' + lonLatInfo[0] + ' lat=' + lonLatInfo[1] + '><span>' + (j + 1) + '</span><span class = "always_belong"></span><span>' + normalLonLat[0] + ", " + normalLonLat[1] + '</span></li>';
+    if(num > 0) {
+        center = [lonSum / num, latSum / num];
+        console.log("中心点为: " + center);
+        // // 计算range
+        // range = 0;
+        // for(var i = 0; i< locationList.length; i++){
+        //     var lon_lat = locationList[i];
+        //     var distance = getGreatCircleDistance(center[0], center[1], lon_lat[0], lon_lat[1]);
+        //     if(distance > range){
+        //         range = distance;
+        //     }
+        // }
+        // range = range.toFixed(4);
+        // console.log("范围为: " + range);
+        // 顺时针排序
+        locationList.sort(clockCompare);
+        // 刷新已选锚地列表
+        var chooseLonLatStr = '';
+        var selected_lon_lat_list = $(".selected_LonLat");
+        for (var j = 0; j < locationList.length; j++) {
+            var lonLatInfo = locationList[j];
+            var normalLonLat = transLonLatToNormal(lonLatInfo[0], lonLatInfo[1]);
+            chooseLonLatStr += '<li clusterId="" lon=' + lonLatInfo[0] + ' lat=' + lonLatInfo[1] + '><span>' + (j + 1) + '</span><span class = "always_belong"></span><span>' + normalLonLat[0] + ", " + normalLonLat[1] + '</span></li>';
+        }
+        selected_lon_lat_list.empty();
+        selected_lon_lat_list.append(chooseLonLatStr);
+        // 顺时针方向
+        var firstPoint = locationList[0];
+        locationList.push(firstPoint);
     }
-    selected_lon_lat_list.empty();
-    selected_lon_lat_list.append(chooseLonLatStr);
-    // 顺时针方向
-    var firstPoint = locationList[0];
-    locationList.push(firstPoint);
 }
 
 // 显示选择标记
@@ -696,6 +697,7 @@ $('#anch_save').click(function(){
 
     // 把需要的点记录下来
     var location = "";
+    console.log(locationList);
     for(var l = 0; l < locationList.length; l++){
         if(l > 0){
             location += ";"
