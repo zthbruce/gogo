@@ -79,30 +79,32 @@ router.get('/portNameSearch', function(req, res, next){
     });
 });
 
-/**
- * 根据cluster_id列表 删除Park_Area中相关的数据
- */
-router.get('/deleteStaticArea', function(req, res, next){
-    // 直接用都好相连
-    var clusterIDListStr = req.query.clusterIDList.join(",");
-    var sqls = util.format("DELETE FROM T2105_ParkArea WHERE cluster_id IN (%s)", clusterIDListStr);
-        mysql.query(sqls, function (err, results) {
-        if(err){
-            console.log(utils.eid1);
-            res.jsonp(['404', utils.eid1]);
-        }else {
-            console.log("成功连接数据库");
-            // console.log(results);
-            res.jsonp(["200", "成功删除静止区域"])
-        }
-    });
-});
+// /**
+//  * 根据cluster_id列表 删除Park_Area中相关的数据
+//  */
+// router.get('/deleteStaticArea', function(req, res, next){
+//     // 直接用都好相连
+//     var clusterIDListStr = req.query.clusterIDList.join(",");
+//     var sqls = util.format("DELETE FROM T2105_ParkArea WHERE cluster_id IN (%s)", clusterIDListStr);
+//         mysql.query(sqls, function (err, results) {
+//         if(err){
+//             console.log(utils.eid1);
+//             res.jsonp(['404', utils.eid1]);
+//         }else {
+//             console.log("成功连接数据库");
+//             // console.log(results);
+//             res.jsonp(["200", "成功删除静止区域"])
+//         }
+//     });
+// });
 
 /**
  * 保存锚地信息
  */
-router.get('/saveAnchInfo', function(req, res, next){
-    var anchInfo = req.query.anchInfo;
+router.post('/saveAnchInfo', function(req, res, next){
+    var anchInfo = req.body;
+    // console.log(anchInfo);
+    // var anchInfo = req.query.anchInfo;
     var sqls = util.format("REPLACE INTO `T2104_Anchorage` (AnchorageKey, Name, Purpose, Des, CenterLon, CenterLat, Location," +
         " DestinationPort) VALUE ('%s', '%s', '%s','%s', '%s', '%s', '%s','%s')", anchInfo.AnchorageKey, anchInfo.Name,
         anchInfo.Purpose, anchInfo.Des, anchInfo.CenterLon, anchInfo.CenterLat, anchInfo.Location, anchInfo.DestinationPort);

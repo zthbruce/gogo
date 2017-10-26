@@ -19,11 +19,11 @@ var allPoints = {};
 function getAllPoints() {
     $.ajax({
         async: false,
-        url: "/icon/getInfo",
+        url: "/parkArea/getInfo",
         dataType: 'json',
         cache: false,
         timeout: 5000,
-        type: 'POST',
+        type: 'GET',
         success: function (data) {
             var res = data;
             // 返回的代码

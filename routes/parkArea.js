@@ -13,8 +13,7 @@ var router = express.Router();
  * 请求停泊区域基本信息
  * 返回格式：{cluster_id: {"lon", "lat", "level", "type"}, cluster_id:...}
  */
-router.post('/getInfo', function(req, res, next){
-    // var sql = 'SELECT * FROM T2105_ParkArea';
+router.get('/getInfo', function(req, res, next){
     var sql = 'SELECT t1.*, t2.TerminalKey, t3.PortID FROM `T2105_ParkArea` t1 LEFT JOIN `T2103_TerminalDetails` t2 ON t1.`cluster_id` ' +
         '= t2.`StationaryAreaKey` LEFT JOIN `T2102_Terminal` t3 ON t2.`TerminalKey` = t3.TerminalKey';
     mysql.query(sql, function (err, results) {
@@ -44,42 +43,42 @@ router.post('/getInfo', function(req, res, next){
     });
 });
 
-/**
- * 修改经纬度信息
- */
-router.get('/modifyLonLatInfo', function(req, res, next){
-    var cluster_id = req.query.cluster_id;
-    var lon = req.query.lon;
-    var lat = req.query.lat;
-    var sql = util.format('UPDATE T2105_ParkArea SET lon = %s, lat = %s WHERE cluster_id = "%s"', lon, lat, cluster_id);
-    mysql.query(sql, function (err, results) {
-        if(err){
-            console.log(utils.eid1);
-            res.jsonp(['304', utils.eid1]);
-        }else{
-            console.log("修改经纬度信息成功");
-            res.jsonp(['200', "修改经纬度信息成功"])
-        }
-    });
-});
-
-/**
- * 修改区域类型
- */
-router.get('/modifyType', function(req, res, next){
-    var cluster_id = req.query.cluster_id;
-    var type = req.query.type;
-    var sql = util.format('UPDATE T2105_ParkArea SET type = %s WHERE cluster_id = "%s"', type, cluster_id);
-    mysql.query(sql, function (err, results) {
-        if(err){
-            console.log(utils.eid1);
-            res.jsonp(['404', utils.eid1]);
-        }else{
-            console.log("修改停泊区域类型成功");
-            res.jsonp(['200', "修改停泊区域类型成功"])
-        }
-    });
-});
+// /**
+//  * 修改经纬度信息
+//  */
+// router.get('/modifyLonLatInfo', function(req, res, next){
+//     var cluster_id = req.query.cluster_id;
+//     var lon = req.query.lon;
+//     var lat = req.query.lat;
+//     var sql = util.format('UPDATE T2105_ParkArea SET lon = %s, lat = %s WHERE cluster_id = "%s"', lon, lat, cluster_id);
+//     mysql.query(sql, function (err, results) {
+//         if(err){
+//             console.log(utils.eid1);
+//             res.jsonp(['304', utils.eid1]);
+//         }else{
+//             console.log("修改经纬度信息成功");
+//             res.jsonp(['200', "修改经纬度信息成功"])
+//         }
+//     });
+// });
+//
+// /**
+//  * 修改区域类型
+//  */
+// router.get('/modifyType', function(req, res, next){
+//     var cluster_id = req.query.cluster_id;
+//     var type = req.query.type;
+//     var sql = util.format('UPDATE T2105_ParkArea SET type = %s WHERE cluster_id = "%s"', type, cluster_id);
+//     mysql.query(sql, function (err, results) {
+//         if(err){
+//             console.log(utils.eid1);
+//             res.jsonp(['404', utils.eid1]);
+//         }else{
+//             console.log("修改停泊区域类型成功");
+//             res.jsonp(['200', "修改停泊区域类型成功"])
+//         }
+//     });
+// });
 
 // 作为中间路由传递
 module.exports = router;

@@ -20,10 +20,11 @@
 .routeInstall_Btn{width:96%;height:30px;margin:5px auto;}
 
 /*起终点选择*/
-.routeStartEnd>div{font-size:14px;color:#fff;width:90%;margin:0px auto 5px;height:20px;}
+.routeStartEnd>div{font-size:14px;color:#fff;width:94%;margin:0px auto 5px;height:20px;}
 .routePort_Select>div{display:inline-block;width:49%;height:20px;line-height:20px;}
 .routePort_Select i{display:inline-block;width:14px;height:14px;margin-left:5px;background:url('/images/placeholder.png') no-repeat;position:relative;top:2px;cursor:pointer;}
-.routePoint_infoShow{display:inline-block;margin-left:10px;height:20px;line-height:20px;}
+/*.routePoint_infoShow{display:inline-block;margin-left:10px;height:20px;line-height:20px;}*/
+.routePoint_infoShow{display:inline-block;margin-left:10px;height:18px;line-height:18px;width:90px;background:transparent;border:1px solid #fff;border-radius:5px;color:#fff;padding-left:5px;}
 
 /*出发港、目的港列表选择*/
 .routeStartEnd>.routeStartEndPort{height:40px;position:relative;}
@@ -71,8 +72,8 @@
 /*期租交船港、还船港选择*/
 #LeaseRouteInfo .routeStartEnd{width:96%;height:132px;margin:5px auto;}
 #LeaseRouteInfo .routeStartEnd>div{font-size:14px;color:#fff;width:98%;margin:0px auto 5px;height:40px;}
-#LeaseRouteInfo .routeStartEnd>.routePort_Select>div{width:100%;}
-#LeaseRouteInfo .routeStartEnd .routePoint_infoShow{font-size:12px;}
+#LeaseRouteInfo .routeStartEnd>.routePort_Select>div{width:100%;margin-bottom:5px;}
+#LeaseRouteInfo .routeStartEnd .routePoint_infoShow{font-size:12px;width:200px;}
 #LeaseRouteInfo .routeStartEnd .routeStartEndPort>span:nth-child(1){line-height:40px;height:40px;}
 #LeaseRouteInfo .routeStartEnd .routeStartEndPort>span:nth-child(2){width:460px;}
 /*信息管理*/

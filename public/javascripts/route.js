@@ -131,11 +131,11 @@ function showSelectedBerth(portList) {
 /**
  * 将已选港口显示，将港口下的泊位高亮显示
  */
-
 function updateBerth2Port(portList){
     // 显示目前已经选择的港口
     for(var i = 0; i< portList.length; i++){
         var portID = portList[i];
+        console.log(portID);
         var port = AllPortBasicList[portID];
         var lon = parseFloat(port.LongitudeNumeric);
         var lat = parseFloat(port.LatitudeNumeric);
@@ -436,11 +436,13 @@ $('.oneRoute_List').delegate("li", 'click', function () {
 
                     // 标准出发港显示
                     var standardDeparturePort_span = $('#routeInfo .routePort_Start>.routePoint_infoShow');
-                    standardDeparturePort_span.text(""); // 初始化
+                    standardDeparturePort_span.val(""); // 初始化
+                    // standardDeparturePort_span.text(""); // 初始化
                     if(standardDeparturePortID !== '') {
                         console.log(standardDeparturePortID);
                         var departure_port = AllPortBasicList[standardDeparturePortID];
-                        standardDeparturePort_span.text(departure_port.ENName);
+                        standardDeparturePort_span.val(departure_port.ENName);
+                        // standardDeparturePort_span.text(departure_port.ENName);
                         standardDeparturePort_span.attr("portID",  standardDeparturePortID);
                         standardDeparturePort_span.attr("lon", departure_port.LongitudeNumeric);
                         standardDeparturePort_span.attr("lat", departure_port.LatitudeNumeric);
@@ -448,11 +450,13 @@ $('.oneRoute_List').delegate("li", 'click', function () {
                     }
                     // 标准目的港显示
                     var standardArrivalPort_span = $('#routeInfo .routePort_End>.routePoint_infoShow');
-                    standardArrivalPort_span.text(""); // 初始化
+                    standardArrivalPort_span.val(""); // 初始化
+                    // standardArrivalPort_span.text(""); // 初始化
                     if(standardArrivalPortID !== ''){
                         console.log(standardArrivalPortID);
                         var arrival_port = AllPortBasicList[standardArrivalPortID];
-                        standardArrivalPort_span.text(arrival_port.ENName);
+                        standardArrivalPort_span.val(arrival_port.ENName);
+                        // standardArrivalPort_span.text(arrival_port.ENName);
                         standardArrivalPort_span.attr("portID",  standardArrivalPortID);
                         standardArrivalPort_span.attr("lon",  arrival_port.LongitudeNumeric);
                         standardArrivalPort_span.attr("lat",  arrival_port.LatitudeNumeric);
@@ -585,12 +589,14 @@ $('.oneRoute_List').delegate("li", 'click', function () {
 
                     // 交船区域显示
                     var delivery_ele = $("#LeaseRouteInfo .routePort_Start>.routePoint_infoShow");
-                    delivery_ele.text(deliveryArea);
+                    delivery_ele.val(deliveryArea);
+                    // delivery_ele.text(deliveryArea);
                     delivery_ele.attr("lon", deliveryLon);
                     delivery_ele.attr("lat", deliveryLat);
                     // 还船区域显示
                     var redelivery_ele = $("#LeaseRouteInfo .routePort_End>.routePoint_infoShow");
-                    redelivery_ele.text(redeliveryArea);
+                    redelivery_ele.val(redeliveryArea);
+                    // redelivery_ele.text(redeliveryArea);
                     redelivery_ele.attr("lon", redeliveryLon);
                     redelivery_ele.attr("lat", redeliveryLat);
                     // 交船港口显示
@@ -784,12 +790,12 @@ $('.routePort_Select i').click(function () {
     // var routeId = title.attr("routeId");
     var type = routeId[0];
     // 显示相关的港口, 以供选择
-    // var type = // 确定是程租还是期租
-    var r = 50; // 默认程租是50km
-    if(type === 'L'){
-        // 期租范围比较大
-        r = 1000
-    }
+    // var r = 50; // 默认程租是50km
+    // if(type === 'L'){
+    //     // 期租范围比较大
+    //     r = 1000
+    // }
+    var r = 100000000000000000000;
     // 显示有关的港口
     showRelatePort(lon, lat, r);
     // 增加港口列表
@@ -887,12 +893,14 @@ $('.LeaseRouteInstall_SaveBtn').click(function () {
     // var routeId = title.attr("routeId");
     // 交船信息
     var delivery_ele = $("#LeaseRouteInfo .routePort_Start>.routePoint_infoShow");
-    var deliveryArea = delivery_ele.text();
+    var deliveryArea = delivery_ele.val();
+    // var deliveryArea = delivery_ele.text();
     var deliveryLon = delivery_ele.attr("lon");
     var deliveryLat = delivery_ele.attr("lat");
     // 还船信息
     var redelivery_ele = $("#LeaseRouteInfo .routePort_End>.routePoint_infoShow");
-    var redeliveryArea = redelivery_ele.text();
+    var redeliveryArea = redelivery_ele.val();
+    // var redeliveryArea = redelivery_ele.text();
     var redeliveryLon = redelivery_ele.attr("lon");
     var redeliveryLat = redelivery_ele.attr("lat");
     // 交船港口
@@ -941,7 +949,6 @@ $('.LeaseRouteInstall_SaveBtn').click(function () {
         redelivery_num += 1;
         redelivery_lon_sum += lon;
         redelivery_lat_sum += lat;
-        redeliveryPort += portID;
         redeliveryPort += portID;
     }
     if(redelivery_num > 0) {

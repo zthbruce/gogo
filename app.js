@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/testIndex');
 
-var icon = require('./routes/icon');
+var parkArea = require('./routes/parkArea');
 
 var point = require('./routes/point');
 
@@ -60,7 +60,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 
 
-app.use('/icon', icon);
+app.use('/parkArea', parkArea);
 
 app.use('/pointShow', point);
 
@@ -113,6 +113,7 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
 
 // it is not export
 module.exports = app;

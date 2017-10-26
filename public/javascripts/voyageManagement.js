@@ -48,7 +48,7 @@ function updateVoyageList(fleetNumber){
         $.ajax({
             url: "/voyageManagement/getVoyageList",
             data: {FleetNumber: fleetNumber},
-            type: "POST",
+            type: "GET",
             beforeSend: function () {
                 console.log("loading");
                 voyageList.css("background", 'url("/images/ajax-loader.gif") no-repeat center');

@@ -477,7 +477,7 @@ function getAnchCheckPointer() {
         current.getSource().addFeature(anch_choosed);
     }
     // 待确认显示
-    var closeAnchList = getCloseAnchList(center[0], center[1], allPoints, 100, 80);
+    var closeAnchList = getCloseAnchList(center[0], center[1], allPoints, 100, 200);
     for(var j = 0; j < closeAnchList.length; j++){
         var anchInfo = closeAnchList[j];
         var key = anchInfo['clusterId'];
@@ -727,8 +727,8 @@ $('#anch_save').click(function(){
     // 保存锚地基本信息
     $.ajax({
         url: '/anch/saveAnchInfo',
-        type: 'get',
-        data: {anchInfo: anchInfo},
+        data: anchInfo,
+        type: 'POST',
         success: function (data) {
             console.log(data[1]);
             getAllAnch(); // 刷新锚地信息
@@ -748,7 +748,7 @@ $('#anch_save').click(function(){
             //  如果在内部
             if(inside([lon, lat], locationList)){
                 // 如果在内部
-                console.log(key);
+                // console.log(key);
                 newParkAreaList.push(key);
                 allPoints[key]["Checked"] = 1; // 更新状态
                 // console.log(allPoints[key]);
