@@ -124,7 +124,6 @@ router.post('/saveAnchInfo', function(req, res, next){
  * 保存锚地详细信息
  */
 router.post('/saveAnchDetailInfo', function(req, res, next){
-    // console.log(typeof req.body);
     var anchKey = req.body.AnchorageKey;
     var parkAreaList = req.body.ParkAreaList;
     var sql1 = "UPDATE T2105_ParkArea SET Checked = '0' WHERE cluster_id IN (SELECT StationaryAreaKey FROM T2112_AnchorageDetails WHERE AnchorageKey ='" + anchKey + "')";
