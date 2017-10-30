@@ -93,11 +93,11 @@ function updateVoyageList(fleetNumber){
                     var stopTime = getRealTime(ele.ArrivalTime).slice(0, 10);
                     var checked = ele.Checked;
                     if (checked === "1") {
-                        voyage_ul += "<li class=checked MMSI=" + ele.MMSI + " voyageID=" + ele.VoyageKey + " departureTime=" + ele.DepartureTime + " arrivalTime=" + ele.ArrivalTime +"><span>" + shipName + "</span>" +
+                        voyage_ul += "<li class=checked shipNumber=" + ele.ShipNumber + " voyageID=" + ele.VoyageKey + " departureTime=" + ele.DepartureTime + " arrivalTime=" + ele.ArrivalTime +"><span>" + shipName + "</span>" +
                             "<span>" + ele.IMO + "</span><span>" + startPortName + "</span><span>" + startTime + "</span><span>" +
                             stopPortName + "</span><span>" + stopTime + "</span></li>";
                     } else {
-                        voyage_ul += "<li class=toCheck MMSI=" + ele.MMSI + " voyageID=" + ele.VoyageKey + " departureTime=" + ele.DepartureTime + " arrivalTime=" + ele.ArrivalTime  + "><span>" + shipName + "</span>" +
+                        voyage_ul += "<li class=toCheck shipNumber=" + ele.ShipNumber + " voyageID=" + ele.VoyageKey + " departureTime=" + ele.DepartureTime + " arrivalTime=" + ele.ArrivalTime  + "><span>" + shipName + "</span>" +
                             "<span>" + ele.IMO + "</span><span>" + startPortName + "</span><span>" + startTime + "</span><span>" +
                             stopPortName + "</span><span>" + stopTime + "</span></li>";
                     }
@@ -166,7 +166,7 @@ function updateSaveStatus(voyageBtn_saveStatus) {
 /**
  * 获取一艘船的历史航次列表
  */
-function getVoyageList2Ship(MMSI, voyageKey){
+function getVoyageList2Ship(shipNumber, voyageKey){
     /* 显示历史航次列表 */
     var voyageList2Ship_ele = $('.shipVoyageList_List');
     // 初始化
@@ -175,7 +175,7 @@ function getVoyageList2Ship(MMSI, voyageKey){
     $.ajax({
         url:'/voyageManagement/getVoyageList2Ship',
         type:'GET',
-        data: {MMSI: MMSI},
+        data: {ShipNumber: shipNumber},
         dataType: 'json',
         success: function (data) {
             var signal = data[0];
@@ -191,7 +191,7 @@ function getVoyageList2Ship(MMSI, voyageKey){
                 voyageList2Ship_ele.css("width", 80 * content.length);
                 /* 将图标定位当前时间点 */
                 var div_ele =  voyageList2Ship_ele.find('li>div[voyageKey="' + voyageKey +'"]');
-                console.log(div_ele);
+                // console.log(div_ele);
                 div_ele.attr('class', 'active');
                 var seq =  voyageList2Ship_ele.children('li').index(div_ele.parent()) + 1;
                 console.log('-' + Math.floor(seq / 7) * 560);
@@ -339,8 +339,6 @@ function updateDuration(departureTime, arrivalTime) {
 }
 
 
-
-
 var info_li = $('.oneVoyageInfo>ul>li');
 /**
  * 获取航次内容
@@ -363,7 +361,7 @@ function getVoyageContent(voyageKey) {
                 /* 显示标题 */
                 var checked = content.Checked;
                 var check_ele = $(".voyage_title>span:nth-child(2)");
-                console.log(typeof checked);
+                // console.log(typeof checked);
                 if(checked === '0'){
                     check_ele.text("(未确认)");
                 }
@@ -373,10 +371,11 @@ function getVoyageContent(voyageKey) {
                     check_ele.css({'color':'#00ff00'});
                 }
                 // 显示详细内容
-                var shipName = content.LocalName;
-                if(shipName === '' || shipName === ' '){
+                var shipName = content.LocalName.trim();
+                if(shipName === ''){
                     shipName = content.Name
                 }
+                console.log(shipName);
                 var cargo = content.Cargo;
                 var cargoChecked = content.CargoChecked;
                 var departurePortID = content.DeparturePortID;
@@ -395,10 +394,8 @@ function getVoyageContent(voyageKey) {
                 }
                 var arrivalPortChecked = content.ArrivalPortChecked;
                 var arrivalTime = content.ArrivalTime;
-                /* 航线展示 */
                 var MMSI = content.MMSI;
                 title_ele.attr('MMSI', MMSI);
-                // getDetailRoute(MMSI, departureTime, arrivalTime);
                 /* 表信息填充 */
                 info_li.eq(0).children('input').val(shipName); // 船名
                 info_li.eq(1).text('IMO: ' + content.IMO); // IMO
@@ -512,11 +509,11 @@ function getVoyageContent(voyageKey) {
                                     duration + '</span><span>' + select_ele + '</span><div class="oneVoyage_EndBtn" style="display: none;">航次结束</div></li>'
                             }
                             voyageDetail_ele.append(li_str);
-                            /* 计算统计量 */
-                            updateDuration(departureTime, arrivalTime);
-                            /* 显示航线 */
-                            getDetailRoute(MMSI, departureTime, arrivalTime);
                         }
+                        /* 计算统计量 */
+                        updateDuration(departureTime, arrivalTime);
+                        /* 显示航线 */
+                        getDetailRoute(MMSI, departureTime, arrivalTime);
                     },
                     error: function (err) {
                         console.log(err);
@@ -667,11 +664,11 @@ $(".voyageList_content").delegate("li", "click", function (event) {
     var voyageDetails = $('#voyageDetails');
     voyageDetails.css('zIndex',fleetDivZIndex);
     var voyageKey = $(this).attr('voyageId');
-    var MMSI = $(this).attr('MMSI');
+    var shipNumber = $(this).attr('shipNumber');
     var departureTime = $(this).attr('departureTime');
     var arrivalTime = $(this).attr('arrivalTime');
     /* 获取历史航次列表 */
-    getVoyageList2Ship(MMSI, voyageKey);
+    getVoyageList2Ship(shipNumber, voyageKey);
     /* 获取具体内容 */
     getVoyageContent(voyageKey);
     voyageDetails.fadeIn(300);
@@ -992,8 +989,45 @@ $('.shipVoyageList_List').delegate('li>div', 'click', function () {
 });
 
 
-// /**
-//  * 点击保存或者确认按钮
-//  */
+$('#voyageDetails .title_offbtn').click(function () {
+    route.getSource().clear(); // 清空当前图层
+    current.getSource().clear();
+});
+
+/**
+ * 点击流水显示具体停泊位置
+ */
+$('.oneVoyage_DockedList').delegate('li', 'click', function () {
+    current.getSource().clear();
+    var stationaryAreaKey = $(this).attr('stationaryareakey');
+    var cluster_info = anchInfoList[stationaryAreaKey];
+    if(cluster_info === undefined){
+        cluster_info = allPoints[stationaryAreaKey];
+    }
+    // if(stationaryAreaKey[0] === "A"){
+    //     var cluster_info = anchInfoList[stationaryAreaKey];
+    // }
+    // if(cluster_id[0] === "B"){
+    //     var cluster_info = allPoints[cluster_id];
+    // }
+    var lon = cluster_info['lon'];
+    var lat = cluster_info['lat'];
+    var lat_lon = WGS84transformer(lat, lon);
+    var sn_feature = new ol.Feature({
+        geometry: new ol.geom.Point(ol.proj.fromLonLat([lat_lon[1], lat_lon[0]]))
+    });
+    sn_feature.setStyle(sn_style);
+    current.getSource().addFeature(sn_feature);
+    var view = map.getView();
+    var pan = ol.animation.pan({
+        //动画持续时间
+        duration: 2000,
+        source:view.getCenter()
+    });
+    //在地图渲染之前执行平移动画
+    map.beforeRender(pan);
+    view.setZoom(12);
+    view.setCenter(ol.proj.fromLonLat([lat_lon[1], lat_lon[0]]));
+});
 
 

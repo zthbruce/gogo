@@ -187,9 +187,39 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                 });
                 start_point.setStyle(start_style);
                 end_point.setStyle(end_style);
-                // start_end.getSource().addFeatures([start_point, end_point]);
                 route.getSource().addFeatures([start_point, end_point]);
-                // map.getView().setCenter(lonLatInfo[0]);
+                // 停泊流水显示位置
+                // var li_ele = $('.oneVoyage_DockedList>li');
+                // var sn_features = [];
+                // for (var j = 1; j < li_ele.length - 1; j++) {
+                //     var ele = li_ele.eq(j);
+                //     var cluster_id = ele.attr('stationaryareakey');
+                //     var cluster_info = allPoints[cluster_id];
+                //     var lon = cluster_info['lon'];
+                //     var lat = cluster_info['lat'];
+                //     var lat_lon = WGS84transformer(lat, lon);
+                //     var sn_feature = new ol.Feature({
+                //         geometry: new ol.geom.Point(ol.proj.fromLonLat([lat_lon[1], lat_lon[0]]))
+                //     });
+                    // sn_feature.setStyle(new ol.style.Style({
+                    //     fill: new ol.style.Fill({ //矢量图层填充颜色，以及透明度
+                    //         color: 'rgba(255, 255, 255, 0.6)'
+                    //     }),
+                    //     text: new ol.style.Text({ //文本样式
+                    //         font: '12px Calibri,sans-serif',
+                    //         fill: new ol.style.Fill({
+                    //             color: '#FFF'
+                    //         }),
+                    //         text: i,
+                    //         stroke: new ol.style.Stroke({
+                    //             color: '#fff',
+                    //             width: 3
+                    //         })
+                    //     })
+                    // }));
+                //     sn_features.push(sn_feature);
+                // }
+                // route.getSource().addFeatures(sn_features);
                 var view = map.getView();
                 var pan = ol.animation.pan({
                     //动画持续时间
@@ -198,8 +228,6 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                 });
                 //在地图渲染之前执行平移动画
                 map.beforeRender(pan);
-                //设置视图中心点坐标为北京
-                // view.setCenter(beijing);
                 view.setCenter(lonLatInfo[0]);
             }
         },

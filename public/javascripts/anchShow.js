@@ -1,7 +1,7 @@
 var anchInfoList;
 
 function getAllAnch() {
-    anchInfoList =[]; // 初始化
+    anchInfoList ={}; // 初始化
     $.ajax({
         url: "/anch/getAnchShowInfo",
         dataType: 'json',
@@ -32,13 +32,20 @@ function getAllAnch() {
                                 lonLatList.push(ol.proj.fromLonLat([lat_lon[1], lat_lon[0]]))
                             }
                         }
-                        anchInfoList.push({
+                        anchInfoList[anchorageKey] ={
                             anchorageKey: anchorageKey,
                             name: name,
                             lonLatList: lonLatList,
                             lon: lon,
                             lat: lat
-                        })
+                        }
+                        // anchInfoList.push({
+                        //     anchorageKey: anchorageKey,
+                        //     name: name,
+                        //     lonLatList: lonLatList,
+                        //     lon: lon,
+                        //     lat: lat
+                        // })
                     }
                 }
                 anchLayer(zoom);
@@ -73,10 +80,11 @@ function anchLayer(zoom){
             // color: 'rgba(255, 255, 255, 0.2)'
         })
     };
-    for (var i = 0; i < anchInfoList.length; i++) {
-        var anch_info = anchInfoList[i];
+    // for (var i = 0; i < anchInfoList.length; i++) {
+    for (var anchorageKey in  anchInfoList) {
+        var anch_info = anchInfoList[anchorageKey];
         var name = anch_info.name;
-        var anchorageKey = anch_info.anchorageKey;
+        // var anchorageKey = anch_info.anchorageKey;
         // console.log(name);
         var lon = anch_info.lon;
         var lat = anch_info.lat;

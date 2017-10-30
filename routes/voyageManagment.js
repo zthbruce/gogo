@@ -17,9 +17,9 @@ var router = express.Router();
  */
 router.get("/getVoyageList", function (req, res, next) {
     var fleetNumber = req.query.FleetNumber;
-    var sql = util.format('SELECT t1.VoyageKey, t1.MMSI, Name, LocalName, IMO, DepartureTime , ' +
+    var sql = util.format('SELECT t1.VoyageKey, t1.ShipNumber, Name, LocalName, IMO, DepartureTime , ' +
         'DeparturePortID, ArrivalTime, ArrivalPortID, t1.Checked FROM T3101_Voyage t1 ' +
-        'LEFT JOIN T0101_Ship t2 ON t1.MMSI = t2.MMSI LEFT JOIN T4101_Fleet t3 ON t2.ShipNumber = t3.ShipNumber ' +
+        'LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber LEFT JOIN T4101_Fleet t3 ON t2.ShipNumber = t3.ShipNumber ' +
         'WHERE FleetNumber = "%s" ORDER BY t1.Checked DESC, ArrivalTime DESC LIMIT 100', fleetNumber);
     mysql.query(sql, function (err, results) {
         if(err){
@@ -36,6 +36,27 @@ router.get("/getVoyageList", function (req, res, next) {
     })
 });
 
+// router.get("/getVoyageList", function (req, res, next) {
+//     var fleetNumber = req.query.FleetNumber;
+//     var sql = util.format('SELECT t1.VoyageKey, t1.MMSI, Name, LocalName, IMO, DepartureTime , ' +
+//         'DeparturePortID, ArrivalTime, ArrivalPortID, t1.Checked FROM T3101_Voyage t1 ' +
+//         'LEFT JOIN T4101_Fleet t2 ON t1.MMSI = t2.MMSI LEFT JOIN T0101_Ship t3 ON t2.ShipNumber = t3.ShipNumber ' +
+//         'WHERE FleetNumber = "%s" ORDER BY t1.Checked DESC, ArrivalTime DESC LIMIT 100', fleetNumber);
+//     mysql.query(sql, function (err, results) {
+//         if(err){
+//             res.jsonp(["404", utils.eid1])
+//         }
+//         else{
+//             if(results.length > 0){
+//                 res.jsonp(["200", results])
+//             }
+//             else{
+//                 res.jsonp(["304", "return nothing"])
+//             }
+//         }
+//     })
+// });
+
 
 /**
  * 请求该船对应航次信息
@@ -44,7 +65,7 @@ router.get("/getVoyageList", function (req, res, next) {
 router.get("/getVoyage", function (req, res, next) {
     var voyageKey = req.query.VoyageKey;
     var sql = util.format("SELECT * FROM T3101_Voyage t1 LEFT JOIN T0101_Ship t2 " +
-        "ON t1.MMSI = t2.MMSI WHERE VoyageKey = '%s'", voyageKey);
+        "ON t1.ShipNumber = t2.ShipNumber WHERE VoyageKey = '%s'", voyageKey);
     mysql.query(sql, function (err, results) {
         if(err){
             res.jsonp(["404", utils.eid1]);
@@ -85,8 +106,8 @@ router.get("/getVoyageDetail", function (req, res, next) {
  * 获得一艘船的历史航次
  */
 router.get("/getVoyageList2Ship", function (req, res, next) {
-    var MMSI = req.query.MMSI;
-    var sql = util.format("SELECT VoyageKey, DepartureTime FROM T3101_Voyage WHERE MMSI = '%s' ORDER BY VoyageKey DESC", MMSI);
+    var ShipNumber = req.query.ShipNumber;
+    var sql = util.format("SELECT VoyageKey, DepartureTime FROM T3101_Voyage WHERE ShipNumber = '%s' ORDER BY VoyageKey DESC", ShipNumber);
     mysql.query(sql, function (err, results) {
         if(err){
             res.jsonp(["404", utils.eid1]);
@@ -163,8 +184,8 @@ router.post('/saveVoyageDetail', function (req, res, next) {
                 if (i > 0) {
                     sql2 += ","
                 }
-                sql2 += "('" + MMSI + "','" + info.DepartureTime + "','" + info.ArrivalTime + "'," + info.StationaryAreaKey +
-                    ",'" + voyageKey + "','" + info.Purpose + "')";
+                sql2 += "('" + MMSI + "','" + info.DepartureTime + "','" + info.ArrivalTime + "','" + info.StationaryAreaKey +
+                    "','" + voyageKey + "','" + info.Purpose + "')";
             }
             console.log(sql2);
             mysql.query(sql2, function (err, data) {
