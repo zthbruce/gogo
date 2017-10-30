@@ -383,7 +383,7 @@ function getVoyageContent(voyageKey) {
                 }
                 // 出港时间
                 var departure_time_ele = departure_checked_ele.next();
-                // departure_time_ele.text(departureTime);
+                departure_time_ele.attr('time', departureTime);
                 departure_time_ele.text(getRealTime(departureTime));
                 /* 抵港 */
                 // 抵达港
@@ -785,6 +785,18 @@ $(".voyageBtn_SaveOrConfirm").click(function(){
     updateSaveStatus(false); // 更新保存按钮状态
     /* 保存航次信息 */
     var voyageKey = $("#voyageDetails").find('.fleet_title').attr('voyageKey');
+    console.log(voyageKey);
+    var cargo = $(".cargo_type_list>select>option:selected").attr('value');
+    console.log(cargo);
+    var cargo_checked_ele = $(".cargo_type_list").next();
+    var cargo_checked = cargo_checked_ele.attr('class') === 'checked'? '1' : '0';
+    var info_li = $(".oneVoyageInfo>ul>li");
+    var departure_ele = info_li.eq(4).children('input');
+    var departure_port = departure_ele.attr('portID');
+    var departure_checked_ele = departure_ele.next();
+    var departure_checked = departure_checked_ele.attr('class') === 'checked'? '1' : '0';
+
+
 
 });
 
@@ -812,7 +824,6 @@ $(".oneVoyageInfo .DWT").bind("input", function () {
  * 悬浮在停靠列表上时会出现结束航次按钮
  */
 $(".oneVoyage_DockedList").delegate('li', 'mouseover', function () {
-    console.log('here');
     var endButton = $(this).find(".oneVoyage_EndBtn");
     endButton.css("display", "block");
 });
