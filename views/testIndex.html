@@ -13,7 +13,7 @@
     <link rel='stylesheet' href='/stylesheets/standardRoute.css' />
     <link rel="stylesheet" href="/stylesheets/datePicker/ion.calendar.css">
 
-    <link rel="stylesheet" href="http://openlayers.org/en/v3.17.1/css/ol.css" type="text/css">
+    <!--<link rel="stylesheet" href="http://openlayers.org/en/v3.17.1/css/ol.css" type="text/css">-->
     <link rel="stylesheet" href="https://openlayers.org/en/v4.1.1/css/ol.css" type="text/css">
     <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
@@ -599,7 +599,9 @@
 <!--航次详情-->
 <div id="voyageDetails">
     <div class="fleet_title">
-        <span>航次详情(未确认)</span>
+    <!--<div class="voyage_title">-->
+        <span>航次详情</span>
+        <span>(未确认)</span>
         <div class="title_offbtn"></div>
     </div>
     <div class="dividing_line"></div>
@@ -633,7 +635,7 @@
             <li><span>货物：</span>
                 <span class="cargo_type_list">
                 <select>
-                    <option value="1" selected="selected">铁矿石</option>
+                    <option value="1">铁矿石</option>
                     <option value="2">原油</option>
                     <option value="3">液化天然气</option>
                     <option value="4">液化石油气</option>
@@ -654,7 +656,7 @@
             <li>到达港：<input type="text" value="Wilmington (N Carolina)" title="Wilmington (N Carolina)" disabled> <i class="toCheck"></i><span>2007-02-03 20:00</span></li>
             <li>航行时长：20d20h20m</li>
             <li>航速：00.00kts</li>
-            <li>航程：45678nm</li>
+            <li>航程：0nm</li>
             <li>停泊总时长：20d20h20m</li>
             <li>加油时长：20d20h20m</li>
             <li>补给时长：20d20h20m</li>

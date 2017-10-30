@@ -156,7 +156,44 @@ function changeBerthSaveButton(saveStatus) {
     }
 }
 
+/**
+ * 由时间戳获得真实时间
+ * @param timeStamp
+ * @returns {string}
+ */
+function getRealTime(timeStamp) {
+    var date = new Date(timeStamp * 1000);
+    var Y = date.getFullYear();
+    var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1);
+    var D = date.getDate() < 10 ? '0'+ date.getDate(): date.getDate();
+    var h = date.getHours() < 10 ? '0'+ date.getHours() :date.getHours();
+    var m = date.getMinutes() < 10 ? '0'+ date.getMinutes() : date.getMinutes();
+    var s = date.getSeconds() < 10 ? '0'+ date.getSeconds()  : date.getSeconds() ;
+    return Y+ '-' + M+ '-' + D+ ' ' + h + ':'+m + ':' +s
+}
 
+/**
+ * 时间戳间距（单位秒）
+ * @param period
+ */
+function getDuration(period) {
+    var s = period % 60;
+    var m = Math.floor(period / 60);
+    if(m === 0){
+        return '0m'
+    }
+    var h = Math.floor(m / 60);
+    if(h === 0){
+        return m + "m"
+    }
+    m = m % 60;
+    var D = Math.floor(h / 24);
+    if(D === 0){
+        return h + "h" + m + "m"
+    }
+    h = h % 24;
+    return D +"d" + h + "h" + m + "m"
+}
 
 
 

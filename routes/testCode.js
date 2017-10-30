@@ -75,3 +75,41 @@ function inside(point, vs) {
 }
 
 console.log(inside([0, 1], [[0,1], [0, 2]]));
+
+
+function getRealTime(timeStamp) {
+    var date = new Date(timeStamp * 1000);
+    var Y = date.getFullYear();
+    var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1);
+    var D = date.getDate() < 10 ? '0'+ date.getDate(): date.getDate();
+    var h = date.getHours() < 10 ? '0'+ date.getHours() :date.getHours();
+    var m = date.getMinutes() < 10 ? '0'+ date.getMinutes() : date.getMinutes();
+    var s = date.getSeconds() < 10 ? '0'+ date.getSeconds()  : date.getSeconds() ;
+    return Y+ '-' + M+ '-' + D+ ' ' + h + ':'+m + ':' +s
+}
+console.log(getRealTime(1404955272));
+
+var stringTime = "2014-07-10 09:21:12";
+var timestamp2 = Date.parse(new Date(stringTime));
+timestamp2 = timestamp2 / 1000;
+console.log(timestamp2);
+
+function getDuration(period) {
+    var s = period % 60;
+    var m = Math.floor(period / 60);
+    if(m === 0){
+        return s + "s"
+    }
+    var h = Math.floor(m / 60);
+    if(h === 0){
+        return m + "m" + s + "s"
+    }
+    m = m % 60;
+    var D = Math.floor(h / 24);
+    if(D === 0){
+        return h + "h" + m + "m" + s + "s"
+    }
+    h = h % 24;
+    return D +"d" + h + "h" + m + "m" + s + "s"
+}
+console.log(getDuration(3600 * 48 + 3600));

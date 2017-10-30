@@ -16,7 +16,7 @@ ee = 0.00669342162296594323;
  * @returns {boolean}
  */
 function isOutOfChina(lat, lon) {
-    if(lon < 72.004 || lon > 125.00) return true;
+    if(lon < 100.004 || lon > 125.00) return true;
     return lat < 17.004 || lat > 55.8271;
 }
 

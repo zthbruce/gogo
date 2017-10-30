@@ -140,7 +140,7 @@ function getDetailRoute(MMSI, startTime, stopTime) {
         url: "/voyage/getDetailRouteInfo",
         dataType: 'json',
         cache: false,
-        timeout: 5000,
+        timeout: 5000000,
         type: 'GET',
         success: function (data) {
             var res = data;

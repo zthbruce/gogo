@@ -574,11 +574,10 @@ $('.FleetName_List').delegate('li', 'click', function () {
     fleetDivZIndex++;
     console.log(fleetDivZIndex);
     fleet_div.css('zIndex',fleetDivZIndex);
-    fleet_div.fadeIn(600);
     // 获取船队列表
     var timePoint = getNowFormatDay();
     getShipList2Fleet(fleetNumber, timePoint);
-    // getShipList2Fleet(fleetNumber, "~");
+    fleet_div.fadeIn(600);
     $(".fleetList_List").attr("timepoint", "~"); // 标记时间信息
 });
 
@@ -1093,7 +1092,7 @@ $(window).mousemove(function(event){
 });
 
 //弹出框关闭事件
-$('.fleet_title>.title_offbtn').click(function(){
+$('.fleet_title>.title_offbtn, .voyage_title>.title_offbtn').click(function(){
     console.log("here");
     $('.Fleet_List_ul>li').removeClass("choose"); // 清空所选
     // $('.FleetName_List>li').removeClass("choose"); // 清空所选

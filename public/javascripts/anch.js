@@ -773,10 +773,13 @@ $('#anch_save').click(function(){
         }
     }
     // parkAreaList = parkAreaList;
+
     $.ajax({
         url: '/anch/saveAnchDetailInfo',
-        type: 'get',
-        data: {AnchorageKey: anchKey, ParkAreaList: newParkAreaList},
+        type: 'POST',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({AnchorageKey: anchKey, ParkAreaList: newParkAreaList}),
+        dataType: 'json',
         success: function (data) {
             console.log(data[1]);
             // 刷新静止区域

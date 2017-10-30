@@ -16,7 +16,8 @@
 .pier_CargoType>span:nth-child(2)>input{width:95px;height:20px;line-height:20px;background:#fff;border:transparent;font-size:12px;cursor:pointer;color:black;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .pier_CargoType>span:nth-child(2)>span{display:inline-block;position:absolute;height:20px;line-height:20px;color:#323232;font-size:12px;right:8px;}
 .pier_info>input{display:inline-block;width:120px;padding-left:5px;height:22px;line-height:22px;font-size:12px;border:1px solid #989898;border-radius:5px;position:relative;top:-1px;font-weight: 500}
-.pier_info>ul{width:124px;max-height:100px;position:absolute;z-index:1000;cursor:pointer;top:24px;left:43px;background:#fff;border-radius:5px;overflow:hidden;overflow-y:scroll;display:none;}
+.pier_info>ul{width:124px;position:absolute;z-index:1000;cursor:pointer;top:24px;left:43px;background:#fff;border-radius:5px;overflow:hidden;overflow-y:scroll;display:none;}
+/*.pier_info>ul{width:124px;max-height:100px;position:absolute;z-index:1000;cursor:pointer;top:24px;left:43px;background:#fff;border-radius:5px;overflow:hidden;overflow-y:scroll;display:none;}*/
 .pier_info>ul>li{width:96%;height:20px;font-size:12px;padding-left:5px;}
 /*.pier_info>ul>li{width:96%;height:20px;font-size:12px;padding-left:5px;font-weight: 300;}*/
 
