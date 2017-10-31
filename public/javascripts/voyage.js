@@ -158,7 +158,7 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                 for(var i = 0; i < num; i++){
                     var ele = lonLatInfo[i];
                     lonLatInfo[i] = ol.proj.fromLonLat([parseFloat(ele[0]), parseFloat(ele[1])]);
-                    if(i > 0 && i % 30 === 0){
+                    if(i > 0 && i % 50 === 0){
                         var start = lonLatInfo[i - 10];
                         var end= lonLatInfo[i];
                         var rotation = getRotation(start, end);
