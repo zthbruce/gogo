@@ -17,10 +17,18 @@ var router = express.Router();
  */
 router.get("/getVoyageList", function (req, res, next) {
     var fleetNumber = req.query.FleetNumber;
+    var checkList = req.query.CheckList;
+    var checkInfo;
+    if(checkList.length === 2){
+        checkInfo = "('0', '1')"
+    }
+    else{
+        checkInfo = "('" + checkList[0] + "')";
+    }
     var sql = util.format('SELECT t1.VoyageKey, t1.ShipNumber, Name, LocalName, IMO, DepartureTime , ' +
         'DeparturePortID, ArrivalTime, ArrivalPortID, t1.Checked FROM T3101_Voyage t1 ' +
         'LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber LEFT JOIN T4101_Fleet t3 ON t2.ShipNumber = t3.ShipNumber ' +
-        'WHERE FleetNumber = "%s" ORDER BY t1.Checked DESC, ArrivalTime DESC LIMIT 100', fleetNumber);
+        'WHERE FleetNumber = "%s" AND t1.Checked IN %s ORDER BY t1.Checked DESC, ArrivalTime DESC LIMIT 100', fleetNumber, checkInfo);
     mysql.query(sql, function (err, results) {
         if(err){
             res.jsonp(["404", utils.eid1])

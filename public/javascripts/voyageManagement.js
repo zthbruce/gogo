@@ -9,8 +9,9 @@
  * 根据复选框显示信息
  */
 var lastFleetNumber = "";
-var lastToCheckStatus = true;
-var lastCheckedStatus = false;
+var lastToCheckStatus;
+var lastCheckedStatus;
+var fleetNumber='F2'; // 初始化默认
 
 // 保存和确认信息
 var standardGoodsStatus = false;
@@ -56,64 +57,76 @@ function updateByCheckSelect(){
 /**
  * 更新航次列表
  */
-function updateVoyageList(fleetNumber){
-    $(".voyageList_content").empty(); // 初始化
+
+function updateVoyageList(){
+    /* 初始化 */
+    // var select = $(".voyageList_select .selected_fleet");
+    // var fleetNumber = select.attr("FleetNumber");
     lastFleetNumber = fleetNumber;
+    $(".voyageList_content").empty();
     var voyageList = $("#voyageList_List");
-    $.ajax({
-        url: "/voyageManagement/getVoyageList",
-        data: {FleetNumber: fleetNumber},
-        type: "GET",
-        beforeSend: function () {
-            console.log("loading");
-            voyageList.css("background", 'url("/images/ajax-loader.gif") no-repeat center');
-        },
-        success: function (data) {
-            if (data[0] === "200") {
-                console.log("获取数据成功");
-                var result = data[1];
-                var voyage_ul = ""; // 列表元素
-                for (var i = 0; i < result.length; i++) {
-                    var ele = result[i];
-                    var shipName = ele.LocalName.trim();
-                    if(shipName === ''){
-                        shipName = ele.Name
+    var checkList = [];
+    if($(".voyage_toCheck").prop("checked")){
+        checkList.push('0');
+    }
+    if($(".voyage_checked").prop("checked")){
+        checkList.push('1');
+    }
+    if(checkList.length > 0) {
+        $.ajax({
+            url: "/voyageManagement/getVoyageList",
+            data: {FleetNumber: fleetNumber, CheckList: checkList},
+            type: "GET",
+            beforeSend: function () {
+                console.log("loading");
+                voyageList.css("background", 'url("/images/ajax-loader.gif") no-repeat center');
+            },
+            success: function (data) {
+                if (data[0] === "200") {
+                    console.log("获取数据成功");
+                    var result = data[1];
+                    var voyage_ul = ""; // 列表元素
+                    for (var i = 0; i < result.length; i++) {
+                        var ele = result[i];
+                        var shipName = ele.LocalName.trim();
+                        if (shipName === '') {
+                            shipName = ele.Name
+                        }
+                        var startPortName = "";
+                        var stopPortName = "";
+                        var startPort = AllPortBasicList[ele.DeparturePortID];
+                        var stopPort = AllPortBasicList[ele.ArrivalPortID];
+                        if (startPort !== undefined) {
+                            startPortName = startPort.ENName;
+                        }
+                        if (stopPort !== undefined) {
+                            stopPortName = stopPort.ENName;
+                        }
+                        var startTime = getRealTime(ele.DepartureTime).slice(0, 10);
+                        var stopTime = getRealTime(ele.ArrivalTime).slice(0, 10);
+                        var checked = ele.Checked;
+                        if (checked === "1") {
+                            voyage_ul += "<li class=checked shipNumber=" + ele.ShipNumber + " voyageID=" + ele.VoyageKey + " departureTime=" + ele.DepartureTime + " arrivalTime=" + ele.ArrivalTime + "><span>" + shipName + "</span>" +
+                                "<span>" + ele.IMO + "</span><span>" + startPortName + "</span><span>" + startTime + "</span><span>" +
+                                stopPortName + "</span><span>" + stopTime + "</span></li>";
+                        } else {
+                            voyage_ul += "<li class=toCheck shipNumber=" + ele.ShipNumber + " voyageID=" + ele.VoyageKey + " departureTime=" + ele.DepartureTime + " arrivalTime=" + ele.ArrivalTime + "><span>" + shipName + "</span>" +
+                                "<span>" + ele.IMO + "</span><span>" + startPortName + "</span><span>" + startTime + "</span><span>" +
+                                stopPortName + "</span><span>" + stopTime + "</span></li>";
+                        }
+                        // $(".voyageList_content").append(voyage_li);
                     }
-                    var startPortName = "";
-                    var stopPortName = "";
-                    var startPort = AllPortBasicList[ele.DeparturePortID];
-                    var stopPort = AllPortBasicList[ele.ArrivalPortID];
-                    if (startPort !== undefined) {
-                        startPortName = startPort.ENName;
-                    }
-                    if (stopPort !== undefined) {
-                        stopPortName = stopPort.ENName;
-                    }
-                    var startTime = getRealTime(ele.DepartureTime).slice(0, 10);
-                    var stopTime = getRealTime(ele.ArrivalTime).slice(0, 10);
-                    var checked = ele.Checked;
-                    if (checked === "1") {
-                        voyage_ul += "<li class=checked shipNumber=" + ele.ShipNumber + " voyageID=" + ele.VoyageKey + " departureTime=" + ele.DepartureTime + " arrivalTime=" + ele.ArrivalTime +"><span>" + shipName + "</span>" +
-                            "<span>" + ele.IMO + "</span><span>" + startPortName + "</span><span>" + startTime + "</span><span>" +
-                            stopPortName + "</span><span>" + stopTime + "</span></li>";
-                    } else {
-                        voyage_ul += "<li class=toCheck shipNumber=" + ele.ShipNumber + " voyageID=" + ele.VoyageKey + " departureTime=" + ele.DepartureTime + " arrivalTime=" + ele.ArrivalTime  + "><span>" + shipName + "</span>" +
-                            "<span>" + ele.IMO + "</span><span>" + startPortName + "</span><span>" + startTime + "</span><span>" +
-                            stopPortName + "</span><span>" + stopTime + "</span></li>";
-                    }
-                    // $(".voyageList_content").append(voyage_li);
+                    var voyageList_ul = $(".voyageList_content");
+                    voyageList_ul.append(voyage_ul);
+                    voyageList_ul.find('li:nth-child(n+51)').hide(); // 默认只显示50条
                 }
-                var voyageList_ul = $(".voyageList_content");
-                voyageList_ul.append(voyage_ul);
-                voyageList_ul.children(".checked").hide(); // 默认隐藏已经确认的
-                voyageList_ul.find('li:nth-child(n+51)').hide(); // 默认只显示50条
+            },
+            complete: function () {
+                console.log("加载结束");
+                voyageList.css("background", ""); // 清除背景
             }
-        },
-        complete: function () {
-            console.log("加载结束");
-            voyageList.css("background", ""); // 清除背景
-        }
-    })
+        })
+    }
 }
 
 /**
@@ -345,6 +358,7 @@ var info_li = $('.oneVoyageInfo>ul>li');
  * @param voyageKey
  */
 function getVoyageContent(voyageKey) {
+    current.getSource().clear(); // 图层初始化
     updateSaveStatus(false); // 保存按钮初始化
     var title_ele = $("#voyageDetails").find(".fleet_title");
     title_ele.attr('voyageKey', voyageKey);
@@ -359,16 +373,17 @@ function getVoyageContent(voyageKey) {
             var content = data[1][0];
             if( signal === '200'){
                 /* 显示标题 */
-                var checked = content.Checked;
-                var check_ele = $(".voyage_title>span:nth-child(2)");
-                // console.log(typeof checked);
-                if(checked === '0'){
-                    check_ele.text("(未确认)");
-                }
-                else{
+                var checked = content.Checked.trim();
+                var check_ele = $("#voyageDetails>.fleet_title>span:nth-child(2)");
+                if(checked === "1"){
                     check_ele.text("(已确认)");
                     // 显示为绿色
                     check_ele.css({'color':'#00ff00'});
+                }
+                else{
+                    check_ele.text("(未确认)");
+                    // 显示为白色
+                    check_ele.css({'color':'#FFF'});
                 }
                 // 显示详细内容
                 var shipName = content.LocalName.trim();
@@ -602,12 +617,16 @@ $(window).mousemove(function(event){
  */
 $(".route_Voyage_btn").click(function () {
     console.log("航次管理");
-    // 默认
-    var defaultFleetNumber = "F2";
-    updateVoyageList(defaultFleetNumber);
+    /* 初始化 */
+    $(".voyage_toCheck").prop("checked", true);
+    $(".voyage_checked").prop("checked", false);
+    lastToCheckStatus = true;
+    lastCheckedStatus = false;
+    // var defaultFleetNumber = "F2";
+    // updateVoyageList(defaultFleetNumber);
+    updateVoyageList();
     var voyageList = $("#voyageList");
     fleetDivZIndex++;
-    console.log(fleetDivZIndex);
     voyageList.css('zIndex',fleetDivZIndex);
     voyageList.fadeIn(500);
     $('.route_List_ul').fadeOut(300);
@@ -632,12 +651,13 @@ $(".voyageList_select .selected_fleet").click(function () {
 $(".FleetList>li").click(function () {
     $(".FleetList").slideUp(200);
     var select = $(".voyageList_select .selected_fleet");
-    var fleetNumber = $(this).attr("FleetNumber");
+    fleetNumber = $(this).attr("FleetNumber");
     select.attr("FleetNumber", fleetNumber);
     select.text($(this).text());
+    // updateVoyageList();
     if(fleetNumber !== lastFleetNumber){
         console.log("新的fleetNumber");
-        updateVoyageList(fleetNumber)
+        updateVoyageList()
     }
 });
 
@@ -653,7 +673,8 @@ $(".fleet_select").mouseleave(function () {
  * 点击复选框会刷新列表
  */
 $(".voyage_toCheck, .voyage_checked").click(function () {
-    updateByCheckSelect()
+    // updateByCheckSelect()
+    updateVoyageList()
 });
 
 /**
@@ -764,7 +785,6 @@ $(".voyageBtn_StandardGoods").click(function(event){
  */
 $(".voyageBtn_SaveOrConfirm").click(function(){
     var voyage_checked = "0"; // 初始化为0
-    // voyageBtn_saveStatus = false; // 状态发生改变
     var title = $("#voyageDetails").find(".fleet_title");
     var checked_span = title.children("span:nth-child(2)");
     var routeAndGoods = $(".voyageBtn_StandardRoute, .voyageBtn_StandardGoods");
@@ -825,7 +845,8 @@ $(".voyageBtn_SaveOrConfirm").click(function(){
         type: 'POST',
         dataType: 'json',
         success: function (data) {
-            console.log(data[1])
+            console.log(data[1]);
+            updateVoyageList()
         },
         error: function (err) {
             console.log(err);
@@ -873,7 +894,6 @@ $(".oneVoyageInfo").delegate("select", "change", function () {
  * 监听详细列表的select
  */
 $(".oneVoyage_DockedList").delegate("select", "change", function () {
-    console.log("here");
     updateSaveStatus(true); // 更新保存按钮状态
     var departureTime = info_li.eq(4).children('span').attr('time');
     var arrivalTime = info_li.eq(5).children('span').attr('time');
@@ -909,36 +929,44 @@ $(".oneVoyage_DockedList").delegate('li', 'mouseout', function () {
 /**
  * 点击结束航次
  */
-$(".oneVoyage_DockedList").delegate(".oneVoyage_EndBtn", "click", function () {
+$(".oneVoyage_DockedList").delegate(".oneVoyage_EndBtn", "click", function (event) {
     console.log("结束航次");
-    updateSaveStatus(true);
     var li_ele = $(this).parent();
-    li_ele.nextAll().remove();
-    // 更新上面的信息
-    var cluster_info = allPoints[li_ele.attr('stationaryAreaKey')];
-    var arrivalPortID = '';
-    var arrivalPortName = '';
-    if(cluster_info !== undefined){
-        arrivalPortID = cluster_info.PortID;
-        if(AllPortBasicList[arrivalPortID] !== undefined) {
-            arrivalPortName = AllPortBasicList[arrivalPortID].ENName;
+    var next_ele = li_ele.nextAll();
+    if(next_ele.length > 0) {
+        updateSaveStatus(true);
+        next_ele.remove();
+        // 更新上面的信息
+        var cluster_info = allPoints[li_ele.attr('stationaryAreaKey')];
+        var arrivalPortID = '';
+        var arrivalPortName = '';
+        if (cluster_info !== undefined) {
+            arrivalPortID = cluster_info.PortID;
+            if (AllPortBasicList[arrivalPortID] !== undefined) {
+                arrivalPortName = AllPortBasicList[arrivalPortID].ENName;
+            }
         }
+        var arrivalTime = li_ele.attr('arrivalTime');
+        // 抵达港
+        var arrival_ele = info_li.eq(5).children('input');
+        arrival_ele.val(arrivalPortName);
+        arrival_ele.attr('portID', arrivalPortID);
+        // 抵达港确认信息
+        var arrival_checked_ele = arrival_ele.next();
+        arrival_checked_ele.attr('class', 'toCheck');
+        // 抵港时间
+        var arrival_time_ele = arrival_checked_ele.next();
+        arrival_time_ele.attr('time', arrivalTime);
+        arrival_time_ele.text(getRealTime(arrivalTime));
+        var departureTime = info_li.eq(4).children('span').attr('time');
+        // 更新统计信息
+        updateDuration(departureTime, arrivalTime);
+        // 更新航线信息
+        var MMSI = $('#voyageDetails .fleet_title').attr('MMSI');
+        getDetailRoute(MMSI, departureTime, arrivalTime);
     }
-    var arrivalTime = li_ele.attr('arrivalTime');
-    // 抵达港
-    var arrival_ele = info_li.eq(5).children('input');
-    arrival_ele.val(arrivalPortName);
-    arrival_ele.attr('portID', arrivalPortID);
-    // 抵达港确认信息
-    var arrival_checked_ele = arrival_ele.next();
-    arrival_checked_ele.attr('class', 'toCheck');
-    // 抵港时间
-    var arrival_time_ele = arrival_checked_ele.next();
-    arrival_time_ele.attr('time', arrivalTime);
-    arrival_time_ele.text(getRealTime(arrivalTime));
-    var departureTime = info_li.eq(4).children('span').attr('time');
-    // 更新统计信息
-    updateDuration(departureTime, arrivalTime);
+    event.stopPropagation();
+    // return false; // 防止冒泡事件
 });
 
 /**
@@ -965,9 +993,7 @@ $('.voyageList_content').scroll(function(){
     var show_number = $(this).children('li').not('[style="display: none;"]').size();
     console.log(show_number);
     var AllWidth = show_number * 20;
-    // var AllWidth = $(this).children('li').length * 20;
-    console.log(AllWidth);
-    //300是安全距离，保证滚动条不处于最下方时才开始执行更多，为400时未显示的剩余8行，不低于260
+    //300是安全距离
     if(scrollTop>AllWidth-300 && show_number < $(this).children('li').size()){
         console.log('显示更多');
         $(this).children('li').slice(show_number, show_number + 50).show()
