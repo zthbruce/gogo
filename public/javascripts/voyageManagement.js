@@ -612,6 +612,18 @@ $(window).mousemove(function(event){
     }
 });
 
+//航次详情弹出框回退按钮单击事件
+$('.title_GoBackBtn').click(function(){
+    $(this).parent().parent().fadeOut(300);
+    var gobackDivId = $(this).parent().parent().attr('id');
+    if(gobackDivId == 'voyageDetails'){
+        $('#voyageList').fadeIn(300);
+        route.getSource().clear(); // 清空当前图层
+        current.getSource().clear();
+    }
+});
+
+
 /**
  * 点击航次管理按钮实现
  */
@@ -692,6 +704,8 @@ $(".voyageList_content").delegate("li", "click", function (event) {
     getVoyageList2Ship(shipNumber, voyageKey);
     /* 获取具体内容 */
     getVoyageContent(voyageKey);
+    //隐藏航次列表弹出框
+    $('#voyageList').fadeOut(300);
     voyageDetails.fadeIn(300);
     // getDetailRoute(MMSI, departureTime, arrivalTime);
     event.stopPropagation();

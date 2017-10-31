@@ -29,6 +29,9 @@
 .title_offbtn{display:inline-block;width:12px;height:12px;position:absolute;top:9px;right:10px;background:url("/images/close_nor.png") no-repeat;cursor:pointer;}
 .title_offbtn:hover{background:url("/images/close_over.png") no-repeat;}
 .title_offbtn:active{background:url("/images/close_down.png") no-repeat;}
+.title_GoBackBtn{display:inline-block;width:16px;height:16px;position:absolute;top:7px;left:15px;background:url("/images/goback_nor.png") no-repeat;cursor:pointer;}
+.title_GoBackBtn:hover{background:url("/images/goback_over.png") no-repeat;}
+.title_GoBackBtn:active{background:url("/images/goback_down.png") no-repeat;}
 .dividing_line{width:96%;height:2px;background:#a0d3e8;margin:0 auto;position:relative;}
 
 /*时间点选择*/
