@@ -102,8 +102,10 @@ function updateVoyageList(){
                         if (stopPort !== undefined) {
                             stopPortName = stopPort.ENName;
                         }
-                        var startTime = getRealTime(ele.DepartureTime).slice(0, 10);
-                        var stopTime = getRealTime(ele.ArrivalTime).slice(0, 10);
+                        var startTime = getRealTime(ele.DepartureTime);
+                        var stopTime = getRealTime(ele.ArrivalTime);
+                        // var startTime = getRealTime(ele.DepartureTime).slice(0, 10);
+                        // var stopTime = getRealTime(ele.ArrivalTime).slice(0, 10);
                         var checked = ele.Checked;
                         if (checked === "1") {
                             voyage_ul += "<li class=checked shipNumber=" + ele.ShipNumber + " voyageID=" + ele.VoyageKey + " departureTime=" + ele.DepartureTime + " arrivalTime=" + ele.ArrivalTime + "><span>" + shipName + "</span>" +
@@ -650,6 +652,8 @@ $(".route_Voyage_btn").click(function () {
     $("#LeaseRouteInfo").fadeOut(300);
     //隐藏航次详情弹出框
     $("#voyageDetails").fadeOut(300);
+    $("#voyage_StandardRoute").fadeOut(300);
+    $("#voyage_StandardGoods").fadeOut(300);
 });
 
 /**

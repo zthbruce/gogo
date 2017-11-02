@@ -5,7 +5,7 @@
 
 
 #voyageList,#voyageDetails,#voyage_StandardRoute,#voyage_StandardGoods{position:fixed;z-index:100;display:none;border-radius:10px;background:rgba(6,2,5,0.8);}
-#voyageList{width:650px;height:350px;top:50px;left:300px;display:none;}
+#voyageList{width:720px;height:440px;top:50px;left:300px;display:none;}
 #voyageDetails{width:720px;height:440px;top:70px;left:300px;display:none;}
 
 
@@ -21,18 +21,18 @@
 .voyageList_select>div:last-child>ul>li:hover{background:#217BA2; }
 
 /*航次列表内容*/
-.voyageList_List{width:94%;height:260px;margin:5px auto;}
+.voyageList_List{width:96%;height:340px;margin:5px auto;}
 .voyageList_List>ul:first-child{background:#000;}
 .voyageList_List>ul>li{width:100%;height:20px;line-height:20px;}
 .voyageList_List>ul>li>span{display:inline-block;text-align:center;font-size:13px;color:#fff;}
 .voyageList_content>.checked>span{color:#1aea1a}
-.voyageList_List>ul>li>span:nth-child(1){width:120px;}
-.voyageList_List>ul>li>span:nth-child(2){width:66px;}
-.voyageList_List>ul>li>span:nth-child(3){width:120px;}
-.voyageList_List>ul>li>span:nth-child(4){width:80px;}
-.voyageList_List>ul>li>span:nth-child(5){width:120px;}
-.voyageList_List>ul>li>span:nth-child(6){width:80px;}
-.voyageList_content{overflow-y:scroll;height:240px;}
+.voyageList_List>ul>li>span:nth-child(1){width:110px;}
+.voyageList_List>ul>li>span:nth-child(2){width:64px;}
+.voyageList_List>ul>li>span:nth-child(3){width:110px;}
+.voyageList_List>ul>li>span:nth-child(4){width:138px;}
+.voyageList_List>ul>li>span:nth-child(5){width:110px;}
+.voyageList_List>ul>li>span:nth-child(6){width:138px;}
+.voyageList_content{overflow-y:scroll;height:320px;}
 .voyageList_content span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .voyageList_content>li:hover{background:#217BA2;cursor:pointer;}
 

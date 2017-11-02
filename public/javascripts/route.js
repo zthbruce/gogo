@@ -780,7 +780,7 @@ $('.routePort_Select i').click(function () {
     });
     map.beforeRender(zoom);
     view.setZoom(14);
-    map.getView().setZoom(14);
+    // map.getView().setZoom(14);
     // 进入航线模式
     routeStatus = true;
     // 清空临时操作层
