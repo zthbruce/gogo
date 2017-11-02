@@ -228,6 +228,7 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                 });
                 //在地图渲染之前执行平移动画
                 map.beforeRender(pan);
+                view.setZoom(2);
                 view.setCenter(lonLatInfo[0]);
             }
         },

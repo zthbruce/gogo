@@ -6,7 +6,7 @@
 
 #voyageList,#voyageDetails,#voyage_StandardRoute,#voyage_StandardGoods{position:fixed;z-index:100;display:none;border-radius:10px;background:rgba(6,2,5,0.8);}
 #voyageList{width:650px;height:350px;top:50px;left:300px;display:none;}
-#voyageDetails{width:700px;height:440px;top:70px;left:300px;display:none;}
+#voyageDetails{width:720px;height:440px;top:70px;left:300px;display:none;}
 
 
 /*航次列表分类选项*/
@@ -60,13 +60,13 @@
 /*.voyage_title>span{display:inline-block;width:10%;text-align:center;height:28px;line-height:28px;color:#fff;}*/
 .voyage_title>span:nth-child(1){margin-left:40%}
 /*.voyage_title>span:nth-child(2){margin-left:-1%}*/
-.oneVoyageInfo{width:94%;margin:0 auto;}
+.oneVoyageInfo{width:95%;margin:0 auto;}
 .oneVoyageInfo>ul{height:120px;}
 .oneVoyageInfo>ul>li{display:inline-block;height:20px;line-height:20px;margin-top:4px;font-size:13px;color:#fff;float:left;margin-right:15px;}
 .oneVoyageInfo>ul>li:nth-child(even){width:166px;}
-.oneVoyageInfo>ul>li:nth-child(odd){width:140px;}
-.oneVoyageInfo>ul>li:nth-child(1){width:196px;}
-.oneVoyageInfo>ul>li:nth-child(1)>input{width:150px;padding-left:4px;height:18px;color:#fff;font-size:13px;background:transparent;border-radius:5px;border:1px solid transparent;outline:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;}
+.oneVoyageInfo>ul>li:nth-child(odd){width:150px;}
+.oneVoyageInfo>ul>li:nth-child(1){width:206px;}
+.oneVoyageInfo>ul>li:nth-child(1)>input{width:160px;padding-left:4px;height:18px;color:#fff;font-size:13px;background:transparent;border-radius:5px;border:1px solid transparent;outline:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;}
 .oneVoyageInfo>ul>li:nth-child(2){width:115px;}
 .oneVoyageInfo>ul>li:nth-child(3){width:165px;position:relative;}
 .oneVoyageInfo>ul>li:nth-child(3)>span{display:inline-block;height:20px;line-height:20px;margin-left:-5px;}
@@ -75,7 +75,7 @@
 /*.oneVoyageInfo>ul>li:nth-child(3)>span:nth-child(2){display:inline-block;width:80px;height:18px;line-height:18px;border-radius:5px;border:1px solid #fff;padding-left:5px;cursor:pointer;}*/
 .oneVoyageInfo>ul>li:nth-child(4){width:100px;margin-right:0px;}
 .oneVoyageInfo>ul>li:nth-child(4)>input{width:45px;padding-left:4px;height:18px;color:#fff;position:relative;top:-1px;background:transparent;border-radius:5px;border:1px solid #fff;outline:none;}
-.oneVoyageInfo>ul>li:nth-child(5),.oneVoyageInfo>ul>li:nth-child(6){width:320px;position:relative;}
+.oneVoyageInfo>ul>li:nth-child(5),.oneVoyageInfo>ul>li:nth-child(6){width:330px;position:relative;}
 .oneVoyageInfo>ul>li:nth-child(6){margin-right:0px;}
 .oneVoyageInfo>ul>li:nth-child(5)>input,.oneVoyageInfo>ul>li:nth-child(6)>input{width:90px;padding-left:4px;height:18px;color:#fff;font-size:13px;background:transparent;border-radius:5px;border:1px solid transparent;outline:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;}
 /*.oneVoyageInfo>ul>li:nth-child(5)>input,.oneVoyageInfo>ul>li:nth-child(6)>input{width:110px;padding-left:4px;height:18px;color:#fff;font-size:13px;background:transparent;border-radius:5px;border:1px solid transparent;outline:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;}*/

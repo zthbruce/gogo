@@ -412,7 +412,7 @@ function getVoyageContent(voyageKey) {
                 var MMSI = content.MMSI;
                 title_ele.attr('MMSI', MMSI);
                 /* 表信息填充 */
-                info_li.eq(0).children('input').val(shipName); // 船名
+                info_li.eq(0).children('input').val(shipName).attr('title',shipName); // 船名
                 info_li.eq(1).text('IMO: ' + content.IMO); // IMO
                 var cargo_select = $('.cargo_type_list');
                 cargo_select.empty();
@@ -443,7 +443,7 @@ function getVoyageContent(voyageKey) {
                 /* 出港 */
                 // 出发港
                 var departure_ele = info_li.eq(4).children('input');
-                departure_ele.val(departurePortName);
+                departure_ele.val(departurePortName).attr('title',departurePortName);
                 departure_ele.attr('portID', departurePortID);
                 // 出发港确认信息
                 var departure_checked_ele = departure_ele.next();
@@ -460,7 +460,7 @@ function getVoyageContent(voyageKey) {
                 /* 抵港 */
                 // 抵达港
                 var arrival_ele = info_li.eq(5).children('input');
-                arrival_ele.val(arrivalPortName);
+                arrival_ele.val(arrivalPortName).attr('title',arrivalPortName);
                 arrival_ele.attr('portID', arrivalPortID);
                 // 抵达港确认信息
                 var arrival_checked_ele = arrival_ele.next();
@@ -617,7 +617,7 @@ $('.title_GoBackBtn').click(function(){
     $(this).parent().parent().fadeOut(300);
     var gobackDivId = $(this).parent().parent().attr('id');
     if(gobackDivId == 'voyageDetails'){
-        $('#voyageList').fadeIn(300);
+        $('#voyageList').fadeIn(300).offset({top:$('#voyageDetails').offset().top,left:$('#voyageDetails').offset().left});
         route.getSource().clear(); // 清空当前图层
         current.getSource().clear();
     }
@@ -648,6 +648,8 @@ $(".route_Voyage_btn").click(function () {
     $("#shipDetails").fadeOut(300);
     $("#routeInfo").fadeOut(300);
     $("#LeaseRouteInfo").fadeOut(300);
+    //隐藏航次详情弹出框
+    $("#voyageDetails").fadeOut(300);
 });
 
 /**
@@ -706,7 +708,7 @@ $(".voyageList_content").delegate("li", "click", function (event) {
     getVoyageContent(voyageKey);
     //隐藏航次列表弹出框
     $('#voyageList').fadeOut(300);
-    voyageDetails.fadeIn(300);
+    voyageDetails.fadeIn(300).offset({top:$('#voyageList').offset().top,left:$('#voyageList').offset().left});;
     // getDetailRoute(MMSI, departureTime, arrivalTime);
     event.stopPropagation();
 });
