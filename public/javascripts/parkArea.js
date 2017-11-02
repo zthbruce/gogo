@@ -1,18 +1,10 @@
 /**
  * Created by Truth on 2017/6/15.
  */
-// var util = require('util');
-// require('blmLayer');
-// require('blmMarker');
 
-// var ip = "127.0.0.1";
-// // var port = process.env.PORT || '3000';
-// var port = '3000';
-// var OL_Action_Root = "http://" + ip + ":" + port;
 var cluster_id_list = [];
 var cluster_id = '';
 var allPoints = {};
-// var allPoints = {};
 
 
 // 获取点信息
@@ -33,8 +25,6 @@ function getAllPoints() {
                 var sendData = res[1];
                 // console.log(sendData);
                 allPoints = JSON.parse(sendData);
-                // var zoom = blmol.operation.getZoom(map);
-                // var extent = blmol.operation.getCurrentExtent(map);
                 parkAreaLayer(); // 首先刷新一次
             }
         },

@@ -134,7 +134,6 @@ function getBasicRouteList(MMSI) {
  * @param startTime
  * @param stopTime
  */
-// var mileage;
 function getDetailRoute(MMSI, startTime, stopTime) {
     var mileage = 0;
     var voyage_info_ul = $('.oneVoyageInfo>ul');
@@ -180,7 +179,7 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                         arrow_feature.setStyle(arrow_style(rotation));
                         arrow_features.push(arrow_feature)
                     }
-                    // 计算航程里程、
+                    // 计算航程里程
                     if( i > 0){
                         mileage += getGreatCircleDistance(last_lon, last_lat, lon, lat)
                     }
@@ -189,6 +188,7 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                 }
                 mileage = mileage / 1.85200;
                 var sailTime = parseInt(info_li.eq(6).attr('time')) / 3600;
+                // 填充对应信息
                 info_li.eq(7).text('航速：' + (mileage / sailTime).toFixed(4) +'kts');
                 info_li.eq(8).text('航程：' + mileage.toFixed(4) + "nm");
                 var feature = new ol.Feature({
@@ -210,38 +210,6 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                 start_point.setStyle(start_style);
                 end_point.setStyle(end_style);
                 route.getSource().addFeatures([start_point, end_point]);
-                // 停泊流水显示位置
-                // var li_ele = $('.oneVoyage_DockedList>li');
-                // var sn_features = [];
-                // for (var j = 1; j < li_ele.length - 1; j++) {
-                //     var ele = li_ele.eq(j);
-                //     var cluster_id = ele.attr('stationaryareakey');
-                //     var cluster_info = allPoints[cluster_id];
-                //     var lon = cluster_info['lon'];
-                //     var lat = cluster_info['lat'];
-                //     var lat_lon = WGS84transformer(lat, lon);
-                //     var sn_feature = new ol.Feature({
-                //         geometry: new ol.geom.Point(ol.proj.fromLonLat([lat_lon[1], lat_lon[0]]))
-                //     });
-                    // sn_feature.setStyle(new ol.style.Style({
-                    //     fill: new ol.style.Fill({ //矢量图层填充颜色，以及透明度
-                    //         color: 'rgba(255, 255, 255, 0.6)'
-                    //     }),
-                    //     text: new ol.style.Text({ //文本样式
-                    //         font: '12px Calibri,sans-serif',
-                    //         fill: new ol.style.Fill({
-                    //             color: '#FFF'
-                    //         }),
-                    //         text: i,
-                    //         stroke: new ol.style.Stroke({
-                    //             color: '#fff',
-                    //             width: 3
-                    //         })
-                    //     })
-                    // }));
-                //     sn_features.push(sn_feature);
-                // }
-                // route.getSource().addFeatures(sn_features);
                 var view = map.getView();
                 var pan = ol.animation.pan({
                     //动画持续时间

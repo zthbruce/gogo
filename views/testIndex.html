@@ -1450,22 +1450,12 @@
 <!--<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1RjvgLx-N8yWBBa639e1jHw1wCh6KJUU&callback=initMap" type="text/javascript"></script>-->
 
 <script>
-//    $(".voyage_toCheck").prop("checked", false);
-//    $(".voyage_checked").prop("checked", false);
-    var unknown_style = new ol.style.Style({
-        image: new ol.style.Icon({
-            scale: 0.1,
-            src: 'icon/unknow.png'
-        })
-    });
-
-    var position_style =  new ol.style.Style({
-        image: new ol.style.Icon({
-            scale: 1,
-            src: 'icon/position.png'
-        })
-    });
-
+//    var position_style =  new ol.style.Style({
+//        image: new ol.style.Icon({
+//            scale: 1,
+//            src: 'icon/position.png'
+//        })
+//    });
     // 泊位图标
     var berth_style = new ol.style.Style({
         image: new ol.style.Icon({
@@ -1481,7 +1471,6 @@
             opacity : 0
         })
     });
-
     // 锚地图标
     var anchorage_style = new ol.style.Style({
         image: new ol.style.Icon({
@@ -1490,41 +1479,27 @@
         })
     });
 
-    // 扇形图图标
-    var pie_style = new ol.style.Style({
-        image: new ol.style.Icon({
-            scale: 0.8,
-            src: 'icon/pie.png'
-        })
-    });
-
-    // 设置图标style
+    // 静止区域图标
     var park_style = {
         // 锚地图标
         0: anchorage_style,
         // 泊位图标
-        1: berth_style,
-        // 定位图标
-        2: unknown_style
+        1: berth_style
     };
 
-
-    // 起始点
+    // 航线起止点
     var start_style = new ol.style.Style({
             image: new ol.style.Icon({
-//            scale: 0.2,
                 src: 'icon/start.png'
             })
     });
 
-    // 结束点
+    // 航线结束点
     var end_style = new ol.style.Style({
         image: new ol.style.Icon({
-//            scale: 0.25,
             src: 'icon/stop.png'
         })
     });
-
 
     // 静止点的显示
     var point_style = new ol.style.Style({
@@ -1539,22 +1514,22 @@
         })
     });
 
-    // 箭头的显示
+    // 航线箭头显示
     function arrow_style(rotation) {
         return new ol.style.Style({
             image: new ol.style.Icon({
                 anchor: [0.75, 0.5],
                 src: 'icon/arrow.png',
-//                scale: 0.4,
                 rotateWithView: true,
                 rotation: -rotation
             })
         });
     }
 
+    // 航线线条显示
     var contour_style =  new ol.style.Style({
         stroke: new ol.style.Stroke({
-            color: '#ff7f16',
+            color: '#5957ff',
             width: 3
         })
     });
@@ -1570,6 +1545,7 @@
 //        })
 //    });
 
+    // 大锚地显示
     var anch_style =  new ol.style.Style({
         stroke: new ol.style.Stroke({
             color: 'blue',
@@ -1602,23 +1578,7 @@
         })
     });
 
-//    // 已添加港口
-//    var port_yes =  new ol.style.Style({
-//        image: new ol.style.Icon({
-//            src: 'images/pointCheck.png',
-//            anchor: [0.5, 0.8]
-//        })
-//    });
-//
-//    // 待选港口
-//    var port_nor =  new ol.style.Style({
-//        image: new ol.style.Icon({
-//            src: 'images/pointAdd.png',
-//            anchor: [0.5, 0.8]
-//        })
-//    });
-
-    // 待选泊位/锚地图标
+    // 待选与被选图标
     var point_status = {
         0: new ol.style.Style({
             image: new ol.style.Icon({
@@ -1634,38 +1594,13 @@
         })
     };
 
-    /**
-     * 流水样式
-     */
+    // 停泊位置显示
     var sn_style = new ol.style.Style({
         image: new ol.style.Icon({
             src: 'images/position.png',
             anchor: [0.5, 0.8]
         })
-    })
-//    var pointer_add =  new ol.style.Style({
-//        image: new ol.style.Icon({
-//            src: 'images/pointerAdd.png'
-//        })
-//    });
-//    // 已添加泊位/锚地图标
-//    var pointer_check =  new ol.style.Style({
-//        image: new ol.style.Icon({
-//            src: 'images/pointerCheck.png'
-//        })
-//    });
-
-    // 已存在的锚地图标
-//    var exist_anch_style = new ol.style.Style({
-//        image: new ol.style.Icon({
-//            scale: 0.8,
-//            src: 'images/anchor.png'
-//        })
-//    });
-
-
-
-
+    });
 
     // 标尺层
     var range_source = new ol.source.Vector({wrapX:true});
@@ -1699,14 +1634,10 @@
 
     // 基本地图
     var basic = blmol.layer.createGoogleTile('basic');
-//    var basic = blmol.layer.createBasicTile('basic');
     // 卫星地图
-//    var bing = blmol.layer.createBingTile('bing');
     var satellite = blmol.layer.createGGSatelliteTile("satellite");
-
-// 电子海图
+    // 电子海图
     var haitu = blmol.layer.createESeaTile('haitu');
-
     // 停泊区域图标层
     var icon = blmol.layer.createVectorLayer('icon', 0, 20);
     // 停泊区域点层
@@ -1719,17 +1650,16 @@
     var current = blmol.layer.createVectorLayer('current', 0, 20);
     // 锚地区域图层
     var anch = blmol.layer.createVectorLayer('anch', 0, 20);
-
-    // 起始点的图标
-//    var start_end = blmol.layer.createVectorLayer('start_end', 0, 20);
-
     //港口图标显示层
     var portLayer = blmol.layer.createVectorLayer('portLogo',0, 20);
 
     // 创造地图
-    var map = blmol.map.createMap('map', [-45.496166, -23.907], initLevel, [basic, satellite, haitu], true, false, false);
+    var map = blmol.map.createMap('map', [-45.496166, -23.907], initLevel, [], true, false, false);
 
     // 显示的图层
+    blmol.map.addLayer(map, basic);
+    blmol.map.addLayer(map, satellite);
+    blmol.map.addLayer(map, haitu);
     blmol.map.addLayer(map, icon);
     blmol.map.addLayer(map, point);
     blmol.map.addLayer(map, route);
@@ -1741,22 +1671,15 @@
     blmol.map.addLayer(map, current);
 
     var zoom = 4;
-//    blmol.map.addLayer(map, start_end);
-
-    // 初始区域
-//    var initArea  = blmol.operation.getCurrentExtent(map);
 
     // 得到港口的所有的泊位，锚地中心点
     getAllPoints();
-
     // 获取所有锚地区域
     getAllAnch();
-
+    // 获取所有锚地
     reqPortBasicInfo();
-
     //获取初始地图
     setMapShow();
-
     $('map').css('height',document.body.clientHeight + 'px');
     //实时监测浏览器窗口高度
     window.onresize = function(){
@@ -1768,13 +1691,11 @@
 
     // 针对事件进行操作
     var currentMouseCoordinate;
-
     // 添加鼠标移动监听事件
     blmol.bind.addOnMouseMoveListener(map,function(map,coordinate,feature,evt){
         currentMouseCoordinate = coordinate;
         $('#optain_topLeft_text').text(coordinate[0].toFixed(6)+','+coordinate[1].toFixed(6));
     });
-
     // 监听界面变化
     var oldLevel = initLevel;
     var anchStatus = false;
@@ -1789,35 +1710,7 @@
             anchLayer(zoom) // 变化锚地显示
         }
         oldLevel = zoom;
-    });
-
-
-//    $('.stillArea_statistics_btn').click(function () {
-//        // SNShow([clusterId]);
-//        $('.box1').css({'display':'block','zIndex':100});
-//    });
-
-//    var info = function (map, listener) {
-//        var click = function (evt) {
-//            var features = [];
-//            map.forEachFeatureAtPixel(evt.pixel, function (feature) {
-//                features.push(feature);
-//            });
-//            listener(map, ol.proj.toLonLat(evt.coordinate), features, evt);
-//        };
-//        return map.on('singleclick', click);
-//    };
-//
-//    info(map, function(map, point, features){
-//        if (features.length > 0 ){
-//            alert(point + " / " + features[0].get('cluster_id'))
-//        }else{
-//            alert(point)
-//        }
-//    })
-
-
-
+    })
 </script>
 <script type="text/javascript" src="/javascripts/util.js"></script>
 <script type="text/javascript" src="/javascripts/basicSkills.js"></script>
