@@ -381,7 +381,8 @@ function getVoyageContent(voyageKey) {
                 if(checked === "1"){
                     check_ele.text("(已确认)");
                     // 显示为绿色
-                    check_ele.css({'color':'#00ff00'});
+                    check_ele.css({'color':'#faff96'});
+                    // check_ele.css({'color':'#00ff00'});
                 }
                 else{
                     check_ele.text("(未确认)");
@@ -521,7 +522,7 @@ function getVoyageContent(voyageKey) {
                                 var cluster = allPoints[stationaryAreaKey];
                                 var portName = '';
                                 if(cluster !== undefined){
-                                    var port = AllPortBasicList[cluster.PortID]
+                                    var port = AllPortBasicList[cluster.PortID];
                                     portName = port.ENName;
                                 }
                                 var duration = getDuration(duration_second); // 获得历时多长时间
