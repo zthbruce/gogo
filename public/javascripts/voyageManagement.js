@@ -340,8 +340,7 @@ function updateDuration(departureTime, arrivalTime) {
     }
     var sailingTime = totalTime - parkTotalTime;
     info_li.eq(6).text('航行时长：' + getDuration(sailingTime));
-    // info_li.eq(7).text('航速：' )
-    // // info_li.eq(8).text('航程：' + content.Mileage);
+    info_li.eq(6).attr('time', sailingTime);
     info_li.eq(9).text('停泊总时长：' + getDuration(parkTotalTime));
     info_li.eq(10).text('加油时长：' + getDuration(refuelTime));
     info_li.eq(11).text('补给时长：' + getDuration(supplyTime));

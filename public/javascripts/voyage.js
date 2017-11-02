@@ -134,7 +134,9 @@ function getBasicRouteList(MMSI) {
  * @param startTime
  * @param stopTime
  */
+// var mileage;
 function getDetailRoute(MMSI, startTime, stopTime) {
+    var mileage = 0;
     $.ajax({
         data: {MMSI: MMSI, startTime: startTime, stopTime: stopTime},
         url: "/voyage/getDetailRouteInfo",
@@ -154,11 +156,17 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                 var pointList = JSON.parse(sendData);
                 var lonLatInfo = pointList['lat_lon_info'];
                 var num = lonLatInfo.length;
+                console.log('点数为:' + num );
                 var arrow_features = [];
+                var last_lon;
+                var last_lat;
                 for(var i = 0; i < num; i++){
                     var ele = lonLatInfo[i];
-                    lonLatInfo[i] = ol.proj.fromLonLat([parseFloat(ele[0]), parseFloat(ele[1])]);
-                    if(i > 0 && i % 50 === 0){
+                    var lat_lon = WGS84transformer(parseFloat(ele[1]), parseFloat(ele[0]));
+                    var lon = lat_lon[1];
+                    var lat = lat_lon[0];
+                    lonLatInfo[i] = ol.proj.fromLonLat([lon, lat]);
+                    if(i > 0 && i % 80 === 0){
                         var start = lonLatInfo[i - 10];
                         var end= lonLatInfo[i];
                         var rotation = getRotation(start, end);
@@ -168,7 +176,16 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                         arrow_feature.setStyle(arrow_style(rotation));
                         arrow_features.push(arrow_feature)
                     }
+                    // 计算航程里程、
+                    if( i > 0){
+                        mileage += getGreatCircleDistance(last_lon, last_lat, lon, lat)
+                    }
+                    last_lon = lon;
+                    last_lat = lat;
                 }
+                var sailTime = parseInt(info_li.eq(6).attr('time')) / 3600;
+                info_li.eq(7).text('航速：' + (mileage / sailTime).toFixed(4) +'kts');
+                info_li.eq(8).text('航程：' + mileage.toFixed(4) + "nm");
                 var feature = new ol.Feature({
                     id: MMSI,
                     geometry: new ol.geom.LineString(lonLatInfo)
