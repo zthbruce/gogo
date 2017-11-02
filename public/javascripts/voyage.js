@@ -187,6 +187,7 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                     last_lon = lon;
                     last_lat = lat;
                 }
+                mileage = mileage / 1.85200;
                 var sailTime = parseInt(info_li.eq(6).attr('time')) / 3600;
                 info_li.eq(7).text('航速：' + (mileage / sailTime).toFixed(4) +'kts');
                 info_li.eq(8).text('航程：' + mileage.toFixed(4) + "nm");
