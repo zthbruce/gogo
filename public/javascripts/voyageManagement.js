@@ -363,6 +363,8 @@ function getVoyageContent(voyageKey) {
     updateSaveStatus(false); // 保存按钮初始化
     var title_ele = $("#voyageDetails").find(".fleet_title");
     title_ele.attr('voyageKey', voyageKey);
+    // var voyage_info_ul = $('.oneVoyageInfo>ul>li');
+    $('.oneVoyageInfo>ul>li').hide();
     /* 获取航次具体内容 */
     $.ajax({
         url:'/voyageManagement/getVoyage',
@@ -516,13 +518,18 @@ function getVoyageContent(voyageKey) {
                                 var sn_arrivalTime = info.ArrivalTime;
                                 var stationaryAreaKey = info.StationaryAreaKey;
                                 var duration_second = sn_arrivalTime - sn_departureTime;
-                                console.log(duration_second);
+                                var cluster = allPoints[stationaryAreaKey];
+                                var portName = '';
+                                if(cluster !== undefined){
+                                    var port = AllPortBasicList[cluster.PortID]
+                                    portName = port.ENName;
+                                }
                                 var duration = getDuration(duration_second); // 获得历时多长时间
                                 // 做相应处理
                                 li_str += '<li duration=' + duration_second +  ' stationaryAreaKey=' + stationaryAreaKey +
                                     ' DepartureTime=' + sn_departureTime + ' ArrivalTime=' + sn_arrivalTime +'><span>' + (i + 1) +
                                     '</span><span>'+ getRealTime(sn_departureTime).slice(0, 16) + '至' + getRealTime(sn_arrivalTime).slice(0, 16) + '</span><span>' +
-                                    duration + '</span><span>' + select_ele + '</span><div class="oneVoyage_EndBtn" style="display: none;">航次结束</div></li>'
+                                    duration + '</span>'+ '<span>' + portName + '</span><span>' + select_ele + '</span><div class="oneVoyage_EndBtn" style="display: none;">航次结束</div></li>'
                             }
                             voyageDetail_ele.append(li_str);
                         }

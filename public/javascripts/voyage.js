@@ -137,6 +137,7 @@ function getBasicRouteList(MMSI) {
 // var mileage;
 function getDetailRoute(MMSI, startTime, stopTime) {
     var mileage = 0;
+    var voyage_info_ul = $('.oneVoyageInfo>ul');
     $.ajax({
         data: {MMSI: MMSI, startTime: startTime, stopTime: stopTime},
         url: "/voyage/getDetailRouteInfo",
@@ -144,6 +145,9 @@ function getDetailRoute(MMSI, startTime, stopTime) {
         cache: false,
         timeout: 5000000,
         type: 'GET',
+        beforeSend: function () {
+            voyage_info_ul.css("background", 'url("/images/ajax-loader.gif") no-repeat center');
+        },
         success: function (data) {
             var res = data;
             // 返回的代码
@@ -257,6 +261,12 @@ function getDetailRoute(MMSI, startTime, stopTime) {
         },
         error: function (data, status, e) {
             console.log(e);
+        },
+        complete: function () {
+            console.log("加载结束");
+            $('.oneVoyageInfo>ul>li').show();
+            voyage_info_ul.css("background", "");
+        // shipList.css("background", ""); // 清除背景
         }
     })
 }
