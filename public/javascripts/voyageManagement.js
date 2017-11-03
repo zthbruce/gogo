@@ -647,6 +647,7 @@ $('.title_MinimizeBtn').click(function(){
     var gobackDivId = $(this).parent().parent().attr('id');
     if(gobackDivId == 'voyageDetails'){
         $('#voyage_Minimize').delay(300).fadeIn(300).attr({'nowdivlift':nowDivLift,'nowdivtop':nowDivTop});
+
     }
 });
 //航次详情向上还原按钮单击事件
