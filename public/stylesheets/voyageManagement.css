@@ -4,9 +4,10 @@
 #route_Show>.route_Voyage_btn:active{background-position:-52px 4px;}
 
 
-#voyageList,#voyageDetails,#voyage_StandardRoute,#voyage_StandardGoods{position:fixed;z-index:100;display:none;border-radius:10px;background:rgba(6,2,5,0.8);}
+#voyageList,#voyageDetails,#voyage_StandardRoute,#voyage_StandardGoods,#voyage_Minimize{position:fixed;z-index:100;display:none;border-radius:10px;background:rgba(6,2,5,0.8);}
 #voyageList{width:720px;height:440px;top:50px;left:300px;display:none;}
 #voyageDetails{width:720px;height:440px;top:50px;left:300px;display:none;}
+
 
 
 /*航次列表分类选项*/
@@ -180,3 +181,8 @@
 .StandardGoods_CancelBtn{margin-left:140px;}
 .StandardGoods_SaveBtn:hover,.StandardGoods_CancelBtn:hover{background:#2EB1EA;}
 .StandardGoods_SaveBtn:active,.StandardGoods_CancelBtn:active{background:#4cb4e0;}
+
+
+/*航次最小化窗口*/
+#voyage_Minimize{width:140px;height:28px;bottom:0px;right:0px;border-radius:0px;display:none;}
+#voyage_Minimize>.fleet_title>span{font-size:12px;text-align:left;padding-left:10px;width:80px;margin:0px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}

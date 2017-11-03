@@ -632,6 +632,40 @@ $('.title_GoBackBtn').click(function(){
     }
 });
 
+//航次详情最小化窗口按钮单击事件
+$('.title_MinimizeBtn').click(function(){
+    var nowDivLift = $(this).parent().parent().offset().left;
+    var nowDivTop = $(this).parent().parent().offset().top;
+    // $(this).parent().parent().fadeOut(300);
+    $(this).parent().parent().animate({
+        left: 1350,
+        top: 600,
+        width: 160,
+        height: 30,
+        opacity: 0
+    }, 500);
+    var gobackDivId = $(this).parent().parent().attr('id');
+    if(gobackDivId == 'voyageDetails'){
+        $('#voyage_Minimize').delay(300).fadeIn(300).attr({'nowdivlift':nowDivLift,'nowdivtop':nowDivTop});
+    }
+});
+//航次详情向上还原按钮单击事件
+$('.title_RestoreBtn').click(function(){
+    $(this).parent().parent().fadeOut(300);
+    var gobackDivId = $(this).parent().parent().attr('id');
+    if(gobackDivId == 'voyage_Minimize'){
+        var nowDivLift = parseInt($('#voyage_Minimize').attr('nowdivlift'));
+        var nowDivTop = parseInt($('#voyage_Minimize').attr('nowdivtop'));
+        // $('#voyageDetails').fadeIn(300);
+        $('#voyageDetails').animate({
+            left: nowDivLift,
+            top: nowDivTop,
+            width: 720,
+            height: 440,
+            opacity: 1
+        }, 500);
+    }
+});
 
 /**
  * 点击航次管理按钮实现
@@ -719,6 +753,7 @@ $(".voyageList_content").delegate("li", "click", function (event) {
     getVoyageContent(voyageKey);
     //隐藏航次列表弹出框
     $('#voyageList').fadeOut(300);
+    $('#voyageDetails').css('opacity',1);
     voyageDetails.fadeIn(300).offset({top:$('#voyageList').offset().top,left:$('#voyageList').offset().left});;
     // getDetailRoute(MMSI, departureTime, arrivalTime);
     event.stopPropagation();
@@ -1042,7 +1077,10 @@ $('.shipVoyageList_List').delegate('li>div', 'click', function () {
 });
 
 
-$('#voyageDetails .title_offbtn').click(function () {
+$('#voyageDetails .title_offbtn,#voyage_Minimize .title_offbtn').click(function () {
+    $('#voyageDetails').css({'left':300,'top':50,'width':720,'height':440,'opacity':0});
+    console.log($('#voyageDetails').offset().left);
+    console.log($('#voyageDetails').offset().top);
     route.getSource().clear(); // 清空当前图层
     current.getSource().clear();
 });
@@ -1057,14 +1095,11 @@ $('.oneVoyage_DockedList').delegate('li', 'click', function () {
     if(cluster_info === undefined){
         cluster_info = allPoints[stationaryAreaKey];
     }
-    // if(stationaryAreaKey[0] === "A"){
-    //     var cluster_info = anchInfoList[stationaryAreaKey];
-    // }
-    // if(cluster_id[0] === "B"){
-    //     var cluster_info = allPoints[cluster_id];
-    // }
     var lon = cluster_info['lon'];
     var lat = cluster_info['lat'];
+    //
+    // var lon = parseFloat($(this).attr('lon'));
+    // var lat = parseFloat($(this).attr('lat'));
     var lat_lon = WGS84transformer(lat, lon);
     var sn_feature = new ol.Feature({
         geometry: new ol.geom.Point(ol.proj.fromLonLat([lat_lon[1], lat_lon[0]]))
@@ -1077,7 +1112,13 @@ $('.oneVoyage_DockedList').delegate('li', 'click', function () {
         duration: 2000,
         source:view.getCenter()
     });
-    //在地图渲染之前执行平移动画
+    // 在地图渲染之前执行平移动画
+    // 在地图渲染之前执行放大动画
+    var zoom = ol.animation.zoom({
+        duration: 2000,
+        resolution: view.getResolution()
+    });
+    map.beforeRender(zoom);
     map.beforeRender(pan);
     view.setZoom(12);
     view.setCenter(ol.proj.fromLonLat([lat_lon[1], lat_lon[0]]));
