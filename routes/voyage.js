@@ -176,7 +176,6 @@ function getDataDuring(table, keyStart, keyEnd, limit, cb){
     if(limit){
         sql += util.format("limit %s", limit)
     }
-    console.log(sql);
     request.post({
         url:'http://192.168.30.80:83/query.json',
         json: {
@@ -185,8 +184,6 @@ function getDataDuring(table, keyStart, keyEnd, limit, cb){
         }
     }, function (err, httpResponse, data){
         if(!err && data && data.rows) {
-            // var result = data.rows;
-            console.log(data.rows);
             cb(["200", data.rows])
         } else{
             cb(["404", err])

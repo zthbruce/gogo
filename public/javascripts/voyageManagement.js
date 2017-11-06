@@ -517,6 +517,8 @@ function getVoyageContent(voyageKey) {
                                 select_ele += '</select>';
                                 var sn_departureTime = info.DepartureTime;
                                 var sn_arrivalTime = info.ArrivalTime;
+                                var lon = info.CenterLon;
+                                var lat = info.CenterLat;
                                 var stationaryAreaKey = info.StationaryAreaKey;
                                 var duration_second = sn_arrivalTime - sn_departureTime;
                                 var cluster = allPoints[stationaryAreaKey];
@@ -527,10 +529,14 @@ function getVoyageContent(voyageKey) {
                                 }
                                 var duration = getDuration(duration_second); // 获得历时多长时间
                                 // 做相应处理
-                                li_str += '<li duration=' + duration_second +  ' stationaryAreaKey=' + stationaryAreaKey +
+                                li_str += '<li duration=' + duration_second +  ' lon=' + lon + ' lat=' + lat +
                                     ' DepartureTime=' + sn_departureTime + ' ArrivalTime=' + sn_arrivalTime +'><span>' + (i + 1) +
                                     '</span><span>'+ getRealTime(sn_departureTime).slice(0, 16) + '至' + getRealTime(sn_arrivalTime).slice(0, 16) + '</span><span>' +
                                     duration + '</span>'+ '<span>' + portName + '</span><span>' + select_ele + '</span><div class="oneVoyage_EndBtn" style="display: none;">航次结束</div></li>'
+                                // li_str += '<li duration=' + duration_second +  ' stationaryAreaKey=' + stationaryAreaKey +
+                                //     ' DepartureTime=' + sn_departureTime + ' ArrivalTime=' + sn_arrivalTime +'><span>' + (i + 1) +
+                                //     '</span><span>'+ getRealTime(sn_departureTime).slice(0, 16) + '至' + getRealTime(sn_arrivalTime).slice(0, 16) + '</span><span>' +
+                                //     duration + '</span>'+ '<span>' + portName + '</span><span>' + select_ele + '</span><div class="oneVoyage_EndBtn" style="display: none;">航次结束</div></li>'
                             }
                             voyageDetail_ele.append(li_str);
                         }
@@ -1091,16 +1097,16 @@ $('#voyageDetails .title_offbtn,#voyage_Minimize .title_offbtn').click(function 
  */
 $('.oneVoyage_DockedList').delegate('li', 'click', function () {
     current.getSource().clear();
-    var stationaryAreaKey = $(this).attr('stationaryareakey');
-    var cluster_info = anchInfoList[stationaryAreaKey];
-    if(cluster_info === undefined){
-        cluster_info = allPoints[stationaryAreaKey];
-    }
-    var lon = cluster_info['lon'];
-    var lat = cluster_info['lat'];
+    // var stationaryAreaKey = $(this).attr('stationaryareakey');
+    // var cluster_info = anchInfoList[stationaryAreaKey];
+    // if(cluster_info === undefined){
+    //     cluster_info = allPoints[stationaryAreaKey];
+    // }
+    // var lon = cluster_info['lon'];
+    // var lat = cluster_info['lat'];
     //
-    // var lon = parseFloat($(this).attr('lon'));
-    // var lat = parseFloat($(this).attr('lat'));
+    var lon = parseFloat($(this).attr('lon'));
+    var lat = parseFloat($(this).attr('lat'));
     var lat_lon = WGS84transformer(lat, lon);
     var sn_feature = new ol.Feature({
         geometry: new ol.geom.Point(ol.proj.fromLonLat([lat_lon[1], lat_lon[0]]))
