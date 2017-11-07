@@ -25,7 +25,7 @@ router.get("/getVoyageList", function (req, res, next) {
     else{
         checkInfo = "('" + checkList[0] + "')";
     }
-    let sql = util.format('SELECT * FROM (SELECT t1.VoyageKey, t1.ShipNumber, NAME, LocalName, IMO, DepartureTime , ' +
+    let sql = util.format('SELECT * FROM (SELECT t1.VoyageKey, t1.ShipNumber, Name, LocalName, IMO, DepartureTime , ' +
         'DeparturePortID, ArrivalTime, ArrivalPortID, t1.Checked FROM T3101_Voyage t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber ' +
         'LEFT JOIN T4101_Fleet t3 ON t2.ShipNumber = t3.ShipNumber WHERE FleetNumber = "%s" AND t1.Checked IN %s ' +
         'ORDER BY t1.Checked DESC, IFNULL(ArrivalTime,"9999999999") DESC) t GROUP BY t.ShipNumber', fleetNumber, checkInfo);
