@@ -1,16 +1,16 @@
 /**
  * Created by admin on 16/10/28.
  */
-// sessionStorage.setItem('nowHtml', nowHtml);
+
 /**********************************长度和面积测量方法*****************************************************/
 /**
  * 计算线长度
  * @param {ol.geom.LineString} line The line.
  * @return {string} The formatted length.
  */
-var formatLength = function(line) {
-    var length;
-    var output;
+let formatLength = function(line) {
+    let length;
+    let output;
     length = Math.round(line.getLength() * 100) / 100;
     output = (Math.round(length / 1000 * 100) / 100);
     return output;
@@ -20,9 +20,9 @@ var formatLength = function(line) {
  * @param {ol.geom.Polygon} polygon The polygon.
  * @return {string} Formatted area.
  */
-var formatArea = function(polygon) {
-    var area;
-    var output;
+let formatArea = function(polygon) {
+    let area;
+    let output;
     area = polygon.getArea();
     output = (Math.round(area / 1000000 * 100) / 100); //+ ' ' + 'km<sup>2</sup>';
     return output;
@@ -32,15 +32,15 @@ var formatArea = function(polygon) {
  * @param str
  * @returns {*[]}
  */
-var getCenterByStr = function (str) {
-    var strArr = str.split(',');
-    var len = strArr.length;
-    var minx = 0;
-    var maxx = 0;
-    var miny = 0;
-    var maxy = 0;
-    var startNum = 0;
-    for(var i=0;i<len;i++){
+let getCenterByStr = function (str) {
+    let strArr = str.split(',');
+    let len = strArr.length;
+    let minx = 0;
+    let maxx = 0;
+    let miny = 0;
+    let maxy = 0;
+    let startNum = 0;
+    for(let i=0;i<len;i++){
         if(strArr[i] != ''){
             strArr[i] = parseFloat(strArr[i]);
             strArr[i+1] = parseFloat(strArr[i+1]);
@@ -75,23 +75,23 @@ var getCenterByStr = function (str) {
  * @param opt_geometry
  * @returns {*}
  */
-var geomFun1 = function (coordinates, opt_geometry) {
-    var center = coordinates[0];
-    var coord = coordinates[1];
-    var centerPx = center;
-    var coordPx = coord;
+let geomFun1 = function (coordinates, opt_geometry) {
+    let center = coordinates[0];
+    let coord = coordinates[1];
+    let centerPx = center;
+    let coordPx = coord;
     // 椭圆的长轴
-    var dmax = Math.max(100, Math.abs(centerPx[0] - coordPx[0]),
+    let dmax = Math.max(100, Math.abs(centerPx[0] - coordPx[0]),
         Math.abs(centerPx[1] - coordPx[1]));
     dmax = Math.round(dmax / 100);
-    var tmp = ol.interaction.Draw.createRegularPolygon(dmax, 0);
-    var geom = tmp(coordinates, opt_geometry);
-    var ext = geom.getExtent();
-    var scx = (center[0] - coord[0]) / (ext[0] - ext[2]);
-    var scy = (center[1] - coord[1]) / (ext[1] - ext[3]);
-    var t = [center[0] - ext[0] * scx, center[1] - ext[1] * scy];
+    let tmp = ol.interaction.Draw.createRegularPolygon(dmax, 0);
+    let geom = tmp(coordinates, opt_geometry);
+    let ext = geom.getExtent();
+    let scx = (center[0] - coord[0]) / (ext[0] - ext[2]);
+    let scy = (center[1] - coord[1]) / (ext[1] - ext[3]);
+    let t = [center[0] - ext[0] * scx, center[1] - ext[1] * scy];
     geom.applyTransform(function (g1, g2, dim) {
-        for (var i = 0; i < g1.length; i += dim) {
+        for (let i = 0; i < g1.length; i += dim) {
             g2[i] = g1[i] * scx + t[0];
             g2[i + 1] = g1[i + 1] * scy + t[1];
         }
@@ -100,7 +100,7 @@ var geomFun1 = function (coordinates, opt_geometry) {
     return geom;
 };
 /**************************************创建修改标签相关方法********************************************/
-var linestyle = new ol.style.Style({
+let linestyle = new ol.style.Style({
     fill: new ol.style.Fill({
         color: 'rgba(255, 255, 255, 0.2)'
     }),
@@ -121,11 +121,11 @@ var linestyle = new ol.style.Style({
 });
 
 function circleUpdateFeatures(points) {
-    var features = [];
-    var point1 = [points[0],points[1]];
-    var point2 = [points[2],points[1]];
-    var point3 = [points[2],points[3]];
-    var point4 = [points[0],points[3]];
+    let features = [];
+    let point1 = [points[0],points[1]];
+    let point2 = [points[2],points[1]];
+    let point3 = [points[2],points[3]];
+    let point4 = [points[0],points[3]];
     points.push(point1);
     points.push([(point1[0]+point2[0])/2,(point1[1]+point2[1])/2]);
     points.push(point2);
@@ -134,8 +134,8 @@ function circleUpdateFeatures(points) {
     points.push([(point3[0]+point4[0])/2,(point3[1]+point4[1])/2]);
     points.push(point4);
     points.push([(point4[0]+point1[0])/2,(point4[1]+point1[1])/2]);
-    for(var i=0;i<8;i++){
-        var point = new ol.Feature({
+    for(let i=0;i<8;i++){
+        let point = new ol.Feature({
             geometry: new ol.geom.Circle(points[i], 2000),
         });
         point.setStyle(circleStyle);
@@ -143,7 +143,7 @@ function circleUpdateFeatures(points) {
         features.push(point);
     }
     points.push(points[0]);
-    var line = new ol.Feature({
+    let line = new ol.Feature({
         geometry: new ol.geom.LineString(points)
     });
     line.setStyle(linestyle);
@@ -153,18 +153,18 @@ function circleUpdateFeatures(points) {
 }
 /***************************************全局变量******************************************************/
 
-// var draw = new ol.interaction.Draw({});
+// let draw = new ol.interaction.Draw({});
 //
 // /**
 //  * 设置图层元素
 //  * @type {ol.source.Vector}
 //  */
-// var source = new ol.source.Vector({wrapX:true});
+// let source = new ol.source.Vector({wrapX:true});
 // /**
 //  * 设置图层
 //  * @type {ol.layer.Vector}
 //  */
-// var vector = new ol.layer.Vector({
+// let vector = new ol.layer.Vector({
 //     source:source
 // });
 
@@ -172,12 +172,12 @@ function circleUpdateFeatures(points) {
  * 记录绘制过的图形类型
  * @type {Array}
  */
-var drewFeatures = [];
-var drewFeaturesType = [];
-// var map = blmol.map.createMap('map', [123.861, 30.217], 8, [blmol.layer.createTianDiTile("blmLayer"),vector], false, false, false);
-var points = [];
-var shuxing = null;
-var area_info = {
+let drewFeatures = [];
+let drewFeaturesType = [];
+// let map = blmol.map.createMap('map', [123.861, 30.217], 8, [blmol.layer.createTianDiTile("blmLayer"),vector], false, false, false);
+let points = [];
+let shuxing = null;
+let area_info = {
     points:[],
     area_type:'',
     area_name:'',
@@ -195,18 +195,18 @@ var area_info = {
 };
 
 //当前设置标签保存了的信息
-var nowAreaInfo = null;
+let nowAreaInfo = null;
 //当前设置标签,不包括线标签
-var nowSetFeature = null;
+let nowSetFeature = null;
 //当前绘制好的标签点信息,不包括线标签
-var nowPoints = [];
+let nowPoints = [];
 //当前绘制图形类型
-var areaType = '';
+let areaType = '';
 /**
  * 定义绘制开始样式
  * @type {ol.style.Style}
  */
-var drawStyle = new ol.style.Style({
+let drawStyle = new ol.style.Style({
     fill: new ol.style.Fill({
         color: 'rgba(255, 255, 255, 0.2)'
     }),
@@ -226,7 +226,7 @@ var drawStyle = new ol.style.Style({
  * 定义绘制结束样式
  * @type {ol.style.Style}
  */
-var drewStyle = new ol.style.Style({
+let drewStyle = new ol.style.Style({
     fill: new ol.style.Fill({
         color: 'rgba(255, 255, 255, 0.2)'
     }),
@@ -245,7 +245,7 @@ var drewStyle = new ol.style.Style({
  * 小圆标签样式
  * @type {ol.style.Style}
  */
-var circleStyle = new ol.style.Style({
+let circleStyle = new ol.style.Style({
     fill: new ol.style.Fill({
         color: '#ffcc33'
     }),
@@ -259,7 +259,7 @@ var circleStyle = new ol.style.Style({
  * 标签修改时的样式
  * @type {ol.style.Style}
  */
-var updateStyle = new ol.style.Style({
+let updateStyle = new ol.style.Style({
     fill: new ol.style.Fill({
         color: 'rgba(255, 255, 255, 0.2)'
     }),
@@ -283,22 +283,22 @@ var updateStyle = new ol.style.Style({
 function addGraphToData(obj,callback) {
     if(obj==null){callback(-1);return;};
     if(obj.area_type == 0){
-        var point1 = ol.proj.toLonLat([obj.points[0],obj.points[1]]);
-        var point2 = ol.proj.toLonLat([obj.points[2],obj.points[3]]);
+        let point1 = ol.proj.toLonLat([obj.points[0],obj.points[1]]);
+        let point2 = ol.proj.toLonLat([obj.points[2],obj.points[3]]);
         obj.points = [point1[0],point1[1],point2[0],point2[1]];
     }else if(obj.area_type == 1 || obj.area_type == 4){
-        for(var i = 0;i<obj.points.length;i++){
+        for(let i = 0;i<obj.points.length;i++){
             obj.points[i] = ol.proj.toLonLat(obj.points[i]);
         }
     }else if(obj.area_type == 2 || obj.area_type == 3){
-        for(var i = 0;i<obj.points[0].length;i++){
+        for(let i = 0;i<obj.points[0].length;i++){
             obj.points[0][i] = ol.proj.toLonLat(obj.points[0][i]);
         }
     }
 
-    var param = '{"seq":"","area":"'+ obj.area_shuxing +'","name":"'+ obj.area_name +'","xys":'+ JSON.stringify(obj.points)
+    let param = '{"seq":"","area":"'+ obj.area_shuxing +'","name":"'+ obj.area_name +'","xys":'+ JSON.stringify(obj.points)
         +',"type":'+ obj.area_type +',"userId":"'+obj.user_id+'"}';
-    var req = {"cmd":0x91,"param":param};
+    let req = {"cmd":0x91,"param":param};
     $.ajax({
         type: "POST",
         url: "/graph",
@@ -306,7 +306,7 @@ function addGraphToData(obj,callback) {
         success:function (data,status) {
             if(status == 'success'){
                 //alert(data);
-                var dataObj = jQuery.parseJSON(data);
+                let dataObj = jQuery.parseJSON(data);
                 callback(dataObj.id);
             }else{
                 callback('');
@@ -331,22 +331,22 @@ function refreshAreaInfo(obj) {
         });
     }else{
         if(obj.area_type == 0){
-            var point1 = ol.proj.toLonLat([obj.points[0],obj.points[1]]);
-            var point2 = ol.proj.toLonLat([obj.points[2],obj.points[3]]);
+            let point1 = ol.proj.toLonLat([obj.points[0],obj.points[1]]);
+            let point2 = ol.proj.toLonLat([obj.points[2],obj.points[3]]);
             obj.points = [point1[0],point1[1],point2[0],point2[1]];
         }else if(obj.area_type == 1 || obj.area_type == 4){
-            for(var i = 0;i<obj.points.length;i++){
+            for(let i = 0;i<obj.points.length;i++){
                 obj.points[i] = ol.proj.toLonLat(obj.points[i]);
             }
         }else if(obj.area_type == 2 || obj.area_type == 3){
-            for(var i = 0;i<obj.points[0].length;i++){
+            for(let i = 0;i<obj.points[0].length;i++){
                 obj.points[0][i] = ol.proj.toLonLat(obj.points[0][i]);
             }
         }
-        var param = '{"seq":"","areaId":"'+ obj.area_id +'","name":"'+ obj.area_name +'","xys":'
+        let param = '{"seq":"","areaId":"'+ obj.area_id +'","name":"'+ obj.area_name +'","xys":'
             +JSON.stringify(obj.points)+',"area":"'+ obj.area_shuxing +'","type":"'+ obj.area_type +'","userId":"1"}';
         //alert(param);
-        var req = {"cmd":0x93,"param":param};
+        let req = {"cmd":0x93,"param":param};
         $.ajax({
             type: "POST",
             url: "/graph",
@@ -373,8 +373,8 @@ function refreshAreaInfo(obj) {
  * @param areaId
  */
 function addFeatureById(areaId) {
-    var param = '{"seq":"","areaId":'+ areaId +',"userId":"1"}';
-    var req = {"cmd":0x94,"param":param};
+    let param = '{"seq":"","areaId":'+ areaId +',"userId":"1"}';
+    let req = {"cmd":0x94,"param":param};
     $.ajax({
         type: "POST",
         url: "/graph",
@@ -382,17 +382,17 @@ function addFeatureById(areaId) {
         success:function (data,status) {
             if(status == 'success'){
                 //alert(data);
-                var data_obj=jQuery.parseJSON(data);
-                var dataObj = data_obj.data[0];
+                let data_obj=jQuery.parseJSON(data);
+                let dataObj = data_obj.data[0];
                 if(dataObj.type == 11) {
                     return;
                 }
                 //将字符串转化为几何信息
-                var pointss = dataObj.xys.split('|');
-                var len = pointss.length;
-                var pointes = [];
-                for(var i=0;i<len;i++){
-                    var point = pointss[i].split(',');
+                let pointss = dataObj.xys.split('|');
+                let len = pointss.length;
+                let pointes = [];
+                for(let i=0;i<len;i++){
+                    let point = pointss[i].split(',');
                     pointes.push(ol.proj.fromLonLat([parseFloat(point[0]),parseFloat(point[1])]));
                 }
                 if(dataObj.type == 0){
@@ -405,8 +405,8 @@ function addFeatureById(areaId) {
                 //将获取到的区域设置为当前区域
                 nowAreaInfo = new area_info.init(dataObj.xys,dataObj.type,dataObj.name,1,areaId,dataObj.area);
                 points = dataObj.xys;
-                var geom1 = geomFun1([[dataObj.xys[0],dataObj.xys[1]],[dataObj.xys[2],dataObj.xys[3]]]);
-                var nowFeature;
+                let geom1 = geomFun1([[dataObj.xys[0],dataObj.xys[1]],[dataObj.xys[2],dataObj.xys[3]]]);
+                let nowFeature;
                 if(dataObj.type == 0){
                     nowFeature = new ol.Feature({
                         id: 'Circle',
@@ -422,14 +422,14 @@ function addFeatureById(areaId) {
                     $('.circle-set').css('display','none');
                     // updateModifyFeatureStyle([]);
                 }else if(dataObj.type == 1){
-                    var nowFeature1 = new ol.Feature({
+                    let nowFeature1 = new ol.Feature({
                         id: 'editLine',
                         geometry: new ol.geom.LineString(dataObj.xys)
                     });
                     nowFeature1.setStyle(drewStyle);
-                    var features = [];
-                    for(var i =0;i<dataObj.xys.length;i++){
-                        var point = new ol.Feature({
+                    let features = [];
+                    for(let i =0;i<dataObj.xys.length;i++){
+                        let point = new ol.Feature({
                             geometry: new ol.geom.Circle(dataObj.xys[i], 2000)
                         });
                         point.setStyle(circleStyle);
@@ -480,10 +480,10 @@ function addFeatureById(areaId) {
                 }else {
                     $('.map-area-name').text(nowAreaInfo.area_name);
                 }
-                var linepoint = nowFeature.getGeometry().getCoordinates()[0];
-                var len = linepoint.length;
-                var j = [];
-                for(var i=0;i<len;i++){
+                let linepoint = nowFeature.getGeometry().getCoordinates()[0];
+                let len = linepoint.length;
+                let j = [];
+                for(let i=0;i<len;i++){
                     if(i==0){
                         j = [0,linepoint[0][1]];
                     }else{
@@ -492,9 +492,9 @@ function addFeatureById(areaId) {
                         }
                     }
                 }
-                var element = document.getElementById('map-region-click');
+                let element = document.getElementById('map-region-click');
                 $('#map-region-click').css('display','block');
-                var popup = new ol.Overlay({
+                let popup = new ol.Overlay({
                     element: element,
                     positioning: 'top-left',
                     stopEvent: false,
@@ -505,8 +505,8 @@ function addFeatureById(areaId) {
 
 
                 //设置最后一个点为地图中心点
-                var areasString = dataObj.xys.toString();
-                var center1 = getCenterByStr(areasString);
+                let areasString = dataObj.xys.toString();
+                let center1 = getCenterByStr(areasString);
                 map.getView().setCenter(center1);
             }else{
                 alert('failed to request data');
@@ -561,9 +561,9 @@ $("#area_save").on("click",function(){
  * @param feature
  * @returns {*[]}
  */
-var styleFunction = function(feature) {
-    var geometry = feature.getGeometry();
-    var styles = [
+let styleFunction = function(feature) {
+    let geometry = feature.getGeometry();
+    let styles = [
         new ol.style.Style({
             stroke: new ol.style.Stroke({
                 color: '#ffcc33',
@@ -572,9 +572,9 @@ var styleFunction = function(feature) {
         })
     ];
     geometry.forEachSegment(function(start, end) {
-        var dx = end[0] - start[0];
-        var dy = end[1] - start[1];
-        var rotation = Math.atan2(dy, dx);
+        let dx = end[0] - start[0];
+        let dy = end[1] - start[1];
+        let rotation = Math.atan2(dy, dx);
         styles.push(new ol.style.Style({
             geometry: new ol.geom.Point(end),
             image: new ol.style.Icon({
@@ -592,7 +592,7 @@ var styleFunction = function(feature) {
  * 为地图所有没有样式线标签添加箭头样式
  * @type {ol.layer.Vector}
  */
-var arrowVector = new ol.layer.Vector({
+let arrowVector = new ol.layer.Vector({
     source: source,
     style: styleFunction
 });
@@ -601,11 +601,11 @@ var arrowVector = new ol.layer.Vector({
  * 记录是否是第一次点击地图
  * @type {boolean}
  */
-var firstDown = true;
+let firstDown = true;
 //是否正在绘制活动
-var isDrawing = false;
+let isDrawing = false;
 //是否刚刚完成最后一次绘制
-var isLastPan = false;
+let isLastPan = false;
 
 
 /**
@@ -634,8 +634,8 @@ function addInteraction(selectType) {
                 if(!geometry){
                     geometry = new ol.geom.Polygon(null);
                 }
-                var start = coordinates[0];
-                var end = coordinates[1];
+                let start = coordinates[0];
+                let end = coordinates[1];
                 geometry.setCoordinates([
                     [start, [start[0], end[1]], end, [end[0], start[1]], start]
                 ]);
@@ -678,9 +678,9 @@ function addInteraction(selectType) {
             // console.log(ol.proj.toLonLat(points));
         }else if(selectType == 'LineString'){
             points = feature.getGeometry().getCoordinates();
-            var features = [];
-            for(var i =0;i<points.length;i++){
-                var point = new ol.Feature({
+            let features = [];
+            for(let i =0;i<points.length;i++){
+                let point = new ol.Feature({
                     geometry: new ol.geom.Circle(points[i], 2000)
                 });
                 // if(nowHtml == 'regulation'){
@@ -815,8 +815,8 @@ blmol.bind.addOnMouseMoveListener(map,function (map,wz,features,evt) {
 //        // nowAreaInfo1.speeds.push(0);
 //    }
 // });
-// var nowClickFeature = undefined;
-// var clickMarker = function (map, points, markers) {
+// let nowClickFeature = undefined;
+// let clickMarker = function (map, points, markers) {
 //     if(nowHtml != 'business' && nowHtml != 'regulation' && markers.length > 0){
 //         if(isDrawing == false){
 //             select.setActive(true);
@@ -834,9 +834,9 @@ blmol.bind.addOnMouseMoveListener(map,function (map,wz,features,evt) {
 //             showLineBusiness2(nowShowFeature);
 //         }
 //     }else if(nowHtml == 'regulation' && isDrawing == false && isLastPan == false){
-//         var feature1 = getFeatureById('隔离带,-1,0');
-//         var feature2 = getFeatureById('VTS报告线,-1,0');
-//         var feature3 = getFeatureById('进入方向,-1,0');
+//         let feature1 = getFeatureById('隔离带,-1,0');
+//         let feature2 = getFeatureById('VTS报告线,-1,0');
+//         let feature3 = getFeatureById('进入方向,-1,0');
 //         if(feature1 != null){
 //             feature1.setStyle(drawStyle);
 //         }
@@ -849,14 +849,14 @@ blmol.bind.addOnMouseMoveListener(map,function (map,wz,features,evt) {
 //         if(markers.length == 0){
 //             return;
 //         }
-//         for(var i=0;i<markers.length;i++) {
+//         for(let i=0;i<markers.length;i++) {
 //             if(markers[i].getId() == undefined||markers[i].getId() ==null||markers[i].getId() ==''){
 //                 return;
 //             }
 //             select.setActive(true);
 //             modify.setActive(true);
 //             // console.log(selected.a);
-//             // var ssd = selected.a.length;
+//             // let ssd = selected.a.length;
 //             // console.log(ssd);
 //             if(markers[i].getId() == '隔离带,-1,0' && i==0){
 //                 startUpdateRegulation(getFeatureById('隔离带,-1,0'));
@@ -877,12 +877,12 @@ blmol.bind.addOnMouseMoveListener(map,function (map,wz,features,evt) {
 /************************地图标签修改方法*****************************/
 
 //
-// var select = new ol.interaction.Select();
+// let select = new ol.interaction.Select();
 // map.addInteraction(select);
 //
-// var selected = select.getFeatures();
+// let selected = select.getFeatures();
 //
-// var modify = new ol.interaction.Modify({
+// let modify = new ol.interaction.Modify({
 //     features: selected
 // });
 // map.addInteraction(modify);
@@ -892,7 +892,7 @@ blmol.bind.addOnMouseMoveListener(map,function (map,wz,features,evt) {
 //
 // });
 
-var pointer = new ol.interaction.Pointer();
+let pointer = new ol.interaction.Pointer();
 
 /**
  * 修改标签结束方法
@@ -900,18 +900,18 @@ var pointer = new ol.interaction.Pointer();
  *
  */
 // modify.on('modifyend',function (evt) {
-//     var point = nowPoints;
-//     var feature = source.getFeatures()[0];
+//     let point = nowPoints;
+//     let feature = source.getFeatures()[0];
 //     if(feature.getId()=='Circle'){
 //         //鼠标开始点击点
-//         var startEndArr = evt.target.j[0][0].na;
-//         var x0 = Math.abs(startEndArr[0][0]-point[0]);
-//         var x1 = Math.abs(startEndArr[0][0]-point[2]);
-//         var y0 = Math.abs(startEndArr[0][1]-point[1]);
-//         var y1 = Math.abs(startEndArr[0][1]-point[3]);
-//         var len1 = startEndArr[1][0] - startEndArr[0][0];
-//         var len2 = startEndArr[1][1] - startEndArr[0][1];
-//         var circlesArr = [];
+//         let startEndArr = evt.target.j[0][0].na;
+//         let x0 = Math.abs(startEndArr[0][0]-point[0]);
+//         let x1 = Math.abs(startEndArr[0][0]-point[2]);
+//         let y0 = Math.abs(startEndArr[0][1]-point[1]);
+//         let y1 = Math.abs(startEndArr[0][1]-point[3]);
+//         let len1 = startEndArr[1][0] - startEndArr[0][0];
+//         let len2 = startEndArr[1][1] - startEndArr[0][1];
+//         let circlesArr = [];
 //         if(x0<=x1 && y0<=y1){
 //             circlesArr = [[point[0]+len1,point[1]+len2],[point[2],point[3]]];
 //         }else if(x0<=x1 && y0>=y1){
@@ -922,20 +922,20 @@ var pointer = new ol.interaction.Pointer();
 //             circlesArr = [[point[0],point[1]],[point[2]+len1,point[3]+len2]];
 //         }
 //         nowPoints=[circlesArr[0][0],circlesArr[0][1],circlesArr[1][0],circlesArr[1][1]];
-//         var geom1 = geomFun1(circlesArr);   // 重新
+//         let geom1 = geomFun1(circlesArr);   // 重新
 //         feature.setGeometry(geom1);
 //         // $('.circle-set').css('display','block');
 //         // $(".circle-set").mydrag();
 //         // showFeatureInfo('Circle', nowPoints, feature);
 //     }else if(feature.getId()=='box'){
-//         var endFeature = evt.features.a[0];
+//         let endFeature = evt.features.a[0];
 //         if(endFeature.getGeometry().getCoordinates()[0].length==4){
 //             feature.getGeometry().setCoordinates(nowPoints);
 //         }else if(endFeature.getGeometry().getCoordinates()[0].length==5){
-//             var startEndArr = evt.target.j[0][0].na;
-//             var changeId = 0;
-//             for(var i=0;i<4;i++){
-//                 var onePoint = point[0][i];
+//             let startEndArr = evt.target.j[0][0].na;
+//             let changeId = 0;
+//             for(let i=0;i<4;i++){
+//                 let onePoint = point[0][i];
 //                 if(onePoint[0]==startEndArr[0][0]&&onePoint[1]==startEndArr[0][1]){
 //                     if(i==3){
 //                         changeId==0;
@@ -944,9 +944,9 @@ var pointer = new ol.interaction.Pointer();
 //                     }
 //                 }
 //             }
-//             var points = point[0];
-//             var x = startEndArr[1][0]-points[changeId][0];
-//             var y = startEndArr[1][1]-points[changeId][1];
+//             let points = point[0];
+//             let x = startEndArr[1][0]-points[changeId][0];
+//             let y = startEndArr[1][1]-points[changeId][1];
 //             if(changeId == 0){
 //                 x = startEndArr[0][0]-points[changeId][0];
 //                 y = startEndArr[0][1]-points[changeId][1];
@@ -968,19 +968,19 @@ var pointer = new ol.interaction.Pointer();
 //             nowPoints=points;
 //             feature.getGeometry().setCoordinates(points);
 //         }else if(endFeature.getGeometry().getCoordinates()[0].length==6){
-//             var points1 = evt.target.j[0][0].na;
-//             var points2 = evt.target.j[1][0].na;
-//             var point1 = points1[0];
-//             var point2 = points2[1];
-//             var x=0;
-//             var y=0;
+//             let points1 = evt.target.j[0][0].na;
+//             let points2 = evt.target.j[1][0].na;
+//             let point1 = points1[0];
+//             let point2 = points2[1];
+//             let x=0;
+//             let y=0;
 //             if(point1[0] == point2[0]){
 //                 x = points1[1][0]-points1[0][0];
 //             }else if(point1[1] == point2[1]){
 //                 y = points1[1][1]-points1[0][1];
 //             }
-//             var point = nowPoints[0];
-//             for(var i=0;i<5;i++){
+//             let point = nowPoints[0];
+//             for(let i=0;i<5;i++){
 //                 if(point[i][0] == point1[0] && point[i][1] == point1[1]){
 //                     point[i] = [point1[0]+x,point1[1]+y];
 //                 }else if(point[i][0] == point2[0] && point[i][1] == point2[1]){
@@ -1002,7 +1002,7 @@ var pointer = new ol.interaction.Pointer();
 //         // showFeatureInfo('Polygon',feature.getGeometry().getCoordinates(),feature);
 //     }
 //     // else if(nowHtml == 'regulation'){
-//     //     var endFeature = evt.features.a[0];
+//     //     let endFeature = evt.features.a[0];
 //     //     if(endFeature.getId().split(',')[0] == '航道边界'){
 //     //         endFeature.setStyle();
 //     //     }else{
@@ -1012,7 +1012,7 @@ var pointer = new ol.interaction.Pointer();
 //     //     startUpdateRegulation(endFeature);
 //     // }
 //     // else if(nowHtml == 'business'){
-//     //     var endFeature = evt.features.a[0];
+//     //     let endFeature = evt.features.a[0];
 //     //     nowShowFeature = feature;
 //     //     nowShowPoints = feature.getGeometry().getCoordinates();
 //     //     changeTipArea(nowShowPoints);
@@ -1081,7 +1081,7 @@ var pointer = new ol.interaction.Pointer();
 // /**
 //  * Define a namespace for the application.
 //  */
-// var app = {};
+// let app = {};
 // /**
 //  * @constructor
 //  * @extends {ol.interaction.Pointer}
@@ -1120,8 +1120,8 @@ var pointer = new ol.interaction.Pointer();
 //  * @return {boolean} `true` to start the drag sequence.
 //  */
 // app.Drag.prototype.handleDownEvent = function(evt) {
-//     var map = evt.map;
-//     var feature = map.forEachFeatureAtPixel(evt.pixel,
+//     let map = evt.map;
+//     let feature = map.forEachFeatureAtPixel(evt.pixel,
 //         function(feature) {
 //             return feature;
 //         });
@@ -1136,15 +1136,15 @@ var pointer = new ol.interaction.Pointer();
 //  * @param {ol.MapBrowserEvent} evt Map browser event.
 //  */
 // app.Drag.prototype.handleDragEvent = function(evt) {
-//     var deltaX = evt.coordinate[0] - this.coordinate_[0];
-//     var deltaY = evt.coordinate[1] - this.coordinate_[1];
-//     var geometry = /** @type {ol.geom.SimpleGeometry} */
+//     let deltaX = evt.coordinate[0] - this.coordinate_[0];
+//     let deltaY = evt.coordinate[1] - this.coordinate_[1];
+//     let geometry = /** @type {ol.geom.SimpleGeometry} */
 //         (this.feature_.getGeometry());
 //     geometry.translate(deltaX, deltaY);
 //     this.coordinate_[0] = evt.coordinate[0];
 //     this.coordinate_[1] = evt.coordinate[1];
 //     if(nowSetFeature.getId() == 'Circle' && isDrawing == false){
-//         var feature = nowSetFeature;
+//         let feature = nowSetFeature;
 //         showFeatureInfo('Circle',[nowPoints[0]+deltaX,nowPoints[1]+deltaY,nowPoints[2]+deltaX,nowPoints[3]+deltaY],feature);
 //         changeTipArea1(feature.getGeometry().getCoordinates()[0]);
 //         $('.circle-set').css('display','block');
@@ -1152,12 +1152,12 @@ var pointer = new ol.interaction.Pointer();
 //         points = nowPoints;
 //         return;
 //     }else if(nowSetFeature.getId() == 'box'&& isDrawing == false){
-//         var feature = nowSetFeature;
+//         let feature = nowSetFeature;
 //         showFeatureInfo('box',feature.getGeometry().getCoordinates(),feature);
 //         changeTipArea1(feature.getGeometry().getCoordinates()[0]);
 //         $('.box-set').css('display','block');
 //     }else if(nowSetFeature.getId() == 'Polygon'&& isDrawing == false){
-//         var feature = nowSetFeature;
+//         let feature = nowSetFeature;
 //         showFeatureInfo('Polygon',feature.getGeometry().getCoordinates(),feature);
 //         changeTipArea1(feature.getGeometry().getCoordinates()[0]);
 //         $('.polygon-set').css('display','block');
@@ -1172,12 +1172,12 @@ var pointer = new ol.interaction.Pointer();
 //  */
 // app.Drag.prototype.handleMoveEvent = function(evt) {
 //     if (this.cursor_) {
-//         var map = evt.map;
-//         var feature = map.forEachFeatureAtPixel(evt.pixel,
+//         let map = evt.map;
+//         let feature = map.forEachFeatureAtPixel(evt.pixel,
 //             function(feature) {
 //                 return feature;
 //             });
-//         var element = evt.map.getTargetElement();
+//         let element = evt.map.getTargetElement();
 //         if (feature) {
 //             if (element.style.cursor != this.cursor_) {
 //                 this.previousCursor_ = element.style.cursor;
@@ -1198,7 +1198,7 @@ var pointer = new ol.interaction.Pointer();
 //     return false;
 // };
 
-// var dragDrop = new app.Drag();
+// let dragDrop = new app.Drag();
 // dragDrop.setActive(false);
 // map.addInteraction(dragDrop);
 
@@ -1207,14 +1207,14 @@ var pointer = new ol.interaction.Pointer();
 function showFeatureInfo(type, points, feature) {
     if(type == 'Circle'){
         // 左下角
-        var point1 = ol.proj.toLonLat([points[0],points[1]]);
+        let point1 = ol.proj.toLonLat([points[0],points[1]]);
         // 右上角
-        var point2 = ol.proj.toLonLat([points[2],points[3]]);
-        var s1 = new ol.Feature(new ol.geom.LineString([[points[0],points[1]],[points[2],points[1]]]));
-        var s2 = new ol.Feature(new ol.geom.LineString([[points[2],points[1]],[points[2],points[3]]]));
-        var short = formatLength(s1.getGeometry())/2;
-        var long = formatLength(s2.getGeometry())/2;
-        var center = [(point1[0]+point2[0])/2,(point1[1]+point2[1])/2];
+        let point2 = ol.proj.toLonLat([points[2],points[3]]);
+        let s1 = new ol.Feature(new ol.geom.LineString([[points[0],points[1]],[points[2],points[1]]]));
+        let s2 = new ol.Feature(new ol.geom.LineString([[points[2],points[1]],[points[2],points[3]]]));
+        let short = formatLength(s1.getGeometry())/2;
+        let long = formatLength(s2.getGeometry())/2;
+        let center = [(point1[0]+point2[0])/2,(point1[1]+point2[1])/2];
 
         $('.circle-set-lonlat-in').remove();
         $('.circle-set-lonlat').append('<div class="circle-set-lonlat-in">'
@@ -1248,8 +1248,8 @@ function showFeatureInfo(type, points, feature) {
             $('#circle-lat-img').css('background-position',getPositionByLat(center[0])[0]);
         });
         $('#circle-lat-img').css('background-position',getPositionByLat(center[0])[0]);
-        var short1 = short<long?short:long;
-        var long1 = short>long?short:long;
+        let short1 = short<long?short:long;
+        let long1 = short>long?short:long;
         if(nowAreaInfo.area_name==''||nowAreaInfo.area_name==undefined||nowAreaInfo.area_name==null){
             $('.circle-set-inputName').val('')
         }else{
@@ -1266,8 +1266,8 @@ function showFeatureInfo(type, points, feature) {
         $('.polygon-set-select-text').text('度分秒');
         $("#polygon-tr").remove();
         $(".polygon-set-lonlat").append("<table id=\"polygon-tr\">"+"</table>");
-        for(var i = 0;i<points[0].length-1;i++){
-            var point = ol.proj.toLonLat(points[0][i]);
+        for(let i = 0;i<points[0].length-1;i++){
+            let point = ol.proj.toLonLat(points[0][i]);
             $('#polygon-tr').append('<tr>'
                 +'<td>'+ (i+1) +'</td>'
                 +'<td>'
@@ -1310,12 +1310,12 @@ function showFeatureInfo(type, points, feature) {
         }
         // $('.polygon-set').css('display','block');
     }else if(type == 'Box'){
-        var maxx;
-        var maxy;
-        var minx;
-        var miny;
-        for(var i = 0;i<points[0].length;i++){
-            var point = ol.proj.toLonLat(points[0][i]);
+        let maxx;
+        let maxy;
+        let minx;
+        let miny;
+        for(let i = 0;i<points[0].length;i++){
+            let point = ol.proj.toLonLat(points[0][i]);
             if(i==0){
                 maxx = point[0];
                 minx = point[0];
@@ -1401,16 +1401,16 @@ function showFeatureInfo(type, points, feature) {
 /************************************椭圆、多边形、矩形的'度分秒'切换响应方法*****************************************/
 //椭圆度分秒改变响应方法
 $('.circle-set-select-left,.circle-set-select-right').on('click',function () {
-    var nowType;
+    let nowType;
     if(this.class=='circle-set-select-left'){
         nowType = getNewShowdw($('.circle-set-select-text').text(),'up');
     }else{
         nowType = getNewShowdw($('.circle-set-select-text').text(),'down');
     }
     $('.circle-set-select-text').text(nowType);
-    var point1 = ol.proj.toLonLat([nowPoints[0],nowPoints[1]]);
-    var point2 = ol.proj.toLonLat([nowPoints[2],nowPoints[3]]);
-    var center = [(point1[0]+point2[0])/2,(point1[1]+point2[1])/2];
+    let point1 = ol.proj.toLonLat([nowPoints[0],nowPoints[1]]);
+    let point2 = ol.proj.toLonLat([nowPoints[2],nowPoints[3]]);
+    let center = [(point1[0]+point2[0])/2,(point1[1]+point2[1])/2];
     if(nowType=='度分秒'){
         $('.circle-set-lonlat-in').remove();
         $('.circle-set-lonlat').append('<div class="circle-set-lonlat-in">'
@@ -1476,20 +1476,20 @@ $('.circle-set-select-left,.circle-set-select-right').on('click',function () {
 });
 //多边形度分秒改变响应方法
 $('.polygon-set-select-left,.polygon-set-select-right').on('click',function () {
-    var nowType;
+    let nowType;
     if(this.class == 'polygon-set-select-left'){
         nowType = getNewShowdw($('.polygon-set-select-text').text(),'up');
     }else{
         nowType = getNewShowdw($('.polygon-set-select-text').text(),'next');
     }
     $('.polygon-set-select-text').text(nowType);
-    var points = nowPoints;
-    var feature = vector.getSource().getFeatures()[0];
+    let points = nowPoints;
+    let feature = vector.getSource().getFeatures()[0];
     if(nowType == '度分秒'){
         $("#polygon-tr").remove();
         $(".polygon-set-lonlat").append("<table id=\"polygon-tr\">"+"</table>");
-        for(var i = 0;i<points[0].length-1;i++){
-            var point = ol.proj.toLonLat(points[0][i]);
+        for(let i = 0;i<points[0].length-1;i++){
+            let point = ol.proj.toLonLat(points[0][i]);
             $('#polygon-tr').append('<tr>'
                 +'<td>'+ (i+1) +'</td>'
                 +'<td>'
@@ -1525,8 +1525,8 @@ $('.polygon-set-select-left,.polygon-set-select-right').on('click',function () {
     }else if(nowType == '度分'){
         $("#polygon-tr").remove();
         $(".polygon-set-lonlat").append("<table id=\"polygon-tr\">"+"</table>");
-        for(var i = 0;i<points[0].length-1;i++){
-            var point = ol.proj.toLonLat(points[0][i]);
+        for(let i = 0;i<points[0].length-1;i++){
+            let point = ol.proj.toLonLat(points[0][i]);
             $('#polygon-tr').append('<tr>'
                 +'<td>'+ (i+1) +'</td>'
                 +'<td>'
@@ -1558,8 +1558,8 @@ $('.polygon-set-select-left,.polygon-set-select-right').on('click',function () {
     }else{
         $("#polygon-tr").remove();
         $(".polygon-set-lonlat").append("<table id=\"polygon-tr\">"+"</table>");
-        for(var i = 0;i<points[0].length-1;i++){
-            var point = ol.proj.toLonLat(points[0][i]);
+        for(let i = 0;i<points[0].length-1;i++){
+            let point = ol.proj.toLonLat(points[0][i]);
             $('#polygon-tr').append('<tr>'
                 +'<td>'+ (i+1) +'</td>'
                 +'<td>'
@@ -1588,20 +1588,20 @@ $('.polygon-set-select-left,.polygon-set-select-right').on('click',function () {
 });
 //矩形度分秒改变响应方法
 $('.box-set-select-left,.box-set-select-right').on('click',function () {
-    var nowType;
+    let nowType;
     if(this.class=='box-set-select-left'){
         nowType = getNewShowdw($('.box-set-select-text').text(),'up');
     }else{
         nowType = getNewShowdw($('.box-set-select-text').text(),'down');
     }
     $('.box-set-select-text').text(nowType);
-    var points = nowPoints;
-    var maxx;
-    var maxy;
-    var minx;
-    var miny;
-    for(var i = 0;i<points[0].length;i++){
-        var point = ol.proj.toLonLat(points[0][i]);
+    let points = nowPoints;
+    let maxx;
+    let maxy;
+    let minx;
+    let miny;
+    for(let i = 0;i<points[0].length;i++){
+        let point = ol.proj.toLonLat(points[0][i]);
         if(i==0){
             maxx = point[0];
             minx = point[0];
@@ -1722,7 +1722,7 @@ $('.box-set-select-left,.box-set-select-right').on('click',function () {
 // //椭圆保存按钮响应方法
 // $('.circle-set-save').on('click',function () {
 //     $('.circle-set').css('display','none');
-//     var areaName = $('.circle-set-inputName').val();
+//     let areaName = $('.circle-set-inputName').val();
 //     saveInfoTo(areaName);
 //     updateModifyFeatureStyle([]);
 // });
@@ -1730,7 +1730,7 @@ $('.box-set-select-left,.box-set-select-right').on('click',function () {
 // //多边形保存按钮响应方法
 // $('.polygon-set-save').on('click',function () {
 //     $('.polygon-set').css('display','none');
-//     var areaName = $('.polygon-set-inputName').val();
+//     let areaName = $('.polygon-set-inputName').val();
 //     saveInfoTo(areaName);
 //     updateModifyFeatureStyle([]);
 // });
@@ -1738,7 +1738,7 @@ $('.box-set-select-left,.box-set-select-right').on('click',function () {
 // //矩形保存按钮响应方法
 // $('.box-set-save').on('click',function () {
 //     $('.box-set').css('display','none');
-//     var areaName = $('.box-set-inputName').val();
+//     let areaName = $('.box-set-inputName').val();
 //     saveInfoTo(areaName);
 //     updateModifyFeatureStyle([]);
 // });
@@ -1773,7 +1773,7 @@ $('#map-click-close').on('click',function () {
         })
     }));
 });
-var isClickButton = false;
+let isClickButton = false;
 //标签设置按钮响应方法
 $('#map-click-set').on('click',function () {
     // updateModifyFeatureStyle([1]);
@@ -1806,10 +1806,10 @@ $(".polygon-set-lonlat").delegate(".polygon-lon-img,.polygon-lat-img","click",fu
  * 多边形增加按钮点击
  */
 $('.polygon-set-add').on('click',function () {
-    var polygonPoints = nowSetFeature.getGeometry().getCoordinates()[0];
-    var len = polygonPoints.length;
-    var oneArr = [polygonPoints[0][0],polygonPoints[0][1]];
-    var endArr = [polygonPoints[len-1][0],polygonPoints[len-1][1]];
+    let polygonPoints = nowSetFeature.getGeometry().getCoordinates()[0];
+    let len = polygonPoints.length;
+    let oneArr = [polygonPoints[0][0],polygonPoints[0][1]];
+    let endArr = [polygonPoints[len-1][0],polygonPoints[len-1][1]];
     polygonPoints[len-1] = endArr;
     polygonPoints.push(oneArr);
     points = [polygonPoints];
@@ -1824,15 +1824,15 @@ $('.polygon-set-add').on('click',function () {
  * 多边形删除按钮点击
  */
 $(".polygon-set-lonlat").delegate(".polygon-set-delete","click",function(){
-    var arr = $(this).attr('id').split('delete');
-    var index = arr[1];
+    let arr = $(this).attr('id').split('delete');
+    let index = arr[1];
     if(nowPoints[0].length<=4){
         return;
     }
     if(index == 0){
         nowPoints[0].splice(index,1);
         nowPoints[0].splice(nowPoints[0].length-1,1);
-        var point = nowPoints[0][0];
+        let point = nowPoints[0][0];
         nowPoints[0].push([point[0],point[1]]);
     }else{
         nowPoints[0].splice(index,1);
@@ -1862,18 +1862,18 @@ $(".box-set-lonlat").delegate("#box-lon-img1,#box-lat-img1,#box-lon-img2,#box-la
  * 更新椭圆信息
  */
 function updateCircleInfo() {
-    var lon1 = $('#circle-lon-dfs-d').val();
-    var lon2 = $('#circle-lon-dfs-f').val();
-    var lon3 = $('#circle-lon-dfs-s').val();
-    var lat1 = $('#circle-lat-dfs-d').val();
-    var lat2 = $('#circle-lat-dfs-f').val();
-    var lat3 = $('#circle-lat-dfs-s').val();
-    var img1 = $('#circle-lon-img').css('background-position');
-    var img2 = $('#circle-lat-img').css('background-position');
-    var center = getLonLatByInput(lon1,lon2,lon3,lat1,lat2,lat3,img1,img2);
-    var center1 =[(nowPoints[0]+nowPoints[2])/2,(nowPoints[1]+nowPoints[3])/2];
-    var x = center[0]-center1[0];
-    var y = center[1]-center1[1];
+    let lon1 = $('#circle-lon-dfs-d').val();
+    let lon2 = $('#circle-lon-dfs-f').val();
+    let lon3 = $('#circle-lon-dfs-s').val();
+    let lat1 = $('#circle-lat-dfs-d').val();
+    let lat2 = $('#circle-lat-dfs-f').val();
+    let lat3 = $('#circle-lat-dfs-s').val();
+    let img1 = $('#circle-lon-img').css('background-position');
+    let img2 = $('#circle-lat-img').css('background-position');
+    let center = getLonLatByInput(lon1,lon2,lon3,lat1,lat2,lat3,img1,img2);
+    let center1 =[(nowPoints[0]+nowPoints[2])/2,(nowPoints[1]+nowPoints[3])/2];
+    let x = center[0]-center1[0];
+    let y = center[1]-center1[1];
     nowPoints[0] = nowPoints[0]+x;
     nowPoints[1] = nowPoints[1]+y;
     nowPoints[2] = nowPoints[2]+x;
@@ -1886,17 +1886,17 @@ function updateCircleInfo() {
  * 更新多边形信息
  */
 function updatePolygonInfo() {
-    var polygonPoints = [];
-    for(var i =0;i<nowPoints[0].length-1;i++){
-        var lon1 = $('#polygon-set-lon1-'+i).val();
-        var lon2 = $('#polygon-set-lon2-'+i).val();
-        var lon3 = $('#polygon-set-lon3-'+i).val();
-        var lat1 = $('#polygon-set-lat1-'+i).val();
-        var lat2 = $('#polygon-set-lat2-'+i).val();
-        var lat3 = $('#polygon-set-lat3-'+i).val();
-        var img1 = $('#polygon-lon-img'+i).css('background-position');
-        var img2 = $('#polygon-lat-img'+i).css('background-position');
-        var point = getLonLatByInput(lon1,lon2,lon3,lat1,lat2,lat3,img1,img2);
+    let polygonPoints = [];
+    for(let i =0;i<nowPoints[0].length-1;i++){
+        let lon1 = $('#polygon-set-lon1-'+i).val();
+        let lon2 = $('#polygon-set-lon2-'+i).val();
+        let lon3 = $('#polygon-set-lon3-'+i).val();
+        let lat1 = $('#polygon-set-lat1-'+i).val();
+        let lat2 = $('#polygon-set-lat2-'+i).val();
+        let lat3 = $('#polygon-set-lat3-'+i).val();
+        let img1 = $('#polygon-lon-img'+i).css('background-position');
+        let img2 = $('#polygon-lat-img'+i).css('background-position');
+        let point = getLonLatByInput(lon1,lon2,lon3,lat1,lat2,lat3,img1,img2);
         polygonPoints.push(point);
     }
     polygonPoints.push(polygonPoints[0]);
@@ -1909,24 +1909,24 @@ function updatePolygonInfo() {
  * 更新矩形信息
  */
 function updateBoxInfo() {
-    var lon11 = $('#box-lon-dfs-d').val();
-    var lon12 = $('#box-lon-dfs-f').val();
-    var lon13 = $('#box-lon-dfs-s').val();
-    var lat11 = $('#box-lat-dfs-d').val();
-    var lat12 = $('#box-lat-dfs-f').val();
-    var lat13 = $('#box-lat-dfs-s').val();
-    var lon21 = $('#box-lon-dfs-d1').val();
-    var lon22 = $('#box-lon-dfs-f1').val();
-    var lon23 = $('#box-lon-dfs-s1').val();
-    var lat21 = $('#box-lat-dfs-d1').val();
-    var lat22 = $('#box-lat-dfs-f1').val();
-    var lat23 = $('#box-lat-dfs-s1').val();
-    var img11 = $('#box-lon-img1').css('background-position');
-    var img12 = $('#box-lat-img1').css('background-position');
-    var img21 = $('#box-lon-img2').css('background-position');
-    var img22 = $('#box-lat-img2').css('background-position');
-    var pointzx = getLonLatByInput(lon11,lon12,lon13,lat11,lat12,lat13,img11,img12);
-    var pointys = getLonLatByInput(lon21,lon22,lon23,lat21,lat22,lat23,img21,img22);
+    let lon11 = $('#box-lon-dfs-d').val();
+    let lon12 = $('#box-lon-dfs-f').val();
+    let lon13 = $('#box-lon-dfs-s').val();
+    let lat11 = $('#box-lat-dfs-d').val();
+    let lat12 = $('#box-lat-dfs-f').val();
+    let lat13 = $('#box-lat-dfs-s').val();
+    let lon21 = $('#box-lon-dfs-d1').val();
+    let lon22 = $('#box-lon-dfs-f1').val();
+    let lon23 = $('#box-lon-dfs-s1').val();
+    let lat21 = $('#box-lat-dfs-d1').val();
+    let lat22 = $('#box-lat-dfs-f1').val();
+    let lat23 = $('#box-lat-dfs-s1').val();
+    let img11 = $('#box-lon-img1').css('background-position');
+    let img12 = $('#box-lat-img1').css('background-position');
+    let img21 = $('#box-lon-img2').css('background-position');
+    let img22 = $('#box-lat-img2').css('background-position');
+    let pointzx = getLonLatByInput(lon11,lon12,lon13,lat11,lat12,lat13,img11,img12);
+    let pointys = getLonLatByInput(lon21,lon22,lon23,lat21,lat22,lat23,img21,img22);
     nowPoints = [[pointzx,[pointzx[0],pointys[1]],pointys,[pointys[0],pointzx[1]],pointzx]];
     points = nowPoints;
     nowSetFeature.getGeometry().setCoordinates(nowPoints);
@@ -1953,7 +1953,7 @@ function quxiaoClick() {
  * @param areaName
  */
 function saveInfoTo(areaName) {
-    var area_types;
+    let area_types;
     areaType = nowSetFeature.getId();
     if(areaType == 'Circle'){area_types = 0;
     }else if(areaType == 'LineString'){area_types = 1;
@@ -1961,10 +1961,10 @@ function saveInfoTo(areaName) {
     }else if(areaType == 'box'){area_types = 3;
     }else if(areaType == 'arrow'){area_types = 4;
     }else{area_types = nowAreaInfo.area_type};
-    var linepoint = nowSetFeature.getGeometry().getCoordinates()[0];
-    var len = linepoint.length;
-    var j = [];
-    for(var i=0;i<len;i++){
+    let linepoint = nowSetFeature.getGeometry().getCoordinates()[0];
+    let len = linepoint.length;
+    let j = [];
+    for(let i=0;i<len;i++){
         if(i==0){
             j = [0,linepoint[0][1]];
         }else{
@@ -1973,9 +1973,9 @@ function saveInfoTo(areaName) {
             }
         }
     }
-    var element = document.getElementById('map-region-click');
+    let element = document.getElementById('map-region-click');
     $('#map-region-click').css('display','block');
-    var popup = new ol.Overlay({
+    let popup = new ol.Overlay({
         element: element,
         positioning: 'top-left',
         stopEvent: false,
@@ -1998,8 +1998,8 @@ function saveInfoTo(areaName) {
  * @returns {ol.Coordinate}
  */
 function getLonLatByInput(lon1,lon2,lon3,lat1,lat2,lat3,img1,img2) {
-    var x = getRInput(lat1)+getRInput(lat2)/60+getRInput(lat3)/3600;
-    var num = parseInt(x/180);
+    let x = getRInput(lat1)+getRInput(lat2)/60+getRInput(lat3)/3600;
+    let num = parseInt(x/180);
     x= num>0?x-num*180:x+num*180;
     if(getRImage(img2)<0){
         x = -x;
@@ -2011,8 +2011,8 @@ function getLonLatByInput(lon1,lon2,lon3,lat1,lat2,lat3,img1,img2) {
  * @param obj
  */
 function changeImage(obj) {
-    var img = obj.css('background-position');
-    var arr = img.split(' ');
+    let img = obj.css('background-position');
+    let arr = img.split(' ');
     if(arr[0]== '0px'){
         arr[0] = '-30px';
     }else if(arr[0]=='-15px'){
@@ -2077,7 +2077,7 @@ function getRInput(num) {
  * @returns {number}
  */
 function getRImage(img) {
-    var arr = img.split(' ');
+    let arr = img.split(' ');
     if(arr[0]=='0px'||arr[0]=='-15px'){
         return 1;
     }else{
@@ -2090,9 +2090,9 @@ function getRImage(img) {
  * @returns {*[]}
  */
 function getDFSByD(d) {
-    var dint = parseInt(d);
-    var fint = parseInt((d-dint)*60);
-    var sint = parseInt(((d-dint)*60-fint)*60);
+    let dint = parseInt(d);
+    let fint = parseInt((d-dint)*60);
+    let sint = parseInt(((d-dint)*60-fint)*60);
     return [Math.abs(dint),Math.abs(fint),Math.abs(sint)];
 }
 /**
@@ -2101,8 +2101,8 @@ function getDFSByD(d) {
  * @returns {*[]}
  */
 function getDFByD(d) {
-    var dint = parseInt(d);
-    var fint = parseInt((d-dint)*60*1000)/1000;
+    let dint = parseInt(d);
+    let fint = parseInt((d-dint)*60*1000)/1000;
 
     return [Math.abs(dint),Math.abs(fint)];
 }
@@ -2113,7 +2113,7 @@ function getDFByD(d) {
  * @returns {*[]}
  */
 function getDByD(d) {
-    var dint = parseInt(d*100000)/100000;
+    let dint = parseInt(d*100000)/100000;
     return [Math.abs(dint)];
 }
 
@@ -2123,7 +2123,7 @@ function getDByD(d) {
  * @returns {string[]}
  */
 function getPositionByLon(lon) {
-    var yu = lon%360;
+    let yu = lon%360;
     if(yu<0){
         yu=yu+360;
     }
@@ -2140,7 +2140,7 @@ function getPositionByLon(lon) {
  * @returns {string[]}
  */
 function getPositionByLat(lat) {
-    var yu = lat%360;
+    let yu = lat%360;
     if(yu<0){
         yu=yu+360;
     }
@@ -2155,9 +2155,9 @@ function getPositionByLat(lat) {
  * 修改提示视图位置
  */
 function changeTipArea1(linepoint) {
-    var len = linepoint.length;
-    var j = [];
-    for(var i=0;i<len;i++){
+    let len = linepoint.length;
+    let j = [];
+    for(let i=0;i<len;i++){
         if(i==0){
             j = [0,linepoint[0][1]];
         }else{
@@ -2166,9 +2166,9 @@ function changeTipArea1(linepoint) {
             }
         }
     }
-    var element = document.getElementById('map-region-click');
+    let element = document.getElementById('map-region-click');
     $('#map-region-click').css('display','block');
-    var popup = new ol.Overlay({
+    let popup = new ol.Overlay({
         element: element,
         positioning: 'top-left',
         stopEvent: false,
@@ -2275,10 +2275,10 @@ function changeAllColor() {
  * 设置控件可拖动方法
  */
 (function ($) {
-    var move = false;           //标记控件是否处于被拖动状态
-    var dragOffsetX = 0;        //控件左边界和鼠标X轴的差
-    var dragOffsetY = 0;        //控件上边界和鼠标Y轴的差
-    var dragObj = null;         //用于存储当前对象
+    let move = false;           //标记控件是否处于被拖动状态
+    let dragOffsetX = 0;        //控件左边界和鼠标X轴的差
+    let dragOffsetY = 0;        //控件上边界和鼠标Y轴的差
+    let dragObj = null;         //用于存储当前对象
 
     $.fn.mydrag = function () {
         dragObj = this;
@@ -2293,8 +2293,8 @@ function changeAllColor() {
         $(document).mousemove(function (e) {
             if (move) {
                 //不断获取鼠标新的坐标，并计算出控件的新坐标
-                var newX = e.clientX - dragOffsetX;
-                var newY = e.clientY - dragOffsetY;
+                let newX = e.clientX - dragOffsetX;
+                let newY = e.clientY - dragOffsetY;
 
                 //边界控制，document.documentElement.clientWidth：可见区域宽度  document.documentElement.clientHeight：可见区域高度
                 newX = newX < 0 ? 0 : newX;
@@ -2315,7 +2315,7 @@ function changeAllColor() {
     };
 })(jQuery);
 function getShipTypeById(id) {
-    var type = '';
+    let type = '';
     switch (parseInt(id)){
         case 2:
             type = '地效翼船';
@@ -2346,7 +2346,7 @@ function getShipTypeById(id) {
 }
 
 function getEventTypeById(id) {
-    var type = '';
+    let type = '';
     switch (parseInt(id)){
         case 0:
             type = '动力航行';
@@ -2384,7 +2384,7 @@ function getEventTypeById(id) {
 }
 
 function getIdTypeByShip(type) {
-    var id = 9;
+    let id = 9;
     if(type == '地效翼船'){
         id = 2
     }else if(type == '作业船'){
@@ -2408,7 +2408,7 @@ function getIdTypeByShip(type) {
 }
 
 function getIdTypeByEvent(type) {
-    var id = 7;
+    let id = 7;
     if(type == '动力航行'){
         id = 0
     }else if(type == '锚泊'){

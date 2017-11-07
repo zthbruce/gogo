@@ -3,26 +3,26 @@
  */
 
 // 将获取的流水数据保存下来，以便进行筛选处理
-// var SNData;
+// let SNData;
 
 // function getHMS(timePeriod){
 //
 // }
 
 // 求最小值
-// var min = function (x, y) {return x > y ? y:x;};
+// let min = function (x, y) {return x > y ? y:x;};
 function getMin(x, y) {return x > y ? y:x;}
 
 // 求最大值
-// var max = function (x, y) {return x > y ? x:y;};
+// let max = function (x, y) {return x > y ? x:y;};
 function getMax(x, y) {return x > y ? x:y;}
 
 //求和函数
-// var sum = function(x,y){ return x+y;};
+// let sum = function(x,y){ return x+y;};
 function getSum(x,y){ return x+y;}
 
 //数组中每个元素求它的平方
-// var square = function(x){ return x*x;};　
+// let square = function(x){ return x*x;};　
 function getSquare(x){ return x * x;}
 
 /**
@@ -30,20 +30,20 @@ function getSquare(x){ return x * x;}
  * @param attr
  */
 function getStatData(SNData, attr){
-    var array = [];
-    var attrValue;
-    for (var i = 0; i < SNData.length; i++) {
+    let array = [];
+    let attrValue;
+    for (let i = 0; i < SNData.length; i++) {
         attrValue = SNData[i][attr];
         if (attrValue !== null) {
             array.push(attrValue)
         }
     }
-    var len = array.length;
+    let len = array.length;
     if(len > 0) {
-        var min = array.reduce(getMin);
-        var max = array.reduce(getMax);
-        var mean = (array.reduce(getSum) / len).toFixed(4);
-        var sigma = Math.sqrt(array.map(function (x) {
+        let min = array.reduce(getMin);
+        let max = array.reduce(getMax);
+        let mean = (array.reduce(getSum) / len).toFixed(4);
+        let sigma = Math.sqrt(array.map(function (x) {
                 return x - mean
             }).map(getSquare).reduce(getSum) / len).toFixed(4);
         return {min: min, max: max, mean: mean, sigma: sigma};
@@ -69,30 +69,30 @@ function showSNStatistic(cluster_id_list){
             cache: true,
             timeout: 500000,
             success: function (data) {
-                var res = data;
+                let res = data;
                 if (res[0] === '200') {
                     console.log('成功获取信息');
-                    var ele;
-                    // var arrival;
-                    // var departure;
-                    // var duration;
-                    var IMO;
-                    var LOA;
-                    var beam;
-                    var draft;
-                    var air_draft;
-                    var DWT;
-                    var type;
-                    var sendData = res[1];
-                    var SNData = JSON.parse(sendData);
-                    var SNCount = SNData.length;
+                    let ele;
+                    // let arrival;
+                    // let departure;
+                    // let duration;
+                    let IMO;
+                    let LOA;
+                    let beam;
+                    let draft;
+                    let air_draft;
+                    let DWT;
+                    let type;
+                    let sendData = res[1];
+                    let SNData = JSON.parse(sendData);
+                    let SNCount = SNData.length;
                     // 表格信息
                     $('#SNInfo').empty();
                     // 初始化
-                    var SNrow = '<tr style="background:#00b7ff;font-size:7px;"> <td>停泊流水号</td> <td>IMO</td> ' +
+                    let SNrow = '<tr style="background:#00b7ff;font-size:7px;"> <td>停泊流水号</td> <td>IMO</td> ' +
                         '<td>抵达时间</td> <td>离开时间</td> <td>停留时长(h)</td> <td>LOA(m)</td> <td>DWT(T)</td> <td>BEAM(m)</td> ' +
                         '<td>DRAFT</td> <td>AIR DRAFT</td> <td>TYPE</td> </tr>';
-                    for (var i = 0; i < SNCount; i++) {
+                    for (let i = 0; i < SNCount; i++) {
                         ele = SNData[i];
                         // duration = (parseFloat(ele.Duration) / 3600.0).toFixed(4);
                         IMO = ele.IMO === null ? "暂无" : ele.IMO;
@@ -130,27 +130,27 @@ function showSNStatistic(cluster_id_list){
 
 function SNStatistic(SNData){
     console.log("统计结果");
-    var SNStatData = {};
+    let SNStatData = {};
     SNStatData["LOA"] = getStatData(SNData, "LOA");
     SNStatData["Moulded_Beam"] =  getStatData(SNData, "Moulded_Beam");
     SNStatData["Draft"] = getStatData(SNData, "Draft");
     SNStatData["AirDraft"] = getStatData(SNData, "AirDraft");
     SNStatData["Duration"] = getStatData(SNData, "Duration");
     SNStatData["DWT"] = getStatData(SNData, "DWT");
-    var row = 1;
-    var min;
-    var max;
-    var mean;
-    var sigma;
-    var ele;
-    for(var key in SNStatData){
+    let row = 1;
+    let min;
+    let max;
+    let mean;
+    let sigma;
+    let ele;
+    for(let key in SNStatData){
         ele = SNStatData[key];
         min = ele.min === null? "暂无": ele.min;
         max = ele.max === null? "暂无": ele.max;
         mean = ele.max === null? "暂无": ele.mean;
         sigma = ele.sigma === null? "暂无": ele.sigma;
         // 获取相应的位置
-        var rowContent = document.getElementById("SNStat").rows[row];
+        let rowContent = document.getElementById("SNStat").rows[row];
         rowContent.cells[1].innerText = max;
         rowContent.cells[2].innerText = min;
         rowContent.cells[3].innerText = mean;
@@ -170,24 +170,24 @@ function SNStatistic(SNData){
 //         cache: true,
 //         timeout: 500000,
 //         success: function (data) {
-//             var res = data;
+//             let res = data;
 //             if (res[0] === '200') {
 //                 console.log('成功获取信息');
-//                 var SNStatData = JSON.parse(res[1]);
-//                 var min;
-//                 var max;
-//                 var mean;
-//                 var sigma;
-//                 var ele;
-//                 var row = 1;
-//                 for(var key in SNStatData){
+//                 let SNStatData = JSON.parse(res[1]);
+//                 let min;
+//                 let max;
+//                 let mean;
+//                 let sigma;
+//                 let ele;
+//                 let row = 1;
+//                 for(let key in SNStatData){
 //                     // console.log(key);
 //                     ele = SNStatData[key];
 //                     min = ele.min === null? "暂无": ele.min;
 //                     max = ele.max === null? "暂无": ele.max;
 //                     mean = ele.max === null? "暂无": ele.mean;
 //                     sigma = ele.sigma === null? "暂无": ele.sigma;
-//                     var rowContent = document.getElementById("SNStat").rows[row];
+//                     let rowContent = document.getElementById("SNStat").rows[row];
 //                     rowContent.cells[1].innerText = max;
 //                     rowContent.cells[2].innerText = min;
 //                     rowContent.cells[3].innerText = mean;

@@ -5,7 +5,7 @@
  * 右上侧工具栏操作
  */
 //工具栏显示隐藏
-var rightToolDisplay = false;
+let rightToolDisplay = false;
 $('#right_tool_btn').click(function(){
     if(rightToolDisplay){
         $('#right_tool').animate({'right':'-160px'},300);
@@ -30,10 +30,10 @@ $(".basic_map_list>div").click(function(){
     $(this).addClass("map_mouse_select");
 });
 
-var mapTypeListDisplay = false;
-var coorContentDisplay = false;
-var rangingDisplay = false;
-var polygonContentDisplay = false;
+let mapTypeListDisplay = false;
+let coorContentDisplay = false;
+let rangingDisplay = false;
+let polygonContentDisplay = false;
 $('.switch_map').click(function(){
     if(mapTypeListDisplay){$('.right_basic_map').slideUp(200);}
     else{$('.right_basic_map').slideDown(200);}
@@ -43,8 +43,8 @@ $('.switch_map').click(function(){
     // $('.polygon_content').slideUp(200);
     // polygonContentDisplay = false;
 });
-var obtainMouseMove;
-var obtainMouseClick;
+let obtainMouseMove;
+let obtainMouseClick;
 $('.obtain_coordinate').click(function(){
     if(coorContentDisplay){
         $('.obtain_content').slideUp(200);
@@ -77,14 +77,14 @@ $('#copy_obtain_coordinate').click(function(event){
 });
 
 //标尺单击事件
-var rangingMouseMove;
-var rangingMouseClick;
-var rangingMouseDoubleClick;
+let rangingMouseMove;
+let rangingMouseClick;
+let rangingMouseDoubleClick;
 
 //设置开始测量标志
-var startRangingLogo = false;
-var pointId = 'point';
-var pointIdNum = 0;
+let startRangingLogo = false;
+let pointId = 'point';
+let pointIdNum = 0;
 $('.screen_scale').click(function(){
     if(polygonContentDisplay){
         map.removeInteraction(draw);
@@ -131,7 +131,7 @@ $('.screen_scale').click(function(){
 
 //自定义测距时端点函数
 function rangingPaintingPoint(coordinate){
-    var feature = new ol.Feature({
+    let feature = new ol.Feature({
         id: pointId+pointIdNum,
         geometry: new ol.geom.Point(ol.proj.fromLonLat(coordinate))
     });
@@ -155,7 +155,7 @@ function rangingPaintingPoint(coordinate){
     range_vector.getSource().addFeature(feature);
 }
 
-var slideFlag = false;
+let slideFlag = false;
 // 画多边形的竖栏展开
 $('.draw_polygon').click(function(){
     if(slideFlag){
@@ -193,7 +193,7 @@ $('.draw_polygon li').click(function(event){
     }
     // console.log($(this).index());
     // 当前按钮的类型
-    var drawClass = $(this).attr('class');
+    let drawClass = $(this).attr('class');
     //将之前的多边形清空
     if(polygonContentDisplay){
         map.removeInteraction(draw);
@@ -208,13 +208,13 @@ $('.draw_polygon li').click(function(event){
 });
 
 // function addDrawInteraction(value) {
-//     // var value = value;
+//     // let value = value;
 //     console.log(value);
 //     if (value !== 'None') {
 //         if (value === 'Box') {
 //             value = 'Circle';
 //             // console.log(132);
-//             var geometryFunction = ol.interaction.Draw.createBox();
+//             let geometryFunction = ol.interaction.Draw.createBox();
 //             addDraw = new ol.interaction.Draw({
 //                 source: source,
 //                 type: (value),
@@ -234,8 +234,8 @@ $('.draw_polygon li').click(function(event){
 //自定义跟随鼠标移动文本框函数
 function followMouseMove(event){
 
-    var divTop = event.clientY+15;
-    var divLeft = event.clientX+15;
+    let divTop = event.clientY+15;
+    let divLeft = event.clientX+15;
     if(divLeft>$(window).width()-140){divLeft = $(window).width()-140;}
     if(divTop>$(window).height()-20){divTop = $(window).height()-20;}
     $('#mouse_rightBottom_text').css({'top':divTop,'left':divLeft});
@@ -245,21 +245,21 @@ function followMouseMove(event){
 /**
  * 测距功能
  */
-var sketch;//目前绘制的功能
-var helpTooltipElement;//帮助工具提示元素
-var helpTooltip;// 叠加显示帮助信息
-var continueLineMsg = '在地图上双击鼠标左键结束测距，总距离：';//用户在绘制线时显示的消息
-var rangingInLogo = false;//设置绘制中标志 rangingInLogo
-var lastTimeTotalDistance = '0nm';//设置上一次总距离
+let sketch;//目前绘制的功能
+let helpTooltipElement;//帮助工具提示元素
+let helpTooltip;// 叠加显示帮助信息
+let continueLineMsg = '在地图上双击鼠标左键结束测距，总距离：';//用户在绘制线时显示的消息
+let rangingInLogo = false;//设置绘制中标志 rangingInLogo
+let lastTimeTotalDistance = '0nm';//设置上一次总距离
 
-// var draw;
+// let draw;
 
 //处理指针移动
-var pointerMoveHandler = function(evt) {
+let pointerMoveHandler = function(evt) {
     if (evt.dragging) {return;}
-    var helpMsg = '在地图上单击鼠标左键开始测距';  //初始提示信息
+    let helpMsg = '在地图上单击鼠标左键开始测距';  //初始提示信息
     if (sketch) {
-        var geom = (sketch.getGeometry());
+        let geom = (sketch.getGeometry());
         helpMsg = continueLineMsg;
     }
     helpTooltipElement.innerHTML = helpMsg;
@@ -267,15 +267,15 @@ var pointerMoveHandler = function(evt) {
     helpTooltipElement.classList.remove('hidden');
 };
 //格式长度输出
-var formatLength = function(line) {
-    var output = (Math.round(line.getLength() * 100) / 100 / 1000 * 0.5399568);
+let formatLength = function(line) {
+    let output = (Math.round(line.getLength() * 100) / 100 / 1000 * 0.5399568);
     output = output.toFixed(2);
     return output +' ' + 'nm';
 };
 //设置样式、函数等
 function addRangingInteraction() {
-    var type = 'LineString';
-    draw = new ol.interaction.Draw({
+    let type = 'LineString';
+    let draw = new ol.interaction.Draw({
         source: range_source,
         type: (type),
         style: new ol.style.Style({
@@ -297,26 +297,26 @@ function addRangingInteraction() {
     });
     map.addInteraction(draw);
     createHelpTooltip();
-    var listener;
+    let listener;
     draw.on('drawstart',function(evt) {
         sketch = evt.feature;
-        var tooltipCoord = evt.coordinate;
+        let tooltipCoord = evt.coordinate;
         startRangingLogo = true;
         listener = sketch.getGeometry().on('change', function(evt) {
-            var geom = evt.target;
-            var output;
+            let geom = evt.target;
+            let output;
             output = formatLength(geom);
             tooltipCoord = geom.getLastCoordinate();
             if(rangingInLogo){
-                var measureTooltipElement = document.createElement('div');
+                let measureTooltipElement = document.createElement('div');
                 measureTooltipElement.className = 'ranging_distance_show';
-                var measureTooltip = new ol.Overlay({
+                let measureTooltip = new ol.Overlay({
                     offset:[8,-10],
                     element: measureTooltipElement,
                     positioning: 'bottom-center'
                 });
                 map.addOverlay(measureTooltip);
-                var lastTimeNum = parseFloat(output)-parseFloat(lastTimeTotalDistance);
+                let lastTimeNum = parseFloat(output)-parseFloat(lastTimeTotalDistance);
                 lastTimeNum = lastTimeNum.toFixed(2);
                 measureTooltipElement.innerHTML = lastTimeNum+'nm'+'/'+output;
                 measureTooltip.setPosition(tooltipCoord);

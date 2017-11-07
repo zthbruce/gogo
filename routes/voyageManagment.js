@@ -25,10 +25,14 @@ router.get("/getVoyageList", function (req, res, next) {
     else{
         checkInfo = "('" + checkList[0] + "')";
     }
-    var sql = util.format('SELECT t1.VoyageKey, t1.ShipNumber, Name, LocalName, IMO, DepartureTime , ' +
-        'DeparturePortID, ArrivalTime, ArrivalPortID, t1.Checked FROM T3101_Voyage t1 ' +
-        'LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber LEFT JOIN T4101_Fleet t3 ON t2.ShipNumber = t3.ShipNumber ' +
-        'WHERE FleetNumber = "%s" AND t1.Checked IN %s ORDER BY t1.Checked DESC, ArrivalTime DESC LIMIT 2000', fleetNumber, checkInfo);
+    let sql = util.format('SELECT * FROM (SELECT t1.VoyageKey, t1.ShipNumber, NAME, LocalName, IMO, DepartureTime , ' +
+        'DeparturePortID, ArrivalTime, ArrivalPortID, t1.Checked FROM T3101_Voyage t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber ' +
+        'LEFT JOIN T4101_Fleet t3 ON t2.ShipNumber = t3.ShipNumber WHERE FleetNumber = "%s" AND t1.Checked IN %s ' +
+        'ORDER BY t1.Checked DESC, IFNULL(ArrivalTime,"9999999999") DESC) t GROUP BY t.ShipNumber', fleetNumber, checkInfo);
+    // var sql = util.format('SELECT t1.VoyageKey, t1.ShipNumber, Name, LocalName, IMO, DepartureTime , ' +
+    //     'DeparturePortID, ArrivalTime, ArrivalPortID, t1.Checked FROM T3101_Voyage t1 ' +
+    //     'LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber LEFT JOIN T4101_Fleet t3 ON t2.ShipNumber = t3.ShipNumber ' +
+    //     'WHERE FleetNumber = "%s" AND t1.Checked IN %s ORDER BY t1.Checked DESC, ArrivalTime LIMIT 100', fleetNumber, checkInfo);
     mysql.query(sql, function (err, results) {
         if(err){
             res.jsonp(["404", utils.eid1])
@@ -157,7 +161,7 @@ router.get("/getPurpose", function (req, res, next) {
  */
 router.post('/saveVoyage', function (req, res, next) {
     var voyageInfo = req.body;
-    var sql = util.format("UPDATE T3101_Voyage SET Cargo = '%s', DepartureTime = '%s', DeparturePortID = '%s', ArrivalTime = '%s', ArrivalPortID = '%s', " +
+    var sql = util.format("UPDATE T3101_Voyage SET Cargo = '%s', DepartureTime = %s, DeparturePortID = '%s', ArrivalTime = %s, ArrivalPortID = '%s', " +
         "CargoChecked = '%s', DeparturePortChecked = '%s',  ArrivalPortChecked = '%s', Checked = '%s' WHERE VoyageKey = '%s'",
         voyageInfo.Cargo, voyageInfo.DepartureTime, voyageInfo.DeparturePortID, voyageInfo.ArrivalTime, voyageInfo.ArrivalPortID,
         voyageInfo.CargoChecked, voyageInfo.DeparturePortChecked, voyageInfo.ArrivalPortChecked, voyageInfo.Checked, voyageInfo.VoyageKey);
@@ -193,7 +197,7 @@ router.post('/saveVoyageDetail', function (req, res, next) {
                     sql2 += ","
                 }
                 sql2 += "('" + MMSI + "','" + info.DepartureTime + "','" + info.ArrivalTime + "','" + info.StationaryAreaKey +
-                    "','" + voyageKey + "','" + info.Purpose + "')";
+                    "','" + voyageKey + "','" + info.Purpose + "','" + info.CenterLon + "','" + info.CenterLat + "')";
             }
             console.log(sql2);
             mysql.query(sql2, function (err, data) {

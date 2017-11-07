@@ -2,12 +2,12 @@
  * Created by ShiTianCi on 2017/6/20.
  */
 //设置地图图标单击监听事件
-var mapImgClick;
+let mapImgClick;
 
 //设置港口信息全局列表
-var AllPortBasicList = [];
+let AllPortBasicList = [];
 //设置主要港口信息全局列表
-var AllMainPortList = [];
+let AllMainPortList = [];
 
 //设置请求港口基本信息函数
 function reqPortBasicInfo(){
@@ -27,7 +27,7 @@ function reqPortBasicInfo(){
                     GradeShowPort(AllPortBasicList,AllMainPortList,initLevel);
                     //针对地图拖动监听, 刷新港口显示
                     blmol.bind.addOnMapMoveEndListener(map, function(map, extent, evt){
-                        var currentZoom = blmol.operation.getZoom(map);
+                        let currentZoom = blmol.operation.getZoom(map);
                         //港口显示
                         GradeShowPort(AllPortBasicList,AllMainPortList,currentZoom);
                     });
@@ -43,20 +43,21 @@ function reqPortBasicInfo(){
     });
 
     //获取所有公司名称及其代码
-
 }
+// 获取所有港口
+reqPortBasicInfo();
 
 //设置请求单个港口基本信息的函数
 function reqOnePortBasicInfo(id){
-    var param = '{"PortID":"'+id +'"}';
+    let param = '{"PortID":"'+id +'"}';
     $.ajax({
         url:'/portInfo/reqOnePortBasic',
         type:'get',
         data:{param:param},
         success: function(data){
             // console.log(data);
-            var sendData = data[1];
-            var jsonData = JSON.parse(sendData);
+            let sendData = data[1];
+            let jsonData = JSON.parse(sendData);
             $('#portBasicInfo').attr('port_id',jsonData[0].PortID);
             $('#portBasicInfo>.portInfo_title>span').text(jsonData[0].ENName);
             $('#portBasicInfo .port_country>span').text(jsonData[0].ISO3);
@@ -74,19 +75,19 @@ function reqOnePortBasicInfo(id){
 
 //设置请求单个港口码头列表的函数
 function reqOnePortPierList(id){
-    var param = '{"PortID":"'+id +'"}';
+    let param = '{"PortID":"'+id +'"}';
     $.ajax({
         url:'/portInfo/reqOnePortPierList',
         type:'get',
         data:{param:param},
         success: function(data){
             console.log(data);
-            var sendData = data[1];
-            var jsonData = JSON.parse(sendData);
+            let sendData = data[1];
+            let jsonData = JSON.parse(sendData);
             console.log(jsonData);
             $('.berthInfo_pierList').empty();
-            for(var i=0;i<jsonData.length;i++){
-                var pierStr = '<li pier_TerminalKey="'+jsonData[i].TerminalKey+'"><span>'+parseInt(parseInt(i)+1)+'</span> <span>'+jsonData[i].Name+'</span> ' +
+            for(let i=0;i<jsonData.length;i++){
+                let pierStr = '<li pier_TerminalKey="'+jsonData[i].TerminalKey+'"><span>'+parseInt(parseInt(i)+1)+'</span> <span>'+jsonData[i].Name+'</span> ' +
                     '<span>'+jsonData[i].Longitude+','+jsonData[i].Latitude+'</span> <span><i></i></span></li>';
                 $('.berthInfo_pierList').append(pierStr);
             }
@@ -98,7 +99,7 @@ function reqOnePortPierList(id){
             reqOnePierBerthList(jsonData[0].TerminalKey);
             //绑定码头列表单击事件
             $('.berthInfo_pierList li').off('click').on('click',function(){
-                var pierTerminalKey = $(this).attr('pier_TerminalKey');
+                let pierTerminalKey = $(this).attr('pier_TerminalKey');
                 $('#pier_remarks').attr('pier_TerminalKey',pierTerminalKey);
                 $('#pier_modify').attr('pier_TerminalKey',pierTerminalKey);
                 $('.berthInfo_ListContent').attr('TerminalKey',pierTerminalKey);
@@ -107,13 +108,13 @@ function reqOnePortPierList(id){
             });
             //绑定删除一条码头记录操作
             $('.berthInfo_pierList i').off('click').on('click',function(event){
-                var deletePierConfirmSign = deletePierConfirm();
+                let deletePierConfirmSign = deletePierConfirm();
                 if(deletePierConfirmSign){
-                    var pierTerminalKey = $(this).parent().parent().attr('pier_TerminalKey');
+                    let pierTerminalKey = $(this).parent().parent().attr('pier_TerminalKey');
                     console.log(pierTerminalKey);
                     deleteOnePier(pierTerminalKey);
                     //重新获取码头信息
-                    var portID = $('#portBasicInfo').attr('port_id');
+                    let portID = $('#portBasicInfo').attr('port_id');
                     // reqOnePortPierList(portID);
                     reqOnePortPierList(40101);
                 }
@@ -128,15 +129,15 @@ function reqOnePortPierList(id){
 
 //设置请求单个码头详细信息的函数
 function reqOnePierDetailInfo(TerminalKey){
-    var param = '{"TerminalKey":"'+TerminalKey +'"}';
+    let param = '{"TerminalKey":"'+TerminalKey +'"}';
     $.ajax({
         url:'/portInfo/reqOnePierDetail',
         type:'get',
         data:{param:param},
         success: function(data){
             console.log(data);
-            var sendData = data[1];
-            var jsonData = JSON.parse(sendData);
+            let sendData = data[1];
+            let jsonData = JSON.parse(sendData);
             console.log(jsonData);
             //右上角显示
             $('.berthInfo_topRight>.berthInfo_content>div:first-child>span:last-child').text(jsonData[0].ENName);
@@ -172,19 +173,19 @@ function reqOnePierDetailInfo(TerminalKey){
 
 //设置获取单个码头下泊位详细信息列表的函数
 function reqOnePierBerthList(pierTerminalKey){
-    var param = '{"pierTerminalKey":"'+pierTerminalKey+'"}';
+    let param = '{"pierTerminalKey":"'+pierTerminalKey+'"}';
     $.ajax({
         url:'/portInfo/reqOnePierBerthList',
         type:'get',
         data:{param:param},
         success: function(data){
             console.log(data);
-            var sendData = data[1];
-            var jsonData = JSON.parse(sendData);
+            let sendData = data[1];
+            let jsonData = JSON.parse(sendData);
             console.log(jsonData);
             $('.berthInfo_ListContent').empty();
-            for(var i=0;i<jsonData.length;i++){
-                var berthStr = '<li dataType="0" TerminalKey="'+jsonData[i].TerminalKey+'" seq="'+jsonData[i].Seq+'"><span>'+parseInt(parseInt(i)+parseInt(1))+'</span> <span><span>'+jsonData[i].LOA+'</span><input type="text" value="'+jsonData[i].LOA+'"></span> ' +
+            for(let i=0;i<jsonData.length;i++){
+                let berthStr = '<li dataType="0" TerminalKey="'+jsonData[i].TerminalKey+'" seq="'+jsonData[i].Seq+'"><span>'+parseInt(parseInt(i)+parseInt(1))+'</span> <span><span>'+jsonData[i].LOA+'</span><input type="text" value="'+jsonData[i].LOA+'"></span> ' +
                     '<span><span>'+jsonData[i].Draft+'</span><input type="text" value="'+jsonData[i].Draft+'"></span> ' +
                     '<span><span>'+jsonData[i].AirDraft+'</span><input type="text" value="'+jsonData[i].AirDraft+'"></span> ' +
                     '<span><span>'+jsonData[i].Moulded_Beam+'</span><input type="text" value="'+jsonData[i].Moulded_Beam+'"></span> ' +
@@ -207,7 +208,7 @@ function reqOnePierBerthList(pierTerminalKey){
 
 //设置修改单个码头备注信息的函数
 function modifyPierRemark(pierTerminalKey,remarks){
-    var param = '{"pierTerminalKey":"'+pierTerminalKey +'","remark":"'+remarks+'"}';
+    let param = '{"pierTerminalKey":"'+pierTerminalKey +'","remark":"'+remarks+'"}';
     $.ajax({
         url:'/portInfo/modifyOnePierRemark',
         type:'get',
@@ -223,7 +224,7 @@ function modifyPierRemark(pierTerminalKey,remarks){
 
 //设置修改单个码头详细信息的函数
 function modifyPierDetail(TerminalKey,Name,PortName,BelongotoCompanyName,BerthQuantity,Longitude,Latitude,Salinity,Location,Tide,CargoTypeName,ImportExportType){
-    var param = '{"TerminalKey":"'+TerminalKey +'","Name":"'+Name+'","PortName":"'+PortName +'","BelongotoCompanyName":"'+BelongotoCompanyName+
+    let param = '{"TerminalKey":"'+TerminalKey +'","Name":"'+Name+'","PortName":"'+PortName +'","BelongotoCompanyName":"'+BelongotoCompanyName+
         '","BerthQuantity":"'+BerthQuantity+'","Longitude":"'+Longitude+'","Latitude":"'+Latitude+'","Salinity":"'+Salinity+
         '","Location":"'+Location+'","Tide":"'+Tide+'","CargoTypeName":"'+CargoTypeName+'","ImportExportType":"'+ImportExportType+'"}';
     $.ajax({
@@ -242,7 +243,7 @@ function modifyPierDetail(TerminalKey,Name,PortName,BelongotoCompanyName,BerthQu
 
 //设置添加码头信息的函数
 function addOnePier(TerminalKey,Name,PortName,BelongotoCompanyName,BerthQuantity,Longitude,Latitude,Salinity,Location,Tide,Type,CargoTypeName,ImportExportType,Des,PortID){
-    var param = '{"TerminalKey":"'+TerminalKey +'","Name":"'+Name+'","PortName":"'+PortName +'","BelongotoCompanyName":"'+BelongotoCompanyName+
+    let param = '{"TerminalKey":"'+TerminalKey +'","Name":"'+Name+'","PortName":"'+PortName +'","BelongotoCompanyName":"'+BelongotoCompanyName+
         '","BerthQuantity":"'+BerthQuantity+'","Longitude":"'+Longitude+'","Latitude":"'+Latitude+'","Salinity":"'+Salinity+
         '","Location":"'+Location+'","Tide":"'+Tide+'","Type":"'+Type+'","CargoTypeName":"'+CargoTypeName+'","ImportExportType":"'+ImportExportType+'","Des":"'+Des+'","PortID":"'+PortID+'"}';
     console.log(param);
@@ -266,7 +267,7 @@ function addOnePier(TerminalKey,Name,PortName,BelongotoCompanyName,BerthQuantity
 
 //设置删除单个码头的函数
 function deleteOnePier(TerminalKey){
-    var param = '{"TerminalKey":"'+TerminalKey +'"}';
+    let param = '{"TerminalKey":"'+TerminalKey +'"}';
     $.ajax({
         url:'/portInfo/deleteOnePier',
         type:'get',
@@ -274,7 +275,7 @@ function deleteOnePier(TerminalKey){
         success: function(data){
             console.log(data);
             //重新获取码头信息
-            var portID = $('#portBasicInfo').attr('port_id');
+            let portID = $('#portBasicInfo').attr('port_id');
             // reqOnePortPierList(portID);
             reqOnePortPierList(40101);
         },
@@ -287,7 +288,7 @@ function deleteOnePier(TerminalKey){
 
 //设置添加单个泊位详细信息的函数
 function addBerthDetail(PortID,TerminalKey,seq,berth_LoadDischargeRate,berth_EquipmentQuantity,berth_Travel,berth_Outreach,berth_LOA,berth_draft,berth_Depth,berth_Length,berth_AirDraft,berth_Moulded_Beam,cluster_id,type){
-    var param = '{"PortID":"'+PortID +'","TerminalKey":"'+TerminalKey +'","seq":"'+seq+'","berth_LOA":"'+berth_LOA+'","berth_draft":"'+berth_draft+
+    let param = '{"PortID":"'+PortID +'","TerminalKey":"'+TerminalKey +'","seq":"'+seq+'","berth_LOA":"'+berth_LOA+'","berth_draft":"'+berth_draft+
         '","berth_AirDraft":"'+berth_AirDraft+'","berth_Moulded_Beam":"'+berth_Moulded_Beam+'","berth_Length":"'+berth_Length+'"' +
         ',"berth_Depth":"'+berth_Depth+'","berth_EquipmentQuantity":"'+berth_EquipmentQuantity+'","berth_LoadDischargeRate":"'+berth_LoadDischargeRate+'"' +
         ',"berth_Travel":"'+berth_Travel+'","berth_Outreach":"'+berth_Outreach+'","cluster_id":"'+cluster_id+'","type":"'+type+'"}';
@@ -315,7 +316,7 @@ function addBerthDetail(PortID,TerminalKey,seq,berth_LoadDischargeRate,berth_Equ
 
 //设置修改单个泊位详细信息的函数
 function modifyBerthDetail(TerminalKey,seq,berth_LOA,berth_draft,berth_AirDraft,berth_MouldedBeam,berth_Length,berth_Depth,berth_loaderNum,berth_loadingRate,berth_mobile,berth_extend){
-    var param = '{"TerminalKey":"'+TerminalKey +'","seq":"'+seq+'","berth_LOA":"'+berth_LOA+'","berth_draft":"'+berth_draft+
+    let param = '{"TerminalKey":"'+TerminalKey +'","seq":"'+seq+'","berth_LOA":"'+berth_LOA+'","berth_draft":"'+berth_draft+
         '","berth_AirDraft":"'+berth_AirDraft+'","berth_MouldedBeam":"'+berth_MouldedBeam+'","berth_Length":"'+berth_Length+'"' +
         ',"berth_Depth":"'+berth_Depth+'","berth_loaderNum":"'+berth_loaderNum+'","berth_loadingRate":"'+berth_loadingRate+'"' +
         ',"berth_mobile":"'+berth_mobile+'","berth_extend":"'+berth_extend+'"}';
@@ -335,7 +336,7 @@ function modifyBerthDetail(TerminalKey,seq,berth_LOA,berth_draft,berth_AirDraft,
 
 //设置删除单个泊位的函数
 function deleteOneBerth(TerminalKey,seq){
-    var param = '{"TerminalKey":"'+TerminalKey +'","seq":"'+seq+'"}';
+    let param = '{"TerminalKey":"'+TerminalKey +'","seq":"'+seq+'"}';
     $.ajax({
         url:'/portInfo/deleteOneberth',
         type:'get',
@@ -354,7 +355,7 @@ function deleteOneBerth(TerminalKey,seq){
 
 //设置请求单个静止区域基本信息的函数
 function reqStillAreaInfo(id,type){
-    var param = '{"ClusterID":"'+id+'","ClusterType":"'+type+'"}';
+    let param = '{"ClusterID":"'+id+'","ClusterType":"'+type+'"}';
     console.log(type);
     // 默认是不能保存的
     saveStatus = false;
@@ -366,12 +367,12 @@ function reqStillAreaInfo(id,type){
         success: function(data) {
             console.log(data);
             if (data[0] === '200') {
-                var sendData = data[1];
-                var jsonData = JSON.parse(sendData);
+                let sendData = data[1];
+                let jsonData = JSON.parse(sendData);
                 console.log(jsonData);
                 console.log(id);
                 console.log(type);
-                var stillAreaStr = '';
+                let stillAreaStr = '';
                 $('.stillArea_contents').empty();
                 if (type === 1) {
                     stillAreaStr = '<div><span>所属港口：</span><span>' + jsonData[0].ENName + '</span></div>' +
@@ -400,8 +401,8 @@ function reqStillAreaInfo(id,type){
                     // 从码头获得泊位列表
                     reqBerthListFromPier(jsonData[0].TerminalKey);
 
-                    for (var i = 0; i < $('#berth_select .berth_detail input').length; i++) {
-                        var infoStr = '';
+                    for (let i = 0; i < $('#berth_select .berth_detail input').length; i++) {
+                        let infoStr = '';
                         if (i == 0) {infoStr = jsonData[0].LoadDischargeRate;}
                         if (i == 1) {infoStr = jsonData[0].EquipmentQuantity;}
                         if (i == 2) {infoStr = jsonData[0].Travel;}
@@ -467,15 +468,15 @@ function reqStillAreaInfo(id,type){
 
 //泊位编辑，修改码头详情的函数
 function berthreqPierDetail(TerminalKey){
-    var param = '{"TerminalKey":"'+TerminalKey +'"}';
+    let param = '{"TerminalKey":"'+TerminalKey +'"}';
     $.ajax({
         url:'/portInfo/reqOnePierDetail',
         type:'get',
         data:{param:param},
         success: function(data){
             console.log(data);
-            var sendData = data[1];
-            var jsonData = JSON.parse(sendData);
+            let sendData = data[1];
+            let jsonData = JSON.parse(sendData);
             console.log(jsonData);
         },
         error: function(err){
@@ -486,19 +487,19 @@ function berthreqPierDetail(TerminalKey){
 
 
 function BoxBerth(PortID){
-    var param = '{"PortID":"'+PortID +'"}';
+    let param = '{"PortID":"'+PortID +'"}';
     $.ajax({
         url:'/portInfo/reqOneBoxBerth',
         type:'get',
         data:{param:param},
         success: function(data){
             console.log(data);
-            var sendData = data[1];
-            var jsonData = JSON.parse(sendData);
+            let sendData = data[1];
+            let jsonData = JSON.parse(sendData);
             console.log(jsonData);
             //悬浮框信息显示
             $('.box_berth_span').empty();
-            var boxberthStr = '<li><span>英文名：</span><span>'+jsonData[0].ENName+'</span></li>' +
+            let boxberthStr = '<li><span>英文名：</span><span>'+jsonData[0].ENName+'</span></li>' +
                 '<li><span>&nbsp;&nbsp;IOS3：</span><span>'+jsonData[0].IOS3+'</span></li>' +
                 '<li><span>&nbsp;&nbsp;&nbsp;经度：</span><span>'+jsonData[0].LongitudeNumeric+'</span></li>'+
                 '<li><span>&nbsp;&nbsp;&nbsp;纬度：</span><span>'+jsonData[0].LatitudeNumeric+'</span></li>'+

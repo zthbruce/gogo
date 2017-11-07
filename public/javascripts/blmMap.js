@@ -23,7 +23,7 @@ blmol.map = {};
  *
  * @param target 地图绑定到的 html 元素的 id
  * @param initCenter {Array.<number>} 启动时的地图中心点
- * @param initZoom {Array.<number>} 启动时的地图 Zoom 等级范围
+ * @param initZoom  启动时的地图 Zoom 等级范围
  * @param layers {Array.<ol.layer.Base>|undefined} 起始时的图层列表，如果未指定则默认为天地图，id 为 blmLayer
  * @param showZoomControl {boolean|undefined} 是否显示左上角的 +、- 这两个 zoom 按钮，未指定则默认为 false
  * @param showAttribution {boolean|undefined} 是否显示右下角的 i 这个 attribution 按钮，未指定则默认为 false

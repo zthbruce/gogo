@@ -1,4 +1,7 @@
-var anchInfoList;
+/**
+ * 显示大锚地信息
+ */
+let anchInfoList = {};
 
 function getAllAnch() {
     anchInfoList ={}; // 初始化
@@ -9,24 +12,24 @@ function getAllAnch() {
         timeout: 5000,
         type: 'GET',
         success: function (data) {
-            var res = data;
+            let res = data;
             if (res[0] === '200') {
                 console.log('成功获取信息');
-                var sendData = res[1];
-                for (var i = 0; i < sendData.length; i++) {
-                    var ele = sendData[i];
-                    var anchorageKey = ele.AnchorageKey;
-                    var location = ele.Location;
-                    var name = ele.Name;
+                let sendData = res[1];
+                for (let i = 0; i < sendData.length; i++) {
+                    let ele = sendData[i];
+                    let anchorageKey = ele.AnchorageKey;
+                    let location = ele.Location;
+                    let name = ele.Name;
                     // 中心点坐标
-                    var lon = ele.CenterLon;
-                    var lat = ele.CenterLat;
+                    let lon = ele.CenterLon;
+                    let lat = ele.CenterLat;
                     if(location !== "") {
-                        var lonLatInfo = location.split(";");
-                        var lonLatList = [];
-                        for (var j = 0; j < lonLatInfo.length; j++) {
-                            var lon_lat = lonLatInfo[j].split("#");
-                            var lat_lon = WGS84transformer(parseFloat(lon_lat[1]), parseFloat(lon_lat[0]));
+                        let lonLatInfo = location.split(";");
+                        let lonLatList = [];
+                        for (let j = 0; j < lonLatInfo.length; j++) {
+                            let lon_lat = lonLatInfo[j].split("#");
+                            let lat_lon = WGS84transformer(parseFloat(lon_lat[1]), parseFloat(lon_lat[0]));
                             // 正常情况
                             if(lon_lat.length === 2) {
                                 lonLatList.push(ol.proj.fromLonLat([lat_lon[1], lat_lon[0]]))
@@ -39,16 +42,9 @@ function getAllAnch() {
                             lon: lon,
                             lat: lat
                         }
-                        // anchInfoList.push({
-                        //     anchorageKey: anchorageKey,
-                        //     name: name,
-                        //     lonLatList: lonLatList,
-                        //     lon: lon,
-                        //     lat: lat
-                        // })
                     }
                 }
-                anchLayer(zoom);
+                anchLayer(initLevel);
             }
         },
         error: function (data, status, e) {
@@ -56,11 +52,7 @@ function getAllAnch() {
         }
     })
 }
-//
-// function getLonLatList() {
-//
-//
-// }
+
 
 /**
  *  根据锚地表显示相应的区域
@@ -68,8 +60,8 @@ function getAllAnch() {
 function anchLayer(zoom){
     console.log("加载锚地详细区域");
     anch.getSource().clear();
-    // var features = [];
-    var style = {
+    // let features = [];
+    let style = {
         stroke: new ol.style.Stroke({
             color: 'white',
             lineDash: [1, 2, 3, 4, 5, 6, 7],
@@ -80,14 +72,14 @@ function anchLayer(zoom){
             // color: 'rgba(255, 255, 255, 0.2)'
         })
     };
-    // for (var i = 0; i < anchInfoList.length; i++) {
-    for (var anchorageKey in  anchInfoList) {
-        var anch_info = anchInfoList[anchorageKey];
-        var name = anch_info.name;
-        // var anchorageKey = anch_info.anchorageKey;
+    // for (let i = 0; i < anchInfoList.length; i++) {
+    for (let anchorageKey in  anchInfoList) {
+        let anch_info = anchInfoList[anchorageKey];
+        let name = anch_info.name;
+        // let anchorageKey = anch_info.anchorageKey;
         // console.log(name);
-        var lon = anch_info.lon;
-        var lat = anch_info.lat;
+        let lon = anch_info.lon;
+        let lat = anch_info.lat;
         if(zoom>=10){
             style.text=new ol.style.Text({
                 // font: '10px sans-serif' 默认这个字体，可以修改成其他的，格式和css的字体设置一样
@@ -100,10 +92,10 @@ function anchLayer(zoom){
                 textAlign: "center"
             })
         }
-        var anch_style = new ol.style.Style(style);
+        let anch_style = new ol.style.Style(style);
         // 获取特性
         // console.log(anch_info.lonLatList.length);
-        var feature = new ol.Feature({
+        let feature = new ol.Feature({
             // name: 'parkArea',
             type: 0,
             anchKey: anchorageKey,
@@ -115,21 +107,25 @@ function anchLayer(zoom){
         anch.getSource().addFeature(feature);
     }
 }
+
+// 获取所有锚地区域
+getAllAnch();
+
 // function anchLayer(level){
 //     if (level >= 10) {
 //         console.log("加载锚地详细区域");
 //         // console.log(anchInfoList);
 //         anch.getSource().clear();
-//         // var features = [];
-//         for (var i = 0; i < anchInfoList.length; i++) {
-//             var anch_info = anchInfoList[i];
-//             var name = anch_info.name;
-//             var anchorageKey = anch_info.anchorageKey;
-//             var lon = anch_info.lon;
-//             var lat = anch_info.lat;
+//         // let features = [];
+//         for (let i = 0; i < anchInfoList.length; i++) {
+//             let anch_info = anchInfoList[i];
+//             let name = anch_info.name;
+//             let anchorageKey = anch_info.anchorageKey;
+//             let lon = anch_info.lon;
+//             let lat = anch_info.lat;
 //             console.log(anchorageKey);
 //             console.log(name);
-//             var anch_style = new ol.style.Style({
+//             let anch_style = new ol.style.Style({
 //                 stroke: new ol.style.Stroke({
 //                     color: 'blue',
 //                     lineDash: [1, 2, 3, 4, 5, 6],
@@ -150,7 +146,7 @@ function anchLayer(zoom){
 //             });
 //             // 获取特性
 //             console.log(anch_info.lonLatList);
-//             var feature = new ol.Feature({
+//             let feature = new ol.Feature({
 //                 type: 0,
 //                 anchKey: anchorageKey,
 //                 lon: lon,
@@ -166,16 +162,16 @@ function anchLayer(zoom){
 //     else{
 //         console.log("加载中心位置信息");
 //         anch.getSource().clear();
-//         // var features = [];
-//         for (var i = 0; i < anchInfoList.length; i++) {
-//             var anch_info = anchInfoList[i];
-//             // var name = anch_info.name;
-//             var anchorageKey = anch_info.anchorageKey;
-//             var lon = anch_info.lon;
-//             var lat = anch_info.lat;
+//         // let features = [];
+//         for (let i = 0; i < anchInfoList.length; i++) {
+//             let anch_info = anchInfoList[i];
+//             // let name = anch_info.name;
+//             let anchorageKey = anch_info.anchorageKey;
+//             let lon = anch_info.lon;
+//             let lat = anch_info.lat;
 //             // console.log(anchorageKey);
 //             // console.log(name);
-//             // var anch_style = new ol.style.Style({
+//             // let anch_style = new ol.style.Style({
 //             //     stroke: new ol.style.Stroke({
 //             //         color: 'blue',
 //             //         lineDash: [1, 2, 3, 4, 5, 6],
@@ -196,7 +192,7 @@ function anchLayer(zoom){
 //             // });
 //             // 获取特性
 //             // console.log(anch_info.lonLatList);
-//             var feature = new ol.Feature({
+//             let feature = new ol.Feature({
 //                 type: 0,
 //                 anchKey: anchorageKey,
 //                 lon: lon,

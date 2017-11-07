@@ -32,10 +32,10 @@
 .title_GoBackBtn{display:inline-block;width:16px;height:16px;position:absolute;top:7px;left:15px;background:url("/images/goback_nor.png") no-repeat;cursor:pointer;}
 .title_GoBackBtn:hover{background:url("/images/goback_over.png") no-repeat;}
 .title_GoBackBtn:active{background:url("/images/goback_down.png") no-repeat;}
-.title_MinimizeBtn,.title_RestoreBtn{display:inline-block;width:12px;height:12px;position:absolute;top:8px;right:30px;background:url("/images/delete_nor.png") no-repeat;cursor:pointer;}
+.title_MinimizeBtn,.title_RestoreBtn{display:inline-block;width:12px;height:12px;position:absolute;top:8px;right:30px;background:url("/images/delete_nor.png") no-repeat 0px 4px;cursor:pointer;}
 .title_RestoreBtn{background:url("/images/reduction_nor.png") no-repeat;}
-.title_MinimizeBtn:hover{background:url("/images/delete_over.png") no-repeat;}
-.title_MinimizeBtn:active{background:url("/images/delete_down.png") no-repeat;}
+.title_MinimizeBtn:hover{background:url("/images/delete_over.png") no-repeat 0px 4px;}
+.title_MinimizeBtn:active{background:url("/images/delete_down.png") no-repeat 0px 4px;}
 .title_RestoreBtn:hover{background:url("/images/reduction_over.png") no-repeat;}
 .title_RestoreBtn:active{background:url("/images/reduction_down.png") no-repeat;}
 .title_MinimizeBtn>input,.title_RestoreBtn>input{display:inline-block;width:12px;height:12px;position:relative;top:-7px;border:0px;background:transparent;cursor:pointer;}

@@ -3,8 +3,8 @@
  * 标准航线
  */
 
-var routeBasicInfo = {};
-var relatePortList = [];
+let routeBasicInfo = {};
+let relatePortList = [];
 getRouteBasicInfo(); // 获取航线基本信息
 getRelatePortList(); // 获取相关的港口列表
 
@@ -51,20 +51,20 @@ function getRelatePortList() {
  */
 function showRelatePort(centerLon, centerLat, r) {
     // 显示待选择的港口, 如果不在已增加的列表中
-    for(var portID in AllPortBasicList){
-        var port = AllPortBasicList[portID];
+    for(let portID in AllPortBasicList){
+        let port = AllPortBasicList[portID];
         if(port !== undefined) {
-            var lon = parseFloat(port.LongitudeNumeric);
-            var lat = parseFloat(port.LatitudeNumeric);
+            let lon = parseFloat(port.LongitudeNumeric);
+            let lat = parseFloat(port.LatitudeNumeric);
             if(isNaN(lon) || isNaN(lat)){
                 continue;
             }
             // 计算距离
-            var distance = getGreatCircleDistance(lon, lat, centerLon, centerLat);
+            let distance = getGreatCircleDistance(lon, lat, centerLon, centerLat);
             if(distance > r){
                 continue;
             }
-            var port_to_choose = new ol.Feature({
+            let port_to_choose = new ol.Feature({
                 'pointer': 'port',
                 type: "toChoose",
                 port_id: portID,
@@ -78,17 +78,17 @@ function showRelatePort(centerLon, centerLat, r) {
 //
 // function showRelatePort() {
 //     // 显示待选择的港口, 如果不在已增加的列表中
-//     for(var j = 0; j< relatePortList.length; j++ ){
-//         var portID = relatePortList[j].portID + '';
+//     for(let j = 0; j< relatePortList.length; j++ ){
+//         let portID = relatePortList[j].portID + '';
 //         console.log(portID);
 //         // console.log(portID);
 //         // 当不在增加列表中
 //         // if(portList.indexOf(portID) === -1 && portID !== standardPortID){
-//         var port = AllPortBasicList[portID];
+//         let port = AllPortBasicList[portID];
 //         if(port !== undefined) {
-//             var lon = parseFloat(port.LongitudeNumeric);
-//             var lat = parseFloat(port.LatitudeNumeric);
-//             var port_to_choose = new ol.Feature({
+//             let lon = parseFloat(port.LongitudeNumeric);
+//             let lat = parseFloat(port.LatitudeNumeric);
+//             let port_to_choose = new ol.Feature({
 //                 type: "toChoose",
 //                 port_id: portID,
 //                 geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
@@ -104,16 +104,16 @@ function showRelatePort(centerLon, centerLat, r) {
  * @param portList
  */
 function showSelectedBerth(portList) {
-    for(var key in allPoints){
+    for(let key in allPoints){
         // 后面需要根据航线的类型进行筛选
-        var ele = allPoints[key];
-        var lon = ele['lon'];
-        var lat = ele['lat'];
-        var type = ele['type']; // 属于哪一类， 目前有0：锚地， 1：泊位， 2：未知区域
-        var portID = ele['PortID'];
+        let ele = allPoints[key];
+        let lon = ele['lon'];
+        let lat = ele['lat'];
+        let type = ele['type']; // 属于哪一类， 目前有0：锚地， 1：泊位， 2：未知区域
+        let portID = ele['PortID'];
         if(type === 1 && portList.indexOf(portID) !==-1){
             // 这是当前选择的
-            var berth_choosed = new ol.Feature({
+            let berth_choosed = new ol.Feature({
                 // 'lon': lon,
                 // 'lat': lat,
                 'portId': portID,
@@ -133,20 +133,20 @@ function showSelectedBerth(portList) {
  */
 function updateBerth2Port(portList){
     // 显示目前已经选择的港口
-    for(var i = 0; i< portList.length; i++){
-        var portID = portList[i];
+    for(let i = 0; i< portList.length; i++){
+        let portID = portList[i];
         console.log(portID);
-        var port = AllPortBasicList[portID];
-        var lon = parseFloat(port.LongitudeNumeric);
-        var lat = parseFloat(port.LatitudeNumeric);
-        var feature = {
+        let port = AllPortBasicList[portID];
+        let lon = parseFloat(port.LongitudeNumeric);
+        let lat = parseFloat(port.LatitudeNumeric);
+        let feature = {
             port_id: portID,
             geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
         };
         if(portID !== standardPortID){
             feature["type"] = "choosed";
         }
-        var port_choosed = new ol.Feature(feature);
+        let port_choosed = new ol.Feature(feature);
         // 设置相应的图标
         port_choosed.setStyle(point_status[0]);
         // port_choosed.setStyle(port_yes);
@@ -167,10 +167,10 @@ function removePort(current_li, current_feature) {
     current_feature.set("type", "toChoose");
     current_feature.setStyle(point_status[1]);
     // 泊位取消高亮
-    var portID = current_li.attr("portID");
-    var features = current.getSource().getFeatures();
-    for(var i=0; i< features.length; i++) {
-        var feature = features[i];
+    let portID = current_li.attr("portID");
+    let features = current.getSource().getFeatures();
+    for(let i=0; i< features.length; i++) {
+        let feature = features[i];
         if(feature.get('portId') === portID){
             current.getSource().removeFeature(feature);
         }
@@ -184,17 +184,17 @@ function removePort(current_li, current_feature) {
 //     current_feature.set("type", "toChoose");
 //     current_feature.setStyle(port_nor);
 //     // 泊位取消高亮
-//     var features = current.getSource().getFeatures();
-//     for(var i=0; i< features.length; i++) {
-//         var feature = features[i];
+//     let features = current.getSource().getFeatures();
+//     for(let i=0; i< features.length; i++) {
+//         let feature = features[i];
 //         if(feature.get('portId') === portID){
 //             current.getSource().removeFeature(feature);
 //         }
 //     }
 //     // 移除列表中的元素
-//     var portList = port_ul.children("li");
-//     for(var j=0; j< portList.length; j++){
-//         var li = portList.eq(j);
+//     let portList = port_ul.children("li");
+//     for(let j=0; j< portList.length; j++){
+//         let li = portList.eq(j);
 //         li.remove();
 //     }
 // }
@@ -204,17 +204,17 @@ function removePort(current_li, current_feature) {
  * @param routeId
  */
 function getRouteCargoList(routeId) {
-    var cargoType_ul = $(".route_CargoType>ul");
+    let cargoType_ul = $(".route_CargoType>ul");
     // 初始化
-    var cargo_ele = $(".route_CargoType input");
+    let cargo_ele = $(".route_CargoType input");
     cargo_ele.val('');
-    var cargo_num_ele = cargo_ele.next();
+    let cargo_num_ele = cargo_ele.next();
     cargo_num_ele.text('');
     $.ajax({
         url:"/berth/getCargoType",
         type:'get',
         success: function(data){
-            var cargoInfo = data[1];
+            let cargoInfo = data[1];
             $.ajax({
                 url: "/route/getCargo2Route",
                 type: 'get',
@@ -222,13 +222,13 @@ function getRouteCargoList(routeId) {
                 success: function (data) {
                     // 获取货物信息
                     // 内容显示
-                    var cargoList2Terminal = [];
+                    let cargoList2Terminal = [];
                     if(data[0] === '200') {
-                        var cargoInfoList = data[1];
-                        var cargoNum = cargoInfoList.length;
-                        var cargoType = '';
-                        for (var i = 0; i < cargoNum; i++) {
-                            var cargo = cargoInfoList[i];
+                        let cargoInfoList = data[1];
+                        let cargoNum = cargoInfoList.length;
+                        let cargoType = '';
+                        for (let i = 0; i < cargoNum; i++) {
+                            let cargo = cargoInfoList[i];
                             if (i > 0) {
                                 cargoType += ", "
                             }
@@ -241,10 +241,10 @@ function getRouteCargoList(routeId) {
                     }
                     // 列表显示
                     cargoType_ul.empty(); // 初始化
-                    var str = '';
+                    let str = '';
                     console.log(cargoList2Terminal);
-                    for(var i = 0; i < cargoInfo.length; i++){
-                        var cargoType = cargoInfo[i];
+                    for(let i = 0; i < cargoInfo.length; i++){
+                        let cargoType = cargoInfo[i];
                         console.log(cargoType.ID);
                         if(cargoList2Terminal.indexOf(cargoType.ID) !== -1){
                             str += '<li><label for=' + cargoType.ID +'><input type="checkbox" checked="checked" id=' + cargoType.ID + '>' +
@@ -257,11 +257,11 @@ function getRouteCargoList(routeId) {
                     }
                     cargoType_ul.append(str);
                     // cargoType_ul.empty(); // 初始化
-                    // var cargoList2Route = data[1];
-                    // var str = '';
+                    // let cargoList2Route = data[1];
+                    // let str = '';
                     // console.log(cargoList2Route);
-                    // for(var i = 0; i < cargoInfo.length; i++){
-                    //     var cargoType = cargoInfo[i];
+                    // for(let i = 0; i < cargoInfo.length; i++){
+                    //     let cargoType = cargoInfo[i];
                     //     console.log(cargoType.ID);
                     //     if(cargoList2Route.indexOf(cargoType.ID) !== -1){
                     //         str += '<li><label for=' + cargoType.ID +'><input type="checkbox" checked="checked" id=' + cargoType.ID + '>' +
@@ -289,31 +289,31 @@ function getRouteCargoList(routeId) {
 /**
  * 地图弹出框拖动事件
  */
-var routeInfoDown = false; //航线信息管理弹出框
-var LeaseRouteInfoDown = false; //期租航线信息管理弹出框
-var DivLeft;
-var DivTop;
+let routeInfoDown = false; //航线信息管理弹出框
+let LeaseRouteInfoDown = false; //期租航线信息管理弹出框
+// let DivLeft;
+// let DivTop;
 $('.fleet_title').mousedown(function(event){
-    var changeDivId = $(this).parent().attr('id');
+    let changeDivId = $(this).parent().attr('id');
     if(changeDivId=='routeInfo'){routeInfoDown = true;}
     if(changeDivId=='LeaseRouteInfo'){LeaseRouteInfoDown = true;}
     DivLeft = event.clientX - $(this).offset().left;
     DivTop = event.clientY - $(this).offset().top;
 });
-var fleetDivZIndex = 0;
+// let fleetDivZIndex = 0;
 $('#LeaseRouteInfoDown,#routeInfo').click(function(){
     fleetDivZIndex++;
     $(this).css('zIndex',fleetDivZIndex);
 });
 $('.fleet_title').mouseup(function(){
-    var changeDivId = $(this).parent().attr('id');
+    let changeDivId = $(this).parent().attr('id');
     if(changeDivId==='LeaseRouteInfo'){LeaseRouteInfoDown = false;}
     if(changeDivId==='routeInfo'){routeInfoDown = false;}
     $(this).css('cursor','auto');
 });
 $(window).mousemove(function(event){
-    var newLeft = event.clientX-DivLeft;
-    var newTop = event.clientY-DivTop;
+    let newLeft = event.clientX-DivLeft;
+    let newTop = event.clientY-DivTop;
     if(newLeft<=0){newLeft = 0;}
     if(newTop<=0){newTop = 0;}
     if(LeaseRouteInfoDown){
@@ -350,19 +350,19 @@ $(".route_Info_btn").click(function () {
 /** 鼠标移动到航线上显示航线的二级信息*/
 $('.routeType_list>li').mouseenter(function(){
     console.log("here");
-    var routeType = $(this).attr("type");
+    let routeType = $(this).attr("type");
     // 清空所选
     $('.routeType_list>li').removeClass("choose");
     $(this).addClass("choose");
-    var route_ul = $('.oneRoute_List');
+    let route_ul = $('.oneRoute_List');
     //航线列表第一次需要初始化
     route_ul.empty();
-    var routeInfo = routeBasicInfo[routeType];
-    for(var i = 0; i< routeInfo.length; i++) {
-        var info = routeInfo[i];
+    let routeInfo = routeBasicInfo[routeType];
+    for(let i = 0; i< routeInfo.length; i++) {
+        let info = routeInfo[i];
         // console.log(info);
-        var routeId = info.RouteId;
-        var name = info.Name;
+        let routeId = info.RouteId;
+        let name = info.Name;
         route_ul.append('<li routeId=' + routeId + '>' + name + '</li>');
     }
     // 显示航线信息
@@ -370,13 +370,13 @@ $('.routeType_list>li').mouseenter(function(){
 });
 
 
-var standardPortID;
-var allPortList;
-var port_type;
-var allDeparturePortList;
-var allArrivalPortList;
-var routeId; //放在内存中
-// var routerCenter = [0, 0];
+let standardPortID;
+let allPortList;
+let port_type;
+let allDeparturePortList;
+let allArrivalPortList;
+let routeId; //放在内存中
+// let routerCenter = [0, 0];
 
 /**
  * 鼠标点击某一条具体的航线
@@ -389,7 +389,7 @@ $('.oneRoute_List').delegate("li", 'click', function () {
     $('.oneRoute_List>li').removeClass("choose");
     $(this).addClass("choose");
     // 显示详细信息
-    var type = routeId[0];
+    let type = routeId[0];
     // 程租(Travel)
     if(type === "T"){
         console.log("程租");
@@ -402,45 +402,45 @@ $('.oneRoute_List').delegate("li", 'click', function () {
             success:function (data) {
                 if(data[0] === '200'){
                     console.log("获取数据成功");
-                    var routeInfo = data[1][0]; // 航线信息
-                    // var routeName = routeInfo.Name; // 名称
-                    var standardDeparturePortID = routeInfo.StandardDeparturePort; // portID
-                    var standardArrivalPortID = routeInfo.StandardArrivalPort; // portID
-                    var departurePort = routeInfo.DeparturePort; // PortIDListStr
-                    var arrivalPort = routeInfo.ArrivalPort; // PortIDListStr
-                    var DWT = routeInfo.DWT === null? "":routeInfo.DWT;
-                    // var LOA = routeInfo.LOA === null? "":routeInfo.LOA;
-                    // var beam = routeInfo.Beam === null? "":routeInfo.Beam;
-                    var draft =  routeInfo.Draft === null? "":routeInfo.Draft;
-                    var max_age = routeInfo.MaxAge === null?"":routeInfo.MaxAge;
-                    var weight = routeInfo.Weight === null ?"":routeInfo.Weight;
+                    let routeInfo = data[1][0]; // 航线信息
+                    // let routeName = routeInfo.Name; // 名称
+                    let standardDeparturePortID = routeInfo.StandardDeparturePort; // portID
+                    let standardArrivalPortID = routeInfo.StandardArrivalPort; // portID
+                    let departurePort = routeInfo.DeparturePort; // PortIDListStr
+                    let arrivalPort = routeInfo.ArrivalPort; // PortIDListStr
+                    let DWT = routeInfo.DWT === null? "":routeInfo.DWT;
+                    // let LOA = routeInfo.LOA === null? "":routeInfo.LOA;
+                    // let beam = routeInfo.Beam === null? "":routeInfo.Beam;
+                    let draft =  routeInfo.Draft === null? "":routeInfo.Draft;
+                    let max_age = routeInfo.MaxAge === null?"":routeInfo.MaxAge;
+                    let weight = routeInfo.Weight === null ?"":routeInfo.Weight;
                     // 装载信息
-                    var loadingWaitTime = routeInfo.LoadingWaitTime === null? "":routeInfo.LoadingWaitTime;
-                    var load_TPH = routeInfo.LoadTPH === null? "":routeInfo.LoadTPH;
-                    var load_DTPH =  routeInfo.LoadDWTPH === null? "":routeInfo.LoadDWTPH;
-                    var load_Sun_Holiday = routeInfo.LoadSunHoliday === null? "":routeInfo.LoadSunHoliday;
+                    let loadingWaitTime = routeInfo.LoadingWaitTime === null? "":routeInfo.LoadingWaitTime;
+                    let load_TPH = routeInfo.LoadTPH === null? "":routeInfo.LoadTPH;
+                    let load_DTPH =  routeInfo.LoadDWTPH === null? "":routeInfo.LoadDWTPH;
+                    let load_Sun_Holiday = routeInfo.LoadSunHoliday === null? "":routeInfo.LoadSunHoliday;
                     // 卸载信息
-                    var dischargeWaitTime = routeInfo.DischargeWaitTime === null? "":routeInfo.DischargeWaitTime;
-                    var discharge_DTPH = routeInfo.DischargeDWTPH === null? "":routeInfo.DischargeDWTPH;
-                    var discharge_TPH = routeInfo.DischargeTPH === null? "":routeInfo.DischargeTPH;
-                    var discharge_Sun_Holiday = routeInfo.DischargeSunHoliday === null? "":routeInfo.DischargeSunHoliday;
-                    var ENDes  = routeInfo.ENDes === null? "":routeInfo.ENDes;
-                    var CNDes = routeInfo.CNDes === null? "":routeInfo.CNDes;
+                    let dischargeWaitTime = routeInfo.DischargeWaitTime === null? "":routeInfo.DischargeWaitTime;
+                    let discharge_DTPH = routeInfo.DischargeDWTPH === null? "":routeInfo.DischargeDWTPH;
+                    let discharge_TPH = routeInfo.DischargeTPH === null? "":routeInfo.DischargeTPH;
+                    let discharge_Sun_Holiday = routeInfo.DischargeSunHoliday === null? "":routeInfo.DischargeSunHoliday;
+                    let ENDes  = routeInfo.ENDes === null? "":routeInfo.ENDes;
+                    let CNDes = routeInfo.CNDes === null? "":routeInfo.CNDes;
                     // 标题
-                    var nameI = $('.routeType_list>.choose').text();
-                    var nameII = $('.oneRoute_List>.choose').text();
+                    let nameI = $('.routeType_list>.choose').text();
+                    let nameII = $('.oneRoute_List>.choose').text();
                     console.log(nameI + "." + nameII);
-                    var title = $('#routeInfo>.fleet_title>span');
+                    let title = $('#routeInfo>.fleet_title>span');
                     title.text(nameI + " / " + nameII);
                     title.attr("routeId", routeId);
 
                     // 标准出发港显示
-                    var standardDeparturePort_span = $('#routeInfo .routePort_Start>.routePoint_infoShow');
+                    let standardDeparturePort_span = $('#routeInfo .routePort_Start>.routePoint_infoShow');
                     standardDeparturePort_span.val(""); // 初始化
                     // standardDeparturePort_span.text(""); // 初始化
                     if(standardDeparturePortID !== '') {
                         console.log(standardDeparturePortID);
-                        var departure_port = AllPortBasicList[standardDeparturePortID];
+                        let departure_port = AllPortBasicList[standardDeparturePortID];
                         standardDeparturePort_span.val(departure_port.ENName);
                         // standardDeparturePort_span.text(departure_port.ENName);
                         standardDeparturePort_span.attr("portID",  standardDeparturePortID);
@@ -449,12 +449,12 @@ $('.oneRoute_List').delegate("li", 'click', function () {
                         allDeparturePortList.push(standardDeparturePortID)
                     }
                     // 标准目的港显示
-                    var standardArrivalPort_span = $('#routeInfo .routePort_End>.routePoint_infoShow');
+                    let standardArrivalPort_span = $('#routeInfo .routePort_End>.routePoint_infoShow');
                     standardArrivalPort_span.val(""); // 初始化
                     // standardArrivalPort_span.text(""); // 初始化
                     if(standardArrivalPortID !== ''){
                         console.log(standardArrivalPortID);
-                        var arrival_port = AllPortBasicList[standardArrivalPortID];
+                        let arrival_port = AllPortBasicList[standardArrivalPortID];
                         standardArrivalPort_span.val(arrival_port.ENName);
                         // standardArrivalPort_span.text(arrival_port.ENName);
                         standardArrivalPort_span.attr("portID",  standardArrivalPortID);
@@ -466,28 +466,28 @@ $('.oneRoute_List').delegate("li", 'click', function () {
                     $(".StartEndPort_List>li:not(.add_port)").remove();// 清空信息初始化
                     // 出发港列表
                     if(departurePort !== null && departurePort !== ""){
-                        var departurePortList = departurePort.split("#");
-                        for(var i = 0; i < departurePortList.length; i++ ){
-                            var portID = departurePortList[i];
+                        let departurePortList = departurePort.split("#");
+                        for(let i = 0; i < departurePortList.length; i++ ){
+                            let portID = departurePortList[i];
                             allDeparturePortList.push(portID);
-                            var port = AllPortBasicList[portID];
-                            var port_li =  '<li portID='+ portID+'><span>'+ port.ENName + '</span><i class="close"></i></li>';
+                            let port = AllPortBasicList[portID];
+                            let port_li =  '<li portID='+ portID+'><span>'+ port.ENName + '</span><i class="close"></i></li>';
                             $("#routeInfo .routeStartPort_Select .StartEndPort_List").append(port_li)
                         }
                     }
                     // 目的港列表
                     if(arrivalPort !== null && arrivalPort !== ""){
-                        var arrivalPortList = arrivalPort.split("#");
-                        for(var i = 0; i < arrivalPortList.length; i++ ){
-                            var portID = arrivalPortList[i];
+                        let arrivalPortList = arrivalPort.split("#");
+                        for(let i = 0; i < arrivalPortList.length; i++ ){
+                            let portID = arrivalPortList[i];
                             allArrivalPortList.push(portID);
                             console.log(portID);
-                            var port = AllPortBasicList[portID];
-                            var port_li =  '<li portID='+ portID+'><span>'+ port.ENName + '</span><i class="close"></i></li>';
+                            let port = AllPortBasicList[portID];
+                            let port_li =  '<li portID='+ portID+'><span>'+ port.ENName + '</span><i class="close"></i></li>';
                             $("#routeInfo .routeEndPort_Select .StartEndPort_List").append(port_li)
                         }
                     }
-                    var info_li = $(".routeInfo_List>li");
+                    let info_li = $(".routeInfo_List>li");
                     // 填上输入值
                     // 基本信息
                     info_li.eq(0).children('input').val(DWT);
@@ -546,69 +546,69 @@ $('.oneRoute_List').delegate("li", 'click', function () {
             success: function (data) {
                 if (data[0] === '200') {
                     console.log("获取数据成功");
-                    var routeInfo = data[1][0]; // 航线信息
+                    let routeInfo = data[1][0]; // 航线信息
                     // 标题
-                    var nameI = $('.routeType_list>.choose').text();
-                    var nameII = $('.oneRoute_List>.choose').text();
+                    let nameI = $('.routeType_list>.choose').text();
+                    let nameII = $('.oneRoute_List>.choose').text();
                     console.log(nameI + "." + nameII);
-                    var title = $('#LeaseRouteInfo>.fleet_title>span');
+                    let title = $('#LeaseRouteInfo>.fleet_title>span');
                     title.text(nameI + " / " + nameII);
                     title.attr("routeId", routeId);
                     // 交船还船范围
-                    var deliveryArea = routeInfo.DeliveryArea;
-                    var deliveryLon = routeInfo.DeliveryCenterLon === null? 0 : routeInfo.DeliveryCenterLon;
-                    var deliveryLat = routeInfo.DeliveryCenterLat === null? 0 : routeInfo.DeliveryCenterLat;
-                    var redeliveryArea = routeInfo.RedeliveryArea;
-                    var redeliveryLon = routeInfo.RedeliveryCenterLon === null? 0 : routeInfo.RedeliveryCenterLon;
-                    var redeliveryLat = routeInfo.RedeliveryCenterLat === null? 0 : routeInfo.RedeliveryCenterLat;
+                    let deliveryArea = routeInfo.DeliveryArea;
+                    let deliveryLon = routeInfo.DeliveryCenterLon === null? 0 : routeInfo.DeliveryCenterLon;
+                    let deliveryLat = routeInfo.DeliveryCenterLat === null? 0 : routeInfo.DeliveryCenterLat;
+                    let redeliveryArea = routeInfo.RedeliveryArea;
+                    let redeliveryLon = routeInfo.RedeliveryCenterLon === null? 0 : routeInfo.RedeliveryCenterLon;
+                    let redeliveryLat = routeInfo.RedeliveryCenterLat === null? 0 : routeInfo.RedeliveryCenterLat;
                     // 交船还船港口
-                    var deliveryPort = routeInfo.DeliveryPort;
-                    var redeliveryPort = routeInfo.RedeliveryPort;
+                    let deliveryPort = routeInfo.DeliveryPort;
+                    let redeliveryPort = routeInfo.RedeliveryPort;
                     // 船舶基本信息
-                    var DWT = routeInfo.DWT === null? "":routeInfo.DWT;
-                    var LOA = routeInfo.LOA === null? "":routeInfo.LOA;
-                    var beam = routeInfo.Beam === null? "":routeInfo.Beam;
-                    var draft =  routeInfo.Draft === null? "":routeInfo.Draft;
-                    var max_age = routeInfo.MaxAge === null?"":routeInfo.MaxAge;
-                    var volume = routeInfo.Volume === null?"":routeInfo.Volume;
+                    let DWT = routeInfo.DWT === null? "":routeInfo.DWT;
+                    let LOA = routeInfo.LOA === null? "":routeInfo.LOA;
+                    let beam = routeInfo.Beam === null? "":routeInfo.Beam;
+                    let draft =  routeInfo.Draft === null? "":routeInfo.Draft;
+                    let max_age = routeInfo.MaxAge === null?"":routeInfo.MaxAge;
+                    let volume = routeInfo.Volume === null?"":routeInfo.Volume;
                     // 航线信息
-                    var weight = routeInfo.Weight === null?"":routeInfo.Weight;
-                    var commission = routeInfo.Commission === null?"":routeInfo.Commission;
-                    var min_lease_term = routeInfo.Min_Lease_Term === null?"":routeInfo.Min_Lease_Term;
-                    var max_lease_term = routeInfo.Max_Lease_Term === null?"":routeInfo.Max_Lease_Term;
-                    var no_diesel_at_sea = routeInfo.No_Diesel_At_Sea === null?'0':routeInfo.No_Diesel_At_Sea;
+                    let weight = routeInfo.Weight === null?"":routeInfo.Weight;
+                    let commission = routeInfo.Commission === null?"":routeInfo.Commission;
+                    let min_lease_term = routeInfo.Min_Lease_Term === null?"":routeInfo.Min_Lease_Term;
+                    let max_lease_term = routeInfo.Max_Lease_Term === null?"":routeInfo.Max_Lease_Term;
+                    let no_diesel_at_sea = routeInfo.No_Diesel_At_Sea === null?'0':routeInfo.No_Diesel_At_Sea;
                     // 航速
-                    var emptyLoad_Speed = routeInfo.EmptyLoad_Speed===null?'':routeInfo.EmptyLoad_Speed;
-                    var fullLoad_Speed = routeInfo.FullLoad_Speed===null?'':routeInfo.FullLoad_Speed;
+                    let emptyLoad_Speed = routeInfo.EmptyLoad_Speed===null?'':routeInfo.EmptyLoad_Speed;
+                    let fullLoad_Speed = routeInfo.FullLoad_Speed===null?'':routeInfo.FullLoad_Speed;
                     // 油耗
-                    var emptyLoad_Fuel_Consumption = routeInfo.EmptyLoad_Fuel_Consumption === null? '':routeInfo.EmptyLoad_Fuel_Consumption;
-                    var fullLoad_Fuel_Consumption = routeInfo.FullLoad_Fuel_Consumption === null? '':routeInfo.FullLoad_Fuel_Consumption;
+                    let emptyLoad_Fuel_Consumption = routeInfo.EmptyLoad_Fuel_Consumption === null? '':routeInfo.EmptyLoad_Fuel_Consumption;
+                    let fullLoad_Fuel_Consumption = routeInfo.FullLoad_Fuel_Consumption === null? '':routeInfo.FullLoad_Fuel_Consumption;
                     // 描述信息
-                    var ENDes  = routeInfo.ENDes === null? "":routeInfo.ENDes;
-                    var CNDes = routeInfo.CNDes === null? "":routeInfo.CNDes;
+                    let ENDes  = routeInfo.ENDes === null? "":routeInfo.ENDes;
+                    let CNDes = routeInfo.CNDes === null? "":routeInfo.CNDes;
 
                     // 交船区域显示
-                    var delivery_ele = $("#LeaseRouteInfo .routePort_Start>.routePoint_infoShow");
+                    let delivery_ele = $("#LeaseRouteInfo .routePort_Start>.routePoint_infoShow");
                     delivery_ele.val(deliveryArea);
                     // delivery_ele.text(deliveryArea);
                     delivery_ele.attr("lon", deliveryLon);
                     delivery_ele.attr("lat", deliveryLat);
                     // 还船区域显示
-                    var redelivery_ele = $("#LeaseRouteInfo .routePort_End>.routePoint_infoShow");
+                    let redelivery_ele = $("#LeaseRouteInfo .routePort_End>.routePoint_infoShow");
                     redelivery_ele.val(redeliveryArea);
                     // redelivery_ele.text(redeliveryArea);
                     redelivery_ele.attr("lon", redeliveryLon);
                     redelivery_ele.attr("lat", redeliveryLat);
                     // 交船港口显示
-                    var delivery_port_ul = $("#LeaseRouteInfo .routeStartPort_Select>span>.StartEndPort_List");
+                    let delivery_port_ul = $("#LeaseRouteInfo .routeStartPort_Select>span>.StartEndPort_List");
                     delivery_port_ul.empty();
                     if(deliveryPort !== null && deliveryPort !== ''){
-                        var deliveryPortList = deliveryPort.split("#");
-                        var port_li = '';
-                        for(var i =0; i < deliveryPortList.length; i++){
-                            var portID = deliveryPortList[i];
+                        let deliveryPortList = deliveryPort.split("#");
+                        let port_li = '';
+                        for(let i =0; i < deliveryPortList.length; i++){
+                            let portID = deliveryPortList[i];
                             allDeparturePortList.push(portID);
-                            var port = AllPortBasicList[portID];
+                            let port = AllPortBasicList[portID];
                             if(port !== undefined) {
                                 port_li += '<li portID=' + portID + '><span>' + port.ENName + '</span><i class="close"></i></li>';
                             }
@@ -616,15 +616,15 @@ $('.oneRoute_List').delegate("li", 'click', function () {
                         delivery_port_ul.append(port_li)
                     }
                     // 还船港口显示
-                    var redelivery_port_ul = $("#LeaseRouteInfo .routeEndPort_Select>span>.StartEndPort_List");
+                    let redelivery_port_ul = $("#LeaseRouteInfo .routeEndPort_Select>span>.StartEndPort_List");
                     redelivery_port_ul.empty();
                     if(redeliveryPort !== null && redeliveryPort !== ''){
-                        var redeliveryPortList = redeliveryPort.split("#");
-                        var port_li = '';
-                        for(var i =0; i < redeliveryPortList.length; i++){
-                            var portID = redeliveryPortList[i];
+                        let redeliveryPortList = redeliveryPort.split("#");
+                        let port_li = '';
+                        for(let i =0; i < redeliveryPortList.length; i++){
+                            let portID = redeliveryPortList[i];
                             allArrivalPortList.push(portID);
-                            var port = AllPortBasicList[portID];
+                            let port = AllPortBasicList[portID];
                             if(port !== undefined) {
                                 port_li += '<li portID=' + portID + '><span>' + port.ENName + '</span><i class="close"></i></li>';
                             }
@@ -634,7 +634,7 @@ $('.oneRoute_List').delegate("li", 'click', function () {
                     // 显示货物信息
                     // getRouteCargoList(routeId);
                     // 信息显示
-                    var info_li = $(".LeaseRouteInfo_List>li");
+                    let info_li = $(".LeaseRouteInfo_List>li");
                     info_li.eq(0).children('input').val(weight);
                     info_li.eq(1).children('input').val(commission);
                     info_li.eq(2).children('input').eq(0).val(min_lease_term);
@@ -692,16 +692,16 @@ $(".LeaseRouteInstall_CancelBtn").click(function(){
  * 出发港增加港口
  */
 // $(".add_StartPort").click(function () {
-//     var startPort = $('.routePort_Start>.routePoint_infoShow');
-//     var lon = startPort.attr("lon");
-//     var lat = startPort.attr("lat");
-//     var closePortList = getClosePortList(lon, lat, AllPortBasicList, 20);
+//     let startPort = $('.routePort_Start>.routePoint_infoShow');
+//     let lon = startPort.attr("lon");
+//     let lat = startPort.attr("lat");
+//     let closePortList = getClosePortList(lon, lat, AllPortBasicList, 20);
 //     // console.log(closePortList);
 //     /* 港口列表模块 */
-//     var startPort_ul = $(".startPort");
+//     let startPort_ul = $(".startPort");
 //     startPort_ul.empty();
-//     for(var i = 0; i < closePortList.length; i++){
-//         var port = closePortList[i];
+//     for(let i = 0; i < closePortList.length; i++){
+//         let port = closePortList[i];
 //         startPort_ul.append('<li portID="'+ port.PortID+'">'+port.ENName+'</li>');
 //     }
 // });
@@ -710,16 +710,16 @@ $(".LeaseRouteInstall_CancelBtn").click(function(){
  * 目的港增加港口
  */
 $(".add_EndPort").click(function () {
-    var endPort = $('.routePort_Start>.routePoint_infoShow');
-    var lon = endPort.attr("lon");
-    var lat = endPort.attr("lat");
-    var closePortList = getClosePortList(lon, lat, AllPortBasicList, 20);
+    let endPort = $('.routePort_Start>.routePoint_infoShow');
+    let lon = endPort.attr("lon");
+    let lat = endPort.attr("lat");
+    let closePortList = getClosePortList(lon, lat, AllPortBasicList, 20);
     // console.log(closePortList);
     /* 港口列表模块 */
-    var endPort_ul = $(".endPort");
+    let endPort_ul = $(".endPort");
     endPort_ul.empty();
-    for(var i = 0; i < closePortList.length; i++){
-        var port = closePortList[i];
+    for(let i = 0; i < closePortList.length; i++){
+        let port = closePortList[i];
         endPort_ul.append('<li portID="'+ port.PortID+'">'+port.ENName+'</li>');
     }
 });
@@ -728,15 +728,15 @@ $(".add_EndPort").click(function () {
  *
  */
 $('.StartEndPort_List').delegate('li>.close', 'click', function () {
-   var port_li = $(this).parent();
-   var current_feature;
+   let port_li = $(this).parent();
+   let current_feature;
     // port_li.remove(); // 将相应的li删除
     // 然后重新计算相应的停泊区域, 将PortID对应的PortID删除了
-    // var m = 0;
-    var portID = port_li.attr("portID");
-    var current_features = current.getSource().getFeatures();
-    for(var i =0; i< current_features.length; i++){
-        var feature = current_features[i];
+    // let m = 0;
+    let portID = port_li.attr("portID");
+    let current_features = current.getSource().getFeatures();
+    for(let i =0; i< current_features.length; i++){
+        let feature = current_features[i];
         if(feature.get('port_id') === portID){
             // m++;
             current_feature = feature;
@@ -757,15 +757,15 @@ $('.StartEndPort_List').delegate('li>.close', 'click', function () {
  * 进入航线模式，泊位图标可点击
  */
 $('.routePort_Select i').click(function () {
-    var info_span = $(this).prev();
-    var info_div = $(this).parent();
-    var port_class = info_div.attr("class");
-    var lon = parseFloat(info_span.attr("lon"));
-    var lat = parseFloat(info_span.attr("lat"));
+    let info_span = $(this).prev();
+    let info_div = $(this).parent();
+    let port_class = info_div.attr("class");
+    let lon = parseFloat(info_span.attr("lon"));
+    let lat = parseFloat(info_span.attr("lat"));
     // 定位至港口相应的位置
-    var view = map.getView();
+    let view = map.getView();
     // view.setZoom(14);
-    var pan = ol.animation.pan({
+    let pan = ol.animation.pan({
         //动画持续时间
         duration: 2000,
         source:view.getCenter()
@@ -774,7 +774,7 @@ $('.routePort_Select i').click(function () {
     map.beforeRender(pan);
     view.setCenter(ol.proj.fromLonLat([lon, lat]));
     // 放大动画
-    var zoom = ol.animation.zoom({
+    let zoom = ol.animation.zoom({
         duration: 2000,
         resolution: view.getResolution()
     });
@@ -785,17 +785,17 @@ $('.routePort_Select i').click(function () {
     routeStatus = true;
     // 清空临时操作层
     current.getSource().clear();
-    // var title = $(this).parent().parent().parent().prev().;
-    // var title = $('#LeaseRouteInfo>.fleet_title>span');
-    // var routeId = title.attr("routeId");
-    var type = routeId[0];
+    // let title = $(this).parent().parent().parent().prev().;
+    // let title = $('#LeaseRouteInfo>.fleet_title>span');
+    // let routeId = title.attr("routeId");
+    let type = routeId[0];
     // 显示相关的港口, 以供选择
-    // var r = 50; // 默认程租是50km
+    // let r = 50; // 默认程租是50km
     // if(type === 'L'){
     //     // 期租范围比较大
     //     r = 1000
     // }
-    var r = 100000000000000000000;
+    let r = 100000000000000000000;
     // 显示有关的港口
     showRelatePort(lon, lat, r);
     // 增加港口列表
@@ -819,54 +819,54 @@ $('.routePort_Select i').click(function () {
  * 程租点击保存
  */
 $('.routeInstall_SaveBtn').click(function () {
-    var departurePort = "";
-    var departure_li = $("#routeInfo .routeStartPort_Select .StartEndPort_List>li");
-    for(var i = 0; i< departure_li.length;i++){
+    let departurePort = "";
+    let departure_li = $("#routeInfo .routeStartPort_Select .StartEndPort_List>li");
+    for(let i = 0; i< departure_li.length;i++){
         if(i > 0){
             departurePort += "#";
         }
-        var portID =  departure_li.eq(i).attr("portID");
+        let portID =  departure_li.eq(i).attr("portID");
         departurePort += portID;
     }
     // 目的港口
-    var arrivalPort = "";
-    var arrival_li = $("#routeInfo .routeEndPort_Select .StartEndPort_List>li");
-    for(var i = 0; i< arrival_li.length;i++){
+    let arrivalPort = "";
+    let arrival_li = $("#routeInfo .routeEndPort_Select .StartEndPort_List>li");
+    for(let i = 0; i< arrival_li.length;i++){
         if(i > 0){
             arrivalPort += "#";
         }
         portID =  arrival_li.eq(i).attr("portID");
         arrivalPort += portID;
     }
-    var info_li = $(".routeInfo_List>li");
-    var DWT = info_li.eq(0).children('input').val();
-    var draft = info_li.eq(1).children('input').val();
-    var max_age = info_li.eq(2).children('input').val();
-    var weight = info_li.eq(3).children('input').val();
+    let info_li = $(".routeInfo_List>li");
+    let DWT = info_li.eq(0).children('input').val();
+    let draft = info_li.eq(1).children('input').val();
+    let max_age = info_li.eq(2).children('input').val();
+    let weight = info_li.eq(3).children('input').val();
     weight = weight === ''?'null' : weight;
-    var loadingWaitTime = info_li.eq(5).children('input').val();
-    var load_TPH = info_li.eq(6).children('input').val();
-    var load_DTPH = info_li.eq(7).children('input').val();
-    var dischargeWaitTime = info_li.eq(10).children('input').val();
-    var dischargeTPH = info_li.eq(11).children('input').val();
-    var discharge_DTPH = info_li.eq(12).children('input').val();
-    var load_Sun_Holiday = "0";
+    let loadingWaitTime = info_li.eq(5).children('input').val();
+    let load_TPH = info_li.eq(6).children('input').val();
+    let load_DTPH = info_li.eq(7).children('input').val();
+    let dischargeWaitTime = info_li.eq(10).children('input').val();
+    let dischargeTPH = info_li.eq(11).children('input').val();
+    let discharge_DTPH = info_li.eq(12).children('input').val();
+    let load_Sun_Holiday = "0";
     if(info_li.eq(8).children('input').prop("checked")){
         load_Sun_Holiday  = "1";
     }
-    var discharge_Sun_Holiday = "0";
+    let discharge_Sun_Holiday = "0";
     if(info_li.eq(13).children('input').prop("checked")){
         discharge_Sun_Holiday = "1";
     }
     // 中英文说明
-    var CNDes = $(".routeDes_Chinese>textarea").val();
-    var ENDes = $(".routeDes_English>textarea").val();
-    var reqParam = {RouteId:routeId, DeparturePort:departurePort, ArrivalPort:arrivalPort, DWT: DWT, MaxAge: max_age, Draft:draft,
+    let CNDes = $(".routeDes_Chinese>textarea").val();
+    let ENDes = $(".routeDes_English>textarea").val();
+    let reqParam = {RouteId:routeId, DeparturePort:departurePort, ArrivalPort:arrivalPort, DWT: DWT, MaxAge: max_age, Draft:draft,
         LoadingWaitTime:loadingWaitTime, LoadSunHoliday:load_Sun_Holiday, LoadTPH:load_TPH, LoadDWTPH:load_DTPH,
         DischargeWaitTime:dischargeWaitTime, DischargeSunHoliday: discharge_Sun_Holiday, DischargeDWTPH: discharge_DTPH,
         DischargeTPH: dischargeTPH, ENDes:ENDes, CNDes:CNDes, Weight: weight};
     // console.log(reqParam);
-    // var reqParam = {};
+    // let reqParam = {};
     $.ajax({
         url:'/route/saveRouteDetailInfo',
         type: "get",
@@ -888,38 +888,38 @@ $('.routeInstall_SaveBtn').click(function () {
  * 期租航线保存
  */
 $('.LeaseRouteInstall_SaveBtn').click(function () {
-    // var title = $('#LeaseRouteInfo>.fleet_title>span');
+    // let title = $('#LeaseRouteInfo>.fleet_title>span');
     // 获取routeId
-    // var routeId = title.attr("routeId");
+    // let routeId = title.attr("routeId");
     // 交船信息
-    var delivery_ele = $("#LeaseRouteInfo .routePort_Start>.routePoint_infoShow");
-    var deliveryArea = delivery_ele.val();
-    // var deliveryArea = delivery_ele.text();
-    var deliveryLon = delivery_ele.attr("lon");
-    var deliveryLat = delivery_ele.attr("lat");
+    let delivery_ele = $("#LeaseRouteInfo .routePort_Start>.routePoint_infoShow");
+    let deliveryArea = delivery_ele.val();
+    // let deliveryArea = delivery_ele.text();
+    let deliveryLon = delivery_ele.attr("lon");
+    let deliveryLat = delivery_ele.attr("lat");
     // 还船信息
-    var redelivery_ele = $("#LeaseRouteInfo .routePort_End>.routePoint_infoShow");
-    var redeliveryArea = redelivery_ele.val();
-    // var redeliveryArea = redelivery_ele.text();
-    var redeliveryLon = redelivery_ele.attr("lon");
-    var redeliveryLat = redelivery_ele.attr("lat");
+    let redelivery_ele = $("#LeaseRouteInfo .routePort_End>.routePoint_infoShow");
+    let redeliveryArea = redelivery_ele.val();
+    // let redeliveryArea = redelivery_ele.text();
+    let redeliveryLon = redelivery_ele.attr("lon");
+    let redeliveryLat = redelivery_ele.attr("lat");
     // 交船港口
-    var deliveryPort = '';
-    var delivery_li = $("#LeaseRouteInfo .routeStartPort_Select>span>.StartEndPort_List>li");
-    var delivery_lon_sum = 0;
-    var delivery_lat_sum = 0;
-    var delivery_num = 0;
-    var redelivery_lon_sum = 0;
-    var redelivery_lat_sum = 0;
-    var redelivery_num = 0;
-    for(var i = 0; i< delivery_li.length;i++){
+    let deliveryPort = '';
+    let delivery_li = $("#LeaseRouteInfo .routeStartPort_Select>span>.StartEndPort_List>li");
+    let delivery_lon_sum = 0;
+    let delivery_lat_sum = 0;
+    let delivery_num = 0;
+    let redelivery_lon_sum = 0;
+    let redelivery_lat_sum = 0;
+    let redelivery_num = 0;
+    for(let i = 0; i< delivery_li.length;i++){
         if(i > 0){
             deliveryPort += "#";
         }
-        var portID =  delivery_li.eq(i).attr("portID");
-        var port = AllPortBasicList[portID];
-        var lon = parseFloat(port.LongitudeNumeric);
-        var lat = parseFloat(port.LatitudeNumeric);
+        let portID =  delivery_li.eq(i).attr("portID");
+        let port = AllPortBasicList[portID];
+        let lon = parseFloat(port.LongitudeNumeric);
+        let lat = parseFloat(port.LatitudeNumeric);
         if(isNaN(lon) || isNaN(lat)){
             continue;
         }
@@ -933,16 +933,16 @@ $('.LeaseRouteInstall_SaveBtn').click(function () {
         deliveryLat = delivery_lat_sum / delivery_num;
     }
     // 还船港口
-    var redeliveryPort = '';
-    var redelivery_li = $("#LeaseRouteInfo .routeEndPort_Select>span>.StartEndPort_List>li");
-    for(var i = 0; i< redelivery_li.length;i++){
+    let redeliveryPort = '';
+    let redelivery_li = $("#LeaseRouteInfo .routeEndPort_Select>span>.StartEndPort_List>li");
+    for(let i = 0; i< redelivery_li.length;i++){
         if(i > 0){
             redeliveryPort += "#";
         }
-        var portID =  redelivery_li.eq(i).attr("portID");
-        var port = AllPortBasicList[portID];
-        var lon = parseFloat(port.LongitudeNumeric);
-        var lat = parseFloat(port.LatitudeNumeric);
+        let portID =  redelivery_li.eq(i).attr("portID");
+        let port = AllPortBasicList[portID];
+        let lon = parseFloat(port.LongitudeNumeric);
+        let lat = parseFloat(port.LatitudeNumeric);
         if(isNaN(lon) || isNaN(lat)){
             continue;
         }
@@ -955,26 +955,26 @@ $('.LeaseRouteInstall_SaveBtn').click(function () {
         redeliveryLon = redelivery_lon_sum / redelivery_num;
         redeliveryLat = redelivery_lat_sum / redelivery_num;
     }
-    var info_li = $(".LeaseRouteInfo_List>li");
-    var weight = info_li.eq(0).children('input').val();
-    var commission = info_li.eq(1).children('input').val();
-    var min_lease_term = info_li.eq(2).children('input').eq(0).val();
-    var max_lease_term = info_li.eq(2).children('input').eq(1).val();
-    var max_age = info_li.eq(3).children('input').val();
-    var DWT = info_li.eq(4).children('input').val();
-    var volume = info_li.eq(5).children('input').val();
-    var LOA = info_li.eq(6).children('input').val();
-    var beam = info_li.eq(7).children('input').val();
-    var draft = info_li.eq(8).children('input').val();
-    var no_diesel_at_sea = info_li.eq(9).children('input').prop("checked") === true? "1":"0";
-    var emptyLoad_Speed = info_li.eq(10).children('input').val();
-    var emptyLoad_Fuel_Consumption = info_li.eq(11).children('input').val();
-    var fullLoad_Speed = info_li.eq(12).children('input').val();
-    var fullLoad_Fuel_Consumption = info_li.eq(13).children('input').val();
+    let info_li = $(".LeaseRouteInfo_List>li");
+    let weight = info_li.eq(0).children('input').val();
+    let commission = info_li.eq(1).children('input').val();
+    let min_lease_term = info_li.eq(2).children('input').eq(0).val();
+    let max_lease_term = info_li.eq(2).children('input').eq(1).val();
+    let max_age = info_li.eq(3).children('input').val();
+    let DWT = info_li.eq(4).children('input').val();
+    let volume = info_li.eq(5).children('input').val();
+    let LOA = info_li.eq(6).children('input').val();
+    let beam = info_li.eq(7).children('input').val();
+    let draft = info_li.eq(8).children('input').val();
+    let no_diesel_at_sea = info_li.eq(9).children('input').prop("checked") === true? "1":"0";
+    let emptyLoad_Speed = info_li.eq(10).children('input').val();
+    let emptyLoad_Fuel_Consumption = info_li.eq(11).children('input').val();
+    let fullLoad_Speed = info_li.eq(12).children('input').val();
+    let fullLoad_Fuel_Consumption = info_li.eq(13).children('input').val();
     // 中英文说明
-    var CNDes = $(".LeaseRouteDes>.routeDes_Chinese>textarea").val();
-    var ENDes = $(".LeaseRouteDes>.routeDes_English>textarea").val();
-    var reqParam = {RouteId:routeId, DeliveryArea:deliveryArea, RedeliveryArea:redeliveryArea, DeliveryCenterLon: deliveryLon,
+    let CNDes = $(".LeaseRouteDes>.routeDes_Chinese>textarea").val();
+    let ENDes = $(".LeaseRouteDes>.routeDes_English>textarea").val();
+    let reqParam = {RouteId:routeId, DeliveryArea:deliveryArea, RedeliveryArea:redeliveryArea, DeliveryCenterLon: deliveryLon,
         DeliveryCenterLat:deliveryLat, RedeliveryCenterLon: redeliveryLon, RedeliveryCenterLat: redeliveryLat, DeliveryPort: deliveryPort,
         RedeliveryPort: redeliveryPort, Weight: weight, Commission:commission, Min_Lease_Term: min_lease_term, Max_Lease_Term: max_lease_term,
         DWT: DWT, MaxAge: max_age, Draft:draft, Volume: volume, LOA: LOA, Beam: beam, No_Diesel_At_Sea:no_diesel_at_sea,
@@ -994,10 +994,10 @@ $('.LeaseRouteInstall_SaveBtn').click(function () {
         }
     });
     // // 保存货物信息
-    // var choose_ele_list = $('.route_CargoType>ul').find("input:checked");
-    // var cargoList = [];
+    // let choose_ele_list = $('.route_CargoType>ul').find("input:checked");
+    // let cargoList = [];
     // console.log(choose_ele_list.length);
-    // for(var j = 0; j < choose_ele_list.length; j++){
+    // for(let j = 0; j < choose_ele_list.length; j++){
     //     // console.log(choose_ele_list.eq(j).attr("id"));
     //     cargoList.push(choose_ele_list.eq(j).attr("id"));
     // }
@@ -1034,12 +1034,12 @@ $('.LeaseRouteInfo_List>li:nth-child(1)').mouseleave(function(){
 });
 // //货物多选按钮
 // $('.LeaseRouteInfo_List>li:nth-child(3)>ul>li').click(function(){
-//     var CargoTextArr = [];
-//     var CargoTextStr = '';
-//     var CargoTextLength = $(this).parent().find('input:checked').length;
-//     for(var i=0;i<CargoTextLength;i++){
+//     let CargoTextArr = [];
+//     let CargoTextStr = '';
+//     let CargoTextLength = $(this).parent().find('input:checked').length;
+//     for(let i=0;i<CargoTextLength;i++){
 //         if(i>0){CargoTextStr+='、';}
-//         var CargoText = $(this).parent().find('input:checked').eq(i).parent().text();
+//         let CargoText = $(this).parent().find('input:checked').eq(i).parent().text();
 //         CargoTextArr.push(CargoText);
 //         CargoTextStr += CargoText;
 //     }
@@ -1052,16 +1052,16 @@ $('.LeaseRouteInfo_List>li:nth-child(1)').mouseleave(function(){
 // 货物多选的选择
 $('.route_CargoType>ul').delegate("li", "click", function(){
     // console.log("here");
-    var CargoTextArr = [];
-    var CargoTextStr = '';
-    var CargoTextLength = $(this).parent().find('input:checked').length;
-    for(var i=0;i<CargoTextLength;i++){
+    let CargoTextArr = [];
+    let CargoTextStr = '';
+    let CargoTextLength = $(this).parent().find('input:checked').length;
+    for(let i=0;i<CargoTextLength;i++){
         if(i>0){CargoTextStr+=", ";}
-        var CargoText = $(this).parent().find('input:checked').eq(i).parent().text();
+        let CargoText = $(this).parent().find('input:checked').eq(i).parent().text();
         CargoTextArr.push(CargoText);
         CargoTextStr += CargoText;
     }
-    var cargo_ele = $(this).parent().prev();
+    let cargo_ele = $(this).parent().prev();
     cargo_ele.children('input').val(CargoTextStr);
     cargo_ele.children('span').text('('+ CargoTextLength+ ')');
     changeBerthSaveButton(true);

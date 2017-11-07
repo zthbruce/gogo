@@ -3,6 +3,7 @@
  * Created by Truth on 2017/7/27.
  */
 
+
 /**
  * 获取码头详细信息
  * @param terminalKey
@@ -15,14 +16,14 @@ function getPierDetail(terminalKey) {
         success: function (data) {
             console.log(data);
             // // 初始化
-            // var cargo_ele = $("#cargo_type_key");
+            // let cargo_ele = $("#cargo_type_key");
             // cargo_ele.val('');
-            // var cargo_num_ele = cargo_ele.next();
+            // let cargo_num_ele = cargo_ele.next();
             // cargo_num_ele.text('');
             if (data[0] === "200") {
-                var jsonData = data[1];
-                var pierInfo = jsonData[0]; // 获取当前码头信息
-                // var cargoInfoList = jsonData["CargoType"];
+                let jsonData = data[1];
+                let pierInfo = jsonData[0]; // 获取当前码头信息
+                // let cargoInfoList = jsonData["CargoType"];
                 // $(".pierInfo_list").attr("terminalKey", terminalKey);
                 port_name_ele.attr("port_id", pierInfo.PortID);
                 port_name_ele.text(pierInfo.PortName);
@@ -33,15 +34,15 @@ function getPierDetail(terminalKey) {
                 $("#berth_num").val(pierInfo.BerthQuantity); // 泊位数量
                 // $("#tide").val(pierInfo.Tide); // 潮汐
                 $("#import_export_type").text(pierInfo.ImportExportType); // 进出口
-                var purpose_ele =  $("#use_type_key");
+                let purpose_ele =  $("#use_type_key");
                 purpose_ele.text(pierInfo.Purpose); // 用途
                 purpose_ele.attr("value", pierInfo.PurposeID); // 赋值
                 // // 获取货物信息
-                // var cargoNum = cargoInfoList.length;
+                // let cargoNum = cargoInfoList.length;
                 // if(cargoNum >= 1){
                 //     // 如果有数目就更新
-                //     var cargoType = '';
-                //     for(var i=0; i < cargoNum; i++){
+                //     let cargoType = '';
+                //     for(let i=0; i < cargoNum; i++){
                 //         if(i > 0){
                 //             cargoType += ", "
                 //         }
@@ -53,7 +54,7 @@ function getPierDetail(terminalKey) {
                 // 下拉列表更新
                 getCargoTypeList(terminalKey);
                 // getCargoInfo(TerminalKey)
-                // var cargo_ele = $("#cargo_type_key");
+                // let cargo_ele = $("#cargo_type_key");
                 // cargo_ele.text(pierInfo.CargoType); // 货物类型
                 // cargo_ele.attr(); // 货物类型
                 // 经纬度的显示
@@ -86,11 +87,11 @@ function addPierSelectPierName(pierStr){
             console.log(data);
             $("#pier_name_list").empty();
             if(data[0] === "200"){
-                var jsonData = data[1];
-                for(var i=0;i<jsonData.length;i++){
+                let jsonData = data[1];
+                for(let i=0;i<jsonData.length;i++){
                     console.log(i);
-                    var pierName = jsonData[i].Name;
-                    var terminalKey =  jsonData[i].TerminalKey;
+                    let pierName = jsonData[i].Name;
+                    let terminalKey =  jsonData[i].TerminalKey;
                     // 显示码头列表
                     $("#pier_name_list").append('<li terminalKey = ' + terminalKey + '>' + pierName + '</li>');
                 }
@@ -100,7 +101,7 @@ function addPierSelectPierName(pierStr){
                     console.log($(this).text());
                     console.log($(this).attr("terminalKey"));
                     // $('#company_name').val($(this).text());
-                    var terminalKey = $(this).attr("terminalKey");
+                    let terminalKey = $(this).attr("terminalKey");
                     $('#pier_name').attr("terminalKey", terminalKey);
                     $('#pier_name').val($(this).text());
                     // 刷新附近泊位信息
@@ -130,10 +131,10 @@ function addPierSelectCompanyName(companyStr){
             // 清空列表
             $("#company_name_list").empty();
             if(data[0] === "200"){
-                var jsonData = data[1];
-                for(var i=0;i<jsonData.length;i++){
-                    var companyName = jsonData[i].Name;
-                    var companyNumber =  jsonData[i].CompanyNumber;
+                let jsonData = data[1];
+                for(let i=0;i<jsonData.length;i++){
+                    let companyName = jsonData[i].Name;
+                    let companyNumber =  jsonData[i].CompanyNumber;
                     // 显示公司列表
                     $("#company_name_list").append('<li companyNumber = ' + companyNumber + '>' + companyName + '</li>');
                 }
@@ -166,10 +167,10 @@ function addPierSelectCompanyName(companyStr){
 //         success: function(data){
 //             console.log(data);
 //             if(data[0] === "200"){
-//                 var jsonData = data[1];
-//                 for(var i=0;i<jsonData.length;i++){
-//                     var pierName = jsonData[i].Name;
-//                     var pierNumber =  jsonData[i].PierNumber;
+//                 let jsonData = data[1];
+//                 for(let i=0;i<jsonData.length;i++){
+//                     let pierName = jsonData[i].Name;
+//                     let pierNumber =  jsonData[i].PierNumber;
 //                     // 显示码头列表
 //                     $("#pier_name_list").append('<li "pierNumber" = ' + pierNumber + '>' + pierName + '</li>');
 //                 }
@@ -198,21 +199,21 @@ function addPierSelectCompanyName(companyStr){
  * @param lon
  * @param lat
  */
-var port_name_ele = $("#port_name");
-var pier_name_ele = $("#pier_name");
-var company_name_ele = $("#company_name");
+let port_name_ele = $("#port_name");
+let pier_name_ele = $("#pier_name");
+let company_name_ele = $("#company_name");
 function getPierInfo(clusterId, lon, lat){
-    var title = $('.newBerthAnch_title');
+    let title = $('.newBerthAnch_title');
     title.attr("lon", lon);
     title.attr("lat", lat);
     saveStatus = false; //
     console.log(lon+ "," + lat);
-    var closePortList = getClosePortList(lon, lat, AllPortBasicList, 10);
+    let closePortList = getClosePortList(lon, lat, AllPortBasicList, 10);
     console.log(closePortList);
     /* 港口列表模块 */
     $("#berth_port_list").empty();
-    for(var i = 0; i < closePortList.length; i++){
-        var port = closePortList[i];
+    for(let i = 0; i < closePortList.length; i++){
+        let port = closePortList[i];
         $("#berth_port_list").append('<li port_id="'+port.PortID+'">'+port.ENName+'</li>');
     }
     // 可点击选择港口
@@ -229,10 +230,10 @@ function getPierInfo(clusterId, lon, lat){
         data:{staticAreaKey : clusterId},
         success: function(data) {
             console.log(data);
-            var terminalKey = "";
+            let terminalKey = "";
             if (data[0] === "200") {
-                var jsonData = data[1];
-                var pierInfo = jsonData[0]; // 获取当前码头信息
+                let jsonData = data[1];
+                let pierInfo = jsonData[0]; // 获取当前码头信息
                 // console.log(pierInfo);
                 terminalKey = pierInfo.TerminalKey;
                 getPierDetail(terminalKey)
@@ -243,8 +244,8 @@ function getPierInfo(clusterId, lon, lat){
                 //     success: function (data) {
                 //         console.log(data);
                 //         if (data[0] === "200") {
-                //             var jsonData = data[1];
-                //             var pierInfo = jsonData[0]; // 获取当前码头信息
+                //             let jsonData = data[1];
+                //             let pierInfo = jsonData[0]; // 获取当前码头信息
                 //             // $(".pierInfo_list").attr("terminalKey", terminalKey);
                 //             port_name_ele.attr("port_id", pierInfo.PortID);
                 //             port_name_ele.text(pierInfo.PortName);
@@ -274,7 +275,7 @@ function getPierInfo(clusterId, lon, lat){
             else {
                 console.log("不属于任何码头");
                 // $(".pierInfo_list").attr("terminalKey", "");
-                var default_port = closePortList[0];
+                let default_port = closePortList[0];
                 port_name_ele.attr("port_id", default_port.PortID);
                 port_name_ele.text(default_port.ENName);
                 pier_name_ele.val("");
@@ -287,7 +288,7 @@ function getPierInfo(clusterId, lon, lat){
                 $("#import_export_type").text("进口");
                 // $("#cargo_type_key").text("Iron Ore");
                 // 经纬度显示当前泊位的中心点
-                var latLonInfo = transLonLatToNormal(lat, lon);
+                let latLonInfo = transLonLatToNormal(lat, lon);
                 $("#LON_LAT").val(latLonInfo[0] + ", " + latLonInfo[1]);
                 $("#LON_LAT").attr("numeric", lat + "," + lon);
                 // 获得当前点附近的疑似泊位
@@ -307,12 +308,12 @@ function getPierInfo(clusterId, lon, lat){
 // function getPierInfo(clusterId, lon, lat){
 //     saveStatus = false; //
 //     console.log(lon+ "," + lat);
-//     var closePortList = getClosePortList(lon, lat, AllPortBasicList, 10);
+//     let closePortList = getClosePortList(lon, lat, AllPortBasicList, 10);
 //     console.log(closePortList);
 //     /* 港口列表模块 */
 //     $("#berth_port_list").empty();
-//     for(var i = 0; i < closePortList.length; i++){
-//         var port = closePortList[i];
+//     for(let i = 0; i < closePortList.length; i++){
+//         let port = closePortList[i];
 //         $("#berth_port_list").append('<li port_id="'+port.PortID+'">'+port.ENName+'</li>');
 //     }
 //     // 可点击选择港口
@@ -330,13 +331,13 @@ function getPierInfo(clusterId, lon, lat){
 //         success: function(data){
 //             console.log(data);
 //             // 如果有数据就显示当前码头数据
-//             var terminalKey = "";
-//             var port_name_ele = $("#port_name");
-//             var pier_name_ele = $("#pier_name");
-//             var company_name_ele = $("#company_name");
+//             let terminalKey = "";
+//             let port_name_ele = $("#port_name");
+//             let pier_name_ele = $("#pier_name");
+//             let company_name_ele = $("#company_name");
 //             if(data[0] === "200"){
-//                 var jsonData = data[1];
-//                 var pierInfo = jsonData[0]; // 获取当前码头信息
+//                 let jsonData = data[1];
+//                 let pierInfo = jsonData[0]; // 获取当前码头信息
 //                 console.log(pierInfo);
 //                 terminalKey = pierInfo.TerminalKey;
 //                 // $(".pierInfo_list").attr("terminalKey", terminalKey);
@@ -362,7 +363,7 @@ function getPierInfo(clusterId, lon, lat){
 //             else{
 //                 console.log("不属于任何码头");
 //                 // $(".pierInfo_list").attr("terminalKey", "");
-//                 var default_port =  closePortList[0];
+//                 let default_port =  closePortList[0];
 //                 port_name_ele.attr("port_id", default_port.PortID);
 //                 port_name_ele.text(default_port.ENName);
 //                 $("#pier_name").val("");
@@ -375,7 +376,7 @@ function getPierInfo(clusterId, lon, lat){
 //                 $("#import_export_type").text("进口");
 //                 $("#cargo_type_key").text("Iron Ore");
 //                 // 经纬度显示当前泊位的中心点
-//                 var latLonInfo = transLonLatToNormal(lat, lon);
+//                 let latLonInfo = transLonLatToNormal(lat, lon);
 //                 $("#LON_LAT").val( latLonInfo[0] + ", " + latLonInfo[1]);
 //                 $("#LON_LAT").attr("numeric", lat + "," + lon);
 //                 // 获得当前点附近的疑似泊位
@@ -400,14 +401,14 @@ function getPierInfo(clusterId, lon, lat){
  * @param lon
  * @param lat
  */
-// var visible_berth_list = [];
+// let visible_berth_list = [];
 function getBerthCheckPointer(status, staticAreaKey, lon, lat) {
-    // var icon_feature = icon.getSource().getFeatureById(staticAreaKey);
+    // let icon_feature = icon.getSource().getFeatureById(staticAreaKey);
     // icon_feature.setStyle(invisible_style); // 隐藏对应图标
     // visible_berth_list.push(staticAreaKey); // 更新隐藏列表
     // icon_feature.set("visible", false);
-    var lat_lon = WGS84transformer(lat, lon);
-    var fearure = new ol.Feature({
+    let lat_lon = WGS84transformer(lat, lon);
+    let fearure = new ol.Feature({
         pointer: 'berth',
         status: status,
         cluster_id: staticAreaKey,
@@ -424,7 +425,7 @@ function getBerthCheckPointer(status, staticAreaKey, lon, lat) {
  * @param current_feature
  */
 function updateChooseBerth(ele, current_feature) {
-    var status = current_feature.get("status");
+    let status = current_feature.get("status");
     // 改变选择图标
     if(status===0) {
         status = 1;
@@ -442,11 +443,11 @@ function updateChooseBerth(ele, current_feature) {
     //     return;
     // }
     // 高亮显示
-    var li_ele = ele.parent().parent().parent();
+    let li_ele = ele.parent().parent().parent();
     $('.berth_list>li').removeAttr("highLight");
     li_ele.attr("highLight", true);
     // 确认显示， 改变列表选择状态
-    var ul_ele = ele.parent().next().children();
+    let ul_ele = ele.parent().next().children();
     if (ele.attr('class') === "notBelong") {
         // $(this).removeClass("notBelong");
         // $(this).addClass("belong");
@@ -459,26 +460,26 @@ function updateChooseBerth(ele, current_feature) {
         ul_ele.attr("status", "1")
     }
     // 改变对应码头的位置信息
-    var i = 0;
-    var lonSum = 0;
-    var latSum = 0;
+    let i = 0;
+    let lonSum = 0;
+    let latSum = 0;
     $("[status='0']").each(function () {
         // console.log(i);
         i++;
         lonSum += parseFloat($(this).attr("lon"));
         latSum += parseFloat($(this).attr("lat"));
     });
-    var lon_lat_ele = $("#LON_LAT");
+    let lon_lat_ele = $("#LON_LAT");
     if(i > 0){
-        var latCenter = latSum / i;
-        var lonCenter = lonSum / i;
-        var latLonInfo = transLonLatToNormal(latCenter, lonCenter);
-        var lon_lat_info = latLonInfo[0] + "," + latLonInfo[1];
+        let latCenter = latSum / i;
+        let lonCenter = lonSum / i;
+        let latLonInfo = transLonLatToNormal(latCenter, lonCenter);
+        let lon_lat_info = latLonInfo[0] + "," + latLonInfo[1];
     }
     else{
-        var latCenter = '';
-        var lonCenter = '';
-        var lon_lat_info = '';
+        let latCenter = '';
+        let lonCenter = '';
+        let lon_lat_info = '';
     }
     lon_lat_ele.val(lon_lat_info);
     lon_lat_ele.attr("numeric", latCenter + "," + lonCenter);
@@ -496,13 +497,13 @@ function updateChooseBerth(ele, current_feature) {
 function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxDistance){
     // 首先会获取该码头下的stationAreaKey
     // console.log("here");
-    var title = $('.newBerthAnch_title');
+    let title = $('.newBerthAnch_title');
     // 如果经纬度为空，那么选取当前点的经纬度
     if(centerLon === 0.0 && centerLat === 0.0){
         centerLon = parseFloat(title.attr("lon"));
         centerLat = parseFloat(title.attr("lat"));
     }
-    var belongDistanceList = {};
+    let belongDistanceList = {};
     $.ajax({
         url:'/berth/getBerthListFromPier',
         type:'get',
@@ -512,18 +513,18 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxD
             if(data[0] === "200") {
                 belongDistanceList = data[1];
             }
-            var distanceList = [];
+            let distanceList = [];
             // 遍历所有静止区域中心点
-            for(var key in allPoints) {
-                var ele = allPoints[key];
-                var type = ele['type']; // 属于哪一类， 目前有0：锚地， 1：泊位， 2：未知区域
+            for(let key in allPoints) {
+                let ele = allPoints[key];
+                let type = ele['type']; // 属于哪一类， 目前有0：锚地， 1：泊位， 2：未知区域
                 if(type === 1){
-                    var lon = ele['lon'];
-                    var lat = ele['lat'];
-                    var distance = getGreatCircleDistance(centerLon, centerLat, lon, lat);
+                    let lon = ele['lon'];
+                    let lat = ele['lat'];
+                    let distance = getGreatCircleDistance(centerLon, centerLat, lon, lat);
                     if(distance <= maxDistance){
-                        var status = 1; // 1表示默认不属于该码头
-                        var info = {LOA: "", Moulded_Beam: "", Draft: "", LoadDischargeRate: ""};
+                        let status = 1; // 1表示默认不属于该码头
+                        let info = {LOA: "", Moulded_Beam: "", Draft: "", LoadDischargeRate: ""};
                         if(key in belongDistanceList){
                             status = 0; // 属于该码头的泊位状态
                             info = belongDistanceList[key];
@@ -551,21 +552,21 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxD
             });
 
             // 获取最近的N个静止区域的统计信息列表
-            var len = distanceList.length;
+            let len = distanceList.length;
             // console.log("长度为:" + len);
             n = Math.min(len, n);
             // 初始化泊位列表
             $(".berth_list").empty();
-            var num = 0;
+            let num = 0;
             current.getSource().clear(); // 清空当前图层
             // visible_berth_list = []; // 隐藏图标
-            for(var i = 0; i < n; i++){
-                var berthInfo = distanceList[i];
-                var staticAreaKey = berthInfo.cluster_id;
+            for(let i = 0; i < n; i++){
+                let berthInfo = distanceList[i];
+                let staticAreaKey = berthInfo.cluster_id;
                 status = berthInfo.status;
-                var belongStatus = status === 0 ? "belong" : "notBelong";
-                var ele = allPoints[staticAreaKey];
-                var belongTerminalKey = ele.TerminalKey === 'null'? '': ele.TerminalKey;
+                let belongStatus = status === 0 ? "belong" : "notBelong";
+                let ele = allPoints[staticAreaKey];
+                let belongTerminalKey = ele.TerminalKey === 'null'? '': ele.TerminalKey;
                 // 如果还没有归属的或者是当前码头的情况
                 if(ele.Checked === 0 || terminalKey === belongTerminalKey) {
                     // 将信息写入html, 并赋予一个状态,根据状态进行筛选
@@ -580,7 +581,7 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxD
                     getBerthCheckPointer(status, staticAreaKey, ele.lon, ele.lat);
                     // getCheckPointer(status, staticAreaKey, ele.lon, ele.lat);
                     // 显示列表
-                    var str = '<li><ul class="oneBerth_info"><li>' + num + '</li><li><span class = ' + belongStatus + ' seq=' + num + '>' +
+                    let str = '<li><ul class="oneBerth_info"><li>' + num + '</li><li><span class = ' + belongStatus + ' seq=' + num + '>' +
                         '</span></li> <li> <ul class="oneBerth_list" status=' + status + ' staticAreaKey = ' + staticAreaKey + ' lon = ' + ele.lon + ' lat=' + ele.lat + '><li>LOA: '
                         + ele.LOA_MAX + ' m</li><li>Beam: ' + ele.BEAM_MAX + ' m</li><li>Draft: ' + ele.DRAFT_MAX + ' m</li> <li>DWT: ' + ele.DWT_MAX
                         + ' T</li><li>长: <input type="text" placeholder="0.00" value=' + berthInfo.LOA + '>M</li> <li>宽: <input type="text" placeholder="0.00" value=' + berthInfo.Moulded_Beam + '>M</li> ' +
@@ -590,9 +591,9 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxD
             }
             // 点击是否属于按钮
             $(".oneBerth_info>li:nth-child(2)>span").click(function () {
-                var staticAreaKey = $(this).parent().next().children().attr("staticareakey");
+                let staticAreaKey = $(this).parent().next().children().attr("staticareakey");
                 // console.log(staticAreaKey);
-                var current_feature = current.getSource().getFeatureById(staticAreaKey);
+                let current_feature = current.getSource().getFeatureById(staticAreaKey);
                 updateChooseBerth($(this), current_feature);
                 // changeBerthSaveButton(true); // 改变保存状态
                 // // 第一个不允许修改状态
@@ -612,26 +613,26 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxD
                 //     $(this).parent().next().children().attr("status", "1")
                 // }
                 // // 改变对应码头的位置信息
-                // var i = 0;
-                // var lonSum = 0;
-                // var latSum = 0;
+                // let i = 0;
+                // let lonSum = 0;
+                // let latSum = 0;
                 // $("[status='0']").each(function () {
                 //     console.log(i);
                 //     i++;
                 //     lonSum += parseFloat($(this).attr("lon"));
                 //     latSum += parseFloat($(this).attr("lat"));
                 // });
-                // var lon_lat_ele = $("#LON_LAT");
+                // let lon_lat_ele = $("#LON_LAT");
                 // if(i > 0){
-                //     var latCenter = latSum / i;
-                //     var lonCenter = lonSum / i;
-                //     var latLonInfo = transLonLatToNormal(latCenter, lonCenter);
-                //     var lon_lat_info = latLonInfo[0] + "," + latLonInfo[1];
+                //     let latCenter = latSum / i;
+                //     let lonCenter = lonSum / i;
+                //     let latLonInfo = transLonLatToNormal(latCenter, lonCenter);
+                //     let lon_lat_info = latLonInfo[0] + "," + latLonInfo[1];
                 // }
                 // else{
-                //     var latCenter = '';
-                //     var lonCenter = '';
-                //     var lon_lat_info = '';
+                //     let latCenter = '';
+                //     let lonCenter = '';
+                //     let lon_lat_info = '';
                 // }
                 // lon_lat_ele.val(lon_lat_info);
                 // lon_lat_ele.attr("numeric", latCenter + "," + lonCenter);
@@ -640,7 +641,7 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxD
             $('.oneBerth_list>li>input, .pier_BerthNum>input').keyup(function(){
             // $('.oneBerth_list>li>input').keyup(function(){
                 console.log("输入信息");
-                var nowVal = $(this).val();
+                let nowVal = $(this).val();
                 if(isNaN(nowVal)){
                     // dataIsEffective=false;
                     changeBerthSaveButton(false); //
@@ -666,15 +667,15 @@ function getCloseBerthList(terminalKey, centerLon, centerLat, allPoints, n, maxD
  * @returns {Array}
  */
 function getBerthList(portID, terminalKey) {
-    var berthList = [];
-    var i = 0;
+    let berthList = [];
+    let i = 0;
     $("[status='0']").each(function () {
         i++;
-        var LOA = $(this).children().eq(4).children().val();
-        var BEAM = $(this).children().eq(5).children().val();
-        var DRAFT = $(this).children().eq(6).children().val();
-        var LoadRate = $(this).children().eq(7).children().val();
-        var staticAreaKey = $(this).attr("staticAreaKey");
+        let LOA = $(this).children().eq(4).children().val();
+        let BEAM = $(this).children().eq(5).children().val();
+        let DRAFT = $(this).children().eq(6).children().val();
+        let LoadRate = $(this).children().eq(7).children().val();
+        let staticAreaKey = $(this).attr("staticAreaKey");
         berthList.push({TerminalKey:terminalKey, Seq:i, LOA: LOA, Moulded_Beam: BEAM, Draft: DRAFT,
             LoadDischargeRate: LoadRate, StationaryAreaKey:staticAreaKey})
     });
@@ -684,20 +685,20 @@ function getBerthList(portID, terminalKey) {
 /**
  * 获取货物类型列表
  */
-// var cargoTypeList = {};
+// let cargoTypeList = {};
 function getCargoTypeList(terminalKey) {
-    var cargoType_ul = $(".pier_CargoType>ul");
+    let cargoType_ul = $(".pier_CargoType>ul");
     // 初始化
-    var cargo_ele = $("#cargo_type_key");
+    let cargo_ele = $("#cargo_type_key");
     cargo_ele.val('');
-    var cargo_num_ele = cargo_ele.next();
+    let cargo_num_ele = cargo_ele.next();
     cargo_num_ele.text('');
     $.ajax({
         url:"/berth/getCargoType",
         type:'get',
         success: function(data){
-            var cargoInfo = data[1];
-            // var cargoList2Terminal = [];
+            let cargoInfo = data[1];
+            // let cargoList2Terminal = [];
             $.ajax({
                 url: "/berth/getCargo2Terminal",
                 type: 'get',
@@ -705,13 +706,13 @@ function getCargoTypeList(terminalKey) {
                 success: function (data) {
                     // 获取货物信息
                     // 内容显示
-                    var cargoList2Terminal = [];
+                    let cargoList2Terminal = [];
                     if(data[0] === '200') {
-                        var cargoInfoList = data[1];
-                        var cargoNum = cargoInfoList.length;
-                        var cargoType = '';
-                        for (var i = 0; i < cargoNum; i++) {
-                            var cargo = cargoInfoList[i];
+                        let cargoInfoList = data[1];
+                        let cargoNum = cargoInfoList.length;
+                        let cargoType = '';
+                        for (let i = 0; i < cargoNum; i++) {
+                            let cargo = cargoInfoList[i];
                             if (i > 0) {
                                 cargoType += ", "
                             }
@@ -724,10 +725,10 @@ function getCargoTypeList(terminalKey) {
                     }
                     // 列表显示
                     cargoType_ul.empty(); // 初始化
-                    var str = '';
+                    let str = '';
                     console.log(cargoList2Terminal);
-                    for(var i = 0; i < cargoInfo.length; i++){
-                        var cargoType = cargoInfo[i];
+                    for(let i = 0; i < cargoInfo.length; i++){
+                        let cargoType = cargoInfo[i];
                         console.log(cargoType.ID);
                         if(cargoList2Terminal.indexOf(cargoType.ID) !== -1){
                             str += '<li><label for=' + cargoType.ID +'><input type="checkbox" checked="checked" id=' + cargoType.ID + '>' +
@@ -754,10 +755,10 @@ function getCargoTypeList(terminalKey) {
  * @return
  */
 // function changePierCenter(berthLonLatList) {
-//     var lonSum = 0;
-//     var latSum = 0;
-//     var len = berthLonLatList.length;
-//     for(var i = 0; i < len; i++){
+//     let lonSum = 0;
+//     let latSum = 0;
+//     let len = berthLonLatList.length;
+//     for(let i = 0; i < len; i++){
 //         lonSum += berthLonLatList[i][0];
 //         latSum += berthLonLatList[i][1];
 //     }
@@ -772,15 +773,15 @@ function getCargoTypeList(terminalKey) {
 /**
  * 地图弹出框拖动事件
  */
-var newBerthDown = false; //泊位管理弹出框
-var newAnchDown = false; //泊位管理弹出框
-var newBerthStatDown = false; //泊位信息统计弹出框
-var DivLeft;
-var DivTop;
+let newBerthDown = false; //泊位管理弹出框
+let newAnchDown = false; //泊位管理弹出框
+let newBerthStatDown = false; //泊位信息统计弹出框
+// let DivLeft;
+// let DivTop;
 
 // 拖动效果
 $('.newBerthAnch_title').mousedown(function(event){
-    var changeDivId = $(this).parent().attr('id');
+    let changeDivId = $(this).parent().attr('id');
     if(changeDivId=='newBerth'){newBerthDown = true;}
     if(changeDivId=='newAnch'){newAnchDown = true;}
     if(changeDivId=='newBerthStatistics'){newBerthStatDown = true;}
@@ -788,14 +789,15 @@ $('.newBerthAnch_title').mousedown(function(event){
     DivTop = event.clientY - $(this).offset().top;
     $(this).css('cursor','all-scroll');
 });
-var portDivZIndex = 0;
+
+// let portDivZIndex = 0;
 $('#newBerth,#newAnch,#newBerthStatistics').click(function(){
     portDivZIndex++;
     $(this).css('zIndex',portDivZIndex);
 });
 
 $('.newBerthAnch_title').mouseup(function(){
-    var changeDivId = $(this).parent().attr('id');
+    let changeDivId = $(this).parent().attr('id');
     if(changeDivId=='newBerth'){newBerthDown = false;}
     if(changeDivId=='newAnch'){newAnchDown = false;}
     if(changeDivId=='newBerthStatistics'){newBerthStatDown = false;}
@@ -803,8 +805,8 @@ $('.newBerthAnch_title').mouseup(function(){
 });
 
 $(window).mousemove(function(event){
-    var newLeft = event.clientX-DivLeft;
-    var newTop = event.clientY-DivTop;
+    let newLeft = event.clientX-DivLeft;
+    let newTop = event.clientY-DivTop;
     if(newLeft<=0){newLeft = 0;}
     if(newTop<=0){newTop = 0;}
     if(newBerthDown){
@@ -833,7 +835,7 @@ $('.span_select,.input_select,.pier_CargoType').mouseleave(function(){
 
 // 选择下拉框 按钮
 $('.span_select>ul>li,.input_select>ul>li').click(function(){
-    var val = $(this).text();
+    let val = $(this).text();
     $(this).parent().prev('span').text(val);
     $(this).parent().prev('input').val(val);
     $(this).parent().slideUp(200);
@@ -842,8 +844,8 @@ $('.span_select>ul>li,.input_select>ul>li').click(function(){
 
 // 用途下拉
 $(".pier_UseType>ul>li").click(function() {
-    var val = $(this).text();
-    var purpose_span = $(this).parent().prev('span');
+    let val = $(this).text();
+    let purpose_span = $(this).parent().prev('span');
     purpose_span.text(val);
     purpose_span.attr("value", $(this).attr('value'));
     $(this).parent().slideUp(200);
@@ -852,16 +854,16 @@ $(".pier_UseType>ul>li").click(function() {
 
 //货物多选按钮点击
 $('.pier_CargoType>ul').delegate("li", "click", function(){
-    var CargoTextArr = [];
-    var CargoTextStr = '';
-    var CargoTextLength = $(this).parent().find('input:checked').length;
-    for(var i=0;i<CargoTextLength;i++){
+    let CargoTextArr = [];
+    let CargoTextStr = '';
+    let CargoTextLength = $(this).parent().find('input:checked').length;
+    for(let i=0;i<CargoTextLength;i++){
         if(i>0){CargoTextStr+=", ";}
-        var CargoText = $(this).parent().find('input:checked').eq(i).parent().text();
+        let CargoText = $(this).parent().find('input:checked').eq(i).parent().text();
         CargoTextArr.push(CargoText);
         CargoTextStr += CargoText;
     }
-    var cargo_type_key_ele = $('#cargo_type_key');
+    let cargo_type_key_ele = $('#cargo_type_key');
     cargo_type_key_ele.val(CargoTextStr);
     cargo_type_key_ele.next('span').text('('+CargoTextLength+')');
     changeBerthSaveButton(true);
@@ -869,10 +871,10 @@ $('.pier_CargoType>ul').delegate("li", "click", function(){
 
 // 泊位管理界面关闭
 $('#berth_cancel').click(function () {
-    // var features = icon.getSource().getFeatures();
-    // for(var i =0; i< visible_berth_list.length; i++){
-    //     var cluster_id  = visible_berth_list[i];
-    //     var feature = icon.getSource().getFeatureById(cluster_id);
+    // let features = icon.getSource().getFeatures();
+    // for(let i =0; i< visible_berth_list.length; i++){
+    //     let cluster_id  = visible_berth_list[i];
+    //     let feature = icon.getSource().getFeatureById(cluster_id);
     //     if(feature.get('Checked') === 0){
     //         feature.setStyle(park_style[1]);
     //     }
@@ -891,9 +893,9 @@ $('#berth_port_list>li').on('click', function () {
    $('#port_name').text($(this).text())
 });
 
-// var pierStatus = false;
-// var berthStatus = false;
-// var saveStatus = false;
+// let pierStatus = false;
+// let berthStatus = false;
+// let saveStatus = false;
 // 关于保存按钮的状态
 
 // 保存按钮单击事件
@@ -901,8 +903,8 @@ $('#berth_save').click(function () {
     console.log("保存当前信息");
     changeBerthSaveButton(false); // 改变按钮
     // 公司ID
-    var companyNumber = $("#company_name").attr('companynumber');
-    var companyName = $("#company_name").val();
+    let companyNumber = $("#company_name").attr('companynumber');
+    let companyName = $("#company_name").val();
     // 保存公司信息
     if(companyName !== '' && companyNumber === ""){
         companyNumber = 'C' + generateNewPierKey();
@@ -920,27 +922,27 @@ $('#berth_save').click(function () {
         });
     }
 
-    // var terminalKey = $(".pierInfo_list").attr("terminalKey"); //TerminalKey
+    // let terminalKey = $(".pierInfo_list").attr("terminalKey"); //TerminalKey
     // 码头ID 生成
-    var terminalKey = $("#pier_name").attr("terminalKey"); //TerminalKey
+    let terminalKey = $("#pier_name").attr("terminalKey"); //TerminalKey
     if (terminalKey === "") {
         // 生成一个码头ID
         terminalKey = generateNewPierKey();
     }
-    var portID = $("#port_name").attr("port_id");
+    let portID = $("#port_name").attr("port_id");
     // 码头发生改变时保存码头信息
     console.log("保存码头信息");
-    var lat = '';
-    var lon = '';
-    var Lat_Lon = $("#LON_LAT").val().split(",");
+    let lat = '';
+    let lon = '';
+    let Lat_Lon = $("#LON_LAT").val().split(",");
     if(Lat_Lon.length > 1){
         lat = Lat_Lon[0];
         lon = Lat_Lon[1];
     }
-    var Lat_Lon_Numeric = $("#LON_LAT").attr("numeric").split(",");
-    var lat_numeric = Lat_Lon_Numeric[0];
-    var lon_numeric = Lat_Lon_Numeric[1];
-    var reqPram = {
+    let Lat_Lon_Numeric = $("#LON_LAT").attr("numeric").split(",");
+    let lat_numeric = Lat_Lon_Numeric[0];
+    let lon_numeric = Lat_Lon_Numeric[1];
+    let reqPram = {
         TerminalKey: terminalKey,
         Name: $("#pier_name").val(),
         PortID: portID,
@@ -969,10 +971,10 @@ $('#berth_save').click(function () {
         }
     });
     // 保存货物信息
-    var choose_ele_list = $('.pier_CargoType>ul').find("input:checked");
-    var cargoList = [];
+    let choose_ele_list = $('.pier_CargoType>ul').find("input:checked");
+    let cargoList = [];
     console.log(choose_ele_list.length);
-    for(var j = 0; j < choose_ele_list.length; j++){
+    for(let j = 0; j < choose_ele_list.length; j++){
         // console.log(choose_ele_list.eq(j).attr("id"));
         cargoList.push(choose_ele_list.eq(j).attr("id"));
     }
@@ -991,40 +993,40 @@ $('#berth_save').click(function () {
 
 
     // 保存泊位信息
-    // var berthList = getBerthList(portID, terminalKey);
+    // let berthList = getBerthList(portID, terminalKey);
     // 内存信息更新
-    var berthList = [];
-    var i = 0;
+    let berthList = [];
+    let i = 0;
     // $("[status='0']").each(function () {
     //     i++;
-    //     var LOA = $(this).children().eq(4).children().val();
-    //     var BEAM = $(this).children().eq(5).children().val();
-    //     var DRAFT = $(this).children().eq(6).children().val();
-    //     var LoadRate = $(this).children().eq(7).children().val();
-    //     var staticAreaKey = $(this).attr("staticAreaKey");
+    //     let LOA = $(this).children().eq(4).children().val();
+    //     let BEAM = $(this).children().eq(5).children().val();
+    //     let DRAFT = $(this).children().eq(6).children().val();
+    //     let LoadRate = $(this).children().eq(7).children().val();
+    //     let staticAreaKey = $(this).attr("staticAreaKey");
     //     berthList.push({TerminalKey:terminalKey, Seq:i, LOA: LOA, Moulded_Beam: BEAM, Draft: DRAFT,
     //         LoadDischargeRate: LoadRate, StationaryAreaKey:staticAreaKey})
     // });
     // return berthList;
     $("[status='0']").each(function () {
-        var staticAreaKey = $(this).attr("staticAreaKey");
+        let staticAreaKey = $(this).attr("staticAreaKey");
         i++;
-        var LOA = $(this).children().eq(4).children().val();
-        var BEAM = $(this).children().eq(5).children().val();
-        var DRAFT = $(this).children().eq(6).children().val();
-        var LoadRate = $(this).children().eq(7).children().val();
-        // var staticAreaKey = $(this).attr("staticAreaKey");
+        let LOA = $(this).children().eq(4).children().val();
+        let BEAM = $(this).children().eq(5).children().val();
+        let DRAFT = $(this).children().eq(6).children().val();
+        let LoadRate = $(this).children().eq(7).children().val();
+        // let staticAreaKey = $(this).attr("staticAreaKey");
         berthList.push({TerminalKey:terminalKey, Seq:i, LOA: LOA, Moulded_Beam: BEAM, Draft: DRAFT,
             LoadDischargeRate: LoadRate, StationaryAreaKey:staticAreaKey});
-        var feature = icon.getSource().getFeatureById(staticAreaKey);
+        let feature = icon.getSource().getFeatureById(staticAreaKey);
         allPoints[staticAreaKey]["Checked"] = 1; // 更新状态
         allPoints[staticAreaKey]['TerminalKey'] = terminalKey; // 更新码头值
         feature.setStyle(berth_yes);
     });
     $("[status='1']").each(function () {
-        var staticAreaKey = $(this).attr("staticAreaKey");
+        let staticAreaKey = $(this).attr("staticAreaKey");
         console.log(staticAreaKey);
-        var feature = icon.getSource().getFeatureById(staticAreaKey);
+        let feature = icon.getSource().getFeatureById(staticAreaKey);
         allPoints[staticAreaKey]["Checked"] = 0;
         allPoints[staticAreaKey]['TerminalKey'] = '';
         feature.setStyle(berth_style);
@@ -1051,13 +1053,13 @@ $('#berth_save').click(function () {
 // 统计按钮
 $('#berth_statistic').click(function(){
     // $('#newBerth').fadeOut("normal");
-    var berthZIndex = $('#newBerth').css('zIndex');
+    let berthZIndex = $('#newBerth').css('zIndex');
     berthZIndex++;
     console.log(berthZIndex);
     $('#newBerthStatistics').fadeIn(600);
     $('#newBerthStatistics').css('zIndex',berthZIndex);
-    var shipType = $('#newBerthStatistics .berthStat_shipType>span:nth-child(2)').text();
-    var staticareakey = $('#newBerth>.berth_list>li:first-child .oneBerth_list').attr('staticareakey');
+    let shipType = $('#newBerthStatistics .berthStat_shipType>span:nth-child(2)').text();
+    let staticareakey = $('#newBerth>.berth_list>li:first-child .oneBerth_list').attr('staticareakey');
     reqBerthStaticData(shipType,staticareakey);
 });
 
@@ -1074,7 +1076,7 @@ $('.pierInfo_list>.pier_info').bind('input propertychange',function() {
 // 公司名称字符匹配
 $('.company_select>input').keyup(function(){
     console.log("输入公司信息");
-    var nowVal = $(this).val();
+    let nowVal = $(this).val();
     // 做一下规范化,将" '等符号正则化
     nowVal = nowVal.replace(/[\'\"]/g,"");
     $('#company_name').attr("companyNumber", '');
@@ -1086,7 +1088,7 @@ $('.company_select>input').keyup(function(){
 // 码头名称字符匹配
 $('.pier_select>input').keyup(function(){
     console.log("输入码头名称");
-    var nowVal = $(this).val();
+    let nowVal = $(this).val();
     // 做一下规范化,将" '等符号正则化
     nowVal = nowVal.replace(/[\'\"]/g,"");
     // $('#pier_name').attr("terminalKey", '');
@@ -1097,12 +1099,12 @@ $('.pier_select>input').keyup(function(){
 
 // 点击状态会定位
 // $(".berth_list").delegate("li>ul>li:nth-child(3)", "click",function(){
-//     // var lon = parseFloat($(this).find($(".oneBerth_list")).attr("lon"));
-//     // var lat = parseFloat($(this).find($(".oneBerth_list")).attr("lat"));
-//     var lon = parseFloat($(this).children().attr("lon"));
-//     var lat = parseFloat($(this).children().attr("lat"));
+//     // let lon = parseFloat($(this).find($(".oneBerth_list")).attr("lon"));
+//     // let lat = parseFloat($(this).find($(".oneBerth_list")).attr("lat"));
+//     let lon = parseFloat($(this).children().attr("lon"));
+//     let lat = parseFloat($(this).children().attr("lat"));
 //     console.log(lon + "," + lat);
-//     var position_feature = new ol.Feature({
+//     let position_feature = new ol.Feature({
 //         geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
 //     });
 //     position_feature.setStyle(position_style);
@@ -1144,49 +1146,49 @@ $('.newBerthAnch_title>.close_btn').click(function(){
 });
 //船舶类型选择
 $('.berthStat_shipType>ul>li').click(function(){
-    var shipType = $(this).text();
+    let shipType = $(this).text();
     $('.berthStat_shipType>span:nth-child(2)').text(shipType);
     $(this).parent().slideUp(200);
     //获取统计数据
-    var staticareakey = $('#newBerth>.berth_list>li:first-child .oneBerth_list').attr('staticareakey');
+    let staticareakey = $('#newBerth>.berth_list>li:first-child .oneBerth_list').attr('staticareakey');
     reqBerthStaticData(shipType,staticareakey);
 });
 
 //设置获取泊位统计数据函数
 function reqBerthStaticData(shipType,staticareakey){
     // console.log(shipType);
-    var param = '{"shipType":"'+shipType+'","staticareakey":"'+staticareakey+'"}';
+    let param = '{"shipType":"'+shipType+'","staticareakey":"'+staticareakey+'"}';
     $.ajax({
         url:'/berth/reqShipStaticData',
         type:'get',
         data:{param:param},
         success: function(data){
             // console.log(data);
-            var sendData = data[1];
-            var jsonData = JSON.parse(sendData);
+            let sendData = data[1];
+            let jsonData = JSON.parse(sendData);
             // console.log(jsonData);
             $('#BerthStatistics>tbody').empty();
-            var MAXLOA = [0,0,0,0,0,0,0,0,0,0,0,0];
-            var MAXBEAM = [0,0,0,0,0,0,0,0,0,0,0,0];
-            var MAXDRAFT = [0,0,0,0,0,0,0,0,0,0,0,0];
-            var MAXDWT = [0,0,0,0,0,0,0,0,0,0,0,0];
-            var MAXDTPH = [0,0,0,0,0,0,0,0,0,0,0,0];
-            for(var i=0;i<jsonData.length;i++) {
-                var j = parseInt(jsonData[i].Date.substr(4,2))-1;
-                var LOA = jsonData[i].LOA=='null' ? 0 : parseFloat(jsonData[i].LOA);
-                var BRAM = jsonData[i].MouldedBeam=='null' ? 0 : parseFloat(jsonData[i].MouldedBeam);
-                var DRAFT = jsonData[i].DesignedDraft=='null' ? 0 : parseFloat(jsonData[i].DesignedDraft);
-                var DWT = jsonData[i].DWT=='null' ? 0 : parseInt(jsonData[i].DWT);
-                var DTPH = jsonData[i].DTPH=='null' ? 0 : parseFloat(jsonData[i].DTPH);
+            let MAXLOA = [0,0,0,0,0,0,0,0,0,0,0,0];
+            let MAXBEAM = [0,0,0,0,0,0,0,0,0,0,0,0];
+            let MAXDRAFT = [0,0,0,0,0,0,0,0,0,0,0,0];
+            let MAXDWT = [0,0,0,0,0,0,0,0,0,0,0,0];
+            let MAXDTPH = [0,0,0,0,0,0,0,0,0,0,0,0];
+            for(let i=0;i<jsonData.length;i++) {
+                let j = parseInt(jsonData[i].Date.substr(4,2))-1;
+                let LOA = jsonData[i].LOA=='null' ? 0 : parseFloat(jsonData[i].LOA);
+                let BRAM = jsonData[i].MouldedBeam=='null' ? 0 : parseFloat(jsonData[i].MouldedBeam);
+                let DRAFT = jsonData[i].DesignedDraft=='null' ? 0 : parseFloat(jsonData[i].DesignedDraft);
+                let DWT = jsonData[i].DWT=='null' ? 0 : parseInt(jsonData[i].DWT);
+                let DTPH = jsonData[i].DTPH=='null' ? 0 : parseFloat(jsonData[i].DTPH);
                 if(LOA > parseFloat(MAXLOA[j])){MAXLOA[j] = LOA;}
                 if(BRAM > parseFloat(MAXBEAM[j])){MAXBEAM[j] = BRAM;}
                 if(DRAFT > parseFloat(MAXDRAFT[j])){MAXDRAFT[j] = DRAFT;}
                 if(DWT > parseInt(MAXDWT[j])){MAXDWT[j] = DWT;}
                 if(DTPH > parseFloat(MAXDTPH[j])){MAXDTPH[j] = DTPH;}
             }
-            for(var i=0;i<12;i++){
-                var StaticInfoStr = '<tr><td>'+parseInt(i+1)+'月</td><td>'+MAXLOA[i]+'</td><td>'+MAXBEAM[i]+'</td><td>'+MAXDRAFT[i]+'</td><td>'+MAXDWT[i]+'</td><td>'+MAXDTPH[i]+'</td></tr>';
-                // var StaticInfoStr = '<tr><td>'+parseInt(i+1)+'月</td><td>'+MAXLOA[i]+'</td><td>'+MAXBEAM[i]+'</td><td>'+MAXDRAFT[i]+'</td><td>'+MAXDWT[i]+'</td></tr>';
+            for(let i=0;i<12;i++){
+                let StaticInfoStr = '<tr><td>'+parseInt(i+1)+'月</td><td>'+MAXLOA[i]+'</td><td>'+MAXBEAM[i]+'</td><td>'+MAXDRAFT[i]+'</td><td>'+MAXDWT[i]+'</td><td>'+MAXDTPH[i]+'</td></tr>';
+                // let StaticInfoStr = '<tr><td>'+parseInt(i+1)+'月</td><td>'+MAXLOA[i]+'</td><td>'+MAXBEAM[i]+'</td><td>'+MAXDRAFT[i]+'</td><td>'+MAXDWT[i]+'</td></tr>';
                 $('#BerthStatistics>tbody').append(StaticInfoStr);
             }
         },
@@ -1209,7 +1211,7 @@ function reqBerthStaticData(shipType,staticareakey){
 // });
 // // shiptest();
 // function shiptest(){
-//     var sendData = "[";
+//     let sendData = "[";
 //     sendData += '{"LOA":"111", "BEAM":"111", "DRAFT":"111", "DWT":"111111", "DTPH":"111111", "date":"2017/01/11 11:11:11"},';
 //     sendData += '{"LOA":"121", "BEAM":"121", "DRAFT":"121", "DWT":"122221", "DTPH":"112111", "date":"2017/01/12 11:11:11"},';
 //     sendData += '{"LOA":"101", "BEAM":"121", "DRAFT":"121", "DWT":"100001", "DTPH":"100001", "date":"2017/01/14 11:11:11"},';
@@ -1225,18 +1227,18 @@ function reqBerthStaticData(shipType,staticareakey){
 //     sendData += '{"LOA":"324", "BEAM":"678", "DRAFT":"546", "DWT":"131232", "DTPH":"431235", "date":"2017/11/14 11:11:11"},';
 //     sendData += '{"LOA":"456", "BEAM":"678", "DRAFT":"565", "DWT":"312324", "DTPH":"123123", "date":"2017/12/14 11:11:11"}';
 //     sendData += "]";
-//     var jsonData = JSON.parse(sendData);
+//     let jsonData = JSON.parse(sendData);
 //     console.log(jsonData);
 //     $('#BerthStatistics>tbody').empty();
-//     var date = new Date;
-//     var MAXLOA = [0,0,0,0,0,0,0,0,0,0,0,0];
-//     var MAXBEAM = [0,0,0,0,0,0,0,0,0,0,0,0];
-//     var MAXDRAFT = [0,0,0,0,0,0,0,0,0,0,0,0];
-//     var MAXDWT = [0,0,0,0,0,0,0,0,0,0,0,0];
-//     var MAXDTPH = [0,0,0,0,0,0,0,0,0,0,0,0];
-//     for(var i=0;i<jsonData.length;i++) {
+//     let date = new Date;
+//     let MAXLOA = [0,0,0,0,0,0,0,0,0,0,0,0];
+//     let MAXBEAM = [0,0,0,0,0,0,0,0,0,0,0,0];
+//     let MAXDRAFT = [0,0,0,0,0,0,0,0,0,0,0,0];
+//     let MAXDWT = [0,0,0,0,0,0,0,0,0,0,0,0];
+//     let MAXDTPH = [0,0,0,0,0,0,0,0,0,0,0,0];
+//     for(let i=0;i<jsonData.length;i++) {
 //         date = new Date(jsonData[i].date);
-//         var j = date.getMonth();
+//         let j = date.getMonth();
 //         // console.log(j);
 //         if(parseFloat(jsonData[i].LOA) > parseFloat(MAXLOA[j])){MAXLOA[j] = parseFloat(jsonData[i].LOA);}
 //         if(parseFloat(jsonData[i].BEAM) > parseFloat(MAXBEAM[j])){MAXBEAM[j] = parseFloat(jsonData[i].BEAM);}
@@ -1244,8 +1246,8 @@ function reqBerthStaticData(shipType,staticareakey){
 //         if(parseInt(jsonData[i].DWT) > parseInt(MAXDWT[j])){MAXDWT[j] = parseInt(jsonData[i].DWT);}
 //         if(parseInt(jsonData[i].DTPH) > parseInt(MAXDTPH[j])){MAXDTPH[j] = parseInt(jsonData[i].DTPH);}
 //     }
-//     for(var i=0;i<12;i++){
-//         var StaticInfoStr = '<tr><td>'+parseInt(i+1)+'月</td><td>'+MAXLOA[i]+'</td><td>'+MAXBEAM[i]+'</td><td>'+MAXDRAFT[i]+'</td><td>'+MAXDWT[i]+'</td><td>'+MAXDTPH[i]+'</td></tr>';
+//     for(let i=0;i<12;i++){
+//         let StaticInfoStr = '<tr><td>'+parseInt(i+1)+'月</td><td>'+MAXLOA[i]+'</td><td>'+MAXBEAM[i]+'</td><td>'+MAXDRAFT[i]+'</td><td>'+MAXDWT[i]+'</td><td>'+MAXDTPH[i]+'</td></tr>';
 //         $('#BerthStatistics>tbody').append(StaticInfoStr);
 //     }
 // }
