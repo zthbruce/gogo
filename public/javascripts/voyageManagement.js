@@ -1063,8 +1063,9 @@ $('.voyageList_content').scroll(function(){
     console.log(show_number);
     var AllWidth = show_number * 20;
     //300是安全距离
-    if(scrollTop>AllWidth-350 && show_number < $(this).children('li').size()){
+    if(scrollTop>AllWidth-350  && show_number < $(this).children('li').size()){
         console.log('显示更多');
+
         $(this).children('li').slice(show_number, show_number + 50).show()
     }
 });
