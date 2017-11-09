@@ -214,8 +214,8 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                 // 将箭头加入
                 // 添加箭头
                 for(let i =0; i< lonLatList.length; i++) {
-                    // if (i > 0 && i % 80 === 0) {
-                    if( i > 10){
+                    if (i > 0 && i % 80 === 0) {
+                    // if( i > 10){
                         let start = lonLatList[i - 10];
                         let end = lonLatList[i];
                         let rotation = getRotation(start, end);
