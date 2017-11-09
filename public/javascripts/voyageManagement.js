@@ -312,6 +312,11 @@ function updateDuration(departureTime, arrivalTime) {
     let parkTotalTime = 0;
     let totalTime = arrivalTime - departureTime;
     let li_ele = $('.oneVoyage_DockedList>li');
+    let voyage_type = $('#voyageDetails').find('>.fleet_title').attr('VoyageType');
+    if(voyage_type === '空载'){
+        li_ele = li_ele.slice(1, li_ele.length - 1)
+    }
+    console.log(li_ele.length);
     for (let j = 0; j < li_ele.length; j++) {
         let ele = li_ele.eq(j);
         let sn_purpose = ele.find('select>option:selected').attr('value');
@@ -398,6 +403,7 @@ function getVoyageContent(voyageKey) {
                     // 显示为白色
                     check_ele.css({'color':'#FFF'});
                 }
+                title_ele.attr('VoyageType', content.Type);
                 // 显示详细内容
                 let shipName = content.LocalName.trim();
                 if(shipName === ''){

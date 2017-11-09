@@ -92,7 +92,7 @@ router.get("/getFleetDetailInfo", function (req, res, next) {
     //          'WHERE FleetNumber = "%s" AND JoinTime <= "%s" AND (LeaveTime >= "%s" OR LeaveTime IS NULL OR LeaveTime = "")' +
     //          'ORDER BY BuiltDate DESC', fleetNumber, timePoint, timePoint)
     // }
-    sql = util.format('SELECT t1.ShipNumber, t2.Name AS ShipName, IMO, MMSI, t3.Name AS Type, DWT, t4.CNName AS ShipStatus, ' +
+    var sql = util.format('SELECT t1.ShipNumber, t2.Name AS ShipName, IMO, MMSI, t3.Name AS Type, DWT, t4.CNName AS ShipStatus, ' +
             'BuiltDate, JoinTime, LeaveTime, Checked FROM T4101_Fleet t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber ' +
             'LEFT JOIN `T0181_ShipType` t3 ON t2.ShipType = t3.TypeKey LEFT JOIN T0183_ShipStatus t4 ON t2.ShipStatus = t4.StatusKey ' +
             'WHERE FleetNumber = "%s" AND (JoinTime <= "%s" OR JoinTime IS NULL OR JoinTime = "") AND (LeaveTime >= "%s" OR LeaveTime IS NULL OR LeaveTime = "")' +

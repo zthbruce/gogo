@@ -139,6 +139,7 @@ function getDetailRoute(MMSI, startTime, stopTime) {
         stopTime = new Date().getTime().toString().slice(0, 10);
         console.log(stopTime);
     }
+    route.getSource().clear(); // 初始化清空
     let mileage = 0;
     let voyage_info_ul = $('.oneVoyageInfo>ul');
     $.ajax({
@@ -158,24 +159,61 @@ function getDetailRoute(MMSI, startTime, stopTime) {
             if (res[0] === '200') {
                 console.log('成功获取信息');
                 // 先清空一会
-                route.getSource().clear();
                 let sendData = res[1];
                 let pointList = JSON.parse(sendData);
                 let lonLatInfo = pointList['lat_lon_info'];
+                let lonLatList = [];
                 let num = lonLatInfo.length;
-                console.log('点数为:' + num );
+                // console.log('点数为:' + num );
                 let arrow_features = [];
                 let last_lon;
                 let last_lat;
+                let last_time;
                 for(let i = 0; i < num; i++){
                     let ele = lonLatInfo[i];
                     let lat_lon = WGS84transformer(parseFloat(ele[1]), parseFloat(ele[0]));
                     let lon = lat_lon[1];
                     let lat = lat_lon[0];
-                    lonLatInfo[i] = ol.proj.fromLonLat([lon, lat]);
-                    if(i > 0 && i % 80 === 0){
-                        let start = lonLatInfo[i - 10];
-                        let end= lonLatInfo[i];
+                    let time = parseInt(ele[2]);
+                    // 计算航程里程
+                    let sub_mileage = 0;
+                    let sub_speed = 0;
+                    if( i > 0){
+                        sub_mileage = getGreatCircleDistance(last_lon, last_lat, lon, lat) / 1.85200;
+                        sub_speed = sub_mileage  /((time - last_time) / 3600)
+                    }
+                    if(sub_speed < 80){
+                        lonLatList.push(ol.proj.fromLonLat([lon, lat]));
+                        mileage += sub_mileage;
+                        last_lon = lon;
+                        last_lat = lat;
+                        last_time = time;
+                    }
+                    // lonLatInfo[i] = ol.proj.fromLonLat([lon, lat]);
+                    // mileage += sub_mileage
+                    // last_lon = lon;
+                    // last_lat = lat;
+                    // last_time = time;
+                }
+                // mileage = mileage / 1.85200;
+                let sailTime = parseInt(info_li.eq(6).attr('time')) / 3600;
+                // 填充对应信息
+                info_li.eq(7).text('航速：' + (mileage / sailTime).toFixed(4) +'kts');
+                info_li.eq(8).text('航程：' + mileage.toFixed(4) + "nm");
+                /* 画航迹 */
+                let feature = new ol.Feature({
+                    id: MMSI,
+                    geometry: new ol.geom.LineString(lonLatList)
+                    // geometry: new ol.geom.LineString(lonLatInfo)
+                });
+                feature.setStyle(contour_style);
+                route.getSource().addFeature(feature);
+                // 将箭头加入
+                // 添加箭头
+                for(let i =0; i< lonLatList.length; i++) {
+                    if (i > 0 && i % 80 === 0) {
+                        let start = lonLatList[i - 10];
+                        let end = lonLatList[i];
                         let rotation = getRotation(start, end);
                         let arrow_feature = new ol.Feature({
                             geometry: new ol.geom.Point(end)
@@ -183,33 +221,18 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                         arrow_feature.setStyle(arrow_style(rotation));
                         arrow_features.push(arrow_feature)
                     }
-                    // 计算航程里程
-                    if( i > 0){
-                        mileage += getGreatCircleDistance(last_lon, last_lat, lon, lat)
-                    }
-                    last_lon = lon;
-                    last_lat = lat;
                 }
-                mileage = mileage / 1.85200;
-                let sailTime = parseInt(info_li.eq(6).attr('time')) / 3600;
-                // 填充对应信息
-                info_li.eq(7).text('航速：' + (mileage / sailTime).toFixed(4) +'kts');
-                info_li.eq(8).text('航程：' + mileage.toFixed(4) + "nm");
-                let feature = new ol.Feature({
-                    id: MMSI,
-                    geometry: new ol.geom.LineString(lonLatInfo)
-                });
-                feature.setStyle(contour_style);
-                route.getSource().addFeature(feature);
-                // 将箭头加入
                 route.getSource().addFeatures(arrow_features);
+                /* 开始图标和结束图标 */
                 // 开始点
                 let start_point = new ol.Feature({
-                    geometry: new ol.geom.Point(lonLatInfo[0])
+                    geometry: new ol.geom.Point(lonLatList[0])
+                    // geometry: new ol.geom.Point(lonLatInfo[0])
                 });
                 // 结束点
                 let end_point = new ol.Feature({
-                    geometry: new ol.geom.Point(lonLatInfo[num - 1])
+                    geometry: new ol.geom.Point(lonLatList[lonLatList.length - 1])
+                    // geometry: new ol.geom.Point(lonLatInfo[num - 1])
                 });
                 start_point.setStyle(start_style);
                 end_point.setStyle(end_style);

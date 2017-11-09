@@ -169,10 +169,7 @@ function getDataDuring(table, keyStart, keyEnd, limit, cb){
         cb("params error");
         return;
     }
-    var sql = util.format("select CONVERT_FROM(t.f.v,'UTF8') as info from hbase.\`%s\` t where row_key>= '%s' and row_key<='%s' ", table, keyStart, keyEnd);
-    // if(desc){
-    //     sql += "order by 1 desc ";
-    // }
+    let sql = util.format("select  CONVERT_FROM(row_key, 'UTF8') as key, CONVERT_FROM(t.f.v,'UTF8') as info from hbase.\`%s\` t where row_key>= '%s' and row_key<='%s' ", table, keyStart, keyEnd);
     if(limit){
         sql += util.format("limit %s", limit)
     }
@@ -212,9 +209,10 @@ router.get('/getDetailRouteInfo', function(req, res, next) {
                     sendData += ",";
                 }
                 if(lon_lat_info[i].info !== undefined){
-                    var info = lon_lat_info[i].info.split("#");
+                    let info = lon_lat_info[i].info.split("#");
+                    let time = lon_lat_info[i].key.slice(9, 19);
                     // 获取经纬度信息
-                    sendData += util.format('[%s, %s]', info[8], info[9]);
+                    sendData += util.format('[%s, %s, %s]', info[8], info[9], time);
                     count++;
                 }
             }
