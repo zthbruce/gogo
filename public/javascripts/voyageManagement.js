@@ -316,7 +316,6 @@ function updateDuration(departureTime, arrivalTime) {
     if(voyage_type === '空载'){
         li_ele = li_ele.slice(1, li_ele.length - 1)
     }
-    console.log(li_ele.length);
     for (let j = 0; j < li_ele.length; j++) {
         let ele = li_ele.eq(j);
         let sn_purpose = ele.find('select>option:selected').attr('value');

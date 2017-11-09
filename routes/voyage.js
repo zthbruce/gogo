@@ -203,6 +203,7 @@ router.get('/getDetailRouteInfo', function(req, res, next) {
             var lon_lat_info = result[1];
             var sendData = util.format('{"MMSI": "%s", "lat_lon_info":[', MMSI);
             var count = 0;
+            // console.log(lon_lat_info);
             for (var i = 0; i < lon_lat_info.length; i++) {
                 // if (lon_lat_info[i] !== undefined && lon_lat_info[i] !== 'undefined') {
                 if (i > 0) {

@@ -139,6 +139,7 @@ function getDetailRoute(MMSI, startTime, stopTime) {
         stopTime = new Date().getTime().toString().slice(0, 10);
         console.log(stopTime);
     }
+    console.log(startTime + "," + stopTime);
     route.getSource().clear(); // 初始化清空
     let mileage = 0;
     let voyage_info_ul = $('.oneVoyageInfo>ul');
@@ -182,13 +183,15 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                         sub_mileage = getGreatCircleDistance(last_lon, last_lat, lon, lat) / 1.85200;
                         sub_speed = sub_mileage  /((time - last_time) / 3600)
                     }
-                    if(sub_speed < 80){
+                    // lonLatList.push(ol.proj.fromLonLat([lon, lat]));
+                    // mileage += sub_mileage;
+                    if(sub_speed < 100){
                         lonLatList.push(ol.proj.fromLonLat([lon, lat]));
                         mileage += sub_mileage;
-                        last_lon = lon;
-                        last_lat = lat;
-                        last_time = time;
                     }
+                    last_lon = lon;
+                    last_lat = lat;
+                    last_time = time;
                     // lonLatInfo[i] = ol.proj.fromLonLat([lon, lat]);
                     // mileage += sub_mileage
                     // last_lon = lon;
@@ -211,7 +214,8 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                 // 将箭头加入
                 // 添加箭头
                 for(let i =0; i< lonLatList.length; i++) {
-                    if (i > 0 && i % 80 === 0) {
+                    // if (i > 0 && i % 80 === 0) {
+                    if( i > 10){
                         let start = lonLatList[i - 10];
                         let end = lonLatList[i];
                         let rotation = getRotation(start, end);
