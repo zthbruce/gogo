@@ -32,9 +32,12 @@ function getArrivalTime(ETA) {
     let current_time = new Date();
     let year = current_time.getFullYear();
     let current_month = current_time.getMonth() + 1;
+    // 如果有跨年的情况
     if(current_month > month){
         year = year + 1;
     }
+    console.log(year + "-" + (month < 10 ? '0' + month:month) + "-" + (day < 10? '0' + day: day) +
+        " " + (hour < 10? '0' + hour: hour) + ":" + (min < 10? '0' + min: min));
     return year + "-" + (month < 10 ? '0' + month:month) + "-" + (day < 10? '0' + day: day) +
         " " + (hour < 10? '0' + hour: hour) + ":" + (min < 10? '0' + min: min)
 }
@@ -283,7 +286,9 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                 let arrivalTime_ele = arrival_ele.next().next();
                 arrival_ele.css('color', 'white');
                 arrivalTime_ele.css('color', 'white');
-                if(arrivalTimestamp > startTime){
+                // 当预计的时间在未来且时间合理
+                // if(arrivalTimestamp > startTime){
+                if(arrivalTimestamp > startTime && (arrivalTimestamp - startTime) < (6 * 30 * 24 * 3600)){
                     // 到达港
                     if(arrival_ele.val() === '~' && arrivalPort !== ''){
                         arrival_ele.val(arrivalPort);
