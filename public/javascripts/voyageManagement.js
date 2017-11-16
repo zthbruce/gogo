@@ -462,7 +462,6 @@ function getVoyageContent(voyageKey) {
                 // 出发港
                 let departure_ele = info_li.eq(4).children('input');
                 departure_ele.val(departurePortName);
-                    // .attr('title',departurePortName);
                 departure_ele.attr('portID', departurePortID);
                 // 出发港确认信息
                 let departure_checked_ele = departure_ele.next();
@@ -480,7 +479,6 @@ function getVoyageContent(voyageKey) {
                 // 抵达港
                 let arrival_ele = info_li.eq(5).children('input');
                 arrival_ele.val(arrivalPortName);
-                    // .attr('title',arrivalPortName);
                 arrival_ele.attr('portID', arrivalPortID);
                 // 抵达港确认信息
                 let arrival_checked_ele = arrival_ele.next();
@@ -498,9 +496,7 @@ function getVoyageContent(voyageKey) {
                 else{
                     arrival_time_ele.text(getRealTime(arrivalTime));
                 }
-                console.log(arrivalTime);
                 arrival_time_ele.attr('time', arrivalTime);
-                // arrival_time_ele.text(getRealTime(arrivalTime));
                 /* 获得航次详细流水信息 */
                 // 初始化
                 let voyageDetail_ele = $('.oneVoyage_DockedList');
@@ -717,7 +713,13 @@ $(".route_Voyage_btn").click(function () {
     $("#routeInfo").fadeOut(300);
     $("#LeaseRouteInfo").fadeOut(300);
     //隐藏航次详情弹出框
-    $("#voyageDetails").fadeOut(300);
+    if($('#voyage_Minimize').css('display')=='block'){
+        $('#voyageDetails').css({'left':300,'top':50,'width':720,'height':440,'opacity':0});
+    }
+    $('#voyageDetails').fadeOut(600);
+    $('#voyage_Minimize').fadeOut(600);
+    route.getSource().clear(); // 清空当前图层
+    current.getSource().clear();
     $("#voyage_StandardRoute").fadeOut(300);
     $("#voyage_StandardGoods").fadeOut(300);
 });
@@ -781,6 +783,10 @@ $(".voyageList_content").delegate("li", "click", function (event) {
     $('#voyageDetails').css('opacity',1);
     voyageDetails.fadeIn(300).offset({top:$('#voyageList').offset().top,left:$('#voyageList').offset().left});;
     // getDetailRoute(MMSI, departureTime, arrivalTime);
+    console.log($('#voyageDetails').css('width'));
+    if(parseInt($('#voyageDetails').css('width'))==160){
+        $('#voyage_Minimize .title_RestoreBtn').trigger('click');
+    }
     event.stopPropagation();
 });
 
@@ -1116,8 +1122,8 @@ $('.shipVoyageList_List').delegate('li>div', 'click', function () {
 
 $('#voyageDetails .title_offbtn,#voyage_Minimize .title_offbtn').click(function () {
     $('#voyageDetails').css({'left':300,'top':50,'width':720,'height':440,'opacity':0});
-    console.log($('#voyageDetails').offset().left);
-    console.log($('#voyageDetails').offset().top);
+    // console.log($('#voyageDetails').offset().left);
+    // console.log($('#voyageDetails').offset().top);
     route.getSource().clear(); // 清空当前图层
     current.getSource().clear();
 });

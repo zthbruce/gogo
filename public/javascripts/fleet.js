@@ -501,7 +501,13 @@ $('.route_Fleet_btn').click(function(){
     $('#routeInfo').fadeOut(600);
     $('#LeaseRouteInfo').fadeOut(600);
     $('#voyageList').fadeOut(600);
+    if($('#voyage_Minimize').css('display')=='block'){
+        $('#voyageDetails').css({'left':300,'top':50,'width':720,'height':440,'opacity':0});
+    }
     $('#voyageDetails').fadeOut(600);
+    $('#voyage_Minimize').fadeOut(600);
+    route.getSource().clear(); // 清空当前图层
+    current.getSource().clear();
     $('#voyage_StandardRoute').fadeOut(600);
     $('#voyage_StandardGoods').fadeOut(600);
 });

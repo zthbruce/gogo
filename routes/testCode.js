@@ -89,10 +89,10 @@ require('util');
 // }
 // console.log(getRealTime(1404955272));
 //
-// var stringTime = "2014-07-10 09:21:12";
-// var timestamp2 = Date.parse(new Date(stringTime));
-// timestamp2 = timestamp2 / 1000;
-// console.log(timestamp2);
+var stringTime = "2017-11-16 14:28";
+var timestamp2 = Date.parse(new Date(stringTime));
+timestamp2 = timestamp2 / 1000;
+console.log(timestamp2);
 //
 // function getDuration(period) {
 //     var s = period % 60;
@@ -115,5 +115,23 @@ require('util');
 // console.log(getDuration(3600 * 48 + 3600));
 
 
-var arrivalTime = new Date();
-console.log( new Date().getTime().toString().slice(0, 10));
+function getArrivalTime(ETA) {
+    let month = Math.floor(ETA/65536.0);  //月
+    let day = Math.floor((ETA - month * 65536)/2048.0);   //日
+    let hour = Math.floor((ETA - month * 65536 - day * 2048)/64.0);  //小时
+    let min = ETA - month * 65536 - day * 2048 - hour * 64;     //分
+    if(month<=0||month>=13)
+        return "~";  //无效的ETA
+    let current_time = new Date();
+    let year = current_time.getFullYear();
+    let current_month = current_time.getMonth() + 1;
+    if(current_month > month){
+        year = year + 1;
+    }
+    console.log(year + "-" + (month < 10 ? '0' + month:month) + "-" + (day < 10? '0' + day: day) +
+        " " + (hour < 10? '0' + hour: hour) + ":" + (min < 10? '0' + min: min));
+    return year + "-" + (month < 10 ? '0' + month:month) + "-" + (day < 10? '0' + day: day) +
+        " " + (hour < 10? '0' + hour: hour) + ":" + (min < 10? '0' + min: min)
+}
+
+getArrivalTime(739968)

@@ -18,6 +18,27 @@ function getRotation(start, end){
     return Math.atan2(dy, dx);
 }
 
+/**
+ * 根据ais_info中的ETA获得预计到达时间
+ * @param ETA
+ */
+function getArrivalTime(ETA) {
+    let month = Math.floor(ETA/65536.0);  //月
+    let day = Math.floor((ETA - month * 65536)/2048.0);   //日
+    let hour = Math.floor((ETA - month * 65536 - day * 2048)/64.0);  //小时
+    let min = ETA - month * 65536 - day * 2048 - hour * 64;     //分
+    if(month<=0||month>=13)
+        return "~";  //无效的ETA
+    let current_time = new Date();
+    let year = current_time.getFullYear();
+    let current_month = current_time.getMonth() + 1;
+    if(current_month > month){
+        year = year + 1;
+    }
+    return year + "-" + (month < 10 ? '0' + month:month) + "-" + (day < 10? '0' + day: day) +
+        " " + (hour < 10? '0' + hour: hour) + ":" + (min < 10? '0' + min: min)
+}
+
 function getShipList() {
     $.ajax({
         // async: false,
@@ -163,6 +184,8 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                 let sendData = res[1];
                 let pointList = JSON.parse(sendData);
                 let lonLatInfo = pointList['lat_lon_info'];
+                let ETA = pointList['ETA'];
+                let arrivalPort = pointList['ArrivalPort'];
                 let lonLatList = [];
                 let num = lonLatInfo.length;
                 // console.log('点数为:' + num );
@@ -198,11 +221,7 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                     // last_lat = lat;
                     // last_time = time;
                 }
-                // mileage = mileage / 1.85200;
                 let sailTime = parseInt(info_li.eq(6).attr('time')) / 3600;
-                // 填充对应信息
-                info_li.eq(7).text('航速：' + (mileage / sailTime).toFixed(4) +'kts');
-                info_li.eq(8).text('航程：' + mileage.toFixed(4) + "nm");
                 /* 画航迹 */
                 let feature = new ol.Feature({
                     id: MMSI,
@@ -257,6 +276,28 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                 map.beforeRender(zoom);
                 view.setCenter(lonLatInfo[0]);
                 view.setZoom(2);
+                /* 填充对应信息 */
+                let arrivalTimeEst = getArrivalTime(ETA);
+                let arrivalTimestamp = Date.parse(new Date(arrivalTimeEst)) / 1000;
+                let arrival_ele = info_li.eq(5).children('input');
+                let arrivalTime_ele = arrival_ele.next().next();
+                if(arrivalTimestamp > startTime){
+                    // 到达港
+                    if(arrival_ele.val() === '~' && arrivalPort !== ''){
+                        arrival_ele.val(arrivalPort);
+                        arrival_ele.css('color', 'orange');
+                    }
+                    if(arrivalTime_ele.text() === '~' && ETA !== ''){
+                        arrivalTime_ele.text(arrivalTimeEst);
+                        arrivalTime_ele.css('color', 'orange');
+                    }
+                }
+                else{
+                    arrival_ele.css('color', 'white');
+                    arrivalTime_ele.css('color', 'white');
+                }
+                info_li.eq(7).text('航速：' + (mileage / sailTime).toFixed(4) +'kts'); // 航速
+                info_li.eq(8).text('航程：' + mileage.toFixed(4) + "nm"); // 航程
             }
         },
         error: function (data, status, e) {
