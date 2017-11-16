@@ -281,6 +281,8 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                 let arrivalTimestamp = Date.parse(new Date(arrivalTimeEst)) / 1000;
                 let arrival_ele = info_li.eq(5).children('input');
                 let arrivalTime_ele = arrival_ele.next().next();
+                arrival_ele.css('color', 'white');
+                arrivalTime_ele.css('color', 'white');
                 if(arrivalTimestamp > startTime){
                     // 到达港
                     if(arrival_ele.val() === '~' && arrivalPort !== ''){
@@ -291,10 +293,6 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                         arrivalTime_ele.text(arrivalTimeEst);
                         arrivalTime_ele.css('color', 'orange');
                     }
-                }
-                else{
-                    arrival_ele.css('color', 'white');
-                    arrivalTime_ele.css('color', 'white');
                 }
                 info_li.eq(7).text('航速：' + (mileage / sailTime).toFixed(4) +'kts'); // 航速
                 info_li.eq(8).text('航程：' + mileage.toFixed(4) + "nm"); // 航程
