@@ -134,4 +134,5 @@ function getArrivalTime(ETA) {
         " " + (hour < 10? '0' + hour: hour) + ":" + (min < 10? '0' + min: min)
 }
 
-getArrivalTime(739968)
+getArrivalTime(739968);
+

@@ -187,6 +187,7 @@ function updateSaveStatus(voyageBtn_saveStatus) {
  * 获取一艘船的历史航次列表
  */
 function getVoyageList2Ship(shipNumber, voyageKey){
+    console.log("here");
     /* 显示历史航次列表 */
     let voyageList2Ship_ele = $('.shipVoyageList_List');
     // 初始化
@@ -211,10 +212,8 @@ function getVoyageList2Ship(shipNumber, voyageKey){
                 voyageList2Ship_ele.css("width", 80 * content.length);
                 /* 将图标定位当前时间点 */
                 let div_ele =  voyageList2Ship_ele.find('li>div[voyageKey="' + voyageKey +'"]');
-                // console.log(div_ele);
                 div_ele.attr('class', 'active');
-                let seq =  voyageList2Ship_ele.children('li').index(div_ele.parent()) + 1;
-                console.log('-' + Math.floor(seq / 7) * 560);
+                let seq =  voyageList2Ship_ele.children('li').index(div_ele.parent());
                 voyageList2Ship_ele.css('margin-left', '-' + Math.floor(seq / 7) * 560 + 'px')
             }else{
                 console.log(content);
@@ -376,7 +375,6 @@ function getVoyageContent(voyageKey) {
     updateSaveStatus(false); // 保存按钮初始化
     let title_ele = $("#voyageDetails").find(".fleet_title");
     title_ele.attr('voyageKey', voyageKey);
-    // let voyage_info_ul = $('.oneVoyageInfo>ul>li');
     $('.oneVoyageInfo>ul>li').hide();
     /* 获取航次具体内容 */
     $.ajax({
@@ -548,8 +546,8 @@ function getVoyageContent(voyageKey) {
                                 }
                                 let duration = getDuration(duration_second); // 获得历时多长时间
                                 // 做相应处理
-                                li_str += '<li duration=' + duration_second +  ' stationaryAreaKey=' + stationaryAreaKey + ' lon=' + lon + ' lat=' + lat +
-                                    ' DepartureTime=' + sn_departureTime + ' ArrivalTime=' + sn_arrivalTime +'><span>' + (i + 1) +
+                                li_str += '<li duration=' + duration_second  + ' lon=' + lon + ' lat=' + lat +
+                                    ' DepartureTime=' + sn_departureTime + ' ArrivalTime=' + sn_arrivalTime + ' stationaryAreaKey=' + stationaryAreaKey + '><span>' + (i + 1) +
                                     '</span><span>'+ getRealTime(sn_departureTime).slice(0, 16) + '至' + getRealTime(sn_arrivalTime).slice(0, 16) + '</span><span>' +
                                     duration + '</span>'+ '<span>' + portName + '</span><span>' + select_ele + '</span><div class="oneVoyage_EndBtn" style="display: none;">航次结束</div></li>'
                             }
@@ -575,8 +573,125 @@ function getVoyageContent(voyageKey) {
     });
 }
 
+/**
+ * 保存流水细节
+ * @param detail_list
+ */
+function saveDetail(detail_list, voyageKey) {
+    let MMSI = $('#voyageDetails>.fleet_title').attr("MMSI");
+    let voyageDetailList = [];
+    for (let j = 0; j < detail_list.length; j++) {
+        let ele = detail_list.eq(j);
+        let sn_purpose = ele.find('select>option:selected').attr('value');
+        let departureTime = ele.attr('departuretime');
+        let arrivalTime = ele.attr('arrivaltime');
+        let stationaryareakey = ele.attr('stationaryareakey');
+        if(stationaryareakey === undefined){
+            stationaryareakey = '';
+        }
+        let center_lon = ele.attr('lon');
+        let center_lat = ele.attr('lat');
+        voyageDetailList.push({Purpose:sn_purpose, DepartureTime:departureTime, ArrivalTime: arrivalTime,
+            StationaryAreaKey: stationaryareakey, CenterLon: center_lon, CenterLat: center_lat})
+    }
+    $.ajax({
+        url:'/voyageManagement/saveVoyageDetail',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({MMSI: MMSI, VoyageKey: voyageKey, VoyageDetailList: voyageDetailList}),
+        type: 'POST',
+        dataType: 'json',
+        success: function (data) {
+            console.log(data[1])
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
+}
 
+/**
+ * 保存航次信息
+ */
+function saveVoyage() {
+    let voyage_checked = "0"; // 初始化为0
+    let title = $("#voyageDetails").find(".fleet_title");
+    let checked_span = title.children("span:nth-child(2)");
+    let routeAndGoods = $(".voyageBtn_StandardRoute, .voyageBtn_StandardGoods");
+    // 如果当前是确认, 保存相应信息
+    if(voyageBtn_ConfirmStatus){
+        $(".voyageBtn_SaveOrConfirm").text("保存");
+        voyage_checked = "1"; // check状态信息
+        checked_span.text("(已确认)");
+        checked_span.css({'color':'#00ff00'});
+        // 标准航线和标准货物可点击
+        standardGoodsStatus  = true;
+        standardRouteStatus = true;
+        routeAndGoods.css("background", "#4d90fe");// 蓝底
+        routeAndGoods.css("color", "#FFF"); // 白字
+    }
+    else{
+        checked_span.text("(未确认)");
+        checked_span.css({'color':"#FFF"});
+        // 标准航线和标准货物不能点击
+        standardGoodsStatus  = false;
+        standardRouteStatus = false;
+        routeAndGoods.css("background", "#ccc"); // 灰底
+        routeAndGoods.css("color", "#060205"); // 黑字
+    }
+    updateSaveStatus(false); // 更新保存按钮状态
+    /* 保存航次信息 */
+    let voyageKey = title.attr('voyageKey');
+    console.log(voyageKey);
+    let cargo = $(".cargo_type_list>select>option:selected").attr('value');
+    console.log(cargo);
+    let cargo_checked_ele = $(".cargo_type_list").next();
+    let cargo_checked = cargo_checked_ele.attr('class') === 'checked'? '1' : '0';
+    // 出发港
+    let departure_ele = info_li.eq(4).children('input');
+    let departure_port = departure_ele.attr('portID');
+    let departure_checked_ele = departure_ele.next();
+    let departure_checked = departure_checked_ele.attr('class') === 'checked'? '1' : '0';
+    let departure_time_ele = departure_checked_ele.next();
+    let departure_time = departure_time_ele.attr('time');
+    // 到达港
+    let arrival_ele = info_li.eq(5).children('input');
+    let arrival_port = arrival_ele.attr('portID');
+    if(arrival_port === undefined){
+        arrival_port = '';
+    }
+    let arrival_checked_ele = arrival_ele.next();
+    let arrival_checked = arrival_checked_ele.attr('class') === 'checked'? '1' : '0';
+    let arrival_time_ele = arrival_checked_ele.next();
+    let arrival_time = arrival_time_ele.attr('time');
+    if(arrival_time === undefined){
+        arrival_time = null
+    }
+    // 航行时长
+    // info_li.eq(6).text(getDuration(sailingTime));
+    // info_li.eq(7).text('航速：' )
+    // // info_li.eq(8).text('航程：' + content.Mileage);
+    let voyageInfo =  {VoyageKey: voyageKey, Cargo: cargo, DepartureTime: departure_time, DeparturePortID: departure_port,
+        ArrivalTime: arrival_time, ArrivalPortID: arrival_port, CargoChecked: cargo_checked, DeparturePortChecked: departure_checked,
+        ArrivalPortChecked: arrival_checked, Checked: voyage_checked};
+    console.log(voyageInfo);
+    $.ajax({
+        url:'/voyageManagement/saveVoyage',
+        data: voyageInfo,
+        type: 'POST',
+        dataType: 'json',
+        success: function (data) {
+            console.log(data[1]);
+            updateVoyageList()
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
 
+    /* 保存航次流水细节 */
+    let li_ele = $('.oneVoyage_DockedList>li');
+    saveDetail(li_ele, voyageKey);
+}
 
 
 
@@ -778,6 +893,9 @@ $(".voyageList_content").delegate("li", "click", function (event) {
     getVoyageList2Ship(shipNumber, voyageKey);
     /* 获取具体内容 */
     getVoyageContent(voyageKey);
+    // 附上shipnumber作为一条船
+    let title_ele = $("#voyageDetails").find(".fleet_title");
+    title_ele.attr('ShipNumber', shipNumber);
     //隐藏航次列表弹出框
     $('#voyageList').fadeOut(300);
     $('#voyageDetails').css('opacity',1);
@@ -877,114 +995,7 @@ $(".voyageBtn_StandardGoods").click(function(event){
  * 确认或保存按钮点击之后都是会保存的
  */
 $(".voyageBtn_SaveOrConfirm").click(function(){
-    let voyage_checked = "0"; // 初始化为0
-    let title = $("#voyageDetails").find(".fleet_title");
-    let checked_span = title.children("span:nth-child(2)");
-    let routeAndGoods = $(".voyageBtn_StandardRoute, .voyageBtn_StandardGoods");
-    // 如果当前是确认, 保存相应信息
-    if(voyageBtn_ConfirmStatus){
-        $(".voyageBtn_SaveOrConfirm").text("保存");
-        voyage_checked = "1"; // check状态信息
-        checked_span.text("(已确认)");
-        checked_span.css({'color':'#00ff00'});
-        // 标准航线和标准货物可点击
-        standardGoodsStatus  = true;
-        standardRouteStatus = true;
-        routeAndGoods.css("background", "#4d90fe");// 蓝底
-        routeAndGoods.css("color", "#FFF"); // 白字
-    }
-    else{
-        checked_span.text("(未确认)");
-        checked_span.css({'color':"#FFF"});
-        // 标准航线和标准货物不能点击
-        standardGoodsStatus  = false;
-        standardRouteStatus = false;
-        routeAndGoods.css("background", "#ccc"); // 灰底
-        routeAndGoods.css("color", "#060205"); // 黑字
-    }
-    updateSaveStatus(false); // 更新保存按钮状态
-    /* 保存航次信息 */
-    let voyageKey = title.attr('voyageKey');
-    console.log(voyageKey);
-    let cargo = $(".cargo_type_list>select>option:selected").attr('value');
-    console.log(cargo);
-    let cargo_checked_ele = $(".cargo_type_list").next();
-    let cargo_checked = cargo_checked_ele.attr('class') === 'checked'? '1' : '0';
-    // 出发港
-    let departure_ele = info_li.eq(4).children('input');
-    let departure_port = departure_ele.attr('portID');
-    let departure_checked_ele = departure_ele.next();
-    let departure_checked = departure_checked_ele.attr('class') === 'checked'? '1' : '0';
-    let departure_time_ele = departure_checked_ele.next();
-    let departure_time = departure_time_ele.attr('time');
-    // 到达港
-    let arrival_ele = info_li.eq(5).children('input');
-    let arrival_port = arrival_ele.attr('portID');
-    if(arrival_port === undefined){
-        arrival_port = '';
-    }
-    let arrival_checked_ele = arrival_ele.next();
-    let arrival_checked = arrival_checked_ele.attr('class') === 'checked'? '1' : '0';
-    let arrival_time_ele = arrival_checked_ele.next();
-    let arrival_time = arrival_time_ele.attr('time');
-    if(arrival_time === undefined){
-        arrival_time = null
-    }
-    // 航行时长
-    // info_li.eq(6).text(getDuration(sailingTime));
-    // info_li.eq(7).text('航速：' )
-    // // info_li.eq(8).text('航程：' + content.Mileage);
-    let voyageInfo =  {VoyageKey: voyageKey, Cargo: cargo, DepartureTime: departure_time, DeparturePortID: departure_port,
-        ArrivalTime: arrival_time, ArrivalPortID: arrival_port, CargoChecked: cargo_checked, DeparturePortChecked: departure_checked,
-        ArrivalPortChecked: arrival_checked, Checked: voyage_checked};
-    console.log(voyageInfo);
-    $.ajax({
-        url:'/voyageManagement/saveVoyage',
-        data: voyageInfo,
-        type: 'POST',
-        dataType: 'json',
-        success: function (data) {
-            console.log(data[1]);
-            updateVoyageList()
-        },
-        error: function (err) {
-            console.log(err);
-        }
-    });
-
-    /* 保存航次流水细节 */
-    let MMSI = title.attr("MMSI");
-    let voyageDetailList = [];
-    let li_ele = $('.oneVoyage_DockedList>li');
-    for (let j = 0; j < li_ele.length; j++) {
-        let ele = li_ele.eq(j);
-        let sn_purpose = ele.find('select>option:selected').attr('value');
-        // let sn_purpose = ele.attr('purpose');
-        let departureTime = ele.attr('departuretime');
-        let arrivalTime = ele.attr('arrivaltime');
-        let stationaryareakey = ele.attr('stationaryareakey');
-        if(stationaryareakey === undefined){
-            stationaryareakey = '';
-        }
-        let center_lon = ele.attr('lon');
-        let center_lat = ele.attr('lat');
-        voyageDetailList.push({Purpose:sn_purpose, DepartureTime:departureTime, ArrivalTime: arrivalTime,
-            StationaryAreaKey: stationaryareakey, CenterLon: center_lon, CenterLat: center_lat})
-    }
-    $.ajax({
-        url:'/voyageManagement/saveVoyageDetail',
-        contentType: 'application/json; charset=utf-8',
-        data: JSON.stringify({MMSI: MMSI, VoyageKey: voyageKey, VoyageDetailList: voyageDetailList}),
-        type: 'POST',
-        dataType: 'json',
-        success: function (data) {
-            console.log(data[1])
-        },
-        error: function (err) {
-            console.log(err);
-        }
-    });
-
+    saveVoyage() // 保存航次信息
 });
 
 
@@ -1034,45 +1045,153 @@ $(".oneVoyage_DockedList").delegate('li', 'mouseout', function () {
 /**
  * 点击结束航次
  */
+
 $(".oneVoyage_DockedList").delegate(".oneVoyage_EndBtn", "click", function (event) {
-    console.log("结束航次");
+    let title_ele = $('#voyageDetails>.fleet_title');
+    let voyageType = title_ele.attr('voyageType');
+    let mmsi = title_ele.attr('MMSI');
     let li_ele = $(this).parent();
     let next_ele = li_ele.nextAll();
     if(next_ele.length > 0) {
-        updateSaveStatus(true);
-        next_ele.remove();
-        // 更新上面的信息
-        let cluster_info = allPoints[li_ele.attr('stationaryAreaKey')];
+        // updateSaveStatus(true);
+        /* 刷新统计的信息 */
         let arrivalPortID = '';
         let arrivalPortName = '';
-        if (cluster_info !== undefined) {
-            arrivalPortID = cluster_info.PortID;
-            if (AllPortBasicList[arrivalPortID] !== undefined) {
-                arrivalPortName = AllPortBasicList[arrivalPortID].ENName;
-            }
+        let arrivalTime;
+        let next_departureTime;
+        let next_departurePort;
+        let next_voyageType;
+        let stationaryAreaKey = li_ele.attr('stationaryAreaKey');
+        let berth_info = allPoints[stationaryAreaKey];
+        let anch_info  = anchInfoList[stationaryAreaKey];
+        // 泊位的港口信息
+        if (berth_info !== undefined) {
+            arrivalPortID = berth_info.PortID
         }
-        let arrivalTime = li_ele.attr('arrivalTime');
-        // 抵达港
+        // 锚地的港口信息
+        else if(anch_info !== undefined){
+            arrivalPortID = anch_info.des_port[0]
+        }
+        if (AllPortBasicList[arrivalPortID] !== undefined) {
+            arrivalPortName = AllPortBasicList[arrivalPortID].ENName;
+        }
+        // 抵港时间
+        if(voyageType === '满载'){
+            // 满载采用流水结束时间
+             arrivalTime = li_ele.attr('arrivalTime');
+             next_voyageType = '空载';
+        }
+        else{
+            // 空载采用流水开始时间
+            arrivalTime = li_ele.attr('departureTime');
+            next_voyageType = '空载';
+        }
+        // 上一个航次的结束时间是下一个航次的开始时间
+        next_departureTime = arrivalTime;
+        // 上一个航次的到达港口是下一个航次的出发港口
+        next_departurePort = arrivalPortID;
+        // 抵达港更新
         let arrival_ele = info_li.eq(5).children('input');
+        let old_arrivalPortID = arrival_ele.attr('portID'); // 保存原先的PortID
         arrival_ele.val(arrivalPortName);
         arrival_ele.attr('portID', arrivalPortID);
         // 抵达港确认信息
         let arrival_checked_ele = arrival_ele.next();
         arrival_checked_ele.attr('class', 'toCheck');
-        // 抵港时间
+        // 抵港时间更新
         let arrival_time_ele = arrival_checked_ele.next();
+        let old_arrivalTime =  arrival_time_ele.attr('time');
+        // 如果到达时间为空
+        if(old_arrivalTime === undefined){
+            old_arrivalTime = null;
+        }
         arrival_time_ele.attr('time', arrivalTime);
         arrival_time_ele.text(getRealTime(arrivalTime));
         let departureTime = info_li.eq(4).children('span').attr('time');
         // 更新统计信息
         updateDuration(departureTime, arrivalTime);
         // 更新航线信息
-        let MMSI = $('#voyageDetails .fleet_title').attr('MMSI');
+        let MMSI = title_ele.attr('MMSI');
         getDetailRoute(MMSI, departureTime, arrivalTime);
+
+        /* 剩余部分生成新航次 */
+        // let voyageList2Ship_ele = $('.shipVoyageList_List');
+        // let li_str = '<li><div voyageKey=' + voyageKey + '></div><span>' + getRealTime(next_departureTime).slice(0, 10) + '</span></li>';
+        // voyageList2Ship_ele.prepend(li_str);
+        let new_voyageKey = mmsi + '#' + next_departureTime; // 生成新航次
+        let shipNumber = title_ele.attr('ShipNumber');
+        let voyageInfo = {Voyagekey: new_voyageKey , MMSI: MMSI, Type: next_voyageType, ShipNumber: shipNumber,
+            DepartureTime: next_departureTime, DeparturePortID: next_departurePort, ArrivalTime: old_arrivalTime , ArrivalPortID: old_arrivalPortID};
+        /* 更新数据库信息 */
+        // 保存新航次信息
+        $.ajax({
+            url:'/voyageManagement/AddVoyage',
+            contentType: 'application/json; charset=utf-8',
+            type:'POST',
+            dataType:'json',
+            data: JSON.stringify(voyageInfo),
+            success: function(data){
+                console.log(data);
+                getVoyageList2Ship(shipNumber, title_ele.attr('voyageKey'))
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+        // 保存新航次流水信息
+        saveDetail(li_ele.nextAll().andSelf(), new_voyageKey);
+        // 保存现航次信息
+        saveVoyage();
+        /* 该行以下信息消失 */
+        next_ele.remove();
     }
+
     event.stopPropagation();
-    // return false; // 防止冒泡事件
+    return false; // 防止冒泡事件
 });
+
+// /**
+//  * 点击结束航次
+//  */
+// $(".oneVoyage_DockedList").delegate(".oneVoyage_EndBtn", "click", function (event) {
+//     console.log("结束航次");
+//     let li_ele = $(this).parent();
+//     let next_ele = li_ele.nextAll();
+//     if(next_ele.length > 0) {
+//         updateSaveStatus(true);
+//         next_ele.remove();
+//         // 更新上面的信息
+//         let cluster_info = allPoints[li_ele.attr('stationaryAreaKey')];
+//         let arrivalPortID = '';
+//         let arrivalPortName = '';
+//         if (cluster_info !== undefined) {
+//             arrivalPortID = cluster_info.PortID;
+//             if (AllPortBasicList[arrivalPortID] !== undefined) {
+//                 arrivalPortName = AllPortBasicList[arrivalPortID].ENName;
+//             }
+//         }
+//         let arrivalTime = li_ele.attr('arrivalTime');
+//         // 抵达港
+//         let arrival_ele = info_li.eq(5).children('input');
+//         arrival_ele.val(arrivalPortName);
+//         arrival_ele.attr('portID', arrivalPortID);
+//         // 抵达港确认信息
+//         let arrival_checked_ele = arrival_ele.next();
+//         arrival_checked_ele.attr('class', 'toCheck');
+//         // 抵港时间
+//         let arrival_time_ele = arrival_checked_ele.next();
+//         arrival_time_ele.attr('time', arrivalTime);
+//         arrival_time_ele.text(getRealTime(arrivalTime));
+//         let departureTime = info_li.eq(4).children('span').attr('time');
+//         // 更新统计信息
+//         updateDuration(departureTime, arrivalTime);
+//         // 更新航线信息
+//         let MMSI = $('#voyageDetails .fleet_title').attr('MMSI');
+//         getDetailRoute(MMSI, departureTime, arrivalTime);
+//     }
+//     event.stopPropagation();
+//     // return false; // 防止冒泡事件
+// });
 
 /**
  * 标准航线取消按钮

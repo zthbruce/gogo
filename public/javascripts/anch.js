@@ -272,7 +272,7 @@ function getAnchInfo(anchKey, lon, lat) {
                             belongPortList.push(destinationportID);
                             let port = AllPortBasicList[destinationportID];
                             // 根据全部港口对象获得相应的内容
-                            let portStr = '<li portID=' + destinationportID + '><span>' + port.ENName + '</span><i></i></li>';
+                            let portStr = '<li portID=' + destinationportID + '><span>' + port.ENName + '</span><i class = "close"></i></li>';
                             // $(".IntentPort_list").append(portStr);
                             $(".add_port").before(portStr);
                         }
@@ -615,6 +615,15 @@ $('.anchInfo_list>.pier_info').bind('input propertychange',function() {
 // 保存按钮事件
 $('#anch_save').click(function(){
     console.log("保存当前信息");
+    let anchName = $("#anch_name").val();
+    let purpose = $("#anch_purpose").val();
+    let des = $("#anch_Des").val();
+    // 开始计算
+    let anchKey = $(".anchInfo_list").attr("anchKey");
+    // 当还不是锚地的时候，生成一个锚地key值
+    if(anchKey === ""){
+        anchKey = 'A' + generateNewPierKey();
+    }
     // 锚地样式
     let anch_style =  new ol.style.Style({
         stroke: new ol.style.Stroke({
@@ -641,18 +650,6 @@ $('#anch_save').click(function(){
     current.getSource().clear(); // 当前图层
     changeAnchSaveButton(false); // 改变按钮状态
     $('#newAnch').fadeOut("normal");
-    // 开始计算
-    let anchKey = $(".anchInfo_list").attr("anchKey");
-    // 当还不是锚地的时候，生成一个锚地key值
-    if(anchKey === ""){
-        anchKey = 'A' + generateNewPierKey();
-    }
-    let anchName = $("#anch_name").val();
-    console.log(anchName);
-    let purpose = $("#anch_purpose").val();
-    console.log(purpose);
-    let des = $("#anch_Des").val();
-    console.log(des);
 
     // // 将不再需要的静止区域ID从表中删除
     // let addClusterIDList = [];
@@ -749,7 +746,8 @@ $('#anch_save').click(function(){
         type: 'POST',
         success: function (data) {
             console.log(data[1]);
-            getAllAnch(); // 刷新锚地信息
+            zoom = blmol.operation.getZoom(map);
+            getAllAnch(zoom); // 刷新锚地信息
         },
         error: function (err) {
             console.log(err);

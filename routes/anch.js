@@ -37,7 +37,7 @@ router.get('/getAnchInfo', function(req, res, next){
  */
 router.get('/anchNameSearch', function(req, res, next){
     var anchNameStr = req.query.anchNameStr;
-    var sqls = util.format("SELECT AnchorageKey, Name, Purpose, Des, centerLon, centerLat FROM T2104_Anchorage WHERE binary Name LIKE '" + anchNameStr  + "%'  LIMIT 20" );
+    var sqls = util.format("SELECT AnchorageKey, Name, Purpose, Des, CenterLon, CenterLat FROM T2104_Anchorage WHERE binary Name LIKE '" + anchNameStr  + "%'  LIMIT 20" );
     mysql.query(sqls, function (err, results) {
         if(err){
             console.log(utils.eid1);
@@ -181,7 +181,7 @@ router.post('/saveAnchDetailInfo', function(req, res, next){
  * 获取锚地显示信息
  */
 router.get('/getAnchShowInfo', function(req, res, next){
-    var sqls = util.format("SELECT AnchorageKey, Name, CenterLon, CenterLat, Location FROM T2104_Anchorage");
+    var sqls = util.format("SELECT AnchorageKey, Name, CenterLon, CenterLat, Location, DestinationPort FROM T2104_Anchorage");
     mysql.query(sqls, function (err, results) {
         if(err){
             console.log(utils.eid1);

@@ -3,7 +3,7 @@
  */
 let anchInfoList = {};
 
-function getAllAnch() {
+function getAllAnch(zoom) {
     anchInfoList ={}; // 初始化
     $.ajax({
         url: "/anch/getAnchShowInfo",
@@ -35,16 +35,22 @@ function getAllAnch() {
                                 lonLatList.push(ol.proj.fromLonLat([lat_lon[1], lat_lon[0]]))
                             }
                         }
+                        let des_port = [];
+                        if(ele.DestinationPort !== ''){
+                            des_port = ele.DestinationPort.split(";") // 多个港口列表
+                        }
                         anchInfoList[anchorageKey] ={
                             anchorageKey: anchorageKey,
                             name: name,
                             lonLatList: lonLatList,
                             lon: lon,
-                            lat: lat
+                            lat: lat,
+                            des_port: des_port
                         }
                     }
                 }
-                anchLayer(initLevel);
+                console.log(anchInfoList);
+                anchLayer(zoom);
             }
         },
         error: function (data, status, e) {
@@ -109,7 +115,7 @@ function anchLayer(zoom){
 }
 
 // 获取所有锚地区域
-getAllAnch();
+getAllAnch(initLevel);
 
 // function anchLayer(level){
 //     if (level >= 10) {

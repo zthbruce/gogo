@@ -26,11 +26,11 @@ router.get("/getVoyageList", function (req, res, next) {
         checkInfo = "('" + checkList[0] + "')";
     }
     let sql = util.format('SELECT * FROM (SELECT t1.VoyageKey, t1.ShipNumber, Name, LocalName, IMO, DepartureTime , ' +
-        'DeparturePortID, ArrivalTime, ArrivalPortID, t1.Checked FROM T3101_Voyage t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber ' +
+        'DeparturePortID, ArrivalTime, ArrivalPortID, t1.Checked FROM T3101_Voyage_20171117bak_copy t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber ' +
         'LEFT JOIN T4101_Fleet t3 ON t2.ShipNumber = t3.ShipNumber WHERE FleetNumber = "%s" AND t1.Checked IN %s AND IsValid = "1" ' +
         'ORDER BY t1.Checked DESC, IFNULL(ArrivalTime,"9999999999") DESC) t GROUP BY t.ShipNumber ORDER BY IFNULL(ArrivalTime,"9999999999") DESC, DepartureTime DESC', fleetNumber, checkInfo);
     // var sql = util.format('SELECT t1.VoyageKey, t1.ShipNumber, Name, LocalName, IMO, DepartureTime , ' +
-    //     'DeparturePortID, ArrivalTime, ArrivalPortID, t1.Checked FROM T3101_Voyage t1 ' +
+    //     'DeparturePortID, ArrivalTime, ArrivalPortID, t1.Checked FROM T3101_Voyage_20171117bak_copy t1 ' +
     //     'LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber LEFT JOIN T4101_Fleet t3 ON t2.ShipNumber = t3.ShipNumber ' +
     //     'WHERE FleetNumber = "%s" AND t1.Checked IN %s ORDER BY t1.Checked DESC, ArrivalTime LIMIT 100', fleetNumber, checkInfo);
     mysql.query(sql, function (err, results) {
@@ -51,7 +51,7 @@ router.get("/getVoyageList", function (req, res, next) {
 // router.get("/getVoyageList", function (req, res, next) {
 //     var fleetNumber = req.query.FleetNumber;
 //     var sql = util.format('SELECT t1.VoyageKey, t1.MMSI, Name, LocalName, IMO, DepartureTime , ' +
-//         'DeparturePortID, ArrivalTime, ArrivalPortID, t1.Checked FROM T3101_Voyage t1 ' +
+//         'DeparturePortID, ArrivalTime, ArrivalPortID, t1.Checked FROM T3101_Voyage_20171117bak_copy t1 ' +
 //         'LEFT JOIN T4101_Fleet t2 ON t1.MMSI = t2.MMSI LEFT JOIN T0101_Ship t3 ON t2.ShipNumber = t3.ShipNumber ' +
 //         'WHERE FleetNumber = "%s" ORDER BY t1.Checked DESC, ArrivalTime DESC LIMIT 100', fleetNumber);
 //     mysql.query(sql, function (err, results) {
@@ -76,7 +76,7 @@ router.get("/getVoyageList", function (req, res, next) {
  */
 router.get("/getVoyage", function (req, res, next) {
     var voyageKey = req.query.VoyageKey;
-    var sql = util.format("SELECT * FROM T3101_Voyage t1 LEFT JOIN T0101_Ship t2 " +
+    var sql = util.format("SELECT * FROM T3101_Voyage_20171117bak_copy t1 LEFT JOIN T0101_Ship t2 " +
         "ON t1.ShipNumber = t2.ShipNumber WHERE VoyageKey = '%s' AND IsValid = '1' ", voyageKey);
     mysql.query(sql, function (err, results) {
         if(err){
@@ -98,7 +98,7 @@ router.get("/getVoyage", function (req, res, next) {
  */
 router.get("/getVoyageDetail", function (req, res, next) {
     var voyageKey = req.query.VoyageKey;
-    var sql = util.format("SELECT * FROM T3102_VoyageDetails WHERE VoyageKey = '%s'", voyageKey);
+    var sql = util.format("SELECT * FROM T3102_VoyageDetails_20171117bak_copy WHERE VoyageKey = '%s'", voyageKey);
     mysql.query(sql, function (err, results) {
         if(err){
             res.jsonp(["404", utils.eid1]);
@@ -119,7 +119,7 @@ router.get("/getVoyageDetail", function (req, res, next) {
  */
 router.get("/getVoyageList2Ship", function (req, res, next) {
     var ShipNumber = req.query.ShipNumber;
-    var sql = util.format("SELECT VoyageKey, DepartureTime FROM T3101_Voyage WHERE ShipNumber = '%s' AND IsValid = '1' ORDER BY DepartureTime DESC", ShipNumber);
+    var sql = util.format("SELECT VoyageKey, DepartureTime FROM T3101_Voyage_20171117bak_copy WHERE ShipNumber = '%s' AND IsValid = '1' ORDER BY DepartureTime DESC", ShipNumber);
     mysql.query(sql, function (err, results) {
         if(err){
             res.jsonp(["404", utils.eid1]);
@@ -161,7 +161,7 @@ router.get("/getPurpose", function (req, res, next) {
  */
 router.post('/saveVoyage', function (req, res, next) {
     var voyageInfo = req.body;
-    var sql = util.format("UPDATE T3101_Voyage SET Cargo = '%s', DepartureTime = %s, DeparturePortID = '%s', ArrivalTime = %s, ArrivalPortID = '%s', " +
+    var sql = util.format("UPDATE T3101_Voyage_20171117bak_copy SET Cargo = '%s', DepartureTime = %s, DeparturePortID = '%s', ArrivalTime = %s, ArrivalPortID = '%s', " +
         "CargoChecked = '%s', DeparturePortChecked = '%s',  ArrivalPortChecked = '%s', Checked = '%s' WHERE VoyageKey = '%s'",
         voyageInfo.Cargo, voyageInfo.DepartureTime, voyageInfo.DeparturePortID, voyageInfo.ArrivalTime, voyageInfo.ArrivalPortID,
         voyageInfo.CargoChecked, voyageInfo.DeparturePortChecked, voyageInfo.ArrivalPortChecked, voyageInfo.Checked, voyageInfo.VoyageKey);
@@ -182,7 +182,7 @@ router.post('/saveVoyage', function (req, res, next) {
 router.post('/saveVoyageDetail', function (req, res, next) {
     var MMSI = req.body.MMSI;
     var voyageKey = req.body.VoyageKey;
-    var sql1 = util.format("DELETE FROM T3102_VoyageDetails WHERE VoyageKey = '%s'", voyageKey);
+    var sql1 = util.format("DELETE FROM T3102_VoyageDetails_20171117bak_copy WHERE VoyageKey = '%s'", voyageKey);
     mysql.query(sql1, function (err, result) {
         if(err){
             res.jsonp(['404', '清空航次详细信息失败'])
@@ -190,7 +190,7 @@ router.post('/saveVoyageDetail', function (req, res, next) {
         else{
             console.log("清空航次详细信息成功");
             var voyageDetailList = req.body.VoyageDetailList;
-            var sql2 = "INSERT INTO T3102_VoyageDetails VALUES ";
+            var sql2 = "INSERT INTO T3102_VoyageDetails_20171117bak_copy VALUES ";
             for (var i = 0; i < voyageDetailList.length; i++) {
                 var info = voyageDetailList[i];
                 if (i > 0) {
@@ -213,6 +213,24 @@ router.post('/saveVoyageDetail', function (req, res, next) {
 });
 
 
+/**
+ * 拆分出新航次
+ */
+router.post('/AddVoyage', function (req, res, next) {
+    let voyageInfo = req.body;
+    let sql = util.format('INSERT INTO T3101_Voyage_20171117bak_copy (VoyageKey, MMSI, Type, DepartureTime, DeparturePortID, ArrivalTime, ArrivalPortID, ShipNumber)' +
+        'VALUE("%s", "%s", "%s", %s, "%s",  %s, "%s", "%s" )', voyageInfo.Voyagekey, voyageInfo.MMSI, voyageInfo.Type,
+        voyageInfo.DepartureTime, voyageInfo.DeparturePortID, voyageInfo.ArrivalTime, voyageInfo.ArrivalPortID, voyageInfo.ShipNumber);
+    console.log(sql);
+    mysql.query(sql, function (err, result) {
+        if(err){
+            res.jsonp(['404', '插入航次信息失败'])
+        }
+        else{
+            res.jsonp(['200', '插入航次信息成功'])
+        }
+    })
+});
 
 
 
