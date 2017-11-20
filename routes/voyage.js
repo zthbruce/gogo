@@ -225,7 +225,7 @@ router.get('/getDetailRouteInfo', function(req, res, next) {
                     count++;
                 }
             }
-            sendData += util.format('],"ETA":%s, "ArrivalPort":"%s" }', arrival_ETA, arrival_port);
+            sendData += util.format('],"ETA":"%s", "ArrivalPort":"%s" }', arrival_ETA, arrival_port);
             console.log(sendData);
             // sendData += ']}';
             if(count>0){

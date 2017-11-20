@@ -56,7 +56,6 @@ let cargoMap = [];
 /**
  * 更新航次列表
  */
-
 function updateVoyageList(){
     /* 初始化 */
     // let select = $(".voyageList_select .selected_fleet");
@@ -406,7 +405,6 @@ function getVoyageContent(voyageKey) {
                 if(shipName === ''){
                     shipName = content.Name
                 }
-                console.log(shipName);
                 let cargo = content.Cargo;
                 let cargoChecked = content.CargoChecked;
                 let departurePortID = content.DeparturePortID;

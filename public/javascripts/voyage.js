@@ -23,6 +23,10 @@ function getRotation(start, end){
  * @param ETA
  */
 function getArrivalTime(ETA) {
+    // 如果是字符串那么转换位Int型
+    if(typeof  ETA === "string"){
+        ETA = parseInt(ETA);
+    }
     let month = Math.floor(ETA/65536.0);  //月
     let day = Math.floor((ETA - month * 65536)/2048.0);   //日
     let hour = Math.floor((ETA - month * 65536 - day * 2048)/64.0);  //小时
@@ -33,7 +37,8 @@ function getArrivalTime(ETA) {
     let year = current_time.getFullYear();
     let current_month = current_time.getMonth() + 1;
     // 如果有跨年的情况
-    if(current_month > month){
+    let month_gap = current_month - month;
+    if(month_gap > 0 && (12 - month_gap) <= 6){
         year = year + 1;
     }
     console.log(year + "-" + (month < 10 ? '0' + month:month) + "-" + (day < 10? '0' + day: day) +
@@ -161,7 +166,6 @@ function getBasicRouteList(MMSI) {
 function getDetailRoute(MMSI, startTime, stopTime) {
     if(stopTime === null || stopTime === 0 || stopTime === undefined){
         stopTime = new Date().getTime().toString().slice(0, 10);
-        console.log(stopTime);
     }
     console.log(startTime + "," + stopTime);
     route.getSource().clear(); // 初始化清空
@@ -280,27 +284,30 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                 view.setCenter(lonLatInfo[0]);
                 view.setZoom(2);
                 /* 填充对应信息 */
-                let arrivalTimeEst = getArrivalTime(ETA);
-                let arrivalTimestamp = Date.parse(new Date(arrivalTimeEst)) / 1000;
                 let arrival_ele = info_li.eq(5).children('input');
                 let arrivalTime_ele = arrival_ele.next().next();
                 arrival_ele.css('color', 'white');
                 arrivalTime_ele.css('color', 'white');
-                // 当预计的时间在未来且时间合理
-                // if(arrivalTimestamp > startTime){
-                if(arrivalTimestamp > startTime && (arrivalTimestamp - startTime) < (6 * 30 * 24 * 3600)){
-                    // 到达港
-                    if(arrival_ele.val() === '~' && arrivalPort !== ''){
-                        arrival_ele.val(arrivalPort);
-                        arrival_ele.css('color', 'orange');
-                    }
-                    if(arrivalTime_ele.text() === '~' && ETA !== ''){
-                        arrivalTime_ele.text(arrivalTimeEst);
-                        arrivalTime_ele.css('color', 'orange');
+                // let arrivalTimestamp = 0;
+                if(ETA !== '' && arrivalPort !== ''){
+                    let arrivalTimeEst = getArrivalTime(ETA);
+                    let arrivalTimestamp = Date.parse(new Date(arrivalTimeEst)) / 1000;
+                    let current_time = new Date().getTime().toString().slice(0, 10);
+                    if(arrivalTimestamp > current_time){
+                        // 如果原先为空
+                        if(arrival_ele.val() === '~'){
+                            arrival_ele.val(arrivalPort);
+                            arrival_ele.css('color', 'orange');
+                        }
+                        // 如果原先为空
+                        if(arrivalTime_ele.text() === '~'){
+                            arrivalTime_ele.text(arrivalTimeEst);
+                            arrivalTime_ele.css('color', 'orange');
+                        }
                     }
                 }
-                info_li.eq(7).text('航速：' + (mileage / sailTime).toFixed(4) +'kts'); // 航速
-                info_li.eq(8).text('航程：' + mileage.toFixed(4) + "nm"); // 航程
+                info_li.eq(7).text('航速：' + (mileage / sailTime).toFixed(1) +'kts'); // 航速
+                info_li.eq(8).text('航程：' + Math.round(mileage) + "nm"); // 航程
             }
         },
         error: function (data, status, e) {
