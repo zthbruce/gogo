@@ -61,8 +61,9 @@ function updateVoyageList(){
     // let select = $(".voyageList_select .selected_fleet");
     // let fleetNumber = select.attr("FleetNumber");
     lastFleetNumber = fleetNumber;
-    $(".voyageList_content").empty();
-    let voyageList = $("#voyageList_List");
+    let voyageList_ul = $(".voyageList_content");
+    voyageList_ul.empty();
+    // let voyageList = $("#voyageList_List");
     let checkList = [];
     if($(".voyage_toCheck").prop("checked")){
         checkList.push('0');
@@ -70,14 +71,17 @@ function updateVoyageList(){
     if($(".voyage_checked").prop("checked")){
         checkList.push('1');
     }
-    if(checkList.length > 0) {
+    if(checkList.length === 0){
+        checkList = '';
+    }
+    // if(checkList.length > 0) {
         $.ajax({
             url: "/voyageManagement/getVoyageList",
             data: {FleetNumber: fleetNumber, CheckList: checkList},
             type: "GET",
             beforeSend: function () {
                 console.log("loading");
-                voyageList.css("background", 'url("/images/ajax-loader.gif") no-repeat center');
+                voyageList_ul.css("background", 'url("/images/ajax-loader.gif") no-repeat center');
             },
             success: function (data) {
                 if (data[0] === "200") {
@@ -122,17 +126,18 @@ function updateVoyageList(){
                         }
                         // $(".voyageList_content").append(voyage_li);
                     }
-                    let voyageList_ul = $(".voyageList_content");
                     voyageList_ul.append(voyage_ul);
                     voyageList_ul.find('li:nth-child(n+51)').hide(); // 默认只显示50条
                 }
+                console.log("加载结束");
+                voyageList_ul.css("background", ""); // 清除背景
             },
             complete: function () {
-                console.log("加载结束");
-                voyageList.css("background", ""); // 清除背景
+                // console.log("加载结束");
+                // voyageList.css("background", ""); // 清除背景
             }
         })
-    }
+    // }
 }
 
 /**
@@ -807,7 +812,8 @@ $('.title_RestoreBtn').click(function(){
 $(".route_Voyage_btn").click(function () {
     console.log("航次管理");
     /* 初始化 */
-    $(".voyage_toCheck").prop("checked", true);
+    // $(".voyage_toCheck").prop("checked", true);
+    $(".voyage_toCheck").prop("checked", false);
     $(".voyage_checked").prop("checked", false);
     lastToCheckStatus = true;
     lastCheckedStatus = false;
