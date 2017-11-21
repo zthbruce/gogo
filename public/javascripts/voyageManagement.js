@@ -626,7 +626,8 @@ function saveVoyage() {
         $(".voyageBtn_SaveOrConfirm").text("保存");
         voyage_checked = "1"; // check状态信息
         checked_span.text("(已确认)");
-        checked_span.css({'color':'#00ff00'});
+        checked_span.css({'color':'#faff96'});
+        // checked_span.css({'color':'#00ff00'});
         // 标准航线和标准货物可点击
         standardGoodsStatus  = true;
         standardRouteStatus = true;
