@@ -1145,10 +1145,10 @@ $(".oneVoyage_DockedList").delegate(".oneVoyage_EndBtn", "click", function (even
         });
         // 保存新航次流水信息
         saveDetail(li_ele.nextAll().andSelf(), new_voyageKey);
-        // 保存现航次信息
-        saveVoyage();
         /* 该行以下信息消失 */
         next_ele.remove();
+        // 保存现航次信息
+        saveVoyage();
     }
 
     event.stopPropagation();

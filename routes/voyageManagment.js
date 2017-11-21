@@ -195,7 +195,7 @@ router.post('/saveVoyageDetail', function (req, res, next) {
         else{
             console.log("清空航次详细信息成功");
             var voyageDetailList = req.body.VoyageDetailList;
-            var sql2 = "INSERT INTO T3102_VoyageDetails VALUES ";
+            var sql2 = "INSERT Ignore INTO T3102_VoyageDetails VALUES ";
             for (var i = 0; i < voyageDetailList.length; i++) {
                 var info = voyageDetailList[i];
                 if (i > 0) {
@@ -223,7 +223,7 @@ router.post('/saveVoyageDetail', function (req, res, next) {
  */
 router.post('/AddVoyage', function (req, res, next) {
     let voyageInfo = req.body;
-    let sql = util.format('INSERT INTO T3101_Voyage (VoyageKey, MMSI, Type, DepartureTime, DeparturePortID, ArrivalTime, ArrivalPortID, ShipNumber)' +
+    let sql = util.format('INSERT ignore INTO T3101_Voyage (VoyageKey, MMSI, Type, DepartureTime, DeparturePortID, ArrivalTime, ArrivalPortID, ShipNumber)' +
         'VALUE("%s", "%s", "%s", %s, "%s",  %s, "%s", "%s" )', voyageInfo.Voyagekey, voyageInfo.MMSI, voyageInfo.Type,
         voyageInfo.DepartureTime, voyageInfo.DeparturePortID, voyageInfo.ArrivalTime, voyageInfo.ArrivalPortID, voyageInfo.ShipNumber);
     console.log(sql);
