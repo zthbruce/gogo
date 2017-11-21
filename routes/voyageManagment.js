@@ -103,7 +103,7 @@ router.get("/getVoyage", function (req, res, next) {
  */
 router.get("/getVoyageDetail", function (req, res, next) {
     var voyageKey = req.query.VoyageKey;
-    var sql = util.format("SELECT * FROM T3102_VoyageDetails WHERE VoyageKey = '%s'", voyageKey);
+    var sql = util.format("SELECT * FROM T3102_VoyageDetails WHERE VoyageKey = '%s' AND IsValid = '1'", voyageKey);
     mysql.query(sql, function (err, results) {
         if(err){
             res.jsonp(["404", utils.eid1]);
