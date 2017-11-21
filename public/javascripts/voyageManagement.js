@@ -71,13 +71,14 @@ function updateVoyageList(){
     if($(".voyage_checked").prop("checked")){
         checkList.push('1');
     }
-    if(checkList.length === 0){
-        checkList = '';
-    }
+    // if(checkList.length === 0){
+    //     checkList = '';
+    // }
     // if(checkList.length > 0) {
         $.ajax({
             url: "/voyageManagement/getVoyageList",
-            data: {FleetNumber: fleetNumber, CheckList: checkList},
+            data: {FleetNumber: fleetNumber, CheckList: JSON.stringify(checkList)},
+            dataType: 'json',
             type: "GET",
             beforeSend: function () {
                 console.log("loading");

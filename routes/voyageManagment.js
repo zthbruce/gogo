@@ -16,15 +16,15 @@ var router = express.Router();
  * 传入参数: FleetNumber
  */
 router.get("/getVoyageList", function (req, res, next) {
-    console.log(req.query.CheckList);
     let fleetNumber = req.query.FleetNumber;
-    let checkList = req.query.CheckList;
+    let checkList = JSON.parse(req.query.CheckList);
+    console.log(checkList.length);
     let sql = util.format('SELECT * FROM (SELECT t1.VoyageKey, t1.ShipNumber, Name, LocalName, IMO, DepartureTime , ' +
         'DeparturePortID, ArrivalTime, ArrivalPortID, t1.Checked FROM T3101_Voyage t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber ' +
         'LEFT JOIN T4101_Fleet t3 ON t2.ShipNumber = t3.ShipNumber WHERE FleetNumber = "%s" AND IsValid = "1" ' +
         'ORDER BY t1.Checked DESC, IFNULL(ArrivalTime,"9999999999") DESC) t GROUP BY t.ShipNumber ORDER BY IFNULL(ArrivalTime,"9999999999") DESC, DepartureTime DESC', fleetNumber);
     // 如果有确认信息，按照确认信息进行显示
-    if(checkList !== ''){
+    if(checkList.length > 0){
         let checkInfo = "('" + checkList[0] + "')";
         if (checkList.length === 2) {
             checkInfo = "('0', '1')"
@@ -32,7 +32,7 @@ router.get("/getVoyageList", function (req, res, next) {
         sql = util.format('SELECT t1.VoyageKey, t1.ShipNumber, Name, LocalName, IMO, DepartureTime , ' +
             'DeparturePortID, ArrivalTime, ArrivalPortID, t1.Checked FROM T3101_Voyage t1 ' +
             'LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber LEFT JOIN T4101_Fleet t3 ON t2.ShipNumber = t3.ShipNumber ' +
-            'WHERE FleetNumber = "%s" AND t1.Checked IN %s ORDER BY t1.Checked DESC, ArrivalTime LIMIT 500', fleetNumber, checkInfo);
+            'WHERE FleetNumber = "%s" AND t1.Checked IN %s ORDER BY t1.Checked DESC, IFNULL(ArrivalTime,"9999999999") DESC, DepartureTime DESC LIMIT 500', fleetNumber, checkInfo);
         // let sql = util.format('SELECT * FROM (SELECT t1.VoyageKey, t1.ShipNumber, Name, LocalName, IMO, DepartureTime , ' +
         //     'DeparturePortID, ArrivalTime, ArrivalPortID, t1.Checked FROM T3101_Voyage t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber ' +
         //     'LEFT JOIN T4101_Fleet t3 ON t2.ShipNumber = t3.ShipNumber WHERE FleetNumber = "%s" AND t1.Checked IN %s AND IsValid = "1" ' +
@@ -236,8 +236,6 @@ router.post('/AddVoyage', function (req, res, next) {
         }
     })
 });
-
-
 
 
 module.exports = router;
