@@ -202,7 +202,7 @@ router.post('/saveVoyageDetail', function (req, res, next) {
                     sql2 += ","
                 }
                 sql2 += "('" + MMSI + "','" + info.DepartureTime + "','" + info.ArrivalTime + "','" + info.StationaryAreaKey +
-                    "','" + voyageKey + "','" + info.Purpose + "','" + info.CenterLon + "','" + info.CenterLat + "')";
+                    "','" + voyageKey + "','" + info.Purpose + "','" + info.CenterLon + "','" + info.CenterLat + "', '1')";
             }
             console.log(sql2);
             mysql.query(sql2, function (err, data) {

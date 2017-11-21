@@ -293,7 +293,8 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                     let arrivalTimeEst = getArrivalTime(ETA);
                     let arrivalTimestamp = Date.parse(new Date(arrivalTimeEst)) / 1000;
                     let current_time = new Date().getTime().toString().slice(0, 10);
-                    if(arrivalTimestamp > current_time){
+                    // 比当前大但是比开始时间不能超过6个月
+                    if(arrivalTimestamp > current_time && (arrivalTimestamp - startTime) / (3600 * 24 * 30) < 6){
                         // 如果原先为空
                         if(arrival_ele.val() === '~'){
                             arrival_ele.val(arrivalPort);
