@@ -317,7 +317,8 @@ function updateDuration(departureTime, arrivalTime) {
     let totalTime = arrivalTime - departureTime;
     let li_ele = $('.oneVoyage_DockedList>li');
     let voyage_type = $('#voyageDetails').find('>.fleet_title').attr('VoyageType');
-    if(voyage_type === '空载'){
+    if(voyage_type === '0'){
+    // if(voyage_type === '空载'){
         li_ele = li_ele.slice(1, li_ele.length - 1)
     }
     for (let j = 0; j < li_ele.length; j++) {
@@ -1082,15 +1083,18 @@ $(".oneVoyage_DockedList").delegate(".oneVoyage_EndBtn", "click", function (even
             arrivalPortName = AllPortBasicList[arrivalPortID].ENName;
         }
         // 抵港时间
-        if(voyageType === '满载'){
+        if(voyageType === '1'){
+        // if(voyageType === '满载'){
             // 满载采用流水结束时间
              arrivalTime = li_ele.attr('arrivalTime');
-             next_voyageType = '空载';
+             next_voyageType = '0';
+             // next_voyageType = '空载';
         }
         else{
             // 空载采用流水开始时间
             arrivalTime = li_ele.attr('departureTime');
-            next_voyageType = '空载';
+            next_voyageType = '1';
+            // next_voyageType = '空载';
         }
         // 上一个航次的结束时间是下一个航次的开始时间
         next_departureTime = arrivalTime;
