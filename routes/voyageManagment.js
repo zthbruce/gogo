@@ -22,7 +22,7 @@ router.get("/getVoyageList", function (req, res, next) {
     let sql = util.format('SELECT * FROM (SELECT t1.VoyageKey, t1.ShipNumber, Name, LocalName, IMO, DepartureTime , ' +
         'DeparturePortID, ArrivalTime, ArrivalPortID, t1.Checked FROM T3101_Voyage t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber ' +
         'LEFT JOIN T4101_Fleet t3 ON t2.ShipNumber = t3.ShipNumber WHERE FleetNumber = "%s" AND IsValid = "1" ' +
-        'ORDER BY IFNULL(ArrivalTime,"9999999999") DESC) t GROUP BY t.ShipNumber ORDER BY IFNULL(ArrivalTime,"9999999999") DESC, DepartureTime DESC', fleetNumber);
+        'ORDER BY IFNULL(ArrivalTime,"9999999999") DESC, DepartureTime DESC) t GROUP BY t.ShipNumber ORDER BY IFNULL(ArrivalTime,"9999999999") DESC, DepartureTime DESC', fleetNumber);
     // 如果有确认信息，按照确认信息进行显示
     if(checkList.length > 0){
         let checkInfo = "('" + checkList[0] + "')";
@@ -167,9 +167,9 @@ router.get("/getPurpose", function (req, res, next) {
 router.post('/saveVoyage', function (req, res, next) {
     var voyageInfo = req.body;
     var sql = util.format("UPDATE T3101_Voyage SET Cargo = '%s', DepartureTime = %s, DeparturePortID = '%s', ArrivalTime = %s, ArrivalPortID = '%s', " +
-        "CargoChecked = '%s', DeparturePortChecked = '%s',  ArrivalPortChecked = '%s', Checked = '%s' WHERE VoyageKey = '%s'",
+        "CargoChecked = '%s', DeparturePortChecked = '%s',  ArrivalPortChecked = '%s', Checked = '%s', Mileage = %s WHERE VoyageKey = '%s'",
         voyageInfo.Cargo, voyageInfo.DepartureTime, voyageInfo.DeparturePortID, voyageInfo.ArrivalTime, voyageInfo.ArrivalPortID,
-        voyageInfo.CargoChecked, voyageInfo.DeparturePortChecked, voyageInfo.ArrivalPortChecked, voyageInfo.Checked, voyageInfo.VoyageKey);
+        voyageInfo.CargoChecked, voyageInfo.DeparturePortChecked, voyageInfo.ArrivalPortChecked, voyageInfo.Checked, voyageInfo.Mileage, voyageInfo.VoyageKey);
     console.log(sql);
     mysql.query(sql, function (err, result) {
         if(err){
@@ -223,9 +223,9 @@ router.post('/saveVoyageDetail', function (req, res, next) {
  */
 router.post('/AddVoyage', function (req, res, next) {
     let voyageInfo = req.body;
-    let sql = util.format('INSERT ignore INTO T3101_Voyage (VoyageKey, MMSI, Type, DepartureTime, DeparturePortID, ArrivalTime, ArrivalPortID, ShipNumber)' +
-        'VALUE("%s", "%s", "%s", %s, "%s",  %s, "%s", "%s" )', voyageInfo.Voyagekey, voyageInfo.MMSI, voyageInfo.Type,
-        voyageInfo.DepartureTime, voyageInfo.DeparturePortID, voyageInfo.ArrivalTime, voyageInfo.ArrivalPortID, voyageInfo.ShipNumber);
+    let sql = util.format('Replace INTO T3101_Voyage (VoyageKey, MMSI, Type, DepartureTime, DeparturePortID, ArrivalTime, ArrivalPortID, ShipNumber, OriginalKey)' +
+        'VALUE("%s", "%s", "%s", %s, "%s",  %s, "%s", "%s", "%s" )', voyageInfo.Voyagekey, voyageInfo.MMSI, voyageInfo.Type,
+        voyageInfo.DepartureTime, voyageInfo.DeparturePortID, voyageInfo.ArrivalTime, voyageInfo.ArrivalPortID, voyageInfo.ShipNumber, voyageInfo.OriginalKey);
     console.log(sql);
     mysql.query(sql, function (err, result) {
         if(err){

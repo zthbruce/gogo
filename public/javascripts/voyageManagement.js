@@ -672,13 +672,14 @@ function saveVoyage() {
     if(arrival_time === undefined){
         arrival_time = null
     }
+    let mileage = info_li.eq(8).attr('mileage');
     // 航行时长
     // info_li.eq(6).text(getDuration(sailingTime));
     // info_li.eq(7).text('航速：' )
     // // info_li.eq(8).text('航程：' + content.Mileage);
     let voyageInfo =  {VoyageKey: voyageKey, Cargo: cargo, DepartureTime: departure_time, DeparturePortID: departure_port,
         ArrivalTime: arrival_time, ArrivalPortID: arrival_port, CargoChecked: cargo_checked, DeparturePortChecked: departure_checked,
-        ArrivalPortChecked: arrival_checked, Checked: voyage_checked};
+        ArrivalPortChecked: arrival_checked, Checked: voyage_checked, Mileage: mileage};
     console.log(voyageInfo);
     $.ajax({
         url:'/voyageManagement/saveVoyage',
@@ -1123,7 +1124,7 @@ $(".oneVoyage_DockedList").delegate(".oneVoyage_EndBtn", "click", function (even
         // 更新航线信息
         let MMSI = title_ele.attr('MMSI');
         getDetailRoute(MMSI, departureTime, arrivalTime);
-
+        let voyageKey = title_ele.attr('voyageKey');
         /* 剩余部分生成新航次 */
         // let voyageList2Ship_ele = $('.shipVoyageList_List');
         // let li_str = '<li><div voyageKey=' + voyageKey + '></div><span>' + getRealTime(next_departureTime).slice(0, 10) + '</span></li>';
@@ -1131,7 +1132,7 @@ $(".oneVoyage_DockedList").delegate(".oneVoyage_EndBtn", "click", function (even
         let new_voyageKey = mmsi + '#' + next_departureTime; // 生成新航次
         let shipNumber = title_ele.attr('ShipNumber');
         let voyageInfo = {Voyagekey: new_voyageKey , MMSI: MMSI, Type: next_voyageType, ShipNumber: shipNumber,
-            DepartureTime: next_departureTime, DeparturePortID: next_departurePort, ArrivalTime: old_arrivalTime , ArrivalPortID: old_arrivalPortID};
+            DepartureTime: next_departureTime, DeparturePortID: next_departurePort, ArrivalTime: old_arrivalTime , ArrivalPortID: old_arrivalPortID, OriginalKey:  voyageKey};
         /* 更新数据库信息 */
         // 保存新航次信息
         $.ajax({
@@ -1152,7 +1153,7 @@ $(".oneVoyage_DockedList").delegate(".oneVoyage_EndBtn", "click", function (even
         saveDetail(li_ele.nextAll().andSelf(), new_voyageKey);
         /* 该行以下信息消失 */
         next_ele.remove();
-        // 保存现航次信息
+        // 保存现有航次信息
         saveVoyage();
     }
 

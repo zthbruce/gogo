@@ -308,6 +308,7 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                     }
                 }
                 info_li.eq(7).text('航速：' + (mileage / sailTime).toFixed(1) +'kts'); // 航速
+                info_li.eq(8).attr('mileage', Math.round(mileage)); // 航程属性
                 info_li.eq(8).text('航程：' + Math.round(mileage) + "nm"); // 航程
             }
         },
