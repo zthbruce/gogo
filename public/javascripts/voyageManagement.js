@@ -431,7 +431,9 @@ function getVoyageContent(voyageKey) {
                 let arrivalPortChecked = content.ArrivalPortChecked;
                 let arrivalTime = content.ArrivalTime;
                 let MMSI = content.MMSI;
+                let originalKey = content.OriginalKey;
                 title_ele.attr('MMSI', MMSI);
+                title_ele.attr('originalKey', originalKey);
                 /* 表信息填充 */
                 info_li.eq(0).children('input').val(shipName).attr('title',shipName); // 船名
                 info_li.eq(1).text('IMO: ' + content.IMO); // IMO
@@ -1017,11 +1019,13 @@ $(".oneVoyageInfo").delegate("select", "change", function () {
 /**
  * 监听详细列表的select
  */
-$(".oneVoyage_DockedList").delegate("select", "change", function () {
+$(".oneVoyage_DockedList").delegate("select", "click", function (event) {
     updateSaveStatus(true); // 更新保存按钮状态
     let departureTime = info_li.eq(4).children('span').attr('time');
     let arrivalTime = info_li.eq(5).children('span').attr('time');
     updateDuration(departureTime, arrivalTime); // 更新统计量
+    event.stopPropagation();
+    return false;
 });
 
 /**
@@ -1124,7 +1128,11 @@ $(".oneVoyage_DockedList").delegate(".oneVoyage_EndBtn", "click", function (even
         // 更新航线信息
         let MMSI = title_ele.attr('MMSI');
         getDetailRoute(MMSI, departureTime, arrivalTime);
-        let voyageKey = title_ele.attr('voyageKey');
+        // let voyageKey = title_ele.attr('voyageKey');
+        let originalKey = title_ele.attr('originalKey');
+        if(originalKey === undefined){
+            originalKey = title_ele.attr('voyageKey');
+        }
         /* 剩余部分生成新航次 */
         // let voyageList2Ship_ele = $('.shipVoyageList_List');
         // let li_str = '<li><div voyageKey=' + voyageKey + '></div><span>' + getRealTime(next_departureTime).slice(0, 10) + '</span></li>';
@@ -1132,7 +1140,7 @@ $(".oneVoyage_DockedList").delegate(".oneVoyage_EndBtn", "click", function (even
         let new_voyageKey = mmsi + '#' + next_departureTime; // 生成新航次
         let shipNumber = title_ele.attr('ShipNumber');
         let voyageInfo = {Voyagekey: new_voyageKey , MMSI: MMSI, Type: next_voyageType, ShipNumber: shipNumber,
-            DepartureTime: next_departureTime, DeparturePortID: next_departurePort, ArrivalTime: old_arrivalTime , ArrivalPortID: old_arrivalPortID, OriginalKey:  voyageKey};
+            DepartureTime: next_departureTime, DeparturePortID: next_departurePort, ArrivalTime: old_arrivalTime , ArrivalPortID: old_arrivalPortID, OriginalKey: originalKey};
         /* 更新数据库信息 */
         // 保存新航次信息
         $.ajax({
@@ -1263,14 +1271,6 @@ $('#voyageDetails .title_offbtn,#voyage_Minimize .title_offbtn').click(function 
  */
 $('.oneVoyage_DockedList').delegate('li', 'click', function () {
     current.getSource().clear();
-    // let stationaryAreaKey = $(this).attr('stationaryareakey');
-    // let cluster_info = anchInfoList[stationaryAreaKey];
-    // if(cluster_info === undefined){
-    //     cluster_info = allPoints[stationaryAreaKey];
-    // }
-    // let lon = cluster_info['lon'];
-    // let lat = cluster_info['lat'];
-    //
     let lon = parseFloat($(this).attr('lon'));
     let lat = parseFloat($(this).attr('lat'));
     let lat_lon = WGS84transformer(lat, lon);
