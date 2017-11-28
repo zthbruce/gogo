@@ -95,13 +95,14 @@ $('.screen_scale').click(function(){
         vector.getSource().clear();
     }
     if(rangingDisplay){
+
         blmol.bind.removeOnClickListener(rangingMouseMove);
         blmol.bind.removeOnClickListener(rangingMouseClick);
         blmol.bind.removeOnClickListener(rangingMouseDoubleClick);
         $(document).off('click');
         helpTooltipElement.classList.add('hidden');
         rangingInLogo = false;
-        map.removeInteraction(draw);
+        map.removeInteraction(drawRanging);
         map.getOverlays().clear();
         blmol.layer.clear(range_vector);
         range_vector.getSource().clear();
@@ -252,7 +253,8 @@ let continueLineMsg = '在地图上双击鼠标左键结束测距，总距离：
 let rangingInLogo = false;//设置绘制中标志 rangingInLogo
 let lastTimeTotalDistance = '0nm';//设置上一次总距离
 
-// let draw;
+let drawRanging;
+
 
 //处理指针移动
 let pointerMoveHandler = function(evt) {
@@ -275,7 +277,7 @@ let formatLength = function(line) {
 //设置样式、函数等
 function addRangingInteraction() {
     let type = 'LineString';
-    let draw = new ol.interaction.Draw({
+    drawRanging = new ol.interaction.Draw({
         source: range_source,
         type: (type),
         style: new ol.style.Style({
@@ -295,10 +297,10 @@ function addRangingInteraction() {
             })
         })
     });
-    map.addInteraction(draw);
+    map.addInteraction(drawRanging);
     createHelpTooltip();
     let listener;
-    draw.on('drawstart',function(evt) {
+    drawRanging.on('drawstart',function(evt) {
         sketch = evt.feature;
         let tooltipCoord = evt.coordinate;
         startRangingLogo = true;
@@ -326,7 +328,7 @@ function addRangingInteraction() {
             helpTooltipElement.innerHTML = continueLineMsg + output;
         });
     }, this);
-    draw.on('drawend',function() {
+    drawRanging.on('drawend',function() {
         startRangingLogo = false;
         lastTimeTotalDistance = '0nm';
         sketch = null;

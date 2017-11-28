@@ -583,9 +583,12 @@ function getVoyageContent(voyageKey) {
 /**
  * 保存流水细节
  * @param detail_list
+ * @param voyageKey
  */
 function saveDetail(detail_list, voyageKey) {
-    let MMSI = $('#voyageDetails>.fleet_title').attr("MMSI");
+    let title_ele = $('#voyageDetails>.fleet_title');
+    let MMSI = title_ele.attr("MMSI");
+    let shipNumber = title_ele.attr("ShipNumber");
     let voyageDetailList = [];
     for (let j = 0; j < detail_list.length; j++) {
         let ele = detail_list.eq(j);
@@ -604,7 +607,7 @@ function saveDetail(detail_list, voyageKey) {
     $.ajax({
         url:'/voyageManagement/saveVoyageDetail',
         contentType: 'application/json; charset=utf-8',
-        data: JSON.stringify({MMSI: MMSI, VoyageKey: voyageKey, VoyageDetailList: voyageDetailList}),
+        data: JSON.stringify({ShipNumber:shipNumber, MMSI: MMSI, VoyageKey: voyageKey, VoyageDetailList: voyageDetailList}),
         type: 'POST',
         dataType: 'json',
         success: function (data) {
@@ -1137,8 +1140,9 @@ $(".oneVoyage_DockedList").delegate(".oneVoyage_EndBtn", "click", function (even
         // let voyageList2Ship_ele = $('.shipVoyageList_List');
         // let li_str = '<li><div voyageKey=' + voyageKey + '></div><span>' + getRealTime(next_departureTime).slice(0, 10) + '</span></li>';
         // voyageList2Ship_ele.prepend(li_str);
-        let new_voyageKey = mmsi + '#' + next_departureTime; // 生成新航次
+        // let new_voyageKey = mmsi + '#' + next_departureTime; // 生成新航次
         let shipNumber = title_ele.attr('ShipNumber');
+        let new_voyageKey = shipNumber + '#' + next_departureTime; // 生成新航次
         let voyageInfo = {Voyagekey: new_voyageKey , MMSI: MMSI, Type: next_voyageType, ShipNumber: shipNumber,
             DepartureTime: next_departureTime, DeparturePortID: next_departurePort, ArrivalTime: old_arrivalTime , ArrivalPortID: old_arrivalPortID, OriginalKey: originalKey};
         /* 更新数据库信息 */

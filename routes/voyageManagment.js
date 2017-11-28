@@ -185,9 +185,10 @@ router.post('/saveVoyage', function (req, res, next) {
  * 保存航次详细信息
  */
 router.post('/saveVoyageDetail', function (req, res, next) {
-    var MMSI = req.body.MMSI;
-    var voyageKey = req.body.VoyageKey;
-    var sql1 = util.format("DELETE FROM T3102_VoyageDetails WHERE VoyageKey = '%s'", voyageKey);
+    let MMSI = req.body.MMSI;
+    let shipNumber = req.body.ShipNumber;
+    let voyageKey = req.body.VoyageKey;
+    let sql1 = util.format("DELETE FROM T3102_VoyageDetails WHERE VoyageKey = '%s'", voyageKey);
     mysql.query(sql1, function (err, result) {
         if(err){
             res.jsonp(['404', '清空航次详细信息失败'])
@@ -201,8 +202,8 @@ router.post('/saveVoyageDetail', function (req, res, next) {
                 if (i > 0) {
                     sql2 += ","
                 }
-                sql2 += "('" + MMSI + "','" + info.DepartureTime + "','" + info.ArrivalTime + "','" + info.StationaryAreaKey +
-                    "','" + voyageKey + "','" + info.Purpose + "','" + info.CenterLon + "','" + info.CenterLat + "', '1')";
+                sql2 += "('" + shipNumber + "','" + info.DepartureTime + "','" + info.ArrivalTime + "','" + info.StationaryAreaKey +
+                    "','" + voyageKey + "','" + info.Purpose + "','" + info.CenterLon + "','" + info.CenterLat + "','"+ MMSI +"', '1')";
             }
             console.log(sql2);
             mysql.query(sql2, function (err, data) {
@@ -223,9 +224,9 @@ router.post('/saveVoyageDetail', function (req, res, next) {
  */
 router.post('/AddVoyage', function (req, res, next) {
     let voyageInfo = req.body;
-    let sql = util.format('Replace INTO T3101_Voyage (VoyageKey, MMSI, Type, DepartureTime, DeparturePortID, ArrivalTime, ArrivalPortID, ShipNumber, OriginalKey)' +
-        'VALUE("%s", "%s", "%s", %s, "%s",  %s, "%s", "%s", "%s" )', voyageInfo.Voyagekey, voyageInfo.MMSI, voyageInfo.Type,
-        voyageInfo.DepartureTime, voyageInfo.DeparturePortID, voyageInfo.ArrivalTime, voyageInfo.ArrivalPortID, voyageInfo.ShipNumber, voyageInfo.OriginalKey);
+    let sql = util.format('Replace INTO T3101_Voyage (VoyageKey, ShipNumber, Type, DepartureTime, DeparturePortID, ArrivalTime, ArrivalPortID, MMSI, OriginalKey)' +
+        'VALUE("%s", "%s", "%s", %s, "%s",  %s, "%s", "%s", "%s" )', voyageInfo.Voyagekey, voyageInfo.ShipNumber, voyageInfo.Type,
+        voyageInfo.DepartureTime, voyageInfo.DeparturePortID, voyageInfo.ArrivalTime, voyageInfo.ArrivalPortID, voyageInfo.MMSI, voyageInfo.OriginalKey);
     console.log(sql);
     mysql.query(sql, function (err, result) {
         if(err){
