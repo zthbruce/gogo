@@ -1410,9 +1410,9 @@ $('.search_status').mouseleave(function(){
  * 选择状态列表元素
  */
 $('.Search_statusSelect').delegate('li', 'click', function () {
-    let status_text = $('.Search_statusText');
+    var status_text = $('.Search_statusText');
     status_text.val($(this).text());
-    status_text.attr('type', $(this).attr('type'));
+    status_text.prop('type', $(this).attr('type'));
     $('.Search_statusSelect').slideUp(300);
 });
 

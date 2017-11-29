@@ -1484,6 +1484,29 @@
             });
         });
     });
+//    $.ajax({
+//        async: false,
+//        url: "/parkArea/getInfo",
+//        dataType: 'json',
+//        cache: false,
+//        timeout: 5000,
+//        type: 'GET',
+//        success: function (data) {
+//            let res = data;
+//            // 返回的代码
+//            // 成功获取数据,数据结构<cluster_id, lon, lat, level, type>
+//            if (res[0] === '200') {
+//                console.log('成功获取信息');
+//                let sendData = res[1];
+//                // console.log(sendData);
+//                allPoints = JSON.parse(sendData);
+//                parkAreaLayer(); // 首先刷新一次
+//            }
+//        },
+//        error: function (data, status, e) {
+//            console.log(e);
+//        }
+//    })
 //    $('#shipInfo_EnterTime').val('2015-01-01');
 </script>
 
