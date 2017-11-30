@@ -211,7 +211,8 @@ function getVoyageList2Ship(shipNumber, voyageKey){
                 for(let i = 0; i< content.length; i++){
                     let info = content[i];
                     let departureTime = getRealTime(info.DepartureTime).slice(0, 10);
-                    li_str += '<li><div voyageKey=' + info.VoyageKey + '></div><span>' + departureTime + '</span></li>'
+                    let check_status = info.Checked === '1'? 'checked': 'toCheck';
+                    li_str += '<li><div voyageKey=' + info.VoyageKey + '></div><span class=' + check_status + '>' + departureTime + '</span></li>'
                 }
                 voyageList2Ship_ele.append(li_str);
                 voyageList2Ship_ele.css("width", 80 * content.length);

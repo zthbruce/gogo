@@ -18,7 +18,7 @@ var router = express.Router();
 router.get("/getVoyageList", function (req, res, next) {
     let fleetNumber = req.query.FleetNumber;
     let checkList = JSON.parse(req.query.CheckList);
-    console.log(checkList.length);
+    // 无确认信息
     let sql = util.format('SELECT * FROM (SELECT t1.VoyageKey, t1.ShipNumber, Name, LocalName, IMO, DepartureTime , ' +
         'DeparturePortID, ArrivalTime, ArrivalPortID, t1.Checked FROM T3101_Voyage t1 LEFT JOIN T0101_Ship t2 ON t1.ShipNumber = t2.ShipNumber ' +
         'LEFT JOIN T4101_Fleet t3 ON t2.ShipNumber = t3.ShipNumber WHERE FleetNumber = "%s" AND IsValid = "1" ' +
@@ -124,7 +124,7 @@ router.get("/getVoyageDetail", function (req, res, next) {
  */
 router.get("/getVoyageList2Ship", function (req, res, next) {
     var ShipNumber = req.query.ShipNumber;
-    var sql = util.format("SELECT VoyageKey, DepartureTime FROM T3101_Voyage WHERE ShipNumber = '%s' AND IsValid = '1' ORDER BY DepartureTime DESC", ShipNumber);
+    var sql = util.format("SELECT VoyageKey, DepartureTime, Checked FROM T3101_Voyage WHERE ShipNumber = '%s' AND IsValid = '1' ORDER BY DepartureTime DESC", ShipNumber);
     mysql.query(sql, function (err, results) {
         if(err){
             res.jsonp(["404", utils.eid1]);
