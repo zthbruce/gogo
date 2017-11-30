@@ -395,16 +395,27 @@ function getVoyageContent(voyageKey) {
                 /* 显示标题 */
                 let checked = content.Checked.trim();
                 let check_ele = $("#voyageDetails>.fleet_title>span:nth-child(2)");
+                let routeAndGoods = $(".voyageBtn_StandardRoute, .voyageBtn_StandardGoods");
                 if(checked === "1"){
                     check_ele.text("(已确认)");
                     // 显示为绿色
                     check_ele.css({'color':'#faff96'});
+                    // 标准航线和标准货物可点击
+                    standardGoodsStatus  = true;
+                    standardRouteStatus = true;
+                    routeAndGoods.css("background", "#4d90fe");// 蓝底
+                    routeAndGoods.css("color", "#FFF"); // 白字
                     // check_ele.css({'color':'#00ff00'});
                 }
                 else{
                     check_ele.text("(未确认)");
                     // 显示为白色
                     check_ele.css({'color':'#FFF'});
+                    // 航线信息和货物信息
+                    standardGoodsStatus  = false;
+                    standardRouteStatus = false;
+                    routeAndGoods.css("background", "#ccc"); // 灰底
+                    routeAndGoods.css("color", "#060205"); // 黑字
                 }
                 title_ele.attr('VoyageType', content.Type);
                 // 显示详细内容
@@ -1168,7 +1179,6 @@ $(".oneVoyage_DockedList").delegate(".oneVoyage_EndBtn", "click", function (even
         // 保存现有航次信息
         saveVoyage();
     }
-
     event.stopPropagation();
     return false; // 防止冒泡事件
 });
