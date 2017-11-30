@@ -639,6 +639,7 @@ function saveVoyage() {
     let title = $("#voyageDetails").find(".fleet_title");
     let checked_span = title.children("span:nth-child(2)");
     let routeAndGoods = $(".voyageBtn_StandardRoute, .voyageBtn_StandardGoods");
+    let voyageKey = title.attr('voyageKey');
     // 如果当前是确认, 保存相应信息
     if(voyageBtn_ConfirmStatus){
         $(".voyageBtn_SaveOrConfirm").text("保存");
@@ -651,6 +652,7 @@ function saveVoyage() {
         standardRouteStatus = true;
         routeAndGoods.css("background", "#4d90fe");// 蓝底
         routeAndGoods.css("color", "#FFF"); // 白字
+        $('.shipVoyageList_List>li>div[voyagekey="' + voyageKey + '"]').next().css('color', '#1aea1a')
     }
     else{
         checked_span.text("(未确认)");
@@ -663,7 +665,6 @@ function saveVoyage() {
     }
     updateSaveStatus(false); // 更新保存按钮状态
     /* 保存航次信息 */
-    let voyageKey = title.attr('voyageKey');
     console.log(voyageKey);
     let cargo = $(".cargo_type_list>select>option:selected").attr('value');
     console.log(cargo);
