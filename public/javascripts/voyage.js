@@ -194,6 +194,7 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                 let ETA = pointList['ETA'];
                 let arrivalPort = pointList['ArrivalPort'];
                 let lonLatList = [];
+                let tmpLonLatList = [];
                 let num = lonLatInfo.length;
                 // console.log('点数为:' + num );
                 let arrow_features = [];
@@ -216,52 +217,84 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                     // lonLatList.push(ol.proj.fromLonLat([lon, lat]));
                     // mileage += sub_mileage;
                     if(sub_speed < 100){
-                        lonLatList.push(ol.proj.fromLonLat([lon, lat]));
+                        // 如果前后两个点横跨了180°,则进行补充点
+                        if (i > 1 && Math.abs(last_lon - lon) > 180) {
+                            let midY = (last_lat + lat) / 2;
+                            let temp_end_point = [0, midY];
+                            let temp_start_point = [0, midY];
+                            if (last_lon < lon) {
+                                temp_end_point[0] = -180;
+                                temp_start_point[0] = 180;
+                            } else {
+                                temp_end_point[0] = 180;
+                                temp_start_point[0] = -180;
+                            }
+                            // lonLatList.push(ol.proj.fromLonLat(temp_end_point)); // 分段线段
+                            // lonLatList.push(ol.proj.fromLonLat(temp_start_point)); // 分段线段
+                            tmpLonLatList.push(ol.proj.fromLonLat(temp_end_point)); // 分段线段
+                            lonLatList.push(tmpLonLatList); // 加入总线段
+                            tmpLonLatList=[ol.proj.fromLonLat(temp_start_point)]; // 分段线段初始化
+                        }
+                        // lonLatList.push(ol.proj.fromLonLat([lon, lat]));
+                        tmpLonLatList.push(ol.proj.fromLonLat([lon, lat]));
                         mileage += sub_mileage;
                     }
                     last_lon = lon;
                     last_lat = lat;
                     last_time = time;
-                    // lonLatInfo[i] = ol.proj.fromLonLat([lon, lat]);
-                    // mileage += sub_mileage
-                    // last_lon = lon;
-                    // last_lat = lat;
-                    // last_time = time;
                 }
+                lonLatList.push(tmpLonLatList); // 加入总线段+
                 let sailTime = parseInt(info_li.eq(6).attr('time')) / 3600;
                 /* 画航迹 */
-                let feature = new ol.Feature({
-                    id: MMSI,
-                    geometry: new ol.geom.LineString(lonLatList)
-                    // geometry: new ol.geom.LineString(lonLatInfo)
-                });
-                feature.setStyle(contour_style);
-                route.getSource().addFeature(feature);
+                let features = [];
+                for(let i = 0; i < lonLatList.length; i++){
+                    console.log(lonLatList[i]);
+                    let feature = new ol.Feature({
+                        // id: MMSI,
+                        geometry: new ol.geom.LineString(lonLatList[i])
+                        // geometry: new ol.geom.LineString(lonLatInfo)
+                    });
+                    feature.setStyle(contour_style);
+                    features.push(feature);
+                }
+                route.getSource().addFeatures(features);
+                // console.log(lonLatList[0]);
+                // let feature = new ol.Feature({
+                //     id: MMSI,
+                //     geometry: new ol.geom.LineString(lonLatList[0])
+                //     // geometry: new ol.geom.LineString(lonLatInfo)
+                // });
+                // feature.setStyle(contour_style);
+                // route.getSource().addFeature(feature);
                 // 将箭头加入
                 // 添加箭头
-                for(let i =0; i< lonLatList.length; i++) {
-                    if (i > 0 && i % 80 === 0) {
-                    // if( i > 10){
-                        let start = lonLatList[i - 10];
-                        let end = lonLatList[i];
-                        let rotation = getRotation(start, end);
-                        let arrow_feature = new ol.Feature({
-                            geometry: new ol.geom.Point(end)
-                        });
-                        arrow_feature.setStyle(arrow_style(rotation));
-                        arrow_features.push(arrow_feature)
+                for(let j =0; j < lonLatList.length; j++) {
+                    let lonLatInfo = lonLatList[j];
+                    for(let i = 0; i < lonLatInfo.length; i++) {
+                        if (i > 0 && i % 50 === 0) {
+                            // if( i > 10){
+                            let start = lonLatInfo[i - 10];
+                            let end = lonLatInfo[i];
+                            let rotation = getRotation(start, end);
+                            let arrow_feature = new ol.Feature({
+                                geometry: new ol.geom.Point(end)
+                            });
+                            arrow_feature.setStyle(arrow_style(rotation));
+                            arrow_features.push(arrow_feature)
+                        }
                     }
                 }
                 route.getSource().addFeatures(arrow_features);
                 /* 开始图标和结束图标 */
                 // 开始点
                 let start_point = new ol.Feature({
-                    geometry: new ol.geom.Point(lonLatList[0])
+                    geometry: new ol.geom.Point(lonLatList[0][0])
                     // geometry: new ol.geom.Point(lonLatInfo[0])
                 });
                 // 结束点
+                let last_line = lonLatList[lonLatList.length - 1];
                 let end_point = new ol.Feature({
-                    geometry: new ol.geom.Point(lonLatList[lonLatList.length - 1])
+                    geometry: new ol.geom.Point(last_line[last_line.length - 1])
                     // geometry: new ol.geom.Point(lonLatInfo[num - 1])
                 });
                 start_point.setStyle(start_style);
