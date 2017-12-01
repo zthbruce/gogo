@@ -81,7 +81,7 @@ router.get("/getVoyageList", function (req, res, next) {
  */
 router.get("/getVoyage", function (req, res, next) {
     var voyageKey = req.query.VoyageKey;
-    var sql = util.format("SELECT * FROM T3101_Voyage t1 LEFT JOIN T0101_Ship t2 " +
+    var sql = util.format("SELECT t1.*, t2.IMO, t2.Name, t2.LocalName FROM T3101_Voyage t1 LEFT JOIN T0101_Ship t2 " +
         "ON t1.ShipNumber = t2.ShipNumber WHERE VoyageKey = '%s' AND IsValid = '1' ", voyageKey);
     mysql.query(sql, function (err, results) {
         if(err){

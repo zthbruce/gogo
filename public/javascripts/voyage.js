@@ -243,10 +243,11 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                     last_lat = lat;
                     last_time = time;
                 }
-                lonLatList.push(tmpLonLatList); // 加入总线段+
+                lonLatList.push(tmpLonLatList); // 加入总线段
                 let sailTime = parseInt(info_li.eq(6).attr('time')) / 3600;
                 /* 画航迹 */
                 let features = [];
+                console.log(lonLatList);
                 for(let i = 0; i < lonLatList.length; i++){
                     console.log(lonLatList[i]);
                     let feature = new ol.Feature({
