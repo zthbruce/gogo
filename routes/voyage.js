@@ -193,11 +193,11 @@ function getDataDuring(table, keyStart, keyEnd, limit, cb){
  * 输入数据: MMSI
  * 输出：
  */
-router.get('/getDetailRouteInfo', function(req, res, next) {
+router.post('/getDetailRouteInfo', function(req, res, next) {
     var table = 'ais_info';
-    var MMSI = req.query.MMSI;
-    var startTime = util.format('%s%s', MMSI, req.query.startTime);
-    var stopTime = util.format('%s%s', MMSI, req.query.stopTime);
+    var MMSI = req.body.MMSI;
+    var startTime = util.format('%s%s', MMSI, req.body.startTime);
+    var stopTime = util.format('%s%s', MMSI, req.body.stopTime);
     getDataDuring(table, startTime, stopTime, false, function (result) {
         if (result[0] === "200") {
             var lon_lat_info = result[1];
@@ -240,6 +240,54 @@ router.get('/getDetailRouteInfo', function(req, res, next) {
         }
     });
 });
+
+// router.get('/getDetailRouteInfo', function(req, res, next) {
+//     var table = 'ais_info';
+//     var MMSI = req.query.MMSI;
+//     var startTime = util.format('%s%s', MMSI, req.query.startTime);
+//     var stopTime = util.format('%s%s', MMSI, req.query.stopTime);
+//     getDataDuring(table, startTime, stopTime, false, function (result) {
+//         if (result[0] === "200") {
+//             var lon_lat_info = result[1];
+//             var sendData = util.format('{"MMSI": "%s", "lat_lon_info":[', MMSI);
+//             var count = 0;
+//             // console.log(lon_lat_info);
+//             let arrival_ETA = '';
+//             let arrival_port = '';
+//             for (var i = 0; i < lon_lat_info.length; i++) {
+//                 // if (lon_lat_info[i] !== undefined && lon_lat_info[i] !== 'undefined') {
+//                 if (i > 0) {
+//                     sendData += ",";
+//                 }
+//                 if(lon_lat_info[i].info !== undefined){
+//                     let info = lon_lat_info[i].info.split("#");
+//                     if(info[12] !== ''){
+//                         arrival_ETA = info[12];
+//                     }
+//                     if(info[19] !== ''){
+//                         arrival_port = info[19];
+//                     }
+//                     let time = lon_lat_info[i].key.slice(9, 19);
+//                     // 获取经纬度信息
+//                     sendData += util.format('[%s, %s, %s]', info[8], info[9], time);
+//                     count++;
+//                 }
+//             }
+//             sendData += util.format('],"ETA":"%s", "ArrivalPort":"%s" }', arrival_ETA, arrival_port);
+//             console.log(sendData);
+//             // sendData += ']}';
+//             if(count>0){
+//                 res.jsonp(['200', sendData]);
+//             }
+//             else{
+//                 res.jsonp(['304', "return nothing"]);
+//             }
+//
+//         } else {
+//             res.jsonp(['404', result]);
+//         }
+//     });
+// });
 
 
 module.exports = router;

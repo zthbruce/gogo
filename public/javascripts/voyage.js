@@ -177,7 +177,7 @@ function getDetailRoute(MMSI, startTime, stopTime) {
         dataType: 'json',
         cache: false,
         timeout: 5000000,
-        type: 'GET',
+        type: 'POST',
         beforeSend: function () {
             voyage_info_ul.css("background", 'url("/images/ajax-loader.gif") no-repeat center');
         },
@@ -247,7 +247,7 @@ function getDetailRoute(MMSI, startTime, stopTime) {
                 let sailTime = parseInt(info_li.eq(6).attr('time')) / 3600;
                 /* 画航迹 */
                 let features = [];
-                console.log(lonLatList);
+                // console.log(lonLatList);
                 for(let i = 0; i < lonLatList.length; i++){
                     console.log(lonLatList[i]);
                     let feature = new ol.Feature({
