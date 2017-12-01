@@ -36,7 +36,8 @@ function getPierDetail(terminalKey) {
                 $("#import_export_type").text(pierInfo.ImportExportType); // 进出口
                 let purpose_ele =  $("#use_type_key");
                 purpose_ele.text(pierInfo.Purpose); // 用途
-                purpose_ele.attr("value", pierInfo.PurposeID); // 赋值
+                purpose_ele.attr("purpose", pierInfo.PurposeID); // 赋值
+                // purpose_ele.attr("value", pierInfo.PurposeID); // 赋值
                 // // 获取货物信息
                 // let cargoNum = cargoInfoList.length;
                 // if(cargoNum >= 1){
@@ -89,7 +90,6 @@ function addPierSelectPierName(pierStr){
             if(data[0] === "200"){
                 let jsonData = data[1];
                 for(let i=0;i<jsonData.length;i++){
-                    console.log(i);
                     let pierName = jsonData[i].Name;
                     let terminalKey =  jsonData[i].TerminalKey;
                     // 显示码头列表
@@ -833,21 +833,22 @@ $('.span_select,.input_select,.pier_CargoType').mouseleave(function(){
     $(this).children('ul').slideUp(200);
 });
 
-// 选择下拉框 按钮
-$('.span_select>ul>li,.input_select>ul>li').click(function(){
-    let val = $(this).text();
-    $(this).parent().prev('span').text(val);
-    $(this).parent().prev('input').val(val);
-    $(this).parent().slideUp(200);
-    changeBerthSaveButton(true);
-});
+// // 选择下拉框 按钮
+// $('.span_select>ul>li,.input_select>ul>li').click(function(){
+//     let val = $(this).text();
+//     $(this).parent().prev('span').text(val);
+//     $(this).parent().prev('input').val(val);
+//     $(this).parent().slideUp(200);
+//     changeBerthSaveButton(true);
+// });
 
-// 用途下拉
+// 用途下拉列表
 $(".pier_UseType>ul>li").click(function() {
     let val = $(this).text();
     let purpose_span = $(this).parent().prev('span');
     purpose_span.text(val);
-    purpose_span.attr("value", $(this).attr('value'));
+    console.log($(this).attr('Purpose'));
+    purpose_span.attr("Purpose", $(this).attr('Purpose'));
     $(this).parent().slideUp(200);
     changeBerthSaveButton(true);
 });
@@ -950,7 +951,7 @@ $('#berth_save').click(function () {
         BelongtoCompany: companyNumber,
         BerthQuantity: $("#berth_num").val(),
         ImportExportType: $("#import_export_type").text(),
-        Purpose: $("#use_type_key").attr("value"),
+        Purpose: $("#use_type_key").attr("purpose"),
         // CargoTypeKey: $("#cargo_type_key").text(),
         LatitudeNumeric: lat_numeric,
         LongitudeNumeric: lon_numeric,
