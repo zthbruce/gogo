@@ -77,7 +77,7 @@
 .fleetList_List>.leave{color:#ff0000;}
 .fleetInfo_content>ul>li>span{display:inline-block;text-align:center;overflow:hidden;}
 .fleetInfo_content>ul>li>span:nth-child(1){width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.fleetInfo_content>ul>li>span:nth-child(2){width:65px;}
+.fleetInfo_content>ul>li>span:nth-child(2){width:65px;cursor:pointer;}
 .fleetInfo_content>ul>li>span:nth-child(3){width:80px;}
 .fleetInfo_content>ul>li>span:nth-child(4){width:135px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .fleetInfo_content>ul>li>span:nth-child(5){width:60px;}

@@ -63,7 +63,7 @@ function getBasicFleetInfo(){
  * @param timePoint
  */
 let lastScrollTop = 0;
-function getFleetInfo(fleetNumber, timePoint) {
+function getFleetInfo(fleetNumber, timePoint, sort_status) {
     // console.log(timePoint);
     let fleet_div = $('#fleet');
     let shipList = fleet_div.find('.fleetList_List');
@@ -91,6 +91,16 @@ function getFleetInfo(fleetNumber, timePoint) {
                 let checkedNum = 0;
                 // fleetBasicInfo = data[1];
                 let shipInfoStr = "";
+                if(sort_status === 'asc'){
+                    fleetDetailInfo.sort(function (x, y) {
+                        return x.IMO - y.IMO;
+                    });
+                }
+                else if(sort_status === 'desc'){
+                    fleetDetailInfo.sort(function (x, y) {
+                        return y.IMO - x.IMO;
+                    });
+                }
                 for(let i = 0; i < fleetDetailInfo.length; i++){
                     let detailInfo = fleetDetailInfo[i];
                     let MMSI = detailInfo.MMSI === null?"":detailInfo.MMSI;
@@ -114,21 +124,21 @@ function getFleetInfo(fleetNumber, timePoint) {
                         checkedNum +=1;
                         shipCheck = 'checked'
                     }
-                    console.log(detailInfo.Checked);
+                    // console.log(detailInfo.Checked);
                     if(joinTime === timePoint){
-                        console.log("joinTime:" + joinTime);
+                        // console.log("joinTime:" + joinTime);
                         leaveOrJoin = "join";
                         DWT_add += DWT;
                         num_add += 1;
                     }
                     if(leaveTime === timePoint){
-                        console.log(leaveTime + ":" + timePoint);
-                        console.log("已经离开");
+                        // console.log(leaveTime + ":" + timePoint);
+                        // console.log("已经离开");
                         leaveOrJoin = "leave";
                         DWT_less += DWT;
                         num_less += 1;
                     }
-                    let shipInfo_li = '<li class=' + leaveOrJoin +'><span>' + type + '</span><span>' + detailInfo.IMO + '</span><span>' + MMSI +
+                    let shipInfo_li = '<li class=' + leaveOrJoin +'><span>' + type + '</span><span class="IMO">' + detailInfo.IMO + '</span><span>' + MMSI +
                         '</span><span>' + detailInfo.ShipName + '</span><span>' + DWT + '</span><span>' + shipAge + '</span><span>' +
                         shipStatus + '</span><span><i class= "shipDetailInfo" shipNumber=' + detailInfo.ShipNumber + '></i></span><span><i class= "' + shipCheck+ '"></i></span><span><i class="shipDelete"></i></span></li>';
                     if(leaveOrJoin !== ""){
@@ -204,7 +214,8 @@ function getSearchInfo(){
                     type_ele.attr("shipType", type);
                     type_ele.val(typeName);
                     let status_ele = $('.Search_statusText');
-                    status_ele.attr("type", status);
+                    console.log(status_ele);
+                    status_ele.prop("type", status);
                     // console.log(status);
                     status_ele.val(ShipStatusInfo[status]);
                     $(".ShipSearch  .min_dwt").val(min_DWT);
@@ -230,7 +241,8 @@ function getSearchInfo(){
  */
 function getShipList2Fleet(fleetNumber, timePoint){
     lastScrollTop = 0;
-    getFleetInfo(fleetNumber, timePoint); // 上表中获得船队信息
+    let sort_status = 'asc';
+    getFleetInfo(fleetNumber, timePoint, sort_status); // 上表中获得船队信息
     getSearchInfo() // 获取上次搜索信息
 }
 
@@ -468,6 +480,86 @@ function saveSearchRecord(type, status, min_DWT, max_DWT) {
 }
 
 
+/**
+ * 对DOM列表排序
+ */
+function sortListDir() {
+    var list, i, switching, b, shouldSwitch, dir, switchcount = 0;
+    list = document.getElementsByClassName("fleetList_List")[0];
+    // console.log(list);
+    switching = true;
+    // Set the sorting direction to ascending:
+    dir = "asc";
+    // Make a loop that will continue until no switching has been done:
+    while (switching) {
+        // Start by saying: no switching is done:
+        switching = false;
+        b = list.getElementsByTagName("li");
+        // Loop through all list-items:
+        for (i = 0; i < (b.length - 1); i++) {
+            // Start by saying there should be no switching:
+            shouldSwitch = false;
+            var imo_ele = b[i].getElementsByClassName('IMO')[0];
+            var next_imo_ele = b[i+1].getElementsByClassName('IMO')[0];
+            console.log(imo_ele);
+            console.log(imo_ele.innerHTML);
+            /* Check if the next item should switch place with the current item,
+             based on the sorting direction (asc or desc): */
+            if (dir === "asc") {
+                if (imo_ele.innerHTML > next_imo_ele.innerHTML) {
+                    /* If next item is alphabetically lower than current item,
+                     mark as a switch and break the loop: */
+                    console.log(imo_ele.innerHTML);
+                    shouldSwitch= true;
+                    break;
+                }
+            } else if (dir === "desc") {
+                if (imo_ele.innerHTML < next_imo_ele.innerHTML) {
+                    console.log(imo_ele.innerHTML);
+                    /* If next item is alphabetically higher than current item,
+                     mark as a switch and break the loop: */
+                    shouldSwitch= true;
+                    break;
+                }
+            }
+        }
+        if (shouldSwitch) {
+            /* If a switch has been marked, make the switch
+             and mark that a switch has been done: */
+            b[i].parentNode.insertBefore(b[i + 1], b[i]);
+            switching = true;
+            // Each time a switch is done, increase switchcount by 1:
+            switchcount ++;
+        } else {
+            /* If no switching has been done AND the direction is "asc",
+             set the direction to "desc" and run the while loop again. */
+            if (switchcount == 0 && dir == "asc") {
+                dir = "desc";
+                switching = true;
+            }
+        }
+    }
+}
+
+
+var switching = 0;
+$('.fleetInfo_content>ul>li>span:nth-child(2)').click(function () {
+    let sort_status;
+    if(switching === 0){
+        switching = 1;
+        sort_status = 'asc';
+    }
+    else if(switching === 1){
+        switching = 2;
+        sort_status = 'desc';
+    }
+    else if(switching === 2){
+        switching = 0;
+        sort_status = 'no';
+    }
+    let timePoint =  $(".fleetList_List").attr("timepoint");
+    getFleetInfo(fleetNumber, timePoint, sort_status); // 上表中获得船队信息
+});
 
 
 
@@ -782,7 +874,7 @@ $('#fleet').delegate('.shipDetailInfo', 'click', function (event) {
                                         // 刷新列表数据
                                         // console.log(fleetList.attr("timepoint"));
                                         let timepoint =  fleetList.attr("timepoint");
-                                        getFleetInfo(fleetNumber, timepoint);
+                                        getFleetInfo(fleetNumber, timepoint, 'asc');
                                         // 刷新历史时间轴
                                         getTimePointList(fleetNumber);
                                         // 实时数目更新
@@ -1264,7 +1356,7 @@ $('.fleetList_List').delegate(".toCheck", "click", function (event) {
     // 刷新船舶信息列表信息
     console.log("刷新信息");
     let timepoint =  $(".fleetList_List").attr("timepoint");
-    getFleetInfo(fleetNumber, timepoint);
+    getFleetInfo(fleetNumber, timepoint, 'asc');
     // 刷新历史时间轴
     getTimePointList(fleetNumber);
 

@@ -173,6 +173,7 @@ function getDataDuring(table, keyStart, keyEnd, limit, cb){
     if(limit){
         sql += util.format("limit %s", limit)
     }
+    console.log(sql);
     request.post({
         url:'http://192.168.30.80:83/query.json',
         json: {
